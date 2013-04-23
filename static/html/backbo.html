@@ -26,13 +26,25 @@
     </div>
     
     <div id="list-template">
-        <ul class="ul_topmenu"></ul>
+      <ul class="topmenu" />
     </div>
     
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
-    <script type="text/javascript" src="http://documentcloud.github.com/backbone/backbone-min.js"></script>
-    <script type="text/javascript" src="/script/init.js"></script>
+    <script type="text/javascript" src="/script/jquery.js"></script>
+    <script type="text/javascript" src="/script/bb.js"></script>
+    <script type="text/template" id="menu_template">
+    //<!--
+      <ul class="ul_topmenu">
+        <li class="boxShadow">
+          <div class="MainMenu closeMenu" op="<%= main_title $>"><%= main.title $></div>
+          <ul class="ul_<%= main_title $> inactive">
+            <li class="boxShadow">
+              <div class="SubMenu" op="<%= sub_src >"><%= sub_title ></div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    //-->
+    </script>
 </body>
 </html>
 
