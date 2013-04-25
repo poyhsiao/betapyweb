@@ -6,7 +6,7 @@ jQuery.error = console.error;
 /* this is for jquery debugger */
 
 $.when(
-  $.getScript('/script/jquery-ui.js'),
+  // $.getScript('/script/jquery-ui.js'),
   $.getScript('/script/underscore.js'),
   $.getScript('/script/backbone.js'),
   $.getScript('/script/bootstrap.js')
@@ -14,10 +14,12 @@ $.when(
   function(e) {
     /* run this function when everything is ready and done */
     backboneWrap();
+    /* Backbone implementation */
   },
   function(e) {
     /* run this function if anything error or fail to retrival anything above */
-    console.warn("Something error");
+    console.error("Something error");
+    console.error(e);
   }
 );
 
@@ -34,74 +36,30 @@ var backboneWrap = function() {
 
     events: {
       /* all the event handler */
-      'click .MainMenu': 'openMain',
-      'click .SubMenu': 'openSub'
     },
 
     selector: function() {
       /* if the parameter is not correct, selector is will choose the correction method to handle the process */
     },
 
-    run: function(cls) {
-      /* handling the menu item model and will pass to createView() when the format is correct */
-      if('undefined' === typeof(cls) || !this.model.get('items')) {
-      /* if the data structure is not defined, will redirect to selector to choose which item function should work for */
-      /* if not get items will be not the menu items */
-        return this.selector();
-      }
-      var me = this, o = me.model.get('items'), i;
-      if($.isArray(o)) {
-        $.each(o, function(k, v) {
-          return me.createView(cls, v);
-        });
-      } else {
-        return me.createView(cls, o);
-      }
+    viewMenu: function(o) {
+      /* display the menu items */
+      var me = this, template = _.template($('#t_mainmenu').html());
+      me.$el.html(template(me.model.attributes));
     },
 
-    createView: function(cls, obj) {
-    /* parser for menu item data */
-      var me = this, container =  $('#menu-template'), title = obj.title, src = obj.src, x, li;
-      if(obj.hasOwnProperty('subitems')) {
-        li = $('<li/>')
-          .addClass('boxShadow')
-          .text(title)
-          .wrapInner('<div class="MainMenu closeMenu" opt="' + title + '" />')
-          .appendTo(container.find('.' + cls));
-
-        $('<ul />')
-          .addClass('ul_' + title + ' inactive')
-          .appendTo(li);
-
-        return $.each(obj.subitems, function(k, v) {
-          return me.createView(title, v);
-        });
-      } else {
-        return $('<li />')
-          .addClass('boxShadow')
-          .text(title)
-          .wrapInner('<div class="SubMenu" opt="' + src + '" />')
-          .appendTo(container.find('.ul_' + cls));
-      }
-    },
-
-    windowResize: function(o) {
-      /* change window size and the resoultion */
-      if(!ckWindow.notDesktop() && !$('div.borderArrow').is(':hidden')) {
-        /* this only work on Desktop environment and the arrow is shown */
-        changeResolution.changeArrow();
-      }
-
+    runWindowResize: function(o) {
       if(ckWindow.isPhone()) {
-        $('div.popContent').css('height', '400px');
+        return $('div.popContent').css('height', '400px');
       /* in mobile device, set the height to fixed 400px */
       } else {
         /* if the device is not mobile phone*/
-        changeResolution.changePopC();
+        return changeResolution.changePopC();
       }
+      changeResolution.changeArrow().fadeIn();
     },
 
-    openMain: function(o) {
+    runMain: function(o) {
       /* handling the click event for main menu items, o is the current object which is clicked */
       var me = this, self = $(o.target), mainmenu = $('div.MainMenu');
       if(self.hasClass('closeMenu')) {
@@ -113,7 +71,7 @@ var backboneWrap = function() {
         self.removeClass('closeMenu').addClass('openMenu').siblings('ul.inactive').slideDown('slow');
         /* open selected menu which has closeMenu class name*/
 
-        if('undefined' === typeof($('span.maintitle').attr('opt')) || self.attr(opt) === $('span.maintitle').attr('opt')) {
+        if('undefined' === typeof($('span.maintitle').attr('opt')) || self.attr('opt') === $('span.maintitle').attr('opt')) {
           /* when switch to other menu item, hide arrow image by checking the page navigation options */
           $('div.borderArrow').show('slow');
         } else {
@@ -122,12 +80,40 @@ var backboneWrap = function() {
       }
     },
 
-    openSub: function(o) {
+    runSub: function(o) {
       /* handling the click event for sub menu items*/
-      var me = this, self = $(o.target), main = self.parents('ul.inactive').siblings('.MainMenu');;
-      console.log(me);
-      console.log('submenu');
-      console.log(o);
+      var me = this, self = $(o.target), main = self.parents('ul.inactive').siblings('.MainMenu'), model, view;
+      model = new MenuModel({
+        "opt": main.attr('opt'),
+        "maintitle": main.text(),
+        "subtitle": self.text()
+      });
+
+      view = new MenuView({
+        el: "#Paganation",
+        model: model,
+        events: {
+          'click .maintitle': 'runPagination',
+          'click .subtitle': 'runPagination'
+        }
+      });
+
+      changeResolution.changePopC(self).fadeIn('slow');
+      changeResolution.changeArrow(self).fadeIn();
+
+      return view.viewPagination();
+    },
+
+    viewPagination: function(o) {
+      /* paga navigation display */
+      var me = this, template = _.template($('#t_pagnation').html());
+      return me.$el.html(template(me.model.attributes));
+    },
+
+    runPagination: function(o) {
+      /* when click item on page navigation will triggle menu click event */
+      var me = this, opt = $(o.target).attr('opt');
+      $('div[opt=' +  opt + ']').trigger('click');
     }
   });
 
@@ -138,19 +124,28 @@ var backboneWrap = function() {
     menuview = new MenuView({
       model: menumodel,
       /* data source */
-      el: '#menu-template'
+      el: '#menu-template',
       /* triggle dom, all the events and handler will be based on this dom */
+      events: {
+        'click .MainMenu': 'runMain',
+        'click .SubMenu': 'runSub'
+      }
     });
 
-    menuview.run('topmenu');
-  });
+    // menuview.run('topmenu');
+    menuview.viewMenu();
 
-  var windowview = new MenuView({
-    /* work for window size and resolution changed */
-    el: window,
-    events: {
-      'resize': 'windowResize'
-    }
+    var windowview = new MenuView({
+      /* work for window size and resolution changed */
+      el: window,
+      events: {
+        'resize': 'runWindowResize'
+      }
+    });
+
+    $('div.MainMenu:first').trigger('click');
+    $('div.SubMenu:first').trigger('click');
+    /* initial the view, open every first item of the menu as default */
   });
 };
 
@@ -195,7 +190,7 @@ var ckWindow = {
     }
 };
 
-changeResolution = {
+var changeResolution = {
   /* define relative DOM position for initial or change resolution. this is defined as private method */
   pop: $('div.popContent'),
   arrow: $('div.borderArrow'),
@@ -216,17 +211,22 @@ changeResolution = {
   changeArrow: function(op) {
     /* change the position of the arrow image, if op is given as the jquery obj, the position will be located based on given op */
     var actopt = $('span.subtitle').attr('opt'),
+    pop = $('div.popContent'),
     itm = op || $('div[opt=' + actopt +']'),
-    offset = ('wild' == ckWindow.text()) ? 50 : 60,
+    // offset = ('wild' == ckWindow.text()) ? 40 : 50,
+    bias = -30,
+    offset = -60,
     arrow = this.arrow;
     arrow.css({
       top: function() {
         return itm.position().top + 'px';
       },
       left: function() {
-        return itm.position().left + itm.width() - offset + 'px';
+        console.log(pop.position().left);
+        // return itm.position().left + itm.width() - offset + 'px';
+        return pop.position().left + bias + offset + 'px';
       }
-    });
+    }).addClass('visible-desktop');
     return op ? arrow : true;
   }
 };

@@ -44,35 +44,35 @@ if __name__ == '__main__':
                      'tools.caching.delay': 3600,
                      'tools.staticdir.dir': os.path.join(current_dir, 'static/css'),
                      'tools.staticdir.content_types': mime_type,
-                     #'tools.gzip.mime_types': mime_type
+                     'tools.gzip.mime_types': mime_type
                      },
-            '/html': {'tools.staticdir.on': True,
+            '/template': {'tools.staticdir.on': True,
                       'tools.caching.on': True,
                       'tools.caching.delay': 3600,
-                      'tools.staticdir.dir': os.path.join(current_dir, 'static/html'),
+                      'tools.staticdir.dir': os.path.join(current_dir, 'static/template'),
                       'tools.staticdir.content_types': mime_type,
-                      #'tools.gzip.mime_types': mime_type
+                      'tools.gzip.mime_types': mime_type
                       },
             '/script': {'tools.staticdir.on': True,
                         'tools.caching.on': True,
                         'tools.caching.delay': 3600,
                         'tools.staticdir.dir': os.path.join(current_dir, 'static/script'),
                         'tools.staticdir.content_types': mime_type,
-                        #'tools.gzip.mime_types': mime_type
+                        'tools.gzip.mime_types': mime_type
                         },
             '/image': {'tools.staticdir.on': True,
                        'tools.caching.on': True,
                        'tools.caching.delay': 3600,
                        'tools.staticdir.dir': os.path.join(current_dir, 'static/image'),
                        'tools.staticdir.content_types': mime_type,
-                       '#tools.gzip.mime_types': mime_type
+                       'tools.gzip.mime_types': mime_type
                        },
             '/data': {'tools.staticdir.on': True,
                       'tools.caching.on': True,
                       'tools.caching.delay': 3600,
                       'tools.staticdir.dir': os.path.join(current_dir, 'static/data'),
                       'tools.staticdir.content_types': mime_type,
-                      #'tools.gzip.mime_types': mime_type
+                      'tools.gzip.mime_types': mime_type
                       }
                     }
 
