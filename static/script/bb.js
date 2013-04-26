@@ -49,19 +49,27 @@ var backboneWrap = function() {
     },
 
     runWindowResize: function(o) {
-      if(ckWindow.isPhone()) {
+      if(!ckWindow.notDesktop() && !$('div.borderArrow').is(':hidden')) {
+        return changeResolution.changeArrow();
+      } else {
+        $('div.borderArrow').hide();
+      }
+
+      if(ckWindow.notDesktop()) {
         return $('div.popContent').css('height', '400px');
       /* in mobile device, set the height to fixed 400px */
       } else {
         /* if the device is not mobile phone*/
         return changeResolution.changePopC();
       }
-      changeResolution.changeArrow().fadeIn();
+      // changeResolution.changeArrow().fadeIn('slow');
     },
 
     runMain: function(o) {
       /* handling the click event for main menu items, o is the current object which is clicked */
       var me = this, self = $(o.target), mainmenu = $('div.MainMenu');
+      console.log(self.attr('opt'));
+      console.log(self);
       if(self.hasClass('closeMenu')) {
         mainmenu.each(function(k, v) {
           if($(v).hasClass('openMenu')) {
@@ -99,7 +107,7 @@ var backboneWrap = function() {
       });
 
       changeResolution.changePopC(self).fadeIn('slow');
-      changeResolution.changeArrow(self).fadeIn();
+      changeResolution.changeArrow(self).fadeIn('slow');
 
       return view.viewPagination();
     },
@@ -226,7 +234,7 @@ var changeResolution = {
         // return itm.position().left + itm.width() - offset + 'px';
         return pop.position().left + bias + offset + 'px';
       }
-    }).addClass('visible-desktop');
+    }).addClass('hidden-phone');
     return op ? arrow : true;
   }
 };
