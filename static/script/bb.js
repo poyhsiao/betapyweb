@@ -91,6 +91,11 @@ var backboneWrap = function() {
     runSub: function(o) {
       /* handling the click event for sub menu items*/
       var me = this, self = $(o.target), main = self.parents('ul.inactive').siblings('.MainMenu'), model, view;
+
+      $('div.selectItem').removeClass('selectItem').addClass('SubMenu').removeClass('itemHover');
+      /* fix sometimes will lost all the classname */
+      self.removeClass('SubMenu').addClass('selectItem');
+
       model = new MenuModel({
         "opt": main.attr('opt'),
         "maintitle": main.text(),
@@ -122,6 +127,15 @@ var backboneWrap = function() {
       /* when click item on page navigation will triggle menu click event */
       var me = this, opt = $(o.target).attr('opt');
       $('div[opt=' +  opt + ']').trigger('click');
+    },
+
+    runHoverSub: function(o) {
+      /* when mouse enter or leave the sub item, will change the style */
+      var me = this, self = $(o.target);
+      if(!self.hasClass('selectItem')) {
+        self.toggleClass('itemHover').toggleClass('SubMenu');
+        /* add/remove itemHover / SubMenu for hover handle */
+      }
     }
   });
 
@@ -136,7 +150,10 @@ var backboneWrap = function() {
       /* triggle dom, all the events and handler will be based on this dom */
       events: {
         'click .MainMenu': 'runMain',
-        'click .SubMenu': 'runSub'
+        'click .SubMenu': 'runSub',
+        'click .itemHover': 'runSub',
+        'mouseenter .SubMenu': 'runHoverSub',
+        'mouseleave .itemHover': 'runHoverSub'
       }
     });
 

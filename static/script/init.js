@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Initial javascript
  * 
  * Auther: Kim Hsiao 
@@ -14,7 +14,7 @@ $.when(
             //extraData(v, 'menu_root');
             extraData(v, 'ul_topmenu');
         });
-        
+
     	$('div.MainMenu').on('click', function() {
     	    if($(this).hasClass('closeMenu')) {
     	        $('div.MainMenu').each(function(k, v) {
@@ -95,7 +95,7 @@ var changeResolution = {
        /* if the device is not the desktop, then remove margin */
        return (op) ? this.pop : true;
     },
-    
+   
     changeArrow: function(op) {
         /* change the position of the arrow image, if op is given as the jquery obj, the position will be located based on given op */
         var actopt = $('span.subtitle').attr('opt'),
