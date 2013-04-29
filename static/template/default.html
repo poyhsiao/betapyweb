@@ -141,6 +141,50 @@
     .clickable {
       cursor: pointer;
     }
+    #LogoBarBG1-1 {
+      background: url("/image/S3_header_BG1.png") no-repeat scroll left center transparent;
+      position: absolute;
+      height: 82px;
+      left: 10px;
+      top: 10px;
+      width: 960px;
+    }
+    #LogoBarBG2-1 {
+      background: url("/image/S3_header_BG2.png") no-repeat scroll right center transparent;
+      position: absolute;
+      height: 82px;
+      top: 10px;
+      right: 10px;
+      width: 960px;
+    }
+    #AscenLinkLogo-1 {
+      background: url("/image/banner.png") no-repeat scroll left center transparent;
+      position: absolute;
+      height: 82px;
+      top: 10px;
+      left: 10px;
+      width: 960px
+    }
+    #XteraLogo-1 {
+      background: url("/image/S3_Xtera_logo.png") no-repeat scroll right center transparent;
+      height: 54px;
+      position: absolute;
+      right: 35px;
+      top: 25px;
+      width: 69px;
+    }
+    span.indecator {
+      background: url("/image/S3_arrow_right.png") no-repeat scroll right center transparent;
+      height: 12px;
+      position: absolute;
+      right: 35px;
+      top: 25px;
+      width: 12px;
+    }
+    .subtitle {
+       background: url("/image/S3_arrow_right.png") no-repeat scroll left center transparent;
+       padding-left: 18px;
+    }
   </style>
 </head>
 
@@ -148,20 +192,12 @@
   <div class="head row-fluid">
       <div class="span12">
           <span class="header-img">
-              <span id="LogoBarBG1" class="visible-desktop">
-                  <img alt="XteraLink logo bar 1" src="/image/S3_header_BG1.png" />
-              </span>
-              <span id="LogoBarBG2" class="visible-desktop">
-                  <img alt="XteraLink logo bar 2" src="/image/S3_header_BG2.png" />
-              </span>
-              <span id="AscenLinkLogo" class="visible-desktop">
-                  <img alt="XteraLink banner" src="/image/banner.png" />
-              </span>
-              <span id="XteraLogo">
-                  <a id="CompanyAnchor" href="http://www.xtera-ip.com/" target="_blank">
-                      <img alt="XteraLink logo" src="/image/S3_Xtera_logo.png" />
-                  </a>
-              </span>
+              <span id="LogoBarBG1-1" class="visible-desktop"></span>
+              <span id="LogoBarBG2-1" class="visible-desktop"></span>
+              <span id="AscenLinkLogo-1" class="visible-desktop"></span>
+              <a href="http://www.xtera-ip.com" id="CompanyAnchor-1" target="_blank" title="http://www.xtera-ip.com">
+                <span id="XteraLogo-1"></span>
+              </a>
           </span>
       </div>
   </div>
@@ -217,9 +253,6 @@
   </script>
   <script type="text/template" id="t_pagnation">
     <span class="maintitle clickable" opt="<%= opt %>"><%= maintitle %></span>
-    <span class="indecator">
-        <img alt="arrow right" src="/image/S3_arrow_right.png" />
-    </span>
     <span class="subtitle clickable" opt="<%= opt %>"><%= subtitle %></span>
   </script>
 </body>
