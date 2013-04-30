@@ -15,73 +15,88 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 import cherrypy
 
 class Root:
-    @cherrypy.expose
-    def index(self):
-        print "Hello world"
+  @cherrypy.expose
+  def index(self):
+    print "Hello World"
 
 if __name__ == '__main__':
-    cherrypy.config.update({'environment': 'production',
-                            'log.error_file': 'site.log',
-                            'server.socket_port': 8000,
-                            # bind port number, default is 8080
-                            'socket_host': '0.0.0.0',
-                            # bind ipv4 default is 127.0.0.1
-                            'log.screen': True})
+  cherrypy.config.update(
+    {
+    'environment': 'production',
+    'server.socket_port': 8000,
+    'server.socket_host': '0.0.0.0',
+    'log.error_file': 'site.log',
+    'log.screen': True
+    }
+  )
 
-    mime_type = {'js': 'text/javascript',
-                 'json': 'application/json',
-                 'css': 'text/css',
-                 'png': 'image/png',
-                 'gif': 'image/gif',
-                 'jpg': 'image/jpeg',
-                 'ico': 'image/x-icon',
-                 'html': 'text/html',
-                 'htm': 'text/html'}
+  mime_type = {
+    'text': {
+      'js': 'text/javascript',
+      'json': 'application/json',
+      'css': 'text/css',
+      'html': 'text/html',
+      'htm': 'text/htm'
+    }, 
+    'binary': {
+      'png': 'image/png',
+      'gif': 'image/gif',
+      'jpg': 'image/jpeg',
+      'ico': 'image/x-icon'
+    }
+  }
 
-    conf = {'/css': {'tools.staticdir.on': True,
-                     'tools.caching.on': True,
-                     'tools.caching.delay': 3600,
-                     'tools.staticdir.dir': os.path.join(current_dir, 'static/css'),
-                     'tools.staticdir.content_types': mime_type,
-                     'tools.encode.on': True,
-                     'tools.gzip.on': True,
-                     'tools.gzip.mime_types': mime_type
-                     },
-            '/template': {'tools.staticdir.on': True,
-                      'tools.caching.on': True,
-                      'tools.caching.delay': 3600,
-                      'tools.staticdir.dir': os.path.join(current_dir, 'static/template'),
-                      'tools.staticdir.content_types': mime_type,
-                      'tools.encode.on': True,
-                      'tools.gzip.on': True,
-                      'tools.gzip.mime_types': mime_type},
-            '/script': {'tools.staticdir.on': True,
-                        'tools.caching.on': True,
-                        'tools.caching.delay': 3600,
-                        'tools.staticdir.dir': os.path.join(current_dir, 'static/script'),
-                        'tools.staticdir.content_types': mime_type,
-                        'tools.encode.on': True,
-                        'tools.gzip.on': True,
-                        'tools.gzip.mime_types': mime_type
-                        },
-            '/image': {'tools.staticdir.on': True,
-                       'tools.caching.on': True,
-                       'tools.caching.delay': 3600,
-                       'tools.staticdir.dir': os.path.join(current_dir, 'static/image'),
-                       'tools.staticdir.content_types': mime_type,
-                       'tools.encode.on': True,
-                       'tools.gzip.on': True,
-                       'tools.gzip.mime_types': mime_type
-                       },
-            '/data': {'tools.staticdir.on': True,
-                      'tools.caching.on': True,
-                      'tools.caching.delay': 3600,
-                      'tools.staticdir.dir': os.path.join(current_dir, 'static/data'),
-                      'tools.staticdir.content_types': mime_type,
-                      'tools.encode.on': True,
-                      'tools.gzip.on': True,
-                      'tools.gzip.mime_types': mime_type
-                      }
-                    }
+  conf = {
+    '/css': {
+      'tools.staticdir.on': True,
+      'tools.staticdir.dir': os.path.join(current_dir, 'static/css'),
+      # 'tools.staticdir.content_types': mime_type['text'],
+      'tools.caching.on': True,
+      'tools.caching.delay': 3600,
+      'tools.encode.on': True,
+      'tools.gzip.on': True,
+      # 'tools.gzip.mime_types': mime_type['text']
+    },
+    '/template': {
+      'tools.staticdir.on': True,
+      'tools.staticdir.dir': os.path.join(current_dir, 'static/template'),
+      # 'tools.staticdir.content_types': mime_type['text'],
+      'tools.caching.on': True,
+      'tools.caching.delay': 3600,
+      'tools.encode.on': True,
+      'tools.gzip.on': True,
+      # 'tools.gzip.mime_types': mime_type['text']
+    },
+    '/script': {
+      'tools.staticdir.on': True,
+      'tools.staticdir.dir': os.path.join(current_dir, 'static/script'),
+      # 'tools.staticdir.content_types': mime_type['text'],
+      'tools.caching.on': True,
+      'tools.caching.delay': 3600,
+      'tools.encode.on': True,
+      'tools.gzip.on': True,
+      # 'tools.gzip.mime_types': mime_type['text']
+    },
+    '/data': {
+      'tools.staticdir.on': True,
+      'tools.staticdir.dir': os.path.join(current_dir, 'static/data'),
+      # 'tools.staticdir.content_types': mime_type['text'],
+      'tools.caching.on': True,
+      'tools.caching.delay': 3600,
+      'tools.encode.on': True,
+      'tools.gzip.on': True,
+      # 'tools.gzip.mime_types': mime_type['text']
+    },
+    '/image': {
+      'tools.staticdir.on': True,
+      'tools.staticdir.dir': os.path.join(current_dir, 'static/image'),
+      # 'tools.staticdir.content_types': mime_type['binary'],
+      'tools.caching.on': True,
+      'tools.caching.delay': 3600,
+      'tools.encode.on': True,
+      'tools.gzip.on': True,
+      # 'tools.gzip.mime_types': mime_type['text']
+    }
+  }
 
-cherrypy.quickstart(Root(), '/', config = conf)
+  cherrypy.quickstart(Root(), '/', config = conf)

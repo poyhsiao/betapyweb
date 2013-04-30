@@ -142,28 +142,28 @@
       cursor: pointer;
     }
     #LogoBarBG1-1 {
-      background: url("/image/S3_header_BG1.png") no-repeat scroll left center transparent;
+      background: url("/image/S3_header_BG1.png") no-repeat scroll left center / contain transparent;
       position: absolute;
       height: 82px;
       left: 10px;
       top: 10px;
-      width: 960px;
+      width: 90%;
     }
     #LogoBarBG2-1 {
-      background: url("/image/S3_header_BG2.png") no-repeat scroll right center transparent;
+      background: url("/image/S3_header_BG2.png") no-repeat scroll right center / contain transparent;
       position: absolute;
       height: 82px;
       top: 10px;
       right: 10px;
-      width: 960px;
+      width: 90%;
     }
     #AscenLinkLogo-1 {
-      background: url("/image/banner.png") no-repeat scroll left center transparent;
+      background: url("/image/banner.png") no-repeat scroll left center / contain transparent;
       position: absolute;
       height: 82px;
       top: 10px;
       left: 10px;
-      width: 960px
+      width: 90%
     }
     #XteraLogo-1 {
       background: url("/image/S3_Xtera_logo.png") no-repeat scroll right center transparent;
@@ -181,10 +181,6 @@
       top: 25px;
       width: 12px;
     }
-    .subtitle {
-       background: url("/image/S3_arrow_right.png") no-repeat scroll left center transparent;
-       padding-left: 18px;
-    }
   </style>
 </head>
 
@@ -192,9 +188,9 @@
   <div class="head row-fluid">
       <div class="span12">
           <span class="header-img">
-              <span id="LogoBarBG1-1" class="visible-desktop"></span>
-              <span id="LogoBarBG2-1" class="visible-desktop"></span>
-              <span id="AscenLinkLogo-1" class="visible-desktop"></span>
+              <span id="LogoBarBG1-1"></span>
+              <span id="LogoBarBG2-1"></span>
+              <span id="AscenLinkLogo-1"></span>
               <a href="http://www.xtera-ip.com" id="CompanyAnchor-1" target="_blank" title="http://www.xtera-ip.com">
                 <span id="XteraLogo-1"></span>
               </a>
@@ -253,6 +249,7 @@
   </script>
   <script type="text/template" id="t_pagnation">
     <span class="maintitle clickable" opt="<%= opt %>"><%= maintitle %></span>
+    <i class="icon-chevron-right"></i>
     <span class="subtitle clickable" opt="<%= opt %>"><%= subtitle %></span>
   </script>
 </body>

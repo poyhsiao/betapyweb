@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="utf-8">
+	<head>
+		 <meta charset="utf-8" />
+
+		  <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame 
+		       Remove this if you use the .htaccess -->
+		  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+		  <title>Login</title>
+		  <meta name="description" content="" />
+		  <meta name="author" content="Kim Hsiao" />
+
+		  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+
+		  <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
+		  <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
+		  <link rel="stylesheet" href="/css/basic.css" type="text/css" />
+		  <link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" />
+		  <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
+		  <link rel="stylesheet" href="/css/new_main.css" type="text/css" />
+		  <link rel="stylesheet" href="/css/style.css" type="text/css" />
+		  <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" />
+		  <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css" />
+		  <style>
+		  	html, body {
+		  		width: 100%;
+		  		height: 100%;
+		  		padding: 0;
+		  		margin: 0;
+		  	}
+		  	.body {
+		  		width: 100%;
+		  		height: 100%;
+		  		padding: 0px;
+		  		margin: 0px;
+		  	}
+		  	.loginLogo {
+		  		height: 100%;
+		  		width: 100%;
+		  	}
+		  	.oLogo {
+		  		background: url("/image/loginpage.png") no-repeat scroll center center transparent;
+		  		height: 112px;
+		  		width: 259px;
+		  		float: right;
+		  		top: 45%;
+		  		position: relative;
+		  	}
+		  	.loginInfo {
+		  		float: left;
+		  		top: 45%;
+		  		left: 0px;
+		  		position: relative;
+		  	}
+		  	.align-right {
+		  		text-align: right;
+		  		text-align: -moz-right;
+		  		text-align: -webkit-right;
+		  	}
+		  	.align-left {
+		  		text-align: left;
+		  		text-align: -moz-left;
+		  		text-align: -webkit-left;
+		  	}
+		  	.align-center {
+		  		text-align: center;
+		  		text-align: -moz-center;
+		  		text-align: -webkit-center;
+		  	}
+		  	.bg {
+		  		background: url("/image/cover1.jpg") no-repeat scroll center center / cover transparent;
+		  		height: 100%;
+		  		width: 100%;
+		  	}
+		  	.submit-btn {
+		  		background: url("/image/cover_login.png") no-repeat fixed left center transparent;
+		  		padding-left: 30px;
+		  	}
+		  </style>
+	</head>
+	<body>
+		<div class="body container-fluid bg">
+			<div class="row-fluid body">
+				<div class="span6 loginLogo">
+					<div class="oLogo"></div>
+				</div>
+				<div class="span6 body">
+					<div class="loginInfo">
+						<form id="theForm" action="default.html" method="get" class="form-horizontal">
+							<div class="control-group">
+								<label class="control-label" for="LangSelect">
+									<strong>Language:</stron>
+								</label>
+								<div class="controls">
+									<p>
+										<select name="Language" id="LangSelect">
+											<option value="0">English</option>
+											<option value="1">Traditional Chinese</option>
+											<option value="2">Simplified Chinese</option>
+										</select>
+									</p>
+								</div>
+								<label class="control-label" for="AccountAlias">
+									<strong>Account:</strong>
+								</label>
+								<div class="controls">
+									<p>
+										<input type="text" name="AccountAlias" id="AccountAlias" />
+									</p>
+								</div>
+								<label class="control-label" for="Password">
+									<strong>Password:</strong>
+								</label>
+								<div class="controls">
+									<p>
+										<input type="password" name="Password" id="Password"/>
+									</p>
+								</div>
+								<div class="controls align-right">
+									<input type="hidden" name="AdminCheck" value="yes" />
+									<button type="submit" name="SubmitBar">
+										<i class="icon-play"></i>
+										&nbsp;Login
+									</button>
+									<input type="hidden" name="Action" value="" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

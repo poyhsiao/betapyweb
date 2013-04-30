@@ -2,3 +2,7 @@
 *.cache
 *.BAK
 *.ORG
+*.bak
+*.org
+.*
+*.pyc
