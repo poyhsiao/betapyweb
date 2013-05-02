@@ -6,3 +6,7 @@
 *.org
 .*
 *.pyc
+*.lock
+lock
+lock.*
+session/*
