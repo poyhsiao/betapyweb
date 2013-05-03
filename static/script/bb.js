@@ -136,12 +136,17 @@ var backboneWrap = function() {
         self.toggleClass('itemHover').toggleClass('SubMenu');
         /* add/remove itemHover / SubMenu for hover handle */
       }
+    },
+
+    runLogout: function(o) {
+      /* logout the page */
+      window.location = '/logout';
     }
   });
 
   $.getJSON('/data/menuitem.json', function(d) {
     /* realtime get the menu item data */
-    var menumodel, menuview;
+    var menumodel, menuview, bodyview;
     menumodel = new MenuModel(d);
     menuview = new MenuView({
       model: menumodel,
@@ -171,6 +176,14 @@ var backboneWrap = function() {
     $('div.MainMenu:first').trigger('click');
     $('div.SubMenu:first').trigger('click');
     /* initial the view, open every first item of the menu as default */
+
+    bodyview = new MenuView({
+      el: 'div.info',
+      events: {
+        'click #oLogout': 'runLogout'
+      }
+    });
+    /* bind other main page components */
   });
 };
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*1-
 '''
-cherrypy web start up
+_ web start up
 
 Created on 2013/04/30
 
@@ -11,31 +11,59 @@ Created on 2013/04/30
 
 import os.path
 import sys
-import cherrypy
+import cherrypy as _
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(current_dir)
+# add this path as a package
 sys.path.append(os.path.join(current_dir, '../middleware'))
-sys.path.append(os.path.join(current_dir, 'pages'))
+
+# from login import Login
+
+# sys.path.append(os.path.join(current_dir, 'pages'))
 env = Environment(loader=FileSystemLoader('static/template'))
 
-from doLogin import Login
+from libs.login import cklogin
+# work for login relative checking
+
+from libs.tools import *
 
 
 class Root:
-    @cherrypy.expose
+    @_.expose
     def index(self):
-        tpl = env.get_template('login.html')
-        return tpl.render(start='hihi', end='data')
+        if not cklogin():
+            # if not login, then redirect to login page
+            tpl = env.get_template('login.html')
+            return tpl.render(start='hihi', end='data')
+        else:
+            # if logged in already, show /main/ page
+            raise _.HTTPRedirect('/main/')
 
-    @cherrypy.expose
-    def main(self):
-        tpl = env.get_template('default.html')
-        return tpl.render(start='let', end='show')
+    @_.expose
+    def doLogin(self, **kwargs):
+        from pages.doLogin import dologin
+        return dologin(**kwargs)
+
+    @_.expose
+    def main(self, **kwargs):
+        if cklogin():
+            # if user logged in, the show the content
+            tpl = env.get_template('default.html')
+            return tpl.render(userinfo=_.session)
+        else:
+            # if not login, go back to login page
+            raise _.HTTPRedirect('/')
+
+    @_.expose
+    def logout(self, **kwargs):
+        from pages.doLogin import logout
+        return logout()
 
 
 if __name__ == '__main__':
-    cherrypy.config.update({
+    _.config.update({
         'environment': 'production',
         'server.socket_port': 8000,
         'server.socket_host': '0.0.0.0',
@@ -138,9 +166,10 @@ if __name__ == '__main__':
     }
 
     root = Root()
-    root.doLogin = Login()
+    # root.doLogin = Login()
+    # root.main = main()
 
-    # cherrypy.tree.mount(Login(), '/doLogin', config=conf)
-    # cherrypy.quickstart(Root(), '/', config=conf)
-    cherrypy.tree.mount(root, '/', config=conf)
-    cherrypy.engine.start()
+    # _.tree.mount(Login(), '/doLogin', config=conf)
+    # _.quickstart(Root(), '/', config=conf)
+    _.tree.mount(root, '/', config=conf)
+    _.engine.start()

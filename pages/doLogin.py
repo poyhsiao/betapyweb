@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*1-
 '''
-cherrypy web doLogin page
+_ web doLogin page
 
 Created on 2013/04/30
 
@@ -10,7 +10,7 @@ Created on 2013/04/30
 '''
 import os
 import sys
-import cherrypy
+import cherrypy as _
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,24 +19,39 @@ env = Environment(loader=FileSystemLoader('static/template'))
 
 
 class Login:
-    @cherrypy.expose
+    @_.expose
     def index(self, **kwargs):
-        print kwargs
+        # print kwargs
         username = kwargs['AccountAlias']
         password = kwargs['Password']
 
-        cherrypy.session['headers'] = cherrypy.request.headers
-        cherrypy.session['username'] = username
-        cherrypy.session['password'] = password
+        _.session['headers'] = _.request.headers
+        _.session['username'] = username
+        _.session['password'] = password
+        # save necessary information into session
 
-        print cherrypy.session
+        # print _.session
 
-        tpl = env.get_template('default.html')
-        return tpl.render(userinfo=cherrypy.session)
+        raise _.HTTPRedirect('/main/')
+        # tpl = env.get_template('default.html')
+        # return tpl.render(userinfo=_.session)
         # import ml_w_login
         # res = ml_w_login.get(username=username, password=password)
         # print res
         # if not res[0]:
-        #     raise cherrypy.HTTPRedirect('/')
+        #     raise _.HTTPRedirect('/')
         # else:
-        #     raise cherrypy.HTTPRedirect('/main')
+        #     raise _.HTTPRedirect('/main')
+
+
+def dologin(**kwargs):
+    login = Login()
+    return login.index(**kwargs)
+
+
+def logout():
+    id = _.session.id
+    _.session.clear()
+    _.session.delete()
+    raise _.HTTPRedirect('/')
+    # lock current session
