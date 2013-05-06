@@ -22,7 +22,7 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 # from login import Login
 
 # sys.path.append(os.path.join(current_dir, 'pages'))
-env = Environment(loader=FileSystemLoader('static/template'))
+env = Environment(loader=FileSystemLoader('static/template'), extensions=['jinja2.ext.i18n'])
 
 from libs.login import cklogin
 # work for login relative checking
@@ -33,10 +33,21 @@ from libs.tools import *
 class Root:
     @_.expose
     def index(self):
+        if _.session.locked:
+            _.session.release_lock()
+        _.session.clean_up()
+        # clean up all expired sessions
         if not cklogin():
-            # if not login, then redirect to login page
+            if 'LANG' in _.session:
+                lang = _.session['LANG']
+            else:
+                lang = 'en-US'
+
             tpl = env.get_template('login.html')
-            return tpl.render(start='hihi', end='data')
+            env.install_gettext_translations(translation(lang))
+            # import gettext for language translation
+            return tpl.render(lang=lang)
+            # if not login, then redirect to login page
         else:
             # if logged in already, show /main/ page
             raise _.HTTPRedirect('/main/')
@@ -48,9 +59,15 @@ class Root:
 
     @_.expose
     def main(self, **kwargs):
+        if 'LANG' in _.session:
+            lang = _.session['LANG']
+        else:
+            lang = 'en-US'
+
         if cklogin():
             # if user logged in, the show the content
             tpl = env.get_template('default.html')
+            env.install_gettext_translations(translation(lang))
             return tpl.render(userinfo=_.session)
         else:
             # if not login, go back to login page
@@ -68,7 +85,8 @@ if __name__ == '__main__':
         'server.socket_port': 8000,
         'server.socket_host': '0.0.0.0',
         'log.error_file': 'site.log',
-        'log.screen': True
+        'log.screen': True,
+        'tools.sessions.locking': 'explicit'
     })
 
     content_type = {'text': {

@@ -15,6 +15,8 @@ from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(current_dir, '../../middleware'))
+sys.path.append(os.path.join(current_dir, '../libs'))
+import tools
 env = Environment(loader=FileSystemLoader('static/template'))
 
 
@@ -24,10 +26,15 @@ class Login:
         # print kwargs
         username = kwargs['AccountAlias']
         password = kwargs['Password']
+        lang = kwargs['Language']
+
+        _.session['LANG'] = lang
+        # save perfer language first
 
         _.session['headers'] = _.request.headers
         _.session['username'] = username
         _.session['password'] = password
+        # _.session['LANG'] = lang
         # save necessary information into session
 
         # print _.session
@@ -50,7 +57,7 @@ def dologin(**kwargs):
 
 
 def logout():
-    id = _.session.id
+    # id = _.session.id
     _.session.clear()
     _.session.delete()
     raise _.HTTPRedirect('/')

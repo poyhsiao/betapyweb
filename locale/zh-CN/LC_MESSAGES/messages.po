@@ -1,0 +1,1927 @@
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: XteraLink\n"
+"POT-Creation-Date: 2012-12-13 09:44+CST\n"
+"PO-Revision-Date: 2012-12-13 10:46+0800\n"
+"Last-Translator: \n"
+"Language-Team: XteraLink <XteraLink>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
+
+# The following messages are from middleware
+# jcfg
+#: middleware/jcfg.py:24
+msgid "SYNTAX: invalid value"
+msgstr "语法: 无效的值"
+
+#: middleware/jcfg.py:25
+msgid "SYNTAX: mixed-style array"
+msgstr "语法: 混合式数组"
+
+#: middleware/jcfg.py:26
+msgid "SYNTAX: no array item"
+msgstr "语法: 没有数组项目"
+
+#: middleware/jcfg.py:27
+msgid "SYNTAX: no ending '}'"
+msgstr "语法: 没有结尾的 '}'"
+
+#: middleware/jcfg.py:28
+msgid "SYNTAX: no valid key"
+msgstr "语法: 不是有效的键名"
+
+#: middleware/jcfg.py:29
+msgid "SYNTAX: no root tag"
+msgstr "语法: 没有根标签"
+
+#: middleware/jcfg.py:30
+msgid "SYNTAX: unexpected '}'"
+msgstr "语法: 未预期的 '}'"
+
+#: middleware/jcfg.py:31
+msgid "invalid key"
+msgstr "无效的键名"
+
+#: middleware/jcfg.py:32 middleware/xte_dhcp_dmz.py:34
+#: middleware/xte_dhcp_dmz.py:37 middleware/xte_dhcp_dmz.py:68
+#: middleware/xte_dhcp_dmz.py:74 middleware/xte_dhcp_dmz.py:76
+#: middleware/xte_dhcp_dmz.py:82 middleware/xte_dhcp_lan.py:34
+#: middleware/xte_dhcp_lan.py:37 middleware/xte_dhcp_lan.py:68
+#: middleware/xte_dhcp_lan.py:74 middleware/xte_dhcp_lan.py:76
+#: middleware/xte_dhcp_lan.py:82
+msgid "invalid value"
+msgstr "无效的值"
+
+#: middleware/jcfg.py:33
+msgid "mandatory array can't be empty"
+msgstr "必要的数组不能为空"
+
+#: middleware/jcfg.py:34
+msgid "no mandatory key"
+msgstr "没有需要的键名"
+
+#: middleware/jcfg.py:35 middleware/xte_wan_detection.py:121
+msgid "too less elements"
+msgstr "太少目标数量"
+
+# xte_administration
+#: middleware/xte_administration.py:15 middleware/xte_administration.py:33
+#: middleware/xte_administration.py:75 middleware/xte_administration.py:117
+#: middleware/xte_administration.py:162
+msgid "account not found:"
+msgstr "未发现账号:"
+
+#: middleware/xte_administration.py:18
+msgid "invalid group:"
+msgstr "无效的群组:"
+
+#: middleware/xte_administration.py:37
+msgid "invalid password"
+msgstr "无效的密码"
+
+#: middleware/xte_administration.py:48
+msgid "duplicated name:"
+msgstr "重复的名称:"
+
+#: middleware/xte_administration.py:52
+msgid "invalid name:"
+msgstr "无效的名称:"
+
+#: middleware/xte_administration.py:78
+msgid "can't delete built-in account:"
+msgstr "无法删除内建的账号:"
+
+#: middleware/xte_administration.py:166
+msgid "same group:"
+msgstr "相同的群组:"
+
+#: middleware/xte_administration.py:200 middleware/xte_administration.py:208
+#: middleware/xte_administration.py:217
+msgid "Reboot now"
+msgstr "立即重启"
+
+#: middleware/xte_administration.py:264
+msgid "invalid configuration"
+msgstr "无效的配置文件"
+
+#: middleware/xte_arp_table.py:11
+msgid "fixed-entry"
+msgstr "固定项目"
+
+#: middleware/xte_arp_table.py:13
+msgid "interface"
+msgstr "界面"
+
+#: middleware/xte_arp_table.py:14 middleware/xte_dhcp_dmz.py:18
+#: middleware/xte_dhcp_lan.py:18 middleware/xte_ip_group.py:13
+#: middleware/xte_network.py:20 middleware/xte_network.py:40
+#: middleware/xte_network.py:52 middleware/xte_network.py:57
+#: middleware/xte_virtual_server.py:15 middleware/xte_wan_detection.py:17
+#: middleware/xte_wan_detection.py:23
+msgid "ip"
+msgstr "IP 地址"
+
+#: middleware/xte_arp_table.py:15 middleware/xte_dhcp_dmz.py:17
+#: middleware/xte_dhcp_lan.py:17
+msgid "mac"
+msgstr "MAC 地址"
+
+#: middleware/xte_auto_routing.py:9 middleware/xte_connection_limit.py:12
+#: middleware/xte_firewall.py:12 middleware/xte_nat.py:13
+msgid "source"
+msgstr "来源"
+
+#: middleware/xte_auto_routing.py:10 middleware/xte_connection_limit.py:13
+#: middleware/xte_firewall.py:13 middleware/xte_nat.py:14
+msgid "destination"
+msgstr "目的地"
+
+#: middleware/xte_auto_routing.py:11 middleware/xte_connection_limit.py:14
+#: middleware/xte_firewall.py:14 middleware/xte_nat.py:15
+#: middleware/xte_service_group.py:13 middleware/xte_virtual_server.py:14
+msgid "service"
+msgstr "服务"
+
+#: middleware/xte_auto_routing.py:15
+msgid "failover"
+msgstr "备援"
+
+#: middleware/xte_auto_routing.py:16
+msgid "persistent"
+msgstr "持续"
+
+#: middleware/xte_auto_routing.py:17 middleware/xte_connection_limit.py:16
+#: middleware/xte_firewall.py:16 middleware/xte_nat.py:17
+#: middleware/xte_virtual_server.py:17
+msgid "log"
+msgstr "纪录"
+
+#: middleware/xte_auto_routing.py:23
+msgid "method"
+msgstr "方法"
+
+#: middleware/xte_auto_routing.py:24
+msgid "parameter"
+msgstr "参数"
+
+#: middleware/xte_auto_routing.py:25
+msgid "aging"
+msgstr "持续时间"
+
+#: middleware/xte_auto_routing.py:26 middleware/xte_connection_limit.py:10
+#: middleware/xte_firewall.py:10 middleware/xte_nat.py:11
+#: middleware/xte_virtual_server.py:21
+msgid "rule"
+msgstr "规则"
+
+#: middleware/xte_connection_limit.py:15
+msgid "rate"
+msgstr "联机/秒"
+
+#: middleware/xte_date_and_time.py:13
+msgid "time-zone"
+msgstr "时区"
+
+#: middleware/xte_date_and_time.py:14
+msgid "time-server"
+msgstr "网络时间服务器"
+
+# xte_date_and_time
+#: middleware/xte_date_and_time.py:64 middleware/xte_date_and_time.py:67
+msgid "See failure.log"
+msgstr "请看 failure.log"
+
+#: middleware/xte_ddns.py:9 middleware/xte_nat.py:10
+#: middleware/xte_network.py:33 middleware/xte_network.py:62
+#: middleware/xte_snmp.py:11
+msgid "enable"
+msgstr "启用"
+
+#: middleware/xte_ddns.py:10
+msgid "provider"
+msgstr "提供者"
+
+#: middleware/xte_ddns.py:11 middleware/xte_dns.py:11
+msgid "domain-name"
+msgstr "域名"
+
+#: middleware/xte_ddns.py:12 middleware/xte_network.py:49
+#: middleware/xte_network.py:69
+msgid "username"
+msgstr "使用者名称"
+
+#: middleware/xte_ddns.py:13 middleware/xte_network.py:50
+#: middleware/xte_network.py:70
+msgid "password"
+msgstr "密码"
+
+#: middleware/xte_ddns.py:97 middleware/xte_ddns.py:99
+#: middleware/xte_ddns.py:101 middleware/xte_ddns.py:103
+#: middleware/xte_network.py:653 middleware/xte_network.py:655
+#: middleware/xte_network.py:663 middleware/xte_network.py:665
+#: middleware/xte_network.py:667 middleware/xte_network.py:670
+#: middleware/xte_network.py:672
+msgid "can't be empty"
+msgstr "设定不能为空"
+
+# xte_dhcp_dmz, xte_dhcp_lan
+#: middleware/xte_dhcp_dmz.py:10 middleware/xte_dhcp_lan.py:10
+#: middleware/xte_dns.py:12
+msgid "dns-server-1"
+msgstr "域名服务器 1"
+
+#: middleware/xte_dhcp_dmz.py:11 middleware/xte_dhcp_lan.py:11
+#: middleware/xte_dns.py:13
+msgid "dns-server-2"
+msgstr "域名服务器 2"
+
+#: middleware/xte_dhcp_dmz.py:12 middleware/xte_dhcp_dmz.py:34
+#: middleware/xte_dhcp_dmz.py:68 middleware/xte_dhcp_lan.py:12
+#: middleware/xte_dhcp_lan.py:34 middleware/xte_dhcp_lan.py:68
+#: middleware/xte_network.py:27 middleware/xte_network.py:45
+msgid "gateway"
+msgstr "网关"
+
+#: middleware/xte_dhcp_dmz.py:13 middleware/xte_dhcp_dmz.py:37
+#: middleware/xte_dhcp_lan.py:13 middleware/xte_dhcp_lan.py:37
+#: middleware/xte_network.py:21 middleware/xte_network.py:44
+#: middleware/xte_network.py:56
+msgid "mask"
+msgstr "网络屏蔽"
+
+#: middleware/xte_dhcp_dmz.py:14 middleware/xte_dhcp_dmz.py:74
+#: middleware/xte_dhcp_dmz.py:76 middleware/xte_dhcp_lan.py:14
+#: middleware/xte_dhcp_lan.py:74 middleware/xte_dhcp_lan.py:76
+msgid "dynamic-range"
+msgstr "DHCP 地址范围"
+
+#: middleware/xte_dhcp_dmz.py:15 middleware/xte_dhcp_dmz.py:82
+#: middleware/xte_dhcp_lan.py:15 middleware/xte_dhcp_lan.py:82
+msgid "static-mapping"
+msgstr "固定配置"
+
+#: middleware/xte_dhcp_dmz.py:74 middleware/xte_dhcp_lan.py:74
+#: webui/templates/dhcp.mako:51
+msgid "Starting Address"
+msgstr "起始地址"
+
+#: middleware/xte_dhcp_dmz.py:76 middleware/xte_dhcp_lan.py:76
+#: webui/templates/dhcp.mako:52
+msgid "Ending Address"
+msgstr "结束地址"
+
+#: middleware/xte_dhcp_dmz.py:82 middleware/xte_dhcp_lan.py:82
+#: webui/templates/arp_table.mako:39 webui/templates/arp_table.mako:54
+#: webui/templates/arp_table.mako:71 webui/templates/dhcp.mako:70
+msgid "IP Address"
+msgstr "IP 地址"
+
+# xte_diagnostic_tools
+#: middleware/xte_diagnostic_tools.py:74
+msgid "nothing to kill"
+msgstr "没有指令可以停止"
+
+#: middleware/xte_diagnostic_tools.py:81
+msgid "kill"
+msgstr "停止"
+
+#: middleware/xte_dns.py:10
+msgid "hostname"
+msgstr "主机名"
+
+#: middleware/xte_firewall.py:15
+msgid "action"
+msgstr "处理"
+
+#: middleware/xte_fqdn.py:10
+msgid "fqdn"
+msgstr "FQDN"
+
+#: middleware/xte_ip_group.py:10 middleware/xte_service_group.py:10
+msgid "group"
+msgstr "群组"
+
+#: middleware/xte_ip_group.py:12 middleware/xte_network.py:34
+#: middleware/xte_network.py:63 middleware/xte_service_group.py:12
+msgid "label"
+msgstr "名称"
+
+#: middleware/xte_nat.py:16
+msgid "translate"
+msgstr "转译成"
+
+#: middleware/xte_network.py:12
+msgid "clone-mac"
+msgstr "Clone MAC"
+
+#: middleware/xte_network.py:13 middleware/xte_network.py:71
+msgid "mtu"
+msgstr "MTU"
+
+#: middleware/xte_network.py:14
+msgid "speed-duplex"
+msgstr "传输模式"
+
+#: middleware/xte_network.py:17 middleware/xte_network.py:32
+msgid "ethernet"
+msgstr "以太网络"
+
+#: middleware/xte_network.py:18
+msgid "basic-subnet"
+msgstr "子网设定"
+
+#: middleware/xte_network.py:24
+msgid "static-route"
+msgstr "静态路由"
+
+#: middleware/xte_network.py:26
+msgid "subnet"
+msgstr "子网/网络屏蔽"
+
+#: middleware/xte_network.py:35 middleware/xte_network.py:64
+msgid "downstream"
+msgstr "下载带宽"
+
+#: middleware/xte_network.py:36 middleware/xte_network.py:65
+msgid "upstream"
+msgstr "上传带宽"
+
+#: middleware/xte_network.py:37
+msgid "type"
+msgstr "模式"
+
+#: middleware/xte_network.py:38
+msgid "static-mode"
+msgstr "静态模式"
+
+#: middleware/xte_network.py:47
+msgid "pppoe-mode"
+msgstr "PPPoE 模式"
+
+#: middleware/xte_network.py:51
+msgid "service-name"
+msgstr "服务名称"
+
+#: middleware/xte_network.py:53
+msgid "daily-redial"
+msgstr "每日回放时间"
+
+#: middleware/xte_network.py:55
+msgid "public-ip-passthrough"
+msgstr "公开 IP 穿透"
+
+#: middleware/xte_network.py:66
+msgid "pin"
+msgstr ""
+
+#: middleware/xte_network.py:67
+msgid "apn"
+msgstr ""
+
+#: middleware/xte_network.py:68
+msgid "dial"
+msgstr "拨接"
+
+#: middleware/xte_network.py:75
+msgid "lan"
+msgstr "局域网络"
+
+#: middleware/xte_network.py:76
+msgid "dmz"
+msgstr "隔离区"
+
+#: middleware/xte_network.py:487
+msgid "is disabled"
+msgstr "是未启用的"
+
+#: middleware/xte_network.py:490
+msgid "is not dynamic"
+msgstr "不是动态的"
+
+#: middleware/xte_snmp.py:12
+msgid "community"
+msgstr "Community"
+
+#: middleware/xte_snmp.py:13
+msgid "system-name"
+msgstr "系统名称"
+
+#: middleware/xte_snmp.py:14
+msgid "system-contact"
+msgstr "系统负责人"
+
+#: middleware/xte_snmp.py:15
+msgid "system-location"
+msgstr "系统位置"
+
+# xte_stat_bandwidth_utilization
+#: middleware/xte_stat_bandwidth_utilization.py:19
+msgid "ipc with bmstatd"
+msgstr ""
+
+#: middleware/xte_stat_bandwidth_utilization.py:35
+msgid "invalid time unit"
+msgstr "无效的时间单位"
+
+#: middleware/xte_stat_bandwidth_utilization.py:37
+msgid "invalid interface"
+msgstr "无效的界面"
+
+#: middleware/xte_stat_bandwidth_utilization.py:39
+msgid "invalid direction"
+msgstr "无效的方向"
+
+#: middleware/xte_syslog.py:20
+msgid "server"
+msgstr "服务器 IP"
+
+#: middleware/xte_syslog.py:21
+msgid "facility"
+msgstr "设施"
+
+#: middleware/xte_virtual_server.py:16
+msgid "port-mapping"
+msgstr "端口对应"
+
+# xte_virtual_server
+#: middleware/xte_virtual_server.py:116
+msgid "port must be > 0 and < 65535"
+msgstr "端口必须大于 0 或小于 65535"
+
+#: middleware/xte_virtual_server.py:117
+msgid "single Service must map to single port mapping"
+msgstr "单一的网络服务必须有相对应的单一端口对应"
+
+#: middleware/xte_virtual_server.py:119
+msgid "multi serice port must map to multi port-mapping"
+msgstr "多个网络服务端口必须对应至多个端口对应"
+
+#: middleware/xte_virtual_server.py:120
+msgid "port1 must be > 0 and < 65535"
+msgstr "端口 1 必须大于 0 或小于 65535"
+
+#: middleware/xte_virtual_server.py:121
+msgid "port2 must be > 0 and < 65535"
+msgstr "端口 2 必须大于 0 或小于 65535"
+
+#: middleware/xte_virtual_server.py:122
+msgid "port2 must > port1"
+msgstr "端口 2 必须大于端口 1"
+
+#: middleware/xte_virtual_server.py:123
+msgid "multi service port size must equal to multi port-mapping size"
+msgstr "多个网络服务端口的数量必须等同于多个端口对应的数量"
+
+#: middleware/xte_wan_detection.py:11
+msgid "detection-protocol"
+msgstr "侦测协议"
+
+#: middleware/xte_wan_detection.py:12
+msgid "detection-period"
+msgstr "侦测周期"
+
+#: middleware/xte_wan_detection.py:13
+msgid "targets-per-detection"
+msgstr "每次侦测所选出之目标数量"
+
+#: middleware/xte_wan_detection.py:14
+msgid "retries"
+msgstr "重试次数"
+
+#: middleware/xte_wan_detection.py:15
+msgid "icmp-target"
+msgstr "目标列表"
+
+#: middleware/xte_wan_detection.py:18
+msgid "hops"
+msgstr "跃点"
+
+#: middleware/xte_wan_detection.py:21
+msgid "tcp-target"
+msgstr "目标列表"
+
+#: middleware/xte_wan_detection.py:24
+msgid "port"
+msgstr "TCP 端口"
+
+#: middleware/xte_wan_detection.py:31
+msgid "ignore-inbound-traffic"
+msgstr "忽略对内流量"
+
+# xte_wan_detection
+#: middleware/xte_wan_detection.py:128
+msgid "is duplicated"
+msgstr "是重复的"
+
+#: webui/auth.py:47
+msgid "Account: %s is not found"
+msgstr "未发现账号: %s"
+
+#: webui/auth.py:51
+msgid "Password is not correct!"
+msgstr "不是正确的密码!"
+
+#: webui/auth.py:55
+msgid "Get administration configuration error!"
+msgstr "取得账号设定时发生错误."
+
+#: webui/lang.py:11
+msgid "Only root can apply remote downgrade file"
+msgstr ""
+
+#: webui/lang.py:12
+msgid "Patch too new"
+msgstr "补丁太新"
+
+#: webui/lang.py:13
+msgid "Incompatible version"
+msgstr "不兼容的版本"
+
+#: webui/lang.py:14
+msgid "Checksum error"
+msgstr "查验码错误"
+
+#: webui/lang.py:15
+msgid "I/O error"
+msgstr "I/O 错误"
+
+#: webui/lang.py:16 webui/lang.py:18
+msgid "Only root can apply remote update file"
+msgstr ""
+
+#: webui/lang.py:17
+msgid "Patch too old"
+msgstr "补丁太旧"
+
+#: webui/lang.py:19
+msgid "Invalid update file"
+msgstr "无效的更新档案"
+
+#: webui/lang.py:20
+msgid "Debug on"
+msgstr "Debug 模式开启"
+
+#: webui/lang.py:21
+msgid "Debug off"
+msgstr "Debug 模式关闭"
+
+#: webui/lang.py:22
+msgid "Incompatible version/build"
+msgstr "不兼容的版本/组建"
+
+#: webui/lang.py:23
+msgid "Incompatible platform"
+msgstr "硬件平台不兼容"
+
+#: webui/lang.py:24
+msgid "Invalid update key"
+msgstr "输入的更新授权码无效"
+
+#: webui/lang.py:25
+msgid "Invalid update file type"
+msgstr "无效的更新文件格式"
+
+#: webui/lang.py:26
+msgid "Invalid downgrade file"
+msgstr "无效的降级档案"
+
+#: webui/lang.py:27
+msgid "Invalid downgrade file type"
+msgstr "无效的降级文件格式"
+
+#: webui/log/syslog.py:27
+msgid "Settings are applied for page Log -> Syslog"
+msgstr "页面 '纪录 -> 系统纪录' 设定已经生效"
+
+#: webui/service/auto_routing.py:28
+msgid "Settings are applied for page Service -> Auto Routing"
+msgstr "页面 '服务 -> 自动路由' 设定已经生效"
+
+#: webui/service/connection_limit.py:28
+msgid "Settings are applied for page Service -> Connection Limit"
+msgstr "页面 '服务 -> 联机限制' 设定已经生效"
+
+#: webui/service/dhcp_dmz.py:27
+msgid "Settings are applied for page Service -> DHCP (DMZ)"
+msgstr "页面 '服务 -> DHCP (隔离区)' 设定已经生效"
+
+#: webui/service/dhcp_lan.py:27
+msgid "Settings are applied for page Service -> DHCP (LAN)"
+msgstr "页面 '服务 -> DHCP (局域网络)' 设定已经生效"
+
+#: webui/service/firewall.py:28
+msgid "Settings are applied for page Service -> Firewall"
+msgstr "页面 '服务 -> 防火墙' 设定已经生效"
+
+#: webui/service/nat.py:32
+msgid "Settings are applied for page Service -> NAT"
+msgstr "页面 '服务 -> 网址转译' 设定已经生效"
+
+#: webui/service/snmp.py:26
+msgid "Settings are applied for page Service -> SNMP"
+msgstr "页面 '服务 -> 简单网络管理' 设定已经生效"
+
+#: webui/service/virtual_server.py:28
+msgid "Settings are applied for page Service -> Virtual Server"
+msgstr "页面 '服务 -> 虚拟主机' 设定已经生效"
+
+#: webui/system/administration.py:109
+msgid "Restore Configuration successfully"
+msgstr "成功地上传配置文件"
+
+#: webui/system/administration.py:154
+msgid "Firmware update successfully, system rebooting..."
+msgstr "系统软件更新成功，系统重启中..."
+
+#: webui/system/administration.py:192
+msgid "Firmware downgrade successfully, system rebooting..."
+msgstr "系统软件降级成功，系统重启中..."
+
+#: webui/system/arp_table.py:27
+msgid "Settings are applied for page System -> ARP Table"
+msgstr "页面 '系统 -> ARP 表格' 设定已经生效"
+
+#: webui/system/date_time.py:30
+msgid "Settings are applied for page System -> Date/Time"
+msgstr "页面 '系统 -> 系统时间' 设定已经生效"
+
+#: webui/system/date_time.py:41
+msgid "Set Time Successfully"
+msgstr "成功地设置时间"
+
+#: webui/system/ddns.py:33
+msgid "Settings are applied for page System -> DDNS"
+msgstr "页面 '系统 ->动态网域名称服务器' 设定已经生效"
+
+#: webui/system/diagnostic_tools.py:23
+msgid "ARP caches are updated"
+msgstr "ARP 信息已经更新"
+
+#: webui/system/diagnostic_tools.py:38
+msgid "Test finished successfully"
+msgstr "测试成功"
+
+#: webui/system/dns.py:26
+msgid "Settings are applied for page System -> DNS"
+msgstr "页面 '系统 -> 域名服务器' 设定已经生效"
+
+#: webui/system/fqdn.py:26
+msgid "Settings are applied for page System -> FQDN"
+msgstr "页面 '系统 -> FQDN' 设定已经生效"
+
+#: webui/system/ip_group.py:28
+msgid "Settings are applied for page System -> IP Group"
+msgstr "页面 '系统-> IP 群组设定' 设定已经生效"
+
+#: webui/system/network.py:33
+msgid "Settings are applied for page System -> Network Setting"
+msgstr "页面 '系统 -> 网络设定' 设定已经生效"
+
+#: webui/system/service_group.py:26
+msgid "Settings are applied for page System -> Service Group"
+msgstr "页面 '系统 -> 网络群组服务设定' 设定已经生效"
+
+#: webui/system/summary.py:28
+msgid "Reconnect successfully"
+msgstr "成功地重新连接"
+
+#: webui/system/wan_detection.py:26
+msgid "Settings are applied for page System -> WAN Detection"
+msgstr "页面 '系统 -> 广域网侦测' 设定已经生效"
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to delete this account?"
+msgstr "确定要删除此账号?"
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to load factory default settings, and reboot?"
+msgstr "确定要回复出厂默认值，并重新启动?"
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to reboot system right now?"
+msgstr "确定要重新启动?"
+
+#: webui/templates/administration.mako:35
+msgid "on-line"
+msgstr "在线"
+
+#: webui/templates/administration.mako:36
+msgid "off-line"
+msgstr "脱机"
+
+#: webui/templates/administration.mako:39
+msgid "Account Setting"
+msgstr "账号设定"
+
+#: webui/templates/administration.mako:42
+#: webui/templates/administration.mako:135
+msgid "Name"
+msgstr "名称"
+
+#: webui/templates/administration.mako:43
+#: webui/templates/administration.mako:139 webui/templates/ip_group.mako:34
+#: webui/templates/service_group.mako:32
+msgid "Group"
+msgstr "群组"
+
+#: webui/templates/administration.mako:44 webui/templates/network.mako:47
+#: webui/templates/summary.mako:72
+msgid "Status"
+msgstr "状态"
+
+#: webui/templates/administration.mako:45
+msgid "Add"
+msgstr "新增"
+
+#: webui/templates/administration.mako:46
+msgid "Sort by Name"
+msgstr "按名称排序"
+
+#: webui/templates/administration.mako:47
+msgid "Sort by Group"
+msgstr "按群组排序"
+
+#: webui/templates/administration.mako:58
+msgid "Maintenance"
+msgstr "系统维护"
+
+#: webui/templates/administration.mako:60
+#: webui/templates/administration.mako:61
+msgid "Factory default"
+msgstr "出厂默认值"
+
+#: webui/templates/administration.mako:64
+#: webui/templates/administration.mako:65
+msgid "Reboot"
+msgstr "重新启动"
+
+#: webui/templates/administration.mako:72
+msgid "Configuration File"
+msgstr "系统设定"
+
+#: webui/templates/administration.mako:74
+msgid "Save Configuration"
+msgstr "下载配置文件"
+
+#: webui/templates/administration.mako:77
+msgid "Save"
+msgstr "下载"
+
+#: webui/templates/administration.mako:82
+msgid "Restore Configuration"
+msgstr "上传配置文件"
+
+#: webui/templates/administration.mako:86
+msgid "Restore"
+msgstr "上传"
+
+#: webui/templates/administration.mako:95
+#: webui/templates/administration.mako:101
+msgid "Firmware Update"
+msgstr "更新系统软件"
+
+#: webui/templates/administration.mako:97
+msgid "Current Version"
+msgstr "目前版本"
+
+#: webui/templates/administration.mako:105
+msgid "Input update key"
+msgstr "请输入更新授权码"
+
+#: webui/templates/administration.mako:112
+msgid "Update"
+msgstr "更新"
+
+#: webui/templates/administration.mako:120
+msgid "Firmware Downgrade"
+msgstr "韧体降级"
+
+#: webui/templates/administration.mako:124
+msgid "Downgrade"
+msgstr "降级"
+
+#: webui/templates/administration.mako:146 webui/templates/ddns.mako:71
+#: webui/templates/login.mako:69 webui/templates/network.mako:117
+#: webui/templates/network.mako:223
+msgid "Password"
+msgstr "密码"
+
+#: webui/templates/administration.mako:150
+msgid "Confirm"
+msgstr "确认"
+
+#: webui/templates/arp_table.mako:29 webui/templates/auto_routing.mako:59
+#: webui/templates/connection_limit.mako:33 webui/templates/firewall.mako:33
+#: webui/templates/ip_group.mako:46 webui/templates/nat.mako:63
+#: webui/templates/network.mako:204 webui/templates/network.mako:257
+#: webui/templates/network.mako:285 webui/templates/network.mako:308
+#: webui/templates/service_group.mako:44
+#: webui/templates/virtual_server.mako:34
+#: webui/templates/wan_detection.mako:82
+#: webui/templates/wan_detection.mako:101
+msgid "Drag and Drop"
+msgstr "Drag and Drop"
+
+#: webui/templates/arp_table.mako:32
+msgid "Fixed Entries Setting"
+msgstr "固定项目设定"
+
+#: webui/templates/arp_table.mako:38 webui/templates/arp_table.mako:53
+#: webui/templates/arp_table.mako:67 webui/templates/diagnostic_tools.mako:50
+#: webui/templates/summary.mako:50
+msgid "Interface"
+msgstr "界面"
+
+#: webui/templates/arp_table.mako:40 webui/templates/arp_table.mako:55
+#: webui/templates/arp_table.mako:75 webui/templates/dhcp.mako:69
+#: webui/templates/stat_dhcp.mako:48
+msgid "MAC Address"
+msgstr "MAC 地址"
+
+#: webui/templates/arp_table.mako:50
+msgid "Dynamic Entries Setting"
+msgstr "动态项目设定"
+
+#: webui/templates/arp_table.mako:56
+msgid "Fix"
+msgstr "固定"
+
+#: webui/templates/auto_routing.mako:1
+msgid "Add auto routing rules"
+msgstr "新增自动路由规则"
+
+#: webui/templates/auto_routing.mako:1
+msgid "Delete auto routing rules"
+msgstr "删除自动路由规则"
+
+#: webui/templates/auto_routing.mako:1
+msgid "Edit auto routing rules"
+msgstr "编辑自动路由规则"
+
+#: webui/templates/auto_routing.mako:38
+msgid "Auto Routing Setting"
+msgstr "自动路由设定"
+
+#: webui/templates/auto_routing.mako:40
+msgid "Method"
+msgstr "方法"
+
+#: webui/templates/auto_routing.mako:42
+msgid "weight"
+msgstr "比重"
+
+#: webui/templates/auto_routing.mako:43
+msgid "traffic"
+msgstr "流量"
+
+#: webui/templates/auto_routing.mako:47
+msgid "Parameters"
+msgstr "参数"
+
+#: webui/templates/auto_routing.mako:51
+msgid "Persistence Time"
+msgstr "持续时间"
+
+#: webui/templates/auto_routing.mako:52 webui/templates/wan_detection.mako:62
+msgid "sec"
+msgstr "秒"
+
+#: webui/templates/auto_routing.mako:63
+#: webui/templates/connection_limit.mako:37 webui/templates/firewall.mako:37
+#: webui/templates/nat.mako:66
+msgid "IPv4 Rules"
+msgstr "IPv4 规则设定"
+
+#: webui/templates/auto_routing.mako:70 webui/templates/auto_routing.mako:98
+#: webui/templates/connection_limit.mako:44
+#: webui/templates/connection_limit.mako:59 webui/templates/firewall.mako:44
+#: webui/templates/firewall.mako:59 webui/templates/nat.mako:72
+#: webui/templates/nat.mako:88
+msgid "Source"
+msgstr "来源"
+
+#: webui/templates/auto_routing.mako:71 webui/templates/auto_routing.mako:99
+#: webui/templates/connection_limit.mako:45
+#: webui/templates/connection_limit.mako:64 webui/templates/firewall.mako:45
+#: webui/templates/firewall.mako:64 webui/templates/nat.mako:73
+#: webui/templates/nat.mako:93
+msgid "Destination"
+msgstr "目的地"
+
+#: webui/templates/auto_routing.mako:72 webui/templates/auto_routing.mako:100
+#: webui/templates/connection_limit.mako:46
+#: webui/templates/connection_limit.mako:69 webui/templates/firewall.mako:46
+#: webui/templates/firewall.mako:69 webui/templates/menu.mako:1
+#: webui/templates/nat.mako:74 webui/templates/nat.mako:98
+#: webui/templates/service_group.mako:57 webui/templates/service_group.mako:68
+#: webui/templates/virtual_server.mako:56
+#: webui/templates/virtual_server.mako:86
+msgid "Service"
+msgstr "服务"
+
+#: webui/templates/auto_routing.mako:73 webui/templates/auto_routing.mako:102
+#: webui/templates/ddns.mako:28 webui/templates/nat.mako:37
+#: webui/templates/network.mako:32 webui/templates/service_header.mako:1
+#: webui/templates/wan_detection.mako:37
+msgid "WAN"
+msgstr "广域网"
+
+#: webui/templates/auto_routing.mako:74 webui/templates/auto_routing.mako:121
+msgid "Failover"
+msgstr "备援"
+
+#: webui/templates/auto_routing.mako:75 webui/templates/auto_routing.mako:122
+msgid "Persistent"
+msgstr "持续"
+
+#: webui/templates/auto_routing.mako:76 webui/templates/auto_routing.mako:123
+#: webui/templates/connection_limit.mako:48
+#: webui/templates/connection_limit.mako:78 webui/templates/firewall.mako:48
+#: webui/templates/firewall.mako:78 webui/templates/menu.mako:1
+#: webui/templates/nat.mako:76 webui/templates/nat.mako:108
+#: webui/templates/virtual_server.mako:47
+#: webui/templates/virtual_server.mako:102
+msgid "Log"
+msgstr "纪录"
+
+#: webui/templates/connection_limit.mako:1
+msgid "Add connection limit rules"
+msgstr "新增联机限制规则"
+
+#: webui/templates/connection_limit.mako:1
+msgid "Delete connection limit rules"
+msgstr "删除联机限制规则"
+
+#: webui/templates/connection_limit.mako:1
+msgid "Edit connection limit rules"
+msgstr "编辑联机限制规则"
+
+#: webui/templates/connection_limit.mako:47
+#: webui/templates/connection_limit.mako:74
+msgid "Conn/Sec"
+msgstr "联机/秒"
+
+#: webui/templates/date_time.mako:27
+msgid "Date/Time Setting"
+msgstr "日期与时间设定"
+
+#: webui/templates/date_time.mako:29
+msgid "Time Zone"
+msgstr "时区"
+
+#: webui/templates/date_time.mako:37
+msgid "Time Server"
+msgstr "网络时间服务器"
+
+#: webui/templates/date_time.mako:43
+msgid "Date"
+msgstr "日期"
+
+#: webui/templates/date_time.mako:47
+msgid "Time"
+msgstr "时间"
+
+#: webui/templates/date_time.mako:50
+msgid "Set Date/Time"
+msgstr "设定日期与时间"
+
+#: webui/templates/ddns.mako:41
+msgid "DDNS Setting"
+msgstr "动态域名服务器设定"
+
+#: webui/templates/ddns.mako:43 webui/templates/nat.mako:53
+#: webui/templates/network.mako:73 webui/templates/network.mako:154
+#: webui/templates/snmp.mako:23
+msgid "Enable"
+msgstr "启用"
+
+#: webui/templates/ddns.mako:47
+msgid "Provider"
+msgstr "提供者"
+
+#: webui/templates/ddns.mako:63 webui/templates/dns.mako:23
+#: webui/templates/fqdn.mako:29
+msgid "Domain Name"
+msgstr "域名"
+
+#: webui/templates/ddns.mako:67 webui/templates/network.mako:113
+#: webui/templates/network.mako:219
+msgid "User Name"
+msgstr "使用者名称"
+
+#: webui/templates/dhcp.mako:27 webui/templates/dns.mako:27
+msgid "DNS Server 1"
+msgstr "域名服务器 1"
+
+#: webui/templates/dhcp.mako:31 webui/templates/dns.mako:31
+msgid "DNS Server 2"
+msgstr "域名服务器 2"
+
+#: webui/templates/dhcp.mako:35 webui/templates/network.mako:188
+#: webui/templates/network.mako:318
+msgid "Gateway"
+msgstr "网关"
+
+#: webui/templates/dhcp.mako:39 webui/templates/network.mako:192
+#: webui/templates/network.mako:245 webui/templates/network.mako:295
+msgid "Netmask"
+msgstr "网络屏蔽"
+
+#: webui/templates/dhcp.mako:43
+msgid "DHCP Range"
+msgstr "DHCP 地址范围"
+
+#: webui/templates/dhcp.mako:61
+msgid "Static Mapping"
+msgstr "固定配置"
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid ""
+"It may take several minutes in a complex network environment. Are you sure?"
+msgstr "在复杂的网络环境可能需时数分钟. 确定要执行?"
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Stop ping command successfully"
+msgstr "成功停止 ping 指令"
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Stop traceroute command successfully"
+msgstr "成功停止路由跟踪指令"
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Target should be a valid IP address or host name"
+msgstr "目标必须是有效的 IP 地址或主机名"
+
+#: webui/templates/diagnostic_tools.mako:32 webui/templates/menu.mako:1
+msgid "Diagnostic Tools"
+msgstr "网络诊断工具"
+
+#: webui/templates/diagnostic_tools.mako:34
+msgid "ARP Enforcement"
+msgstr "ARP 重整"
+
+#: webui/templates/diagnostic_tools.mako:35
+msgid "Enforce"
+msgstr "重整"
+
+#: webui/templates/diagnostic_tools.mako:38
+msgid "IP Conflict Test"
+msgstr "IP 冲突测试"
+
+#: webui/templates/diagnostic_tools.mako:39
+msgid "Test"
+msgstr "测试"
+
+#: webui/templates/diagnostic_tools.mako:46
+msgid "Ping & Trace Route"
+msgstr "Ping 与路由跟踪"
+
+#: webui/templates/diagnostic_tools.mako:48
+msgid "Target IP"
+msgstr "目标 IP"
+
+#: webui/templates/diagnostic_tools.mako:61
+msgid "Ping"
+msgstr "Ping"
+
+#: webui/templates/diagnostic_tools.mako:62
+msgid "Trace"
+msgstr "跟踪"
+
+#: webui/templates/diagnostic_tools.mako:63
+msgid "Stop"
+msgstr "停止"
+
+#: webui/templates/dns.mako:17
+msgid "DNS Setting"
+msgstr "域名服务器设定"
+
+#: webui/templates/dns.mako:19
+msgid "Host Name"
+msgstr "主机名"
+
+#: webui/templates/firewall.mako:1
+msgid "Add firewall rules"
+msgstr "新增防火墙规则"
+
+#: webui/templates/firewall.mako:1
+msgid "Delete firewall rules"
+msgstr "删除防火墙规则"
+
+#: webui/templates/firewall.mako:1
+msgid "Edit firewall rules"
+msgstr "编辑防火墙规则"
+
+#: webui/templates/firewall.mako:47 webui/templates/firewall.mako:74
+msgid "Action"
+msgstr "处理"
+
+#: webui/templates/fqdn.mako:25
+msgid "FQDN Setting"
+msgstr "FQDN 设定"
+
+#: webui/templates/fqdn.mako:28 webui/templates/stat_fqdn.mako:47
+msgid "No."
+msgstr "编号"
+
+#: webui/templates/fqdn.mako:39
+msgid "Note: Empty domain name can be acceptable"
+msgstr "备注: 可接受空的域名"
+
+#: webui/templates/interface.mako:1
+msgid "Your account has been deleted!"
+msgstr "你的账号已经被删除了！"
+
+#: webui/templates/interface.mako:63
+msgid "Logout"
+msgstr "注销"
+
+#: webui/templates/interface.mako:69
+msgid "Apply"
+msgstr "套用设定"
+
+#: webui/templates/interface.mako:70
+msgid "Reload"
+msgstr "重载"
+
+#: webui/templates/interface.mako:71
+msgid "Help"
+msgstr "说明"
+
+#: webui/templates/ip_group.mako:1 webui/templates/ip_group.mako:59
+#: webui/templates/ip_group.mako:70 webui/templates/network.mako:231
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:71
+msgid "IPv4 Address"
+msgstr "IPv4 地址"
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "IPv4 Range"
+msgstr "IPv4 地址范围"
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "Subnet/mask"
+msgstr "子网/屏蔽"
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "fqdn@"
+msgstr "fqdn@"
+
+#: webui/templates/ip_group.mako:49
+msgid "IP Group Rule"
+msgstr "IP 群组规则"
+
+#: webui/templates/ip_group.mako:52 webui/templates/network.mako:77
+#: webui/templates/network.mako:158 webui/templates/service_group.mako:50
+#: webui/templates/summary.mako:91
+msgid "Label"
+msgstr "名称"
+
+#: webui/templates/login.mako:12
+msgid "Login"
+msgstr "登入"
+
+#: webui/templates/login.mako:55 webui/templates/menu.mako:1
+msgid "Language"
+msgstr "语言"
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "English"
+msgstr "英文 (English)"
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "Simplified Chinese"
+msgstr "简体中文 (Simplified Chinese)"
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "Traditional Chinese"
+msgstr "繁体中文 (Traditional Chinese)"
+
+#: webui/templates/login.mako:66
+msgid "Account"
+msgstr "账号"
+
+#: webui/templates/menu.mako:1
+msgid "ARP Table"
+msgstr "ARP 表格"
+
+#: webui/templates/menu.mako:1
+msgid "Administration"
+msgstr "系统管理"
+
+#: webui/templates/menu.mako:1
+msgid "Are you sure to apply these settings?"
+msgstr "确定要套用设定?"
+
+#: webui/templates/menu.mako:1
+msgid "Are you sure to logout?"
+msgstr "确定要注销?"
+
+#: webui/templates/menu.mako:1
+msgid "Auto Routing"
+msgstr "自动路由"
+
+#: webui/templates/menu.mako:1
+msgid "Bandwidth Utilization"
+msgstr "带宽使用率"
+
+#: webui/templates/menu.mako:1
+msgid "Connection Limit"
+msgstr "联机限制"
+
+#: webui/templates/menu.mako:1
+msgid "DDNS"
+msgstr "动态网域名称服务器"
+
+#: webui/templates/menu.mako:1
+msgid "DHCP (DMZ)"
+msgstr "DHCP (隔离区)"
+
+#: webui/templates/menu.mako:1
+msgid "DHCP (LAN)"
+msgstr "DHCP (局域网络)"
+
+#: webui/templates/menu.mako:1
+msgid "DNS"
+msgstr "域名服务器"
+
+#: webui/templates/menu.mako:1
+msgid "Date/Time"
+msgstr "系统时间"
+
+#: webui/templates/menu.mako:1
+msgid "Firewall"
+msgstr "防火墙"
+
+#: webui/templates/menu.mako:1
+msgid "IP Group"
+msgstr "IP 群组设定"
+
+#: webui/templates/menu.mako:1
+msgid "NAT"
+msgstr "网址转译"
+
+#: webui/templates/menu.mako:1
+msgid "Network Setting"
+msgstr "网络设定"
+
+#: webui/templates/menu.mako:1
+msgid "SNMP"
+msgstr "简单网络管理"
+
+#: webui/templates/menu.mako:1
+msgid "Service Group"
+msgstr "网络服务群组设定"
+
+#: webui/templates/menu.mako:1
+msgid "Statistics"
+msgstr "统计"
+
+#: webui/templates/menu.mako:1
+msgid "Summary"
+msgstr "系统信息"
+
+#: webui/templates/menu.mako:1
+msgid "Syslog"
+msgstr "系统纪录"
+
+#: webui/templates/menu.mako:1
+msgid "View"
+msgstr "纪录浏览"
+
+#: webui/templates/menu.mako:1 webui/templates/stat_fqdn.mako:44
+#: webui/templates/stat_fqdn.mako:48
+msgid "FQDN"
+msgstr "FQDN"
+
+#: webui/templates/menu.mako:1 webui/templates/stat_wan_detection.mako:53
+msgid "WAN Detection"
+msgstr "广域网侦测"
+
+#: webui/templates/menu.mako:1 webui/templates/view.mako:1
+msgid "System"
+msgstr "系统"
+
+#: webui/templates/menu.mako:1 webui/templates/virtual_server.mako:38
+#: webui/templates/virtual_server.mako:45
+#: webui/templates/virtual_server.mako:69
+msgid "Virtual Server"
+msgstr "虚拟主机"
+
+#: webui/templates/message.mako:1
+msgid "Invalid input name!"
+msgstr "无效的输入名称!"
+
+#: webui/templates/message.mako:1
+msgid "Invalid input password!"
+msgstr "无效的输入密码!"
+
+#: webui/templates/message.mako:1
+msgid "Invalid input!"
+msgstr "无效的输入!"
+
+#: webui/templates/message.mako:1
+msgid "Password and confirm are inconsistent!"
+msgstr "密码和确认不一致!"
+
+#: webui/templates/message.mako:1
+msgid "Please select file!"
+msgstr "请选择档案!"
+
+#: webui/templates/nat.mako:1
+msgid "Add nat rules"
+msgstr "新增网址转译规则"
+
+#: webui/templates/nat.mako:1
+msgid "Delete nat rules"
+msgstr "删除网址转译规则"
+
+#: webui/templates/nat.mako:1
+msgid "Edit nat rules"
+msgstr "编辑网址转译规则"
+
+#: webui/templates/nat.mako:75 webui/templates/nat.mako:103
+msgid "Translate"
+msgstr "转译成"
+
+#: webui/templates/network.mako:45
+msgid "USB Modem Status"
+msgstr "USB 调制解调器 状态"
+
+#: webui/templates/network.mako:51
+msgid "Brand"
+msgstr "品牌"
+
+#: webui/templates/network.mako:51
+msgid "model"
+msgstr "型号"
+
+#: webui/templates/network.mako:55
+msgid "Operator"
+msgstr "电信公司"
+
+#: webui/templates/network.mako:59
+msgid "Mode"
+msgstr "联机模式"
+
+#: webui/templates/network.mako:63
+msgid "Quality"
+msgstr "讯号质量"
+
+#: webui/templates/network.mako:71 webui/templates/network.mako:152
+msgid "Basic Setting"
+msgstr "基本设定"
+
+#: webui/templates/network.mako:81 webui/templates/network.mako:167
+msgid "Downstream"
+msgstr "下载带宽"
+
+#: webui/templates/network.mako:88 webui/templates/network.mako:174
+msgid "Upstream"
+msgstr "上传带宽"
+
+#: webui/templates/network.mako:99
+msgid "3G/3.5G Dial-up Setting"
+msgstr "3G/3.5G 拨号 设定"
+
+#: webui/templates/network.mako:101
+msgid "PIN"
+msgstr ""
+
+#: webui/templates/network.mako:105
+msgid "APN"
+msgstr ""
+
+#: webui/templates/network.mako:109
+msgid "Dial number"
+msgstr "拨接号码"
+
+#: webui/templates/network.mako:121 webui/templates/network.mako:137
+msgid "MTU"
+msgstr "MTU"
+
+#: webui/templates/network.mako:131
+msgid "Ethernet"
+msgstr "以太网络"
+
+#: webui/templates/network.mako:133
+msgid "Clone MAC"
+msgstr "Clone MAC"
+
+#: webui/templates/network.mako:141
+msgid "Speed/Duplex"
+msgstr "传输模式"
+
+#: webui/templates/network.mako:162
+msgid "WAN Type"
+msgstr "联机模式"
+
+#: webui/templates/network.mako:185
+msgid "IPv4 Static Type"
+msgstr "IPv4 静态模式"
+
+#: webui/templates/network.mako:196 webui/templates/network.mako:249
+#: webui/templates/network.mako:294
+msgid "IP Address/Range"
+msgstr "IP 地址/范围"
+
+#: webui/templates/network.mako:217
+msgid "PPPoE Type"
+msgstr "PPPoE 模式"
+
+#: webui/templates/network.mako:227
+msgid "Service Name"
+msgstr "服务名称"
+
+#: webui/templates/network.mako:235
+msgid "Daily Redial"
+msgstr "每日回放时间"
+
+#: webui/templates/network.mako:243
+msgid "IPv4 Public IP Passthrough"
+msgstr "IPv4 公开 IP 穿透"
+
+#: webui/templates/network.mako:288
+msgid "IPv4 Basic Subnet"
+msgstr "IPv4 子网设定"
+
+#: webui/templates/network.mako:311
+msgid "IPv4 Static Routing Subnet"
+msgstr "IPv4 静态路由子网"
+
+#: webui/templates/network.mako:317
+msgid "Subnet/Mask"
+msgstr "子网/网络屏蔽"
+
+#: webui/templates/network_header.mako:12
+msgid "WAN Setting"
+msgstr "广域网设定"
+
+#: webui/templates/network_header.mako:13
+msgid "DMZ Setting"
+msgstr "隔离区设定"
+
+#: webui/templates/network_header.mako:14
+msgid "LAN Setting"
+msgstr "局域网络设定"
+
+#: webui/templates/service_group.mako:47
+msgid "Service Group Rule"
+msgstr "网络服务群组规则"
+
+#: webui/templates/service_header.mako:1
+msgid "10/full"
+msgstr "10Mb/s 全双工"
+
+#: webui/templates/service_header.mako:1
+msgid "10/half"
+msgstr "10Mb/s 半双工"
+
+#: webui/templates/service_header.mako:1
+msgid "100/full"
+msgstr "100Mb/s 全双工"
+
+#: webui/templates/service_header.mako:1
+msgid "100/half"
+msgstr "100Mb/s 半双工"
+
+#: webui/templates/service_header.mako:1
+msgid "Accept"
+msgstr "接受"
+
+#: webui/templates/service_header.mako:1
+msgid "Add Account Setting"
+msgstr "新增账号设定"
+
+#: webui/templates/service_header.mako:1
+msgid "Add Fixed Entries Details"
+msgstr "新增固定项目详细数据"
+
+#: webui/templates/service_header.mako:1
+msgid "Add Rule Details"
+msgstr "新增规则详细数据"
+
+#: webui/templates/service_header.mako:1
+msgid "Any"
+msgstr "任何地址"
+
+#: webui/templates/service_header.mako:1
+msgid "Any Service"
+msgstr "任何服务"
+
+#: webui/templates/service_header.mako:1
+msgid "Cancel"
+msgstr "取消"
+
+#: webui/templates/service_header.mako:1
+msgid "DHCP"
+msgstr "DHCP 动态配址"
+
+#: webui/templates/service_header.mako:1
+msgid "Delete"
+msgstr "删除"
+
+#: webui/templates/service_header.mako:1
+msgid "Deny"
+msgstr "拒绝"
+
+#: webui/templates/service_header.mako:1
+msgid "Edit"
+msgstr "编辑"
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Account Setting"
+msgstr "编辑账号设定"
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Fixed Entries Details"
+msgstr "编辑固定项目详细数据"
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Rule Details"
+msgstr "编辑规则详细数据"
+
+#: webui/templates/service_header.mako:1
+msgid "Localhost"
+msgstr "本机地址"
+
+#: webui/templates/service_header.mako:1
+msgid "No NAT"
+msgstr "不做NAT"
+
+#: webui/templates/service_header.mako:1
+msgid "OK"
+msgstr "确定"
+
+#: webui/templates/service_header.mako:1
+msgid "PPPoE"
+msgstr "PPPoE"
+
+#: webui/templates/service_header.mako:1
+msgid "Static"
+msgstr "固定"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN1"
+msgstr "广域网 1"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN2"
+msgstr "广域网 2"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN3"
+msgstr "广域网 3"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN4"
+msgstr "广域网 4"
+
+#: webui/templates/service_header.mako:1
+msgid "auto"
+msgstr "自动设定"
+
+#: webui/templates/service_header.mako:1
+msgid "group@"
+msgstr "群组@"
+
+#: webui/templates/service_header.mako:1
+msgid "none"
+msgstr "无"
+
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:59
+msgid "LAN"
+msgstr "局域网络"
+
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:60
+msgid "DMZ"
+msgstr "隔离区"
+
+#: webui/templates/snmp.mako:21
+msgid "SNMP Setting"
+msgstr "简单网络管理设定"
+
+#: webui/templates/snmp.mako:27
+msgid "Community"
+msgstr "Community"
+
+#: webui/templates/snmp.mako:31
+msgid "System Name"
+msgstr "系统名称"
+
+#: webui/templates/snmp.mako:35
+msgid "System Contact"
+msgstr "系统负责人"
+
+#: webui/templates/snmp.mako:39
+msgid "System Location"
+msgstr "系统位置"
+
+#: webui/templates/stat_bandwidth_utilization.mako:21
+#: webui/templates/stat_wan_detection.mako:28
+msgid "WAN Link"
+msgstr "广域网"
+
+#: webui/templates/stat_bandwidth_utilization.mako:27
+msgid "Traffic Type"
+msgstr "网络流向"
+
+#: webui/templates/stat_bandwidth_utilization.mako:29
+msgid "Outbound"
+msgstr "对外"
+
+#: webui/templates/stat_bandwidth_utilization.mako:30
+msgid "Inbound"
+msgstr "对内"
+
+#: webui/templates/stat_bandwidth_utilization.mako:32
+#: webui/templates/view.mako:32
+msgid "Refresh"
+msgstr "更新"
+
+#: webui/templates/stat_dhcp.mako:25 webui/templates/stat_fqdn.mako:25
+#: webui/templates/stat_wan_detection.mako:34
+msgid "Automatic Refresh"
+msgstr "自动更新"
+
+#: webui/templates/stat_dhcp.mako:27 webui/templates/stat_fqdn.mako:27
+#: webui/templates/stat_wan_detection.mako:36
+msgid "Disabled"
+msgstr "停止"
+
+#: webui/templates/stat_dhcp.mako:28 webui/templates/stat_fqdn.mako:28
+#: webui/templates/stat_wan_detection.mako:37
+msgid "Every 3 Seconds"
+msgstr "每隔 3 秒"
+
+#: webui/templates/stat_dhcp.mako:29 webui/templates/stat_fqdn.mako:29
+#: webui/templates/stat_wan_detection.mako:38
+msgid "Every 6 Seconds"
+msgstr "每隔 6 秒"
+
+#: webui/templates/stat_dhcp.mako:30 webui/templates/stat_fqdn.mako:30
+#: webui/templates/stat_wan_detection.mako:39
+msgid "Every 9 Seconds"
+msgstr "每隔 9 秒"
+
+#: webui/templates/stat_dhcp.mako:31 webui/templates/stat_fqdn.mako:31
+#: webui/templates/stat_wan_detection.mako:40
+msgid "Every 15 Seconds"
+msgstr "每隔 15 秒"
+
+#: webui/templates/stat_dhcp.mako:32 webui/templates/stat_fqdn.mako:32
+#: webui/templates/stat_wan_detection.mako:41
+msgid "Every 21 Seconds"
+msgstr "每隔 21 秒"
+
+#: webui/templates/stat_dhcp.mako:33 webui/templates/stat_fqdn.mako:33
+#: webui/templates/stat_wan_detection.mako:42
+msgid "Every 30 Seconds"
+msgstr "每隔 30 秒"
+
+#: webui/templates/stat_dhcp.mako:34 webui/templates/stat_fqdn.mako:34
+#: webui/templates/stat_wan_detection.mako:43
+msgid "Every 39 Seconds"
+msgstr "每隔 39 秒"
+
+#: webui/templates/stat_dhcp.mako:35 webui/templates/stat_fqdn.mako:35
+#: webui/templates/stat_wan_detection.mako:44
+msgid "Every 51 Seconds"
+msgstr "每隔 51 秒"
+
+#: webui/templates/stat_dhcp.mako:36 webui/templates/stat_fqdn.mako:36
+#: webui/templates/stat_wan_detection.mako:45
+msgid "Every 63 Seconds"
+msgstr "每隔 63 秒"
+
+#: webui/templates/stat_dhcp.mako:47
+msgid "Lease IP"
+msgstr "配置 IP 位置"
+
+#: webui/templates/stat_dhcp.mako:49
+msgid "Client-Hostname"
+msgstr "主机名"
+
+#: webui/templates/stat_dhcp.mako:50
+msgid "Expire Time"
+msgstr "结束时间"
+
+#: webui/templates/stat_fqdn.mako:49
+msgid "IP 1"
+msgstr "IP 地址 1"
+
+#: webui/templates/stat_fqdn.mako:50
+msgid "IP 2"
+msgstr "IP 地址 2"
+
+#: webui/templates/stat_fqdn.mako:51
+msgid "IP 3"
+msgstr "IP 地址 3"
+
+#: webui/templates/stat_fqdn.mako:52
+msgid "IP 4"
+msgstr "IP 地址 4"
+
+#: webui/templates/stat_wan_detection.mako:56
+#: webui/templates/wan_detection.mako:91
+#: webui/templates/wan_detection.mako:110
+msgid "Destination IP"
+msgstr "目标 IP 地址"
+
+#: webui/templates/stat_wan_detection.mako:57
+msgid "Number of Requests"
+msgstr "侦测次数"
+
+#: webui/templates/stat_wan_detection.mako:58
+msgid "Number of Replies"
+msgstr "回应次数"
+
+#: webui/templates/stat_wan_detection.mako:59
+msgid "Success Ratio (%)"
+msgstr "成功率 (%)"
+
+#: webui/templates/summary.mako:26
+msgid "System Information"
+msgstr "系统状态"
+
+#: webui/templates/summary.mako:34
+msgid "Version"
+msgstr "目前版本"
+
+#: webui/templates/summary.mako:35
+msgid "Serial Number"
+msgstr "序号"
+
+#: webui/templates/summary.mako:36
+msgid "Uptime"
+msgstr "开机时间"
+
+#: webui/templates/summary.mako:37
+msgid "Connections"
+msgstr "目前联机总数"
+
+#: webui/templates/summary.mako:38
+msgid "CPU Usage %"
+msgstr "CPU 使用 %"
+
+#: webui/templates/summary.mako:44
+msgid "DetectOK"
+msgstr "功能正常"
+
+#: webui/templates/summary.mako:45
+msgid "Failed"
+msgstr "无法运作"
+
+#: webui/templates/summary.mako:48
+msgid "Port Information"
+msgstr "网络接口信息"
+
+#: webui/templates/summary.mako:70
+msgid "DDNS Host"
+msgstr "动态网域名称"
+
+#: webui/templates/summary.mako:73
+msgid "Rx (Kbps)"
+msgstr "接收 (Kbps)"
+
+#: webui/templates/summary.mako:74
+msgid "TX (Kbps)"
+msgstr "传送 (Kbps)"
+
+#: webui/templates/summary.mako:75
+msgid "Detection"
+msgstr "侦测"
+
+#: webui/templates/summary.mako:77 webui/templates/summary.mako:79
+msgid "Reconnect"
+msgstr "重新连接"
+
+#: webui/templates/summary.mako:87 webui/templates/summary.mako:88
+msgid "N/A"
+msgstr "N/A"
+
+#: webui/templates/summary.mako:90
+msgid "Connection Time"
+msgstr "连接时间"
+
+#: webui/templates/syslog.mako:21
+msgid "Syslog Setting"
+msgstr "系统纪录设定"
+
+#: webui/templates/syslog.mako:23
+msgid "Server IP"
+msgstr "服务器 IP"
+
+#: webui/templates/syslog.mako:27
+msgid "Facility"
+msgstr "设施"
+
+#: webui/templates/view.mako:1
+msgid "Traffic"
+msgstr "流量"
+
+#: webui/templates/view.mako:23
+msgid "Log Type"
+msgstr "纪录种类"
+
+#: webui/templates/view.mako:34
+msgid "Recent Event"
+msgstr "最近事件"
+
+#: webui/templates/virtual_server.mako:1
+msgid "Add virtual server rules"
+msgstr "新增虚拟主机规则"
+
+#: webui/templates/virtual_server.mako:1
+msgid "Delete virtual server rules"
+msgstr "删除虚拟主机规则"
+
+#: webui/templates/virtual_server.mako:1
+msgid "Edit virtual server rules"
+msgstr "编辑虚拟主机规则"
+
+#: webui/templates/virtual_server.mako:46
+#: webui/templates/virtual_server.mako:91
+msgid "Real Server"
+msgstr "真实服务器"
+
+#: webui/templates/virtual_server.mako:57
+#: webui/templates/virtual_server.mako:94
+msgid "IPv4"
+msgstr "IPv4"
+
+#: webui/templates/virtual_server.mako:58
+#: webui/templates/virtual_server.mako:98
+msgid "Port Mapping"
+msgstr "端口对应"
+
+#: webui/templates/wan_detection.mako:28
+msgid "Always Success When There Is Inbound Traffic"
+msgstr "当有对内流量,总是成功"
+
+#: webui/templates/wan_detection.mako:52
+msgid "Protocol"
+msgstr "协定"
+
+#: webui/templates/wan_detection.mako:59
+msgid "Detection Period"
+msgstr "侦测周期"
+
+#: webui/templates/wan_detection.mako:66
+msgid "Number of Targets per Detection"
+msgstr "每次侦测所选出之目标数量"
+
+#: webui/templates/wan_detection.mako:72
+msgid "Number of Retries"
+msgstr "重试次数"
+
+#: webui/templates/wan_detection.mako:85
+#: webui/templates/wan_detection.mako:104
+msgid "Target List"
+msgstr "目标列表"
+
+#: webui/templates/wan_detection.mako:92
+msgid "Hops"
+msgstr "跃点"
+
+#: webui/templates/wan_detection.mako:111
+msgid "TCP Port"
+msgstr "TCP 端口"
+
+#~ msgid "wan1"
+#~ msgstr "广域网 1"
+
+#~ msgid "wan2"
+#~ msgstr "广域网 2"
+
+#~ msgid "wan3"
+#~ msgstr "广域网 3"
+
+#~ msgid "wan4"
+#~ msgstr "广域网 4"
+
+#~ msgid "1000/full"
+#~ msgstr "1000Mb/s 全双工"
+
+#~ msgid "Port"
+#~ msgstr "网络接口"
+
+#~ msgid "Unknown"
+#~ msgstr "未知的"
+
+#~ msgid "proto@"
+#~ msgstr "协定@"
+
+#~ msgid "IPv4 DHCP (DMZ) Setting"
+#~ msgstr "IPv4 DHCP (隔离区) 设定"
+
+#~ msgid "IPv4 DHCP (LAN) Setting"
+#~ msgstr "IPv4 DHCP (局域网络) 设定"
+
+#~ msgid "is invalid value"
+#~ msgstr "是无效的值"

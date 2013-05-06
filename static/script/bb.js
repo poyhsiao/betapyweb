@@ -2,7 +2,7 @@
 * Created by Kim Hsiao
 ***/
 
-jQuery.error = console.error;
+// jQuery.error = console.error;
 /* this is for jquery debugger */
 
 $.when(
@@ -15,11 +15,14 @@ $.when(
     /* run this function when everything is ready and done */
     backboneWrap();
     /* Backbone implementation */
-  },
-  function(e) {
+  }, function(e) {
     /* run this function if anything error or fail to retrival anything above */
     console.error("Something error");
     console.error(e);
+    // return window.location.reload()
+  }, function(e) {
+    // this is the progress callback
+    return true;
   }
 );
 

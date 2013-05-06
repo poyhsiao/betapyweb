@@ -11,7 +11,7 @@
   <meta name="description" content="" />
   <meta name="author" content="Kim Hsiao" />
 
-  <meta name="viewport" content="width=device-width; initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
@@ -182,6 +182,7 @@
       width: 12px;
     }
   </style>
+  <script type="text/javascript" src="/script/jquery.js"></script>
 </head>
 
 <body>
@@ -200,13 +201,13 @@
   <div class="row-fluid info">
       <div class="span4 header IdentityInformation">
           <span id="IdentityInformation">{{ userinfo.username }}@{{ userinfo.headers['HTTP_X_FORWARDED_FOR']|default(userinfo.headers['Remote-Addr']) }}</span>
-          <span id="oLogout">登出</span>
+          <span id="oLogout">{{ _('Logout')}}</span>
       </div>
       <div class="span6 offset2 header user-op">
           <span id="Paganation">&nbsp;</span>
-          <span id="oApply">套用設定</span>
-          <span id="oReload">重新載入</span>
-          <span id="oHelp">說明</span>
+          <span id="oApply">{{ _('Apply')}}</span>
+          <span id="oReload">{{ _('Reload')}}</span>
+          <span id="oHelp">{{ _('Help')}}</span>
       </div>
   </div>
   <div class="body container-fluid">
@@ -229,8 +230,7 @@
       </div>
   </div>
   <div class="borderArrow inactive" />
-  <script src="/script/jquery.js"></script>
-  <script src="/script/bb.js"></script>
+  <script type="text/javascript" src="/script/bb.js" async="async"></script>
   <script type="text/template" id="t_mainmenu">
     <ul class="topmenu">
       <% _.each(items, function(v, k) { %>

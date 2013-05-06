@@ -1,0 +1,1910 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: XteraLink\n"
+"POT-Creation-Date: 2012-12-13 09:44+CST\n"
+"PO-Revision-Date: 2012-12-13 10:01+0800\n"
+"Last-Translator: \n"
+"Language-Team: XteraLink <XteraLink>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: middleware/jcfg.py:24
+msgid "SYNTAX: invalid value"
+msgstr ""
+
+#: middleware/jcfg.py:25
+msgid "SYNTAX: mixed-style array"
+msgstr ""
+
+#: middleware/jcfg.py:26
+msgid "SYNTAX: no array item"
+msgstr ""
+
+#: middleware/jcfg.py:27
+msgid "SYNTAX: no ending '}'"
+msgstr ""
+
+#: middleware/jcfg.py:28
+msgid "SYNTAX: no valid key"
+msgstr ""
+
+#: middleware/jcfg.py:29
+msgid "SYNTAX: no root tag"
+msgstr ""
+
+#: middleware/jcfg.py:30
+msgid "SYNTAX: unexpected '}'"
+msgstr ""
+
+#: middleware/jcfg.py:31
+msgid "invalid key"
+msgstr "Invalid key"
+
+#: middleware/jcfg.py:32 middleware/xte_dhcp_dmz.py:34
+#: middleware/xte_dhcp_dmz.py:37 middleware/xte_dhcp_dmz.py:68
+#: middleware/xte_dhcp_dmz.py:74 middleware/xte_dhcp_dmz.py:76
+#: middleware/xte_dhcp_dmz.py:82 middleware/xte_dhcp_lan.py:34
+#: middleware/xte_dhcp_lan.py:37 middleware/xte_dhcp_lan.py:68
+#: middleware/xte_dhcp_lan.py:74 middleware/xte_dhcp_lan.py:76
+#: middleware/xte_dhcp_lan.py:82
+msgid "invalid value"
+msgstr "Invalid value"
+
+#: middleware/jcfg.py:33
+msgid "mandatory array can't be empty"
+msgstr "Mandatory array can't be empty."
+
+#: middleware/jcfg.py:34
+msgid "no mandatory key"
+msgstr "No mandatory key"
+
+#: middleware/jcfg.py:35 middleware/xte_wan_detection.py:121
+msgid "too less elements"
+msgstr "Too less elements"
+
+#: middleware/xte_administration.py:15 middleware/xte_administration.py:33
+#: middleware/xte_administration.py:75 middleware/xte_administration.py:117
+#: middleware/xte_administration.py:162
+msgid "account not found:"
+msgstr "Account not found:"
+
+#: middleware/xte_administration.py:18
+msgid "invalid group:"
+msgstr "Invalid group:"
+
+#: middleware/xte_administration.py:37
+msgid "invalid password"
+msgstr "Invalid password"
+
+#: middleware/xte_administration.py:48
+msgid "duplicated name:"
+msgstr "Duplicate name:"
+
+#: middleware/xte_administration.py:52
+msgid "invalid name:"
+msgstr "Invalid name:"
+
+#: middleware/xte_administration.py:78
+msgid "can't delete built-in account:"
+msgstr "Can't delete built-in account:"
+
+#: middleware/xte_administration.py:166
+msgid "same group:"
+msgstr "Same group:"
+
+#: middleware/xte_administration.py:200 middleware/xte_administration.py:208
+#: middleware/xte_administration.py:217
+msgid "Reboot now"
+msgstr ""
+
+#: middleware/xte_administration.py:264
+msgid "invalid configuration"
+msgstr "Invalid configuration"
+
+# middleware key
+# xte_arp_table
+#: middleware/xte_arp_table.py:11
+msgid "fixed-entry"
+msgstr "Fixed Entries"
+
+#: middleware/xte_arp_table.py:13
+msgid "interface"
+msgstr "Interface"
+
+#: middleware/xte_arp_table.py:14 middleware/xte_dhcp_dmz.py:18
+#: middleware/xte_dhcp_lan.py:18 middleware/xte_ip_group.py:13
+#: middleware/xte_network.py:20 middleware/xte_network.py:40
+#: middleware/xte_network.py:52 middleware/xte_network.py:57
+#: middleware/xte_virtual_server.py:15 middleware/xte_wan_detection.py:17
+#: middleware/xte_wan_detection.py:23
+msgid "ip"
+msgstr "IP Address"
+
+#: middleware/xte_arp_table.py:15 middleware/xte_dhcp_dmz.py:17
+#: middleware/xte_dhcp_lan.py:17
+msgid "mac"
+msgstr "MAC Address"
+
+#: middleware/xte_auto_routing.py:9 middleware/xte_connection_limit.py:12
+#: middleware/xte_firewall.py:12 middleware/xte_nat.py:13
+msgid "source"
+msgstr "Source"
+
+#: middleware/xte_auto_routing.py:10 middleware/xte_connection_limit.py:13
+#: middleware/xte_firewall.py:13 middleware/xte_nat.py:14
+msgid "destination"
+msgstr "Destination"
+
+#: middleware/xte_auto_routing.py:11 middleware/xte_connection_limit.py:14
+#: middleware/xte_firewall.py:14 middleware/xte_nat.py:15
+#: middleware/xte_service_group.py:13 middleware/xte_virtual_server.py:14
+msgid "service"
+msgstr "Service"
+
+#: middleware/xte_auto_routing.py:15
+msgid "failover"
+msgstr "Failover"
+
+#: middleware/xte_auto_routing.py:16
+msgid "persistent"
+msgstr "Persistent"
+
+#: middleware/xte_auto_routing.py:17 middleware/xte_connection_limit.py:16
+#: middleware/xte_firewall.py:16 middleware/xte_nat.py:17
+#: middleware/xte_virtual_server.py:17
+msgid "log"
+msgstr "Log"
+
+#: middleware/xte_auto_routing.py:23
+msgid "method"
+msgstr "Method"
+
+#: middleware/xte_auto_routing.py:24
+msgid "parameter"
+msgstr "Parameters"
+
+# xte_auto_routing
+#: middleware/xte_auto_routing.py:25
+msgid "aging"
+msgstr "persistance time"
+
+#: middleware/xte_auto_routing.py:26 middleware/xte_connection_limit.py:10
+#: middleware/xte_firewall.py:10 middleware/xte_nat.py:11
+#: middleware/xte_virtual_server.py:21
+msgid "rule"
+msgstr "Rules"
+
+# xte_connection_limit
+#: middleware/xte_connection_limit.py:15
+msgid "rate"
+msgstr "Conn/Sec"
+
+#: middleware/xte_date_and_time.py:13
+msgid "time-zone"
+msgstr "Time Zone"
+
+#: middleware/xte_date_and_time.py:14
+msgid "time-server"
+msgstr "Time Server"
+
+#: middleware/xte_date_and_time.py:64 middleware/xte_date_and_time.py:67
+msgid "See failure.log"
+msgstr ""
+
+#: middleware/xte_ddns.py:9 middleware/xte_nat.py:10
+#: middleware/xte_network.py:33 middleware/xte_network.py:62
+#: middleware/xte_snmp.py:11
+msgid "enable"
+msgstr "Enable"
+
+#: middleware/xte_ddns.py:10
+msgid "provider"
+msgstr ""
+
+#: middleware/xte_ddns.py:11 middleware/xte_dns.py:11
+msgid "domain-name"
+msgstr "Domain Name"
+
+#: middleware/xte_ddns.py:12 middleware/xte_network.py:49
+#: middleware/xte_network.py:69
+msgid "username"
+msgstr "User Name"
+
+#: middleware/xte_ddns.py:13 middleware/xte_network.py:50
+#: middleware/xte_network.py:70
+msgid "password"
+msgstr "Password"
+
+#: middleware/xte_ddns.py:97 middleware/xte_ddns.py:99
+#: middleware/xte_ddns.py:101 middleware/xte_ddns.py:103
+#: middleware/xte_network.py:653 middleware/xte_network.py:655
+#: middleware/xte_network.py:663 middleware/xte_network.py:665
+#: middleware/xte_network.py:667 middleware/xte_network.py:670
+#: middleware/xte_network.py:672
+msgid "can't be empty"
+msgstr ""
+
+#: middleware/xte_dhcp_dmz.py:10 middleware/xte_dhcp_lan.py:10
+#: middleware/xte_dns.py:12
+msgid "dns-server-1"
+msgstr "DNS Server 1"
+
+#: middleware/xte_dhcp_dmz.py:11 middleware/xte_dhcp_lan.py:11
+#: middleware/xte_dns.py:13
+msgid "dns-server-2"
+msgstr "DNS Server 2"
+
+#: middleware/xte_dhcp_dmz.py:12 middleware/xte_dhcp_dmz.py:34
+#: middleware/xte_dhcp_dmz.py:68 middleware/xte_dhcp_lan.py:12
+#: middleware/xte_dhcp_lan.py:34 middleware/xte_dhcp_lan.py:68
+#: middleware/xte_network.py:27 middleware/xte_network.py:45
+msgid "gateway"
+msgstr "Gateway"
+
+#: middleware/xte_dhcp_dmz.py:13 middleware/xte_dhcp_dmz.py:37
+#: middleware/xte_dhcp_lan.py:13 middleware/xte_dhcp_lan.py:37
+#: middleware/xte_network.py:21 middleware/xte_network.py:44
+#: middleware/xte_network.py:56
+msgid "mask"
+msgstr "Netmask"
+
+#: middleware/xte_dhcp_dmz.py:14 middleware/xte_dhcp_dmz.py:74
+#: middleware/xte_dhcp_dmz.py:76 middleware/xte_dhcp_lan.py:14
+#: middleware/xte_dhcp_lan.py:74 middleware/xte_dhcp_lan.py:76
+msgid "dynamic-range"
+msgstr "DHCP Range"
+
+#: middleware/xte_dhcp_dmz.py:15 middleware/xte_dhcp_dmz.py:82
+#: middleware/xte_dhcp_lan.py:15 middleware/xte_dhcp_lan.py:82
+msgid "static-mapping"
+msgstr "Static Mapping"
+
+#: middleware/xte_dhcp_dmz.py:74 middleware/xte_dhcp_lan.py:74
+#: webui/templates/dhcp.mako:51
+msgid "Starting Address"
+msgstr ""
+
+#: middleware/xte_dhcp_dmz.py:76 middleware/xte_dhcp_lan.py:76
+#: webui/templates/dhcp.mako:52
+msgid "Ending Address"
+msgstr ""
+
+#: middleware/xte_dhcp_dmz.py:82 middleware/xte_dhcp_lan.py:82
+#: webui/templates/arp_table.mako:39 webui/templates/arp_table.mako:54
+#: webui/templates/arp_table.mako:71 webui/templates/dhcp.mako:70
+msgid "IP Address"
+msgstr ""
+
+#: middleware/xte_diagnostic_tools.py:74
+msgid "nothing to kill"
+msgstr "Nothing to kill"
+
+#: middleware/xte_diagnostic_tools.py:81
+msgid "kill"
+msgstr "Killed"
+
+#: middleware/xte_dns.py:10
+msgid "hostname"
+msgstr "Host Name"
+
+#: middleware/xte_firewall.py:15
+msgid "action"
+msgstr "Action"
+
+#: middleware/xte_fqdn.py:10
+msgid "fqdn"
+msgstr "FQDN"
+
+# xte_ip-group
+#: middleware/xte_ip_group.py:10 middleware/xte_service_group.py:10
+msgid "group"
+msgstr "Group"
+
+#: middleware/xte_ip_group.py:12 middleware/xte_network.py:34
+#: middleware/xte_network.py:63 middleware/xte_service_group.py:12
+msgid "label"
+msgstr "Label"
+
+#: middleware/xte_nat.py:16
+msgid "translate"
+msgstr "Translate"
+
+#: middleware/xte_network.py:12
+msgid "clone-mac"
+msgstr "Clone MAC"
+
+#: middleware/xte_network.py:13 middleware/xte_network.py:71
+msgid "mtu"
+msgstr "MTU"
+
+#: middleware/xte_network.py:14
+msgid "speed-duplex"
+msgstr "Speed/Duplex"
+
+#: middleware/xte_network.py:17 middleware/xte_network.py:32
+msgid "ethernet"
+msgstr "Ethernet"
+
+#: middleware/xte_network.py:18
+msgid "basic-subnet"
+msgstr "Basic Subnet"
+
+#: middleware/xte_network.py:24
+msgid "static-route"
+msgstr "Static Routing"
+
+# xte_dhcp_dmz, xte_dhcp_lan
+#: middleware/xte_network.py:26
+msgid "subnet"
+msgstr "Subnet/Mask"
+
+#: middleware/xte_network.py:35 middleware/xte_network.py:64
+msgid "downstream"
+msgstr "Downstream"
+
+#: middleware/xte_network.py:36 middleware/xte_network.py:65
+msgid "upstream"
+msgstr "Upstream"
+
+#: middleware/xte_network.py:37
+msgid "type"
+msgstr "WAN Type"
+
+#: middleware/xte_network.py:38
+msgid "static-mode"
+msgstr "Static"
+
+#: middleware/xte_network.py:47
+msgid "pppoe-mode"
+msgstr "PPPoE"
+
+#: middleware/xte_network.py:51
+msgid "service-name"
+msgstr "Service Name"
+
+#: middleware/xte_network.py:53
+msgid "daily-redial"
+msgstr "Daily Dial"
+
+#: middleware/xte_network.py:55
+msgid "public-ip-passthrough"
+msgstr "Public IP Passthrough"
+
+#: middleware/xte_network.py:66
+msgid "pin"
+msgstr ""
+
+#: middleware/xte_network.py:67
+msgid "apn"
+msgstr ""
+
+#: middleware/xte_network.py:68
+msgid "dial"
+msgstr ""
+
+#: middleware/xte_network.py:75
+msgid "lan"
+msgstr "LAN"
+
+#: middleware/xte_network.py:76
+msgid "dmz"
+msgstr "DMZ"
+
+#: middleware/xte_network.py:487
+msgid "is disabled"
+msgstr ""
+
+#: middleware/xte_network.py:490
+msgid "is not dynamic"
+msgstr ""
+
+#: middleware/xte_snmp.py:12
+msgid "community"
+msgstr "Community"
+
+#: middleware/xte_snmp.py:13
+msgid "system-name"
+msgstr "System Name"
+
+#: middleware/xte_snmp.py:14
+msgid "system-contact"
+msgstr "System Contact"
+
+#: middleware/xte_snmp.py:15
+msgid "system-location"
+msgstr "System Location"
+
+#: middleware/xte_stat_bandwidth_utilization.py:19
+msgid "ipc with bmstatd"
+msgstr ""
+
+#: middleware/xte_stat_bandwidth_utilization.py:35
+msgid "invalid time unit"
+msgstr "Invalid time unit"
+
+#: middleware/xte_stat_bandwidth_utilization.py:37
+msgid "invalid interface"
+msgstr "Invalid WAN link"
+
+#: middleware/xte_stat_bandwidth_utilization.py:39
+msgid "invalid direction"
+msgstr "Invalid traffic type"
+
+#: middleware/xte_syslog.py:20
+msgid "server"
+msgstr "Server IP"
+
+#: middleware/xte_syslog.py:21
+msgid "facility"
+msgstr "Facility"
+
+#: middleware/xte_virtual_server.py:16
+msgid "port-mapping"
+msgstr "Port Mapping"
+
+#: middleware/xte_virtual_server.py:116
+msgid "port must be > 0 and < 65535"
+msgstr "Port must be > 0 and < 65535."
+
+#: middleware/xte_virtual_server.py:117
+msgid "single Service must map to single port mapping"
+msgstr "Single service must map to single port mapping."
+
+#: middleware/xte_virtual_server.py:119
+msgid "multi serice port must map to multi port-mapping"
+msgstr "Multiple service ports must map to multiple port-mapping."
+
+#: middleware/xte_virtual_server.py:120
+msgid "port1 must be > 0 and < 65535"
+msgstr "Starting port must be > 0  and < 65535."
+
+#: middleware/xte_virtual_server.py:121
+msgid "port2 must be > 0 and < 65535"
+msgstr "Ending port must be > 0 and < 65535."
+
+#: middleware/xte_virtual_server.py:122
+msgid "port2 must > port1"
+msgstr "Ending port must > starting port."
+
+#: middleware/xte_virtual_server.py:123
+msgid "multi service port size must equal to multi port-mapping size"
+msgstr "Multiple service port size must equal to multiple port-mapping size."
+
+#: middleware/xte_wan_detection.py:11
+msgid "detection-protocol"
+msgstr "Protocol"
+
+#: middleware/xte_wan_detection.py:12
+msgid "detection-period"
+msgstr "Detection Period"
+
+#: middleware/xte_wan_detection.py:13
+msgid "targets-per-detection"
+msgstr "Number of Targets per Detection"
+
+#: middleware/xte_wan_detection.py:14
+msgid "retries"
+msgstr "Number of Retries"
+
+#: middleware/xte_wan_detection.py:15
+msgid "icmp-target"
+msgstr "Target List"
+
+#: middleware/xte_wan_detection.py:18
+msgid "hops"
+msgstr "Hops"
+
+#: middleware/xte_wan_detection.py:21
+msgid "tcp-target"
+msgstr "Target List"
+
+#: middleware/xte_wan_detection.py:24
+msgid "port"
+msgstr "TCP port"
+
+#: middleware/xte_wan_detection.py:31
+msgid "ignore-inbound-traffic"
+msgstr "Ignore inbound traffic"
+
+#: middleware/xte_wan_detection.py:128
+msgid "is duplicated"
+msgstr ""
+
+#: webui/auth.py:47
+msgid "Account: %s is not found"
+msgstr ""
+
+#: webui/auth.py:51
+msgid "Password is not correct!"
+msgstr ""
+
+#: webui/auth.py:55
+msgid "Get administration configuration error!"
+msgstr ""
+
+#: webui/lang.py:11
+msgid "Only root can apply remote downgrade file"
+msgstr ""
+
+#: webui/lang.py:12
+msgid "Patch too new"
+msgstr ""
+
+#: webui/lang.py:13
+msgid "Incompatible version"
+msgstr ""
+
+#: webui/lang.py:14
+msgid "Checksum error"
+msgstr ""
+
+#: webui/lang.py:15
+msgid "I/O error"
+msgstr ""
+
+#: webui/lang.py:16 webui/lang.py:18
+msgid "Only root can apply remote update file"
+msgstr ""
+
+#: webui/lang.py:17
+msgid "Patch too old"
+msgstr ""
+
+#: webui/lang.py:19
+msgid "Invalid update file"
+msgstr ""
+
+#: webui/lang.py:20
+msgid "Debug on"
+msgstr ""
+
+#: webui/lang.py:21
+msgid "Debug off"
+msgstr ""
+
+#: webui/lang.py:22
+msgid "Incompatible version/build"
+msgstr ""
+
+#: webui/lang.py:23
+msgid "Incompatible platform"
+msgstr ""
+
+#: webui/lang.py:24
+msgid "Invalid update key"
+msgstr ""
+
+#: webui/lang.py:25
+msgid "Invalid update file type"
+msgstr ""
+
+#: webui/lang.py:26
+msgid "Invalid downgrade file"
+msgstr ""
+
+#: webui/lang.py:27
+msgid "Invalid downgrade file type"
+msgstr ""
+
+#: webui/log/syslog.py:27
+msgid "Settings are applied for page Log -> Syslog"
+msgstr ""
+
+#: webui/service/auto_routing.py:28
+msgid "Settings are applied for page Service -> Auto Routing"
+msgstr ""
+
+#: webui/service/connection_limit.py:28
+msgid "Settings are applied for page Service -> Connection Limit"
+msgstr ""
+
+#: webui/service/dhcp_dmz.py:27
+msgid "Settings are applied for page Service -> DHCP (DMZ)"
+msgstr ""
+
+#: webui/service/dhcp_lan.py:27
+msgid "Settings are applied for page Service -> DHCP (LAN)"
+msgstr ""
+
+#: webui/service/firewall.py:28
+msgid "Settings are applied for page Service -> Firewall"
+msgstr ""
+
+#: webui/service/nat.py:32
+msgid "Settings are applied for page Service -> NAT"
+msgstr ""
+
+#: webui/service/snmp.py:26
+msgid "Settings are applied for page Service -> SNMP"
+msgstr ""
+
+#: webui/service/virtual_server.py:28
+msgid "Settings are applied for page Service -> Virtual Server"
+msgstr ""
+
+#: webui/system/administration.py:109
+msgid "Restore Configuration successfully"
+msgstr ""
+
+#: webui/system/administration.py:154
+msgid "Firmware update successfully, system rebooting..."
+msgstr ""
+
+#: webui/system/administration.py:192
+msgid "Firmware downgrade successfully, system rebooting..."
+msgstr ""
+
+#: webui/system/arp_table.py:27
+msgid "Settings are applied for page System -> ARP Table"
+msgstr ""
+
+#: webui/system/date_time.py:30
+msgid "Settings are applied for page System -> Date/Time"
+msgstr ""
+
+#: webui/system/date_time.py:41
+msgid "Set Time Successfully"
+msgstr ""
+
+#: webui/system/ddns.py:33
+msgid "Settings are applied for page System -> DDNS"
+msgstr ""
+
+#: webui/system/diagnostic_tools.py:23
+msgid "ARP caches are updated"
+msgstr ""
+
+#: webui/system/diagnostic_tools.py:38
+msgid "Test finished successfully"
+msgstr ""
+
+#: webui/system/dns.py:26
+msgid "Settings are applied for page System -> DNS"
+msgstr ""
+
+#: webui/system/fqdn.py:26
+msgid "Settings are applied for page System -> FQDN"
+msgstr ""
+
+#: webui/system/ip_group.py:28
+msgid "Settings are applied for page System -> IP Group"
+msgstr ""
+
+#: webui/system/network.py:33
+msgid "Settings are applied for page System -> Network Setting"
+msgstr ""
+
+#: webui/system/service_group.py:26
+msgid "Settings are applied for page System -> Service Group"
+msgstr ""
+
+#: webui/system/summary.py:28
+msgid "Reconnect successfully"
+msgstr ""
+
+#: webui/system/wan_detection.py:26
+msgid "Settings are applied for page System -> WAN Detection"
+msgstr ""
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to delete this account?"
+msgstr ""
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to load factory default settings, and reboot?"
+msgstr ""
+
+#: webui/templates/administration.mako:1
+msgid "Are you sure to reboot system right now?"
+msgstr ""
+
+#: webui/templates/administration.mako:35
+msgid "on-line"
+msgstr ""
+
+#: webui/templates/administration.mako:36
+msgid "off-line"
+msgstr ""
+
+#: webui/templates/administration.mako:39
+msgid "Account Setting"
+msgstr ""
+
+#: webui/templates/administration.mako:42
+#: webui/templates/administration.mako:135
+msgid "Name"
+msgstr ""
+
+#: webui/templates/administration.mako:43
+#: webui/templates/administration.mako:139 webui/templates/ip_group.mako:34
+#: webui/templates/service_group.mako:32
+msgid "Group"
+msgstr ""
+
+#: webui/templates/administration.mako:44 webui/templates/network.mako:47
+#: webui/templates/summary.mako:72
+msgid "Status"
+msgstr ""
+
+#: webui/templates/administration.mako:45
+msgid "Add"
+msgstr ""
+
+#: webui/templates/administration.mako:46
+msgid "Sort by Name"
+msgstr ""
+
+#: webui/templates/administration.mako:47
+msgid "Sort by Group"
+msgstr ""
+
+#: webui/templates/administration.mako:58
+msgid "Maintenance"
+msgstr ""
+
+#: webui/templates/administration.mako:60
+#: webui/templates/administration.mako:61
+msgid "Factory default"
+msgstr ""
+
+#: webui/templates/administration.mako:64
+#: webui/templates/administration.mako:65
+msgid "Reboot"
+msgstr ""
+
+#: webui/templates/administration.mako:72
+msgid "Configuration File"
+msgstr ""
+
+#: webui/templates/administration.mako:74
+msgid "Save Configuration"
+msgstr ""
+
+#: webui/templates/administration.mako:77
+msgid "Save"
+msgstr ""
+
+#: webui/templates/administration.mako:82
+msgid "Restore Configuration"
+msgstr ""
+
+#: webui/templates/administration.mako:86
+msgid "Restore"
+msgstr ""
+
+#: webui/templates/administration.mako:95
+#: webui/templates/administration.mako:101
+msgid "Firmware Update"
+msgstr ""
+
+#: webui/templates/administration.mako:97
+msgid "Current Version"
+msgstr ""
+
+#: webui/templates/administration.mako:105
+msgid "Input update key"
+msgstr ""
+
+#: webui/templates/administration.mako:112
+msgid "Update"
+msgstr ""
+
+#: webui/templates/administration.mako:120
+msgid "Firmware Downgrade"
+msgstr ""
+
+#: webui/templates/administration.mako:124
+msgid "Downgrade"
+msgstr ""
+
+#: webui/templates/administration.mako:146 webui/templates/ddns.mako:71
+#: webui/templates/login.mako:69 webui/templates/network.mako:117
+#: webui/templates/network.mako:223
+msgid "Password"
+msgstr ""
+
+#: webui/templates/administration.mako:150
+msgid "Confirm"
+msgstr ""
+
+#: webui/templates/arp_table.mako:29 webui/templates/auto_routing.mako:59
+#: webui/templates/connection_limit.mako:33 webui/templates/firewall.mako:33
+#: webui/templates/ip_group.mako:46 webui/templates/nat.mako:63
+#: webui/templates/network.mako:204 webui/templates/network.mako:257
+#: webui/templates/network.mako:285 webui/templates/network.mako:308
+#: webui/templates/service_group.mako:44
+#: webui/templates/virtual_server.mako:34
+#: webui/templates/wan_detection.mako:82
+#: webui/templates/wan_detection.mako:101
+msgid "Drag and Drop"
+msgstr ""
+
+#: webui/templates/arp_table.mako:32
+msgid "Fixed Entries Setting"
+msgstr ""
+
+#: webui/templates/arp_table.mako:38 webui/templates/arp_table.mako:53
+#: webui/templates/arp_table.mako:67 webui/templates/diagnostic_tools.mako:50
+#: webui/templates/summary.mako:50
+msgid "Interface"
+msgstr ""
+
+#: webui/templates/arp_table.mako:40 webui/templates/arp_table.mako:55
+#: webui/templates/arp_table.mako:75 webui/templates/dhcp.mako:69
+#: webui/templates/stat_dhcp.mako:48
+msgid "MAC Address"
+msgstr ""
+
+#: webui/templates/arp_table.mako:50
+msgid "Dynamic Entries Setting"
+msgstr ""
+
+#: webui/templates/arp_table.mako:56
+msgid "Fix"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:1
+msgid "Add auto routing rules"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:1
+msgid "Delete auto routing rules"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:1
+msgid "Edit auto routing rules"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:38
+msgid "Auto Routing Setting"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:40
+msgid "Method"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:42
+msgid "weight"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:43
+msgid "traffic"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:47
+msgid "Parameters"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:51
+msgid "Persistence Time"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:52 webui/templates/wan_detection.mako:62
+msgid "sec"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:63
+#: webui/templates/connection_limit.mako:37 webui/templates/firewall.mako:37
+#: webui/templates/nat.mako:66
+msgid "IPv4 Rules"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:70 webui/templates/auto_routing.mako:98
+#: webui/templates/connection_limit.mako:44
+#: webui/templates/connection_limit.mako:59 webui/templates/firewall.mako:44
+#: webui/templates/firewall.mako:59 webui/templates/nat.mako:72
+#: webui/templates/nat.mako:88
+msgid "Source"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:71 webui/templates/auto_routing.mako:99
+#: webui/templates/connection_limit.mako:45
+#: webui/templates/connection_limit.mako:64 webui/templates/firewall.mako:45
+#: webui/templates/firewall.mako:64 webui/templates/nat.mako:73
+#: webui/templates/nat.mako:93
+msgid "Destination"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:72 webui/templates/auto_routing.mako:100
+#: webui/templates/connection_limit.mako:46
+#: webui/templates/connection_limit.mako:69 webui/templates/firewall.mako:46
+#: webui/templates/firewall.mako:69 webui/templates/menu.mako:1
+#: webui/templates/nat.mako:74 webui/templates/nat.mako:98
+#: webui/templates/service_group.mako:57 webui/templates/service_group.mako:68
+#: webui/templates/virtual_server.mako:56
+#: webui/templates/virtual_server.mako:86
+msgid "Service"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:73 webui/templates/auto_routing.mako:102
+#: webui/templates/ddns.mako:28 webui/templates/nat.mako:37
+#: webui/templates/network.mako:32 webui/templates/service_header.mako:1
+#: webui/templates/wan_detection.mako:37
+msgid "WAN"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:74 webui/templates/auto_routing.mako:121
+msgid "Failover"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:75 webui/templates/auto_routing.mako:122
+msgid "Persistent"
+msgstr ""
+
+#: webui/templates/auto_routing.mako:76 webui/templates/auto_routing.mako:123
+#: webui/templates/connection_limit.mako:48
+#: webui/templates/connection_limit.mako:78 webui/templates/firewall.mako:48
+#: webui/templates/firewall.mako:78 webui/templates/menu.mako:1
+#: webui/templates/nat.mako:76 webui/templates/nat.mako:108
+#: webui/templates/virtual_server.mako:47
+#: webui/templates/virtual_server.mako:102
+msgid "Log"
+msgstr ""
+
+#: webui/templates/connection_limit.mako:1
+msgid "Add connection limit rules"
+msgstr ""
+
+#: webui/templates/connection_limit.mako:1
+msgid "Delete connection limit rules"
+msgstr ""
+
+#: webui/templates/connection_limit.mako:1
+msgid "Edit connection limit rules"
+msgstr ""
+
+#: webui/templates/connection_limit.mako:47
+#: webui/templates/connection_limit.mako:74
+msgid "Conn/Sec"
+msgstr ""
+
+#: webui/templates/date_time.mako:27
+msgid "Date/Time Setting"
+msgstr ""
+
+#: webui/templates/date_time.mako:29
+msgid "Time Zone"
+msgstr ""
+
+#: webui/templates/date_time.mako:37
+msgid "Time Server"
+msgstr ""
+
+#: webui/templates/date_time.mako:43
+msgid "Date"
+msgstr ""
+
+#: webui/templates/date_time.mako:47
+msgid "Time"
+msgstr ""
+
+#: webui/templates/date_time.mako:50
+msgid "Set Date/Time"
+msgstr ""
+
+#: webui/templates/ddns.mako:41
+msgid "DDNS Setting"
+msgstr ""
+
+#: webui/templates/ddns.mako:43 webui/templates/nat.mako:53
+#: webui/templates/network.mako:73 webui/templates/network.mako:154
+#: webui/templates/snmp.mako:23
+msgid "Enable"
+msgstr ""
+
+#: webui/templates/ddns.mako:47
+msgid "Provider"
+msgstr ""
+
+#: webui/templates/ddns.mako:63 webui/templates/dns.mako:23
+#: webui/templates/fqdn.mako:29
+msgid "Domain Name"
+msgstr ""
+
+#: webui/templates/ddns.mako:67 webui/templates/network.mako:113
+#: webui/templates/network.mako:219
+msgid "User Name"
+msgstr ""
+
+#: webui/templates/dhcp.mako:27 webui/templates/dns.mako:27
+msgid "DNS Server 1"
+msgstr ""
+
+#: webui/templates/dhcp.mako:31 webui/templates/dns.mako:31
+msgid "DNS Server 2"
+msgstr ""
+
+#: webui/templates/dhcp.mako:35 webui/templates/network.mako:188
+#: webui/templates/network.mako:318
+msgid "Gateway"
+msgstr ""
+
+#: webui/templates/dhcp.mako:39 webui/templates/network.mako:192
+#: webui/templates/network.mako:245 webui/templates/network.mako:295
+msgid "Netmask"
+msgstr ""
+
+#: webui/templates/dhcp.mako:43
+msgid "DHCP Range"
+msgstr ""
+
+#: webui/templates/dhcp.mako:61
+msgid "Static Mapping"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid ""
+"It may take several minutes in a complex network environment. Are you sure?"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Stop ping command successfully"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Stop traceroute command successfully"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:1
+msgid "Target should be a valid IP address or host name"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:32 webui/templates/menu.mako:1
+msgid "Diagnostic Tools"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:34
+msgid "ARP Enforcement"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:35
+msgid "Enforce"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:38
+msgid "IP Conflict Test"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:39
+msgid "Test"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:46
+msgid "Ping & Trace Route"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:48
+msgid "Target IP"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:61
+msgid "Ping"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:62
+msgid "Trace"
+msgstr ""
+
+#: webui/templates/diagnostic_tools.mako:63
+msgid "Stop"
+msgstr ""
+
+#: webui/templates/dns.mako:17
+msgid "DNS Setting"
+msgstr ""
+
+#: webui/templates/dns.mako:19
+msgid "Host Name"
+msgstr ""
+
+#: webui/templates/firewall.mako:1
+msgid "Add firewall rules"
+msgstr ""
+
+#: webui/templates/firewall.mako:1
+msgid "Delete firewall rules"
+msgstr ""
+
+#: webui/templates/firewall.mako:1
+msgid "Edit firewall rules"
+msgstr ""
+
+#: webui/templates/firewall.mako:47 webui/templates/firewall.mako:74
+msgid "Action"
+msgstr ""
+
+#: webui/templates/fqdn.mako:25
+msgid "FQDN Setting"
+msgstr ""
+
+#: webui/templates/fqdn.mako:28 webui/templates/stat_fqdn.mako:47
+msgid "No."
+msgstr ""
+
+#: webui/templates/fqdn.mako:39
+msgid "Note: Empty domain name can be acceptable"
+msgstr ""
+
+#: webui/templates/interface.mako:1
+msgid "Your account has been deleted!"
+msgstr ""
+
+#: webui/templates/interface.mako:63
+msgid "Logout"
+msgstr ""
+
+#: webui/templates/interface.mako:69
+msgid "Apply"
+msgstr ""
+
+#: webui/templates/interface.mako:70
+msgid "Reload"
+msgstr ""
+
+#: webui/templates/interface.mako:71
+msgid "Help"
+msgstr ""
+
+#: webui/templates/ip_group.mako:1 webui/templates/ip_group.mako:59
+#: webui/templates/ip_group.mako:70 webui/templates/network.mako:231
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:71
+msgid "IPv4 Address"
+msgstr ""
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "IPv4 Range"
+msgstr ""
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "Subnet/mask"
+msgstr ""
+
+#: webui/templates/ip_group.mako:1 webui/templates/service_header.mako:1
+msgid "fqdn@"
+msgstr ""
+
+#: webui/templates/ip_group.mako:49
+msgid "IP Group Rule"
+msgstr ""
+
+#: webui/templates/ip_group.mako:52 webui/templates/network.mako:77
+#: webui/templates/network.mako:158 webui/templates/service_group.mako:50
+#: webui/templates/summary.mako:91
+msgid "Label"
+msgstr ""
+
+#: webui/templates/login.mako:12
+msgid "Login"
+msgstr ""
+
+#: webui/templates/login.mako:55 webui/templates/menu.mako:1
+msgid "Language"
+msgstr ""
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "English"
+msgstr ""
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "Simplified Chinese"
+msgstr ""
+
+#: webui/templates/login.mako:59 webui/templates/menu.mako:1
+msgid "Traditional Chinese"
+msgstr ""
+
+#: webui/templates/login.mako:66
+msgid "Account"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "ARP Table"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Administration"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Are you sure to apply these settings?"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Are you sure to logout?"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Auto Routing"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Bandwidth Utilization"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Connection Limit"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "DDNS"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "DHCP (DMZ)"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "DHCP (LAN)"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "DNS"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Date/Time"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Firewall"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "IP Group"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "NAT"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Network Setting"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "SNMP"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Service Group"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Statistics"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Summary"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "Syslog"
+msgstr ""
+
+#: webui/templates/menu.mako:1
+msgid "View"
+msgstr ""
+
+#: webui/templates/menu.mako:1 webui/templates/stat_fqdn.mako:44
+#: webui/templates/stat_fqdn.mako:48
+msgid "FQDN"
+msgstr ""
+
+#: webui/templates/menu.mako:1 webui/templates/stat_wan_detection.mako:53
+msgid "WAN Detection"
+msgstr ""
+
+#: webui/templates/menu.mako:1 webui/templates/view.mako:1
+msgid "System"
+msgstr ""
+
+#: webui/templates/menu.mako:1 webui/templates/virtual_server.mako:38
+#: webui/templates/virtual_server.mako:45
+#: webui/templates/virtual_server.mako:69
+msgid "Virtual Server"
+msgstr ""
+
+#: webui/templates/message.mako:1
+msgid "Invalid input name!"
+msgstr ""
+
+#: webui/templates/message.mako:1
+msgid "Invalid input password!"
+msgstr ""
+
+#: webui/templates/message.mako:1
+msgid "Invalid input!"
+msgstr ""
+
+#: webui/templates/message.mako:1
+msgid "Password and confirm are inconsistent!"
+msgstr ""
+
+#: webui/templates/message.mako:1
+msgid "Please select file!"
+msgstr ""
+
+#: webui/templates/nat.mako:1
+msgid "Add nat rules"
+msgstr ""
+
+#: webui/templates/nat.mako:1
+msgid "Delete nat rules"
+msgstr ""
+
+#: webui/templates/nat.mako:1
+msgid "Edit nat rules"
+msgstr ""
+
+#: webui/templates/nat.mako:75 webui/templates/nat.mako:103
+msgid "Translate"
+msgstr ""
+
+#: webui/templates/network.mako:45
+msgid "USB Modem Status"
+msgstr ""
+
+#: webui/templates/network.mako:51
+msgid "Brand"
+msgstr ""
+
+#: webui/templates/network.mako:51
+msgid "model"
+msgstr ""
+
+#: webui/templates/network.mako:55
+msgid "Operator"
+msgstr ""
+
+#: webui/templates/network.mako:59
+msgid "Mode"
+msgstr ""
+
+#: webui/templates/network.mako:63
+msgid "Quality"
+msgstr ""
+
+#: webui/templates/network.mako:71 webui/templates/network.mako:152
+msgid "Basic Setting"
+msgstr ""
+
+#: webui/templates/network.mako:81 webui/templates/network.mako:167
+msgid "Downstream"
+msgstr ""
+
+#: webui/templates/network.mako:88 webui/templates/network.mako:174
+msgid "Upstream"
+msgstr ""
+
+#: webui/templates/network.mako:99
+msgid "3G/3.5G Dial-up Setting"
+msgstr ""
+
+#: webui/templates/network.mako:101
+msgid "PIN"
+msgstr ""
+
+#: webui/templates/network.mako:105
+msgid "APN"
+msgstr ""
+
+#: webui/templates/network.mako:109
+msgid "Dial number"
+msgstr ""
+
+#: webui/templates/network.mako:121 webui/templates/network.mako:137
+msgid "MTU"
+msgstr ""
+
+#: webui/templates/network.mako:131
+msgid "Ethernet"
+msgstr ""
+
+#: webui/templates/network.mako:133
+msgid "Clone MAC"
+msgstr ""
+
+#: webui/templates/network.mako:141
+msgid "Speed/Duplex"
+msgstr ""
+
+#: webui/templates/network.mako:162
+msgid "WAN Type"
+msgstr ""
+
+#: webui/templates/network.mako:185
+msgid "IPv4 Static Type"
+msgstr ""
+
+#: webui/templates/network.mako:196 webui/templates/network.mako:249
+#: webui/templates/network.mako:294
+msgid "IP Address/Range"
+msgstr ""
+
+#: webui/templates/network.mako:217
+msgid "PPPoE Type"
+msgstr ""
+
+#: webui/templates/network.mako:227
+msgid "Service Name"
+msgstr ""
+
+#: webui/templates/network.mako:235
+msgid "Daily Redial"
+msgstr ""
+
+#: webui/templates/network.mako:243
+msgid "IPv4 Public IP Passthrough"
+msgstr ""
+
+#: webui/templates/network.mako:288
+msgid "IPv4 Basic Subnet"
+msgstr ""
+
+#: webui/templates/network.mako:311
+msgid "IPv4 Static Routing Subnet"
+msgstr ""
+
+#: webui/templates/network.mako:317
+msgid "Subnet/Mask"
+msgstr ""
+
+#: webui/templates/network_header.mako:12
+msgid "WAN Setting"
+msgstr ""
+
+#: webui/templates/network_header.mako:13
+msgid "DMZ Setting"
+msgstr ""
+
+#: webui/templates/network_header.mako:14
+msgid "LAN Setting"
+msgstr ""
+
+#: webui/templates/service_group.mako:47
+msgid "Service Group Rule"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "10/full"
+msgstr "10Mb/s Full Duplex"
+
+#: webui/templates/service_header.mako:1
+msgid "10/half"
+msgstr "10Mb/s Half Duplex"
+
+#: webui/templates/service_header.mako:1
+msgid "100/full"
+msgstr "100Mb/s Full Duplex"
+
+#: webui/templates/service_header.mako:1
+msgid "100/half"
+msgstr "100Mb/s Half Duplex"
+
+#: webui/templates/service_header.mako:1
+msgid "Accept"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Add Account Setting"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Add Fixed Entries Details"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Add Rule Details"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Any"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Any Service"
+msgstr "Any"
+
+#: webui/templates/service_header.mako:1
+msgid "Cancel"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "DHCP"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Delete"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Deny"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Edit"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Account Setting"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Fixed Entries Details"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Edit Rule Details"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Localhost"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "No NAT"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "OK"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "PPPoE"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "Static"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "WAN1"
+msgstr "WAN 1"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN2"
+msgstr "WAN 2"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN3"
+msgstr "WAN 3"
+
+#: webui/templates/service_header.mako:1
+msgid "WAN4"
+msgstr "WAN 4"
+
+#: webui/templates/service_header.mako:1
+msgid "auto"
+msgstr "Auto"
+
+#: webui/templates/service_header.mako:1
+msgid "group@"
+msgstr ""
+
+#: webui/templates/service_header.mako:1
+msgid "none"
+msgstr ""
+
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:59
+msgid "LAN"
+msgstr ""
+
+#: webui/templates/service_header.mako:1 webui/templates/summary.mako:60
+msgid "DMZ"
+msgstr ""
+
+#: webui/templates/snmp.mako:21
+msgid "SNMP Setting"
+msgstr ""
+
+#: webui/templates/snmp.mako:27
+msgid "Community"
+msgstr ""
+
+#: webui/templates/snmp.mako:31
+msgid "System Name"
+msgstr ""
+
+#: webui/templates/snmp.mako:35
+msgid "System Contact"
+msgstr ""
+
+#: webui/templates/snmp.mako:39
+msgid "System Location"
+msgstr ""
+
+#: webui/templates/stat_bandwidth_utilization.mako:21
+#: webui/templates/stat_wan_detection.mako:28
+msgid "WAN Link"
+msgstr ""
+
+#: webui/templates/stat_bandwidth_utilization.mako:27
+msgid "Traffic Type"
+msgstr ""
+
+#: webui/templates/stat_bandwidth_utilization.mako:29
+msgid "Outbound"
+msgstr ""
+
+#: webui/templates/stat_bandwidth_utilization.mako:30
+msgid "Inbound"
+msgstr ""
+
+#: webui/templates/stat_bandwidth_utilization.mako:32
+#: webui/templates/view.mako:32
+msgid "Refresh"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:25 webui/templates/stat_fqdn.mako:25
+#: webui/templates/stat_wan_detection.mako:34
+msgid "Automatic Refresh"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:27 webui/templates/stat_fqdn.mako:27
+#: webui/templates/stat_wan_detection.mako:36
+msgid "Disabled"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:28 webui/templates/stat_fqdn.mako:28
+#: webui/templates/stat_wan_detection.mako:37
+msgid "Every 3 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:29 webui/templates/stat_fqdn.mako:29
+#: webui/templates/stat_wan_detection.mako:38
+msgid "Every 6 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:30 webui/templates/stat_fqdn.mako:30
+#: webui/templates/stat_wan_detection.mako:39
+msgid "Every 9 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:31 webui/templates/stat_fqdn.mako:31
+#: webui/templates/stat_wan_detection.mako:40
+msgid "Every 15 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:32 webui/templates/stat_fqdn.mako:32
+#: webui/templates/stat_wan_detection.mako:41
+msgid "Every 21 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:33 webui/templates/stat_fqdn.mako:33
+#: webui/templates/stat_wan_detection.mako:42
+msgid "Every 30 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:34 webui/templates/stat_fqdn.mako:34
+#: webui/templates/stat_wan_detection.mako:43
+msgid "Every 39 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:35 webui/templates/stat_fqdn.mako:35
+#: webui/templates/stat_wan_detection.mako:44
+msgid "Every 51 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:36 webui/templates/stat_fqdn.mako:36
+#: webui/templates/stat_wan_detection.mako:45
+msgid "Every 63 Seconds"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:47
+msgid "Lease IP"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:49
+msgid "Client-Hostname"
+msgstr ""
+
+#: webui/templates/stat_dhcp.mako:50
+msgid "Expire Time"
+msgstr ""
+
+#: webui/templates/stat_fqdn.mako:49
+msgid "IP 1"
+msgstr ""
+
+#: webui/templates/stat_fqdn.mako:50
+msgid "IP 2"
+msgstr ""
+
+#: webui/templates/stat_fqdn.mako:51
+msgid "IP 3"
+msgstr ""
+
+#: webui/templates/stat_fqdn.mako:52
+msgid "IP 4"
+msgstr ""
+
+#: webui/templates/stat_wan_detection.mako:56
+#: webui/templates/wan_detection.mako:91
+#: webui/templates/wan_detection.mako:110
+msgid "Destination IP"
+msgstr ""
+
+#: webui/templates/stat_wan_detection.mako:57
+msgid "Number of Requests"
+msgstr ""
+
+#: webui/templates/stat_wan_detection.mako:58
+msgid "Number of Replies"
+msgstr ""
+
+#: webui/templates/stat_wan_detection.mako:59
+msgid "Success Ratio (%)"
+msgstr ""
+
+#: webui/templates/summary.mako:26
+msgid "System Information"
+msgstr ""
+
+#: webui/templates/summary.mako:34
+msgid "Version"
+msgstr ""
+
+#: webui/templates/summary.mako:35
+msgid "Serial Number"
+msgstr ""
+
+#: webui/templates/summary.mako:36
+msgid "Uptime"
+msgstr ""
+
+#: webui/templates/summary.mako:37
+msgid "Connections"
+msgstr ""
+
+#: webui/templates/summary.mako:38
+msgid "CPU Usage %"
+msgstr ""
+
+#: webui/templates/summary.mako:44
+msgid "DetectOK"
+msgstr "OK"
+
+#: webui/templates/summary.mako:45
+msgid "Failed"
+msgstr ""
+
+#: webui/templates/summary.mako:48
+msgid "Port Information"
+msgstr ""
+
+#: webui/templates/summary.mako:70
+msgid "DDNS Host"
+msgstr ""
+
+#: webui/templates/summary.mako:73
+msgid "Rx (Kbps)"
+msgstr ""
+
+#: webui/templates/summary.mako:74
+msgid "TX (Kbps)"
+msgstr ""
+
+#: webui/templates/summary.mako:75
+msgid "Detection"
+msgstr ""
+
+#: webui/templates/summary.mako:77 webui/templates/summary.mako:79
+msgid "Reconnect"
+msgstr ""
+
+#: webui/templates/summary.mako:87 webui/templates/summary.mako:88
+msgid "N/A"
+msgstr ""
+
+#: webui/templates/summary.mako:90
+msgid "Connection Time"
+msgstr ""
+
+#: webui/templates/syslog.mako:21
+msgid "Syslog Setting"
+msgstr ""
+
+#: webui/templates/syslog.mako:23
+msgid "Server IP"
+msgstr ""
+
+#: webui/templates/syslog.mako:27
+msgid "Facility"
+msgstr ""
+
+#: webui/templates/view.mako:1
+msgid "Traffic"
+msgstr ""
+
+#: webui/templates/view.mako:23
+msgid "Log Type"
+msgstr ""
+
+#: webui/templates/view.mako:34
+msgid "Recent Event"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:1
+msgid "Add virtual server rules"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:1
+msgid "Delete virtual server rules"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:1
+msgid "Edit virtual server rules"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:46
+#: webui/templates/virtual_server.mako:91
+msgid "Real Server"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:57
+#: webui/templates/virtual_server.mako:94
+msgid "IPv4"
+msgstr ""
+
+#: webui/templates/virtual_server.mako:58
+#: webui/templates/virtual_server.mako:98
+msgid "Port Mapping"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:28
+msgid "Always Success When There Is Inbound Traffic"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:52
+msgid "Protocol"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:59
+msgid "Detection Period"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:66
+msgid "Number of Targets per Detection"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:72
+msgid "Number of Retries"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:85
+#: webui/templates/wan_detection.mako:104
+msgid "Target List"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:92
+msgid "Hops"
+msgstr ""
+
+#: webui/templates/wan_detection.mako:111
+msgid "TCP Port"
+msgstr ""
+
+#~ msgid "wan1"
+#~ msgstr "WAN 1"
+
+#~ msgid "wan2"
+#~ msgstr "WAN 2"
+
+#~ msgid "wan3"
+#~ msgstr "WAN 3"
+
+#~ msgid "wan4"
+#~ msgstr "WAN 4"
+
+#~ msgid "1000/full"
+#~ msgstr "1000Mb/s Full Duplex"
+
+#~ msgid "rule-array"
+#~ msgstr "rule"

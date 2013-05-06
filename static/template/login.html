@@ -8,7 +8,7 @@
 		<title>Login</title>
 		<meta name="description" content="" />
 		<meta name="author" content="Kim Hsiao" />
-		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
 		<link rel="stylesheet" href="/css/basic.css" type="text/css" />
@@ -86,19 +86,19 @@
 						<form id="theForm" action="/doLogin/" method="post" class="form-horizontal">
 							<div class="control-group">
 								<label class="control-label" for="LangSelect">
-									<strong>Language:</stron>
+									<strong>{{ _('Language') }}:</stron>
 								</label>
 								<div class="controls">
 									<p>
 									<select name="Language" id="LangSelect">
-										<option value="0">English</option>
-										<option value="1">Traditional Chinese</option>
-										<option value="2">Simplified Chinese</option>
+										<option value="en-US"{% if lang == "en-US" %} selected="selected"{% endif %}>{{ _('English') }}</option>
+										<option value="zh-TW"{% if lang == "zh-TW" %} selected="selected"{% endif %}>{{ _('Traditional Chinese') }}</option>
+										<option value="zh-CN"{% if lang == "zh-CN" %} selected="selected"{% endif %}>{{ _('Simplified Chinese') }}</option>
 									</select>
 									</p>
 								</div>
 								<label class="control-label" for="AccountAlias">
-									<strong>Account:</strong>
+									<strong>{{ _('Account') }}:</strong>
 								</label>
 								<div class="controls">
 									<p>
@@ -106,7 +106,7 @@
 									</p>
 								</div>
 								<label class="control-label" for="Password">
-									<strong>Password:</strong>
+									<strong>{{ _('Password') }}:</strong>
 								</label>
 								<div class="controls">
 									<p>
@@ -117,7 +117,7 @@
 									<input type="hidden" name="AdminCheck" value="yes" />
 									<button type="submit" name="SubmitBar">
 									<i class="icon-play"></i>
-									&nbsp;Login
+									&nbsp;{{ _('Login') }}
 									</button>
 									<input type="hidden" name="Action" value="" />
 								</div>
@@ -127,5 +127,11 @@
 				</div>
 			</div>
 		</div>
+		<script type="text/javascript" src="/script/jquery.js"></script>
+		<script type="text/javascript">
+			$('#LangSelect').on('change', function() {
+				return $('#theForm')[0].submit();
+			});
+		</script>
 	</body>
 </html>
