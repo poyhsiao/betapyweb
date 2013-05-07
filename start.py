@@ -15,13 +15,19 @@ import cherrypy as _
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
+static_dir = current_dir + '/static'
+script_dir = static_dir + '/script'
+template_dir = static_dir + '/template'
+data_dir = static_dir + '/data'
+image_dir = static_dir + '/image'
+css_dir = static_dir + '/css'
+
 sys.path.append(current_dir)
 # add this path as a package
 sys.path.append(os.path.join(current_dir, '../middleware'))
 
 # from login import Login
 
-# sys.path.append(os.path.join(current_dir, 'pages'))
 env = Environment(loader=FileSystemLoader('static/template'), extensions=['jinja2.ext.i18n'])
 
 from libs.login import cklogin
@@ -33,41 +39,43 @@ from libs.tools import *
 class Root:
     @_.expose
     def index(self):
+        '''
+            main page which is login page
+        '''
         if _.session.locked:
             _.session.release_lock()
         _.session.clean_up()
         # clean up all expired sessions
         if not cklogin():
-            if 'LANG' in _.session:
-                lang = _.session['LANG']
-            else:
-                lang = 'en-US'
-
-            tpl = env.get_template('login.html')
-            env.install_gettext_translations(translation(lang))
-            # import gettext for language translation
-            return tpl.render(lang=lang)
             # if not login, then redirect to login page
+            tpl = env.get_template('login.html')
+            trans = translation()
+            env.install_gettext_translations(trans['obj'])
+            # import gettext for language translation
+            return tpl.render(lang=trans['lang'])
         else:
             # if logged in already, show /main/ page
             raise _.HTTPRedirect('/main/')
 
     @_.expose
     def doLogin(self, **kwargs):
-        from pages.doLogin import dologin
-        return dologin(**kwargs)
+        '''
+            login handler will use doLogin file
+        '''
+        from doLogin import login
+        return login(**kwargs)
 
     @_.expose
     def main(self, **kwargs):
-        if 'LANG' in _.session:
-            lang = _.session['LANG']
-        else:
-            lang = 'en-US'
-
+        '''
+            it's main page
+        '''
         if cklogin():
             # if user logged in, the show the content
+            trans = translation()
+            # save default language
             tpl = env.get_template('default.html')
-            env.install_gettext_translations(translation(lang))
+            env.install_gettext_translations(trans['obj'])
             return tpl.render(userinfo=_.session)
         else:
             # if not login, go back to login page
@@ -75,8 +83,43 @@ class Root:
 
     @_.expose
     def logout(self, **kwargs):
-        from pages.doLogin import logout
+        from doLogin import logout
         return logout()
+
+    @_.expose
+    def menuitem(self, **kwargs):
+        '''
+            translate menu items and display it
+        '''
+        tpl = env.get_template('menuitem.json')
+        env.install_gettext_translations(translation()['obj'])
+        return tpl.render()
+
+    @_.expose
+    def js(self, **kwargs):
+        '''TESTING
+            should become the all-in-one js normal request
+            the require should be as get method as
+            /js?files=jquery.js&files=underscore.js&files=underscore.js&files=bootstrap.js
+        '''
+        if kwargs is not None and 'files' in kwargs:
+            import libs.jsReturn as j
+            js = j.JS(kwargs['files'])
+            data = js.getContent()
+            return data
+
+    @_.expose
+    def jsmin(self, **kwargs):
+        '''TESTING
+            should become the all-in-one js normal request with COMPRESS
+            the require should be as get method as
+            /jsmin?files=jquery.js&files=underscore.js&files=underscore.js&files=bootstrap.js
+        '''
+        if kwargs is not None and 'files' in kwargs:
+            import libs.jsReturn as j
+            js = j.JS(kwargs['files'])
+            data = js.getMini()
+            return data
 
 
 if __name__ == '__main__':

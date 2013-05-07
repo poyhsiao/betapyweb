@@ -14,7 +14,7 @@ $.when(
   function(e) {
     /* run this function when everything is ready and done */
     backboneWrap();
-    /* Backbone implementation */
+     // Backbone implementation
   }, function(e) {
     /* run this function if anything error or fail to retrival anything above */
     console.error("Something error");
@@ -147,7 +147,7 @@ var backboneWrap = function() {
     }
   });
 
-  $.getJSON('/data/menuitem.json', function(d) {
+  $.getJSON('/menuitem', function(d) {
     /* realtime get the menu item data */
     var menumodel, menuview, bodyview;
     menumodel = new MenuModel(d);

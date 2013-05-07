@@ -11,12 +11,12 @@ Created on 2013/04/30
 import os
 import sys
 import cherrypy as _
+# import libs.tools as tools
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(current_dir, '../../middleware'))
-sys.path.append(os.path.join(current_dir, '../libs'))
-import tools
+sys.path.append(os.path.join(current_dir, '../middleware'))
+# import libs.tools as tools
 env = Environment(loader=FileSystemLoader('static/template'))
 
 
@@ -24,8 +24,8 @@ class Login:
     @_.expose
     def index(self, **kwargs):
         # print kwargs
-        username = kwargs['AccountAlias']
-        password = kwargs['Password']
+        username = str(kwargs['AccountAlias'])
+        password = str(kwargs['Password'])
         lang = kwargs['Language']
 
         _.session['LANG'] = lang
@@ -34,6 +34,7 @@ class Login:
         _.session['headers'] = _.request.headers
         _.session['username'] = username
         _.session['password'] = password
+
         # _.session['LANG'] = lang
         # save necessary information into session
 
@@ -51,13 +52,11 @@ class Login:
         #     raise _.HTTPRedirect('/main')
 
 
-def dologin(**kwargs):
-    login = Login()
-    return login.index(**kwargs)
+def login(**kwargs):
+    return Login().index(**kwargs)
 
 
 def logout():
-    # id = _.session.id
     _.session.clear()
     _.session.delete()
     raise _.HTTPRedirect('/')

@@ -1,0 +1,36 @@
+{
+    "items":[
+        {"title": "{{ _('System') }}", "subitems": [
+            {"title": "{{ _('Summary') }}", "src": "summary"},
+            {"title": "{{ _('DNS') }}", "src": "dns"},
+            {"title": "{{ _('VLAN') }}", "src": "vlan"},
+            {"title": "{{ _('Bridge') }}", "src": "bridge"},
+            {"title": "{{ _('IP Address') }}", "src": "ip"},
+            {"title": "{{ _('Routing Table') }}", "src": "route"},
+            {"title": "{{ _('ARP Table') }}", "src": "arp"},
+            {"title": "{{ _('Date/Time Setting') }}", "src": "date"},
+            {"title": "{{ _('Diagnostic Tools') }}", "src": "diagnostic"},
+            {"title": "{{ _('Administration') }}", "src": "admin"}
+        ]},
+        {"title": "{{ _('Service') }}", "subitems": [
+            {"title": "{{ _('SNMP') }}", "src": "snmp"},
+            {"title": "{{ _('Email') }}", "src": "email"},
+            {"title": "{{ _('VRRPv2') }}", "src": "vrrp"},
+            {"title": "{{ _('SLB') }}", "src": "slb"},
+            {"title": "{{ _('NAT64') }}", "src": "nat64"}
+        ]},
+        {"title": "{{ _('Statistics') }}", "subitems": [
+            {"title": "{{ _('Counters') }}", "src": "counters"},
+            {"title": "{{ _('Rates') }}", "src": "rates"},
+            {"title": "{{ _('Rersistence Info') }}", "src": "persistence"}
+        ]},
+        {"title": "{{ _('Log') }}", "subitems": [
+            {"title": "{{ _('View') }}", "src": "view"},
+            {"title": "{{ _('Syslog') }}", "src": "syslog"}
+        ]}
+    ],
+   "opt": [
+        {"title": "{{ _('Login') }}", "src": "login"},
+        {"title": "{{ _('Wizard') }}", "src": "wizard"}
+    ]
+}
