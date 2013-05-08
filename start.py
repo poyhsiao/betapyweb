@@ -35,6 +35,8 @@ from libs.login import cklogin
 
 from libs.tools import *
 
+import doSystem as ds
+
 
 class Root:
     @_.expose
@@ -85,6 +87,10 @@ class Root:
     def logout(self, **kwargs):
         from doLogin import logout
         return logout()
+
+    # @_.expose
+    # def system(self, opt):
+    #     return ds.System(opt)
 
     @_.expose
     def menuitem(self, **kwargs):
@@ -227,6 +233,7 @@ if __name__ == '__main__':
     }
 
     root = Root()
+    root.system = ds.System()
     # root.doLogin = Login()
     # root.main = main()
 

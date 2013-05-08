@@ -71,8 +71,6 @@ var backboneWrap = function() {
     runMain: function(o) {
       /* handling the click event for main menu items, o is the current object which is clicked */
       var me = this, self = $(o.target), mainmenu = $('div.MainMenu');
-      console.log(self.attr('opt'));
-      console.log(self);
       if(self.hasClass('closeMenu')) {
         mainmenu.each(function(k, v) {
           if($(v).hasClass('openMenu')) {
@@ -104,6 +102,7 @@ var backboneWrap = function() {
         "maintitle": main.text(),
         "subtitle": self.text()
       });
+      /* for page navigation data */
 
       view = new MenuView({
         el: "#Paganation",
@@ -113,9 +112,12 @@ var backboneWrap = function() {
           'click .subtitle': 'runPagination'
         }
       });
+      /* for page navigation view */
 
       changeResolution.changePopC(self).fadeIn('slow');
       changeResolution.changeArrow(self).fadeIn('slow');
+
+      me.execMenu(self.attr('opt'));
 
       return view.viewPagination();
     },
@@ -144,6 +146,37 @@ var backboneWrap = function() {
     runLogout: function(o) {
       /* logout the page */
       window.location = '/logout';
+    },
+
+    execMenu: function(o) {
+      /* when click menu item will separate model/template with this function */
+      var model, view;
+      switch(o) {
+        case 'summary':
+          $.getJSON('/system/summary', function(d) {
+            model = new MenuModel(d);
+            view = new MenuView({
+              model: model,
+              /* data source */
+              el: '.popContent',
+              /* triggle dom */
+              events: {}
+              /* no events bind for summery for now */
+            });
+
+            view.viewSummery();
+          });
+          break;
+        default:
+        break;
+      }
+    },
+
+    viewSummery: function(o) {
+      /* summery display */
+      var me = this, template = _.template($('#t_summery').html());
+      console.log(me.model);
+      return me.$el.html(template(me.model.attributes));
     }
   });
 

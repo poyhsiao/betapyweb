@@ -16,6 +16,8 @@ from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(current_dir, '../middleware'))
+# set middleware path in system path
+
 # import libs.tools as tools
 env = Environment(loader=FileSystemLoader('static/template'))
 
@@ -31,25 +33,29 @@ class Login:
         _.session['LANG'] = lang
         # save perfer language first
 
-        _.session['headers'] = _.request.headers
-        _.session['username'] = username
-        _.session['password'] = password
+        import ml_w_login as wlogin
+        if wlogin.get(username, password)[0]:
+            _.session['headers'] = _.request.headers
+            _.session['username'] = username
+            _.session['password'] = password
 
-        # _.session['LANG'] = lang
-        # save necessary information into session
+            # _.session['LANG'] = lang
+            # save necessary information into session
 
-        # print _.session
+            # print _.session
 
-        raise _.HTTPRedirect('/main/')
-        # tpl = env.get_template('default.html')
-        # return tpl.render(userinfo=_.session)
-        # import ml_w_login
-        # res = ml_w_login.get(username=username, password=password)
-        # print res
-        # if not res[0]:
-        #     raise _.HTTPRedirect('/')
-        # else:
-        #     raise _.HTTPRedirect('/main')
+            raise _.HTTPRedirect('/main/')
+            # tpl = env.get_template('default.html')
+            # return tpl.render(userinfo=_.session)
+            # import ml_w_login
+            # res = ml_w_login.get(username=username, password=password)
+            # print res
+            # if not res[0]:
+            #     raise _.HTTPRedirect('/')
+            # else:
+            #     raise _.HTTPRedirect('/main')
+        else:
+            raise _.HTTPRedirect('/')
 
 
 def login(**kwargs):

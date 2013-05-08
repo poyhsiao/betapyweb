@@ -15,6 +15,7 @@
 
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
+  <script type="text/javascript" src="/script/jquery.js"></script>
   <link rel="stylesheet" href="/css/basic.css" type="text/css" />
   <link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" />
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
@@ -182,7 +183,6 @@
       width: 12px;
     }
   </style>
-  <script type="text/javascript" src="/script/jquery.js"></script>
 </head>
 
 <body>
@@ -251,6 +251,16 @@
     <span class="maintitle clickable" opt="<%= opt %>"><%= maintitle %></span>
     <i class="icon-chevron-right"></i>
     <span class="subtitle clickable" opt="<%= opt %>"><%= subtitle %></span>
+  </script>
+  <script type="text/template" id="t_summery">
+    <table>
+      <% _.each(items, function(v, k) { %>
+      <tr>
+          <th><%= v.title %></th>
+          <td><%= v.value %></td>
+      </tr>
+      <% }); %>
+    </table>
   </script>
 </body>
 </html>

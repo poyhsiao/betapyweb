@@ -1,0 +1,22 @@
+'items': [
+    {
+        'title': '{{ _('Connections') }}',
+        'value': '{{ info['connections'] }}'
+    },
+    {
+        'title': '{{ _('Serial Number') }}',
+        'value': '{{ info['serial_number'] }}'
+    },
+    {
+        'title': '{{ _('Uptime') }}',
+        'value': '{{ info['uptime'] }}'
+    },
+    {
+        'title': '{{ _('Version') }}',
+        'value': '{{ info['version'] }}'
+    },
+    {
+        'title': '{{ _('CPU Usage %') }}',
+        'value': '{{ info['cpu_usage'] }}'
+    }
+]
