@@ -15,7 +15,6 @@
 
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
-  <script type="text/javascript" src="/script/jquery.js"></script>
   <link rel="stylesheet" href="/css/basic.css" type="text/css" />
   <link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" />
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
@@ -68,6 +67,8 @@
         display: none;
         position: relative;
         top: 5px;
+        padding: 50px 30px 0px 30px;
+        overflow: auto;
     }
     div.footer {
         text-align: center;
@@ -183,6 +184,9 @@
       width: 12px;
     }
   </style>
+  <script type="text/javascript" src="/script/jquery.js"></script>
+  <script type="text/javascript" src="/script/underscore.js"></script>
+  <script type="text/javascript" src="/script/backbone.js"></script>
 </head>
 
 <body>
@@ -215,7 +219,88 @@
           <!--span>Left Menu</span-->
           <div id="menu-template">
               <!--div class="menu_root MenuBar" /-->
-              <ul class="topmenu" />
+              <ul class="topmenu">
+                <li class="boxShadow">
+                  <div class="MainMenu closeMenu" opt="System">{{ _('System') }}</div>
+                  <ul class="ul_System inactive">
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="summary">{{ _('Summary') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="dns">{{ _('DNS') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="vlan">{{ _('VLAN') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="bridge">{{ _('Bridge') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="ip">{{ _('IP Address') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="route">{{ _('Routing Table') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="arp">{{ _('ARP Table') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="date">{{ _('Date/Time') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="diagnostic">{{ _('Diagnostic Tools') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="admin">{{ _('Administration') }}</div>
+                    </li>
+                  </ul>
+                </li>
+                <li class="boxShadow">
+                  <div class="MainMenu closeMenu" opt="Service">{{ _('Service') }}</div>
+                  <ul class="ul_Service inactive">
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="snmp">{{ _('SNMP') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="email">{{ _('Email') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="vrrp">{{ _('VRRPv2') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="slb">{{ _('SLB') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="nat64">{{ _('NAT64') }}</div>
+                    </li>
+                  </ul>
+                </li>
+                <li class="boxShadow">
+                  <div class="MainMenu closeMenu" opt="Statistics">{{ _('Statistics') }}</div>
+                  <ul class="ul_Statistics inactive">
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="counters">{{ _('Counters') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="rates">{{ _('Rates') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="persistence">{{ _('Rersistence Info') }}</div>
+                    </li>
+                  </ul>
+                </li>
+                <li class="boxShadow">
+                  <div class="MainMenu closeMenu" opt="Log">{{ _('Log') }}</div>
+                  <ul class="ul_Log inactive">
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="view">{{ _('View') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="syslog">{{ _('Syslog') }}</div>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
           </div>
       </div>
       <div class="span9 mainContent">
@@ -230,7 +315,7 @@
       </div>
   </div>
   <div class="borderArrow inactive" />
-  <script type="text/javascript" src="/script/bb.js" async="async"></script>
+  <script type="text/javascript" src="/script/bb.js" defer></script>
   <script type="text/template" id="t_mainmenu">
     <ul class="topmenu">
       <% _.each(items, function(v, k) { %>
@@ -252,15 +337,38 @@
     <i class="icon-chevron-right"></i>
     <span class="subtitle clickable" opt="<%= opt %>"><%= subtitle %></span>
   </script>
-  <script type="text/template" id="t_summery">
-    <table>
-      <% _.each(items, function(v, k) { %>
-      <tr>
-          <th><%= v.title %></th>
-          <td><%= v.value %></td>
-      </tr>
-      <% }); %>
-    </table>
+  <script type="text/template" id="t_summary">
+    <div class="systemSummary">
+      <table border="1">
+        <% _.each(items, function(v, k) { %>
+        <tr>
+            <th><%= v.title %></th>
+            <td><%= v.value %></td>
+        </tr>
+        <% }); %>
+      </table>
+    </div>
+  </script>
+  <script type="text/template" id="t_summery_control">
+    <div class="systemSummaryTimer control-group">
+      <label class="control-label" for="summary_timer">
+        <strong>{{ _('Automatic Refresh') }}</strong>
+      </label>
+      <div class="controls">
+        <select name="summary_timer" id="summary_timer">
+          <option value="0">{{ _('Disabled') }}</option>
+          <option value="3">{{ _('Every 3 Seconds') }}</option>
+          <option value="6">{{ _('Every 6 Seconds') }}</option>
+          <option value="9">{{ _('Every 9 Seconds') }}</option>
+          <option value="15">{{ _('Every 15 Seconds') }}</option>
+          <option value="21">{{ _('Every 21 Seconds') }}</option>
+          <option value="30">{{ _('Every 30 Seconds') }}</option>
+          <option value="39">{{ _('Every 39 Seconds') }}</option>
+          <option value="51">{{ _('Every 51 Seconds') }}</option>
+          <option value="63">{{ _('Every 63 Seconds') }}</option>
+        </select>
+      </div>
+    </div>
   </script>
 </body>
 </html>

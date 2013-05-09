@@ -55,4 +55,5 @@ class System(object):
             trans = translation()
             env.install_gettext_translations(trans['obj'])
             # import gettext for language translation
+            # _.response.headers['Content-Type'] = 'application/json'
             return tpl.render(info=obj[1])
