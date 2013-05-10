@@ -39,12 +39,11 @@ class System(object):
         return 'Hello World!'
 
     @_.expose
-    def summary(self, **kwargs):
+    def ssys(self, **kwargs):
         '''
             System -> Summary access
         '''
         import ml_w_summary_system as wsys
-        # import summary middleware
         obj = wsys.get()
         print obj
         if not obj[0]:
@@ -57,3 +56,43 @@ class System(object):
             # import gettext for language translation
             # _.response.headers['Content-Type'] = 'application/json'
             return tpl.render(info=obj[1])
+
+    @_.expose
+    def s_port(self, **kwargs):
+        '''
+            Retrieval summary of port information
+        '''
+        import ml_w_summary_port as wport
+        obj = wport.get()
+        print obj
+        if not obj[0]:
+            return "Fail"
+        else:
+            import json
+            _.response.headers["Content-Type"] = "application/json"
+            return json.dumps(obj)
+
+    @_.expose
+    def gdns(self, **kwargs):
+        '''
+            Retrieval dns information
+        '''
+        import ml_w_dns as dns
+        import json
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(dns.get())
+
+    @_.expose
+    def sdns(self, **kwargs):
+        '''
+            Save DNS setting
+        '''
+        import ml_w_dns as dns
+        import json
+        import unicodedata as codec
+        for k in kwargs:
+            kwargs[k] = codec.normalize('NFKD', kwargs[k]).encode("UTF-8", "ignore")
+        res = dns.set(cfg=kwargs)
+        _.response.headers["Content-Type"] = "application/json"
+        # return json.dumps(kwargs)
+        return json.dumps(res)

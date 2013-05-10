@@ -58,19 +58,12 @@ def v(obj, display='print'):
             "obj": can be any kind of data type
             "display": current is "print" only
     '''
-    try:
-        if 'print' == display:
-            print('This object has folloing content')
-            print("\t")
-            print '''
-            ----------------------------------
-            '''
-            for k in obj:
-                print(k + ' = ' + obj[k])
-    except:
-        print obj
-    finally:
-        print("\t")
+    if 'print' == display:
+        import pprint as pp
         print '''
-        ----------------------------------
+        ---------- start ------------------------
+        '''
+        pp.pprint(obj)
+        print '''
+        ----------  end ------------------------
         '''

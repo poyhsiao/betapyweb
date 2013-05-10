@@ -71,7 +71,8 @@ View = Backbone.View.extend({
         model = new Model({
             "opt": main.attr("opt"),
             "maintitle": main.text(),
-            "subtitle": self.text()
+            "subtitle": self.text(),
+            "current": self.attr("opt")
         });
         /* for page navigation data */
 
@@ -124,22 +125,22 @@ View = Backbone.View.extend({
 
     viewSysSummaryTimer: function(o) {
         var me = this, t = _.template($("#t_summery_control").html());
-        me.$el.html(t());
+        me.$el.append(t());
         $("div.systemSummaryTimer").css({
-            "position": "absolute",
+            "position": "relative",
             "bottom": "20px",
             "right": "10px"
         });
     },
 
-    viewSysSummary: function(o) {
+    viewSysSummary: function(tpl, id, selector) {
     /* summary display */
-        var me = this, t = _.template($("#t_summary").html());
-        $("div.systemSummary").remove();
+        var me = this, tpl = tpl || "#t_summary", id = id || "div.systemSummary", selector = me.model.attributes[selector] || me.model.attributes, t = _.template($(tpl).html());
+        $(id).remove();
         /* remove and clean-up current data */
-        me.$el.append(t(me.model.attributes));
+        me.$el.append(t(selector));
         /* because the SysSummaryTimer is shown before, just append it*/
-        $("div.systemSummary table").css({
+        $(id).children("table").css({
             "width": "100%",
             "height": "100%"
         });
@@ -168,6 +169,66 @@ View = Backbone.View.extend({
         }
     },
 
+    viewDNS: function(o) {
+    /* it is about DNS get */
+        var me = this, t = _.template($("#t_SystemDNS").html()), data = {"items": me.model.attributes[1]};
+        me.$el.html(t(data));
+        $("div.SystemDNS").children("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("input").css("width", "90%");
+        return $("div.popContent").unblock();
+    },
+
+    viewSaveDNS: function(o) {
+    /* when the input items is changed, triggler this function */
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
+    },
+
+    runOpApply: function(o) {
+    /*
+        when the form is savable, click Apply button will call this function
+    */
+        var me = this, self = $(o.target), current = $(".subtitle").attr("current"), data = [], url, obj;
+        switch(current) {
+            case "dns":
+            /* for dns saving */
+                url = "/system/sdns/";
+                obj = $("div.SystemDNS");
+                break;
+            default:
+                return;
+                break;
+        }
+
+        if(url.length) {
+            obj.wrap('<form id="theForm" />');
+            $.post(url, $("#theForm").serialize(), function(d) {
+                console.log(d);
+            });
+        }
+    },
+
+    runOpReload: function(o) {
+    /*
+        when click reload link/button
+        will just reload the popContent
+    */
+        var me = this, opt = $("span.subtitle").attr("current");
+        $("#oApply").hide();
+        /* hide save/apply link */
+        return me.execMenu(opt);
+    },
+
+    runOpHelp: function(o) {
+    /*
+        when click Help link/button, will triggle this function
+        for now, it's under construction
+    */
+        return true;
+    },
+
     execMenu: function(o) {
     /* when click menu item will separate model/template with this function */
         try {
@@ -176,13 +237,12 @@ View = Backbone.View.extend({
             timer_v = 0;
             /* reset auto-refresh option */
         } catch(e) {}
-        $.getScript("/script/jquery.blockUI.js", function() {
-            $("div.popContent").block();
-            try {
-            /* this should be remove once every function is ready */
-                return MainOperation[o]();
-            } catch(e) {}
-        });
+
+        $("div.popContent").block();
+        try {
+        /* this should be remove once every function is ready */
+            return MainOperation[o]();
+        } catch(e) {}
     }
 }),
 ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, timer_v = 0;
@@ -277,14 +337,14 @@ MainOperation = {
         system summary handling
         o: keep the auto-refresh item or not, if not set, will remove all
     */
-        $.getJSON("/system/summary", function(d) {
-            var me = this, cview;
+        $.getJSON("/system/ssys", function(d) {
+            var me = this;
             if(o) {
-                $('#systemSummary').remove();
+                $('.systemSummary, systemSummaryPort').remove();
             } else {
                 $('div.popContent').children().remove();
 
-                cview = new View({
+                var cview = new View({
                     el: "div.popContent",
                     events: {
                         "change #summary_timer": "setSysSummaryTimer"
@@ -296,12 +356,15 @@ MainOperation = {
             }
             /* clean up popContent its children dom */
 
-            if('' !== me.model) {
-                delete me.model;
-            }
-            if('' !== me.view) {
-                delete me.view;
-            }
+            $.getJSON("/system/s_port", function(data) {
+                /* retrieval port summary information */
+                var pmodel = new Model(data),
+                pview = new View({
+                    model: pmodel,
+                    el: "div.popContent"
+                });
+                pview.viewSysSummary("#t_summaryPort", "div.systemSummaryPort", 1);
+            });
 
             me.model = new Model(d);
             me.view = new View({
@@ -311,12 +374,29 @@ MainOperation = {
 
             return me.view.viewSysSummary();
         });
+    },
+
+    dns: function(o) {
+    /* get DNS setting */
+        var me = this;
+        $.getJSON("/system/gdns", function(d) {
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                el: "div.popContent",
+                events: {
+                    "input input": "viewSaveDNS"
+                }
+            });
+
+            return me.view.viewDNS();
+        });
     }
 };
 
 (function() {
 /* initial the JS, call and execute this portion */
-    var menuview, windowview, infoview;
+    var menuview, windowview, infoview, opview;
     menuview = new View({
         el: "#menu-template",
         /* triggle dom, all the events and handler will be based on this dom */
@@ -345,9 +425,20 @@ MainOperation = {
         }
     });
 
+    opview = new View({
+        el: "div.user-op",
+        events: {
+            "click #oApply": "runOpApply",
+            "click #oReload": "runOpReload",
+            "click #oHelp": "runOpHelp"
+        }
+    });
+
     $.getScript("/script/bootstrap.js", function() {
-        $("div.MainMenu:first").trigger("click");
-        $("div.SubMenu:first").trigger("click");
-        /* initial the view, open every first item of the menu as default */
+        $.getScript("/script/jquery.blockUI.js", function() {
+            $("div.MainMenu:first").trigger("click");
+            $("div.SubMenu:first").trigger("click");
+            /* initial the view, open every first item of the menu as default */
+        });
     });
 }).call(this);

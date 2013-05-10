@@ -183,6 +183,12 @@
       top: 25px;
       width: 12px;
     }
+    .padding {
+      padding: 10px;
+    }
+    #oApply {
+      display: none;
+    }
   </style>
   <script type="text/javascript" src="/script/jquery.js"></script>
   <script type="text/javascript" src="/script/underscore.js"></script>
@@ -335,10 +341,10 @@
   <script type="text/template" id="t_pagnation">
     <span class="maintitle clickable" opt="<%= opt %>"><%= maintitle %></span>
     <i class="icon-chevron-right"></i>
-    <span class="subtitle clickable" opt="<%= opt %>"><%= subtitle %></span>
+    <span class="subtitle clickable" opt="<%= opt %>" current="<%= current %>"><%= subtitle %></span>
   </script>
   <script type="text/template" id="t_summary">
-    <div class="systemSummary">
+    <div class="systemSummary padding">
       <table border="1">
         <% _.each(items, function(v, k) { %>
         <tr>
@@ -346,6 +352,36 @@
             <td><%= v.value %></td>
         </tr>
         <% }); %>
+      </table>
+    </div>
+  </script>
+  <script type="text/template" id="t_summaryPort">
+    <div class="systemSummaryPort padding">
+      <table border="1">
+        <tbody>
+          <tr>
+              <th rowspan="2">{{ _('Interface') }}</th>
+              <th rowspan="2">{{ _('Status') }}</th>
+              <th colspan="2">{{ _('Rx (Kbps)') }}</th>
+              <th colspan="2">{{ _("TX (Kbps)") }}</th>
+          </tr>
+          <tr>
+              <th>{{ _("Packets") }}</th>
+              <th>{{ _("Bytes") }}</th>
+              <th>{{ _("Packets") }}</th>
+              <th>{{ _("Bytes") }}</th>
+          </tr>
+          <% _.each(port, function(v, k) { %>
+          <tr>
+              <th><%= v["interface"] %></th>
+              <td><%= v["status"] %></td>
+              <td><%= v["RX"]["bytes"] %></td>
+              <td><%= v["RX"]["packets"] %></td>
+              <td><%= v["TX"]["bytes"] %></td>
+              <td><%= v["TX"]["packets"] %></td>
+          </tr>
+          <% }); %>
+        </tbody>
       </table>
     </div>
   </script>
@@ -368,6 +404,62 @@
           <option value="63">{{ _('Every 63 Seconds') }}</option>
         </select>
       </div>
+    </div>
+  </script>
+  <script type="text/template" id="t_SystemDNS">
+    <div class="SystemDNS padding control-group">
+      <table border="1">
+        <tbody>
+            <tr>
+              <th>
+                <label class="control-label" for="hostname">
+                  <strong>{{ _("Host Name") }}</strong>
+                </label>
+              </th>
+              <td>
+                <div class="controls">
+                  <input type="text" value="<%= items["hostname"] %>" id="hostname" name="hostname" placeholder="{{ _("Host Name") }}" />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label class="control-label" for="domain-name">
+                  <strong>{{ _("Domain Name") }}</strong>
+                </label>
+              </th>
+              <td>
+                <div class="controls">
+                  <input type="text" value="<%= items["domain-name"] %>" id="domain-name" name="domain-name" placeholder="{{ _("Domain Name") }}" />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label class="control-label" for="dns-server-1">
+                  <strong>{{ _("DNS Server 1") }}</strong>
+                </label>
+              </th>
+              <td>
+                <div class="controls">
+                  <input type="text" value="<%= items["dns-server-1"] %>" id="dns-server-1" name="dns-server-1" placeholder="{{ _("DNS Server 1") }}" />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label class="control-label" for="dns-server-2">
+                  <strong>{{ _("DNS Server 2") }}</strong>
+                </label>
+              </th>
+              <td>
+                <div class="controls">
+                  <input type="text" value="<%= items["dns-server-2"] %>" id="dns-server-2" name="dns-server-2" placeholder="{{ _("DNS Server 2") }}" />
+                </div>
+              </td>
+            </tr>
+        </tbody>
+      </table>
     </div>
   </script>
 </body>
