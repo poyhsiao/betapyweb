@@ -35,14 +35,19 @@ class Login:
 
         import ml_w_login as wlogin
         if wlogin.get(username, password)[0]:
+
+            import ml_w_account as wa
+
             _.session['headers'] = _.request.headers
             _.session['username'] = username
             _.session['password'] = password
 
-            # _.session['LANG'] = lang
-            # save necessary information into session
-
-            # print _.session
+            dat = wa.get()[1]['user']
+            for v in dat:
+                if "admin" == v.get("name"):
+                    libs.tools.v(v)
+                    for kk, vv in v.items():
+                        _.session[kk] = vv
 
             raise _.HTTPRedirect('/main/')
             # tpl = env.get_template('default.html')

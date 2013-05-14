@@ -16,7 +16,8 @@
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
   <link rel="stylesheet" href="/css/basic.css" type="text/css" />
-  <link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" />
+  <!--link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" /-->
+  <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css">
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
   <link rel="stylesheet" href="/css/new_main.css" type="text/css" />
   <link rel="stylesheet" href="/css/style.css" type="text/css" />
@@ -459,6 +460,56 @@
               </td>
             </tr>
         </tbody>
+      </table>
+    </div>
+  </script>
+  <script type="text/template" id="t_SystemVLAN">
+    <div class="SystemVLAN padding control-group">
+      <table border="1">
+        <tr>
+            <th>
+              {{ _("Interface") }}
+            </th>
+            <th>
+              {{ _("VLAN ID") }}
+            </th>
+            <td>
+              <button type="button" class="btnAdd">{{ _("Add") }}</button>
+            </td>
+        </tr>
+        <% _.each(vconfig, function(v, k) { %>
+        <tr class="item-<%= v.vlan_id %>">
+            <td><%= v.interface %><input type="hidden" name="interface" value="<%= v.interface %>" /></td>
+            <td><%= v.vlan_id %><input type="hidden" name="vlan_id" value="<%= v.vlan_id %>" /></td>
+            <td><button type="button" class="btnDel">{{ _("Delete") }}</button></td>
+        </tr>
+        <% }); %>
+    </table>
+    </div>
+    <div class="addSysVLAN padding control-group inactive" title="{{ _("Add") }} VLAN">
+      <table border="1">
+        <tr>
+          <th>
+            <label class="control-label" for="lan-interface">
+              <strong>{{ _("Interface") }}</strong>
+            </label>
+          </th>
+          <td><input type="text" id="lan-interface" name="interface" placeholder="{{ _("Interface") }}" /></td>
+        </tr>
+        <tr>
+          <th>
+            <label class="control-label" for="lan-vlan_id">
+              <strong>{{ _("VLAN ID") }}</strong>
+            </label>
+          </th>
+          <td><input type="number" id="lan-vlan_id" name="vlan_id" placeholder="{{ _("VLAN ID") }}" /></td>
+        </tr>
+        <tr>
+          <td colspan="2" class="padding">
+            <button type="button" class="vlanSubmit btn">{{ _("Add") }}</button>&nbsp;&nbsp;
+            <button type="button" class="vlanCancel btn">{{ _("Cancel") }}</button>
+          </td>
+        </tr>
       </table>
     </div>
   </script>

@@ -186,6 +186,67 @@ View = Backbone.View.extend({
         /* show "Apply" link/button */
     },
 
+    viewVLAN: function(o) {
+    /* it is about VLAN get */
+        var me = this, t = _.template($("#t_SystemVLAN").html());
+        me.$el.html(t(me.model.attributes[1]));
+        $("div.SystemVLAN").children("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("button").css({
+            "width": "90%",
+            "height": "90%"
+        });
+        return $("div.popContent").unblock();
+    },
+
+    editVlan: function(o) {
+    /* add vlan item */
+        var me = this, ct = $("div.addSysVLAN");
+        ct.css({
+            "z-index": 2
+        }).dialog({
+            modal: true,
+            close: function(e, u) {
+                $(this).find("input").val("");
+            }
+        }).children("table").css({
+            "width": "90%",
+            "height": "90%",
+            "text-align": "center"
+        }).find("input").css({
+            "width": "90%",
+            "height": "90%"
+        });
+
+        ct.find("button").on("click", function(o) {
+            if($(o.target).hasClass("vlanSubmit")) {
+                /* add new vlan, press add */
+                ct.wrap('<form id="theForm" />');
+                $.post("/system/svlan", $("#theForm").serialize(), function(d) {
+                    console.log(d);
+                    ct.dialog("close");
+                    return me.runOpReload();
+                });
+            } else {
+                ct.dialog("close");
+            }
+        });
+    },
+
+    delVlan: function(o) {
+    /* delete vlan item */
+        var me = this, self = $(o.target);
+        self.parents("tr").remove();
+        return me.viewSaveVLAN(o);
+    },
+
+    viewSaveVLAN: function(o) {
+    /* when modify any of vlan item, display apply and able to save the value */
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
+    },
+
     runOpApply: function(o) {
     /*
         when the form is savable, click Apply button will call this function
@@ -197,8 +258,11 @@ View = Backbone.View.extend({
                 url = "/system/sdns/";
                 obj = $("div.SystemDNS");
                 break;
+            case "vlan":
+            /* for vlan saving */
+                url = "/system/svlan";
+                obj = $("div.SystemVLAN");
             default:
-                return;
                 break;
         }
 
@@ -206,6 +270,11 @@ View = Backbone.View.extend({
             obj.wrap('<form id="theForm" />');
             $.post(url, $("#theForm").serialize(), function(d) {
                 console.log(d);
+                if(!d[0]) {
+                    if(confirm("System Fail\n\nReload the Page?")) {
+                        return me.execMenu(current);
+                    }
+                }
             });
         }
     },
@@ -391,6 +460,25 @@ MainOperation = {
 
             return me.view.viewDNS();
         });
+    },
+
+    vlan: function(o) {
+    /* get VLAN setting */
+        var me = this;
+        $.getJSON("/system/gvlan", function(d) {
+            me.model = new Model(d),
+            me.view = new View({
+                model: me.model,
+                el: "div.popContent",
+                events: {
+                    "click button.btnAdd": "editVlan",
+                    "click button.btnDel": "delVlan",
+                    "input input": "viewSaveVLAN"
+                }
+            });
+
+            return me.view.viewVLAN();
+        });
     }
 };
 
@@ -436,9 +524,11 @@ MainOperation = {
 
     $.getScript("/script/bootstrap.js", function() {
         $.getScript("/script/jquery.blockUI.js", function() {
-            $("div.MainMenu:first").trigger("click");
-            $("div.SubMenu:first").trigger("click");
-            /* initial the view, open every first item of the menu as default */
+            $.getScript("/script/jquery-ui.js", function() {
+                $("div.MainMenu:first").trigger("click");
+                $("div.SubMenu:first").trigger("click");
+                /* initial the view, open every first item of the menu as default */
+            });
         });
     });
 }).call(this);

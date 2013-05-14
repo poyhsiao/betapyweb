@@ -67,3 +67,6 @@ def v(obj, display='print'):
         print '''
         ----------  end ------------------------
         '''
+def convert(str):
+    import unicodedata as codec
+    return codec.normalize('NFKD', str).encode("UTF-8", "ignore")

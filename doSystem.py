@@ -89,10 +89,44 @@ class System(object):
         '''
         import ml_w_dns as dns
         import json
-        import unicodedata as codec
+        import libs.tools
+        # import unicodedata as codec
         for k in kwargs:
-            kwargs[k] = codec.normalize('NFKD', kwargs[k]).encode("UTF-8", "ignore")
+            kwargs[k] = libs.tools.convert(kwargs[k])
         res = dns.set(cfg=kwargs)
         _.response.headers["Content-Type"] = "application/json"
         # return json.dumps(kwargs)
+        return json.dumps(res)
+
+    @_.expose
+    def gvlan(self, **kwargs):
+        '''
+            Get VLAN information
+        '''
+        import ml_w_vlan as vlan
+        import json
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(vlan.get())
+
+    @_.expose
+    def svlan(self, **kwargs):
+        '''
+            Save VLAN setting
+        '''
+        import ml_w_vlan as vlan
+        import json
+        import libs.tools
+        libs.tools.v(kwargs)
+        size = len(kwargs["interface"])
+        if len(kwargs["interface"]) > 0:
+            op = []
+            for i in range(0, size):
+                if len(kwargs["interface"][i]) > 1 and len(kwargs["vlan_id"]) > 0:
+                    op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": int(kwargs["vlan_id"][i])})
+
+        dat = {"vconfig": op}
+        libs.tools.v(dat)
+        res = vlan.set(cfg=dat)
+        libs.tools.v(res)
+        _.response.headers["Content-Type"] = "application/json"
         return json.dumps(res)
