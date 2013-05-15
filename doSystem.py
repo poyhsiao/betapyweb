@@ -130,3 +130,24 @@ class System(object):
         libs.tools.v(res)
         _.response.headers["Content-Type"] = "application/json"
         return json.dumps(res)
+
+    @_.expose
+    def gbridge(self, **kwargs):
+        '''
+            get Bridge setting
+        '''
+        import ml_w_bridge as wbr
+        import json
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wbr.get())
+
+    @_.expose
+    def sbridge(self, **kwargs):
+        '''
+            Save Bridge setting
+        '''
+        import ml_w_bridge as wbr
+        import json
+        import libs.tools
+        libs.tools.v(kwargs)
+        return True

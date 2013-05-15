@@ -247,6 +247,103 @@ View = Backbone.View.extend({
         /* show "Apply" link/button */
     },
 
+    viewBridge: function(o) {
+    /* it is about Bridge get */
+        var me = this, t = _.template($("#t_SystemBridge").html()), dat = me.model.attributes[1];
+        me.$el.html(t(dat));
+        $("div.SystemBridge").children("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("button").css({
+            "width": function() {
+                return $(this).hasClass("brAdd") ? "90%" : "45%";
+            },
+            "height": "90%"
+        });
+
+        $("div.SystemBridge").data(dat);
+
+        return $("div.popContent").unblock();
+    },
+
+    editBridge: function(o) {
+    /* add new bridge, which will pop-up a jQuery dialog */
+        var me = this, self = $(o.target), dat = $("div.SystemBridge").data(), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), opt;
+
+        ct.find("input").val("");
+        ct.find("tr.brInterface").remove();
+        /* reset all input data and other item */
+
+        if(self.hasClass("brEdit")) {
+            /* edit existing bridge */
+            opt = self.attr("opt");
+            dat = dat.br[opt];
+            /* data for current bridge setting */
+            ck += " ( " + dat["name"] + " )";
+
+            $("#br_name").val(dat["name"]);  /* name */
+            $.each(dat["interface"], function(k, v) {  /* interface editor */
+                var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
+                $("<td />").text(v).appendTo($("tr.addBrInterface")).appendTo(tr);
+                $("<td />").addClass("text-center").html($("button.btnDelBrInterface").clone(true)).appendTo(tr);
+            });
+            if(true === dat["STP"]) {   /* stp setting */
+                $("#brSTP").attr("checked", "checked");
+            }
+            $("#br-hello_time").val(dat["hello_time"]);  /* hello time setting */
+            $("#br-max_message_age").val(dat["max_message_age"]);  /* max message age setting */
+            $("#br-forward_delay").val(dat["forward_delay"]);  /* forward delay setting */
+        }
+
+        ct.children("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("input, button").css({
+            "width": "90%",
+            "height": "100%"
+        });
+
+        ct.find(".btnSmt").css({
+            "width": "30%"
+        });
+
+        ct.dialog({
+            modal: true,
+            title: ck,
+            close: function() {
+                $(this).dialog("destroy");
+            }
+        });
+
+        $("button.btnSaveBrInterface").one("click", function() {
+            return me.saveBridge(ct);
+        });
+    },
+
+    delBridge: function(o) {
+    /* delete existing bridge setting */
+        me = this, self = $(o.target), row = self.parents("tr"), opt = self.attr("opt"), dat = $("div.SystemBridge").data(), res = [];
+        row.remove();
+        delete(dat['br'][opt]);
+        $.each(dat['br'], function(k, v) {
+            if("undefined" !== v) {
+                res.push(v);
+            }
+        });
+        var result = {'br': res};
+
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
+    },
+
+    saveBridge: function(dom) {
+    /*
+        when click ok in dialog will save the new / edited bridge
+            dom: is the dialog jquery object not whole dialog  object
+    */
+        var ct = $("div.SystemBridge").children("tbody"), tr = $("<tr />"), td = $("<td />");
+    },
+
     runOpApply: function(o) {
     /*
         when the form is savable, click Apply button will call this function
@@ -478,6 +575,25 @@ MainOperation = {
             });
 
             return me.view.viewVLAN();
+        });
+    },
+
+    bridge: function(o) {
+    /* get Bridge setting */
+        var me = this;
+        $.getJSON("/system/gbridge", function(d) {
+            me.model = new Model(d),
+            me.view = new View({
+                model: me.model,
+                el: "div.popContent",
+                events: {
+                    "click button.brAdd": "editBridge",
+                    "click button.brDel": "delBridge",
+                    "click button.brEdit": "editBridge"
+                }
+            });
+
+            return me.view.viewBridge();
         });
     }
 };

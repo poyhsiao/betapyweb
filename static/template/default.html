@@ -190,6 +190,15 @@
     #oApply {
       display: none;
     }
+    .text-center {
+      text-align: center;
+    }
+    .text-left {
+      text-align: left;
+    }
+    .text-right {
+      text-align: right;
+    }
   </style>
   <script type="text/javascript" src="/script/jquery.js"></script>
   <script type="text/javascript" src="/script/underscore.js"></script>
@@ -510,6 +519,126 @@
             <button type="button" class="vlanCancel btn">{{ _("Cancel") }}</button>
           </td>
         </tr>
+      </table>
+    </div>
+  </script>
+  <script type="text/template" id="t_SystemBridge">
+    <div class="SystemBridge padding">
+      <table border="1">
+          <tbody>
+              <tr>
+                  <th>{{ _("Name") }}</th>
+                  <th>{{ _("Interface") }}</th>
+                  <td>
+                    <button type="button" class="btn brAdd">{{ _("Add") }}</button>
+                    <span class="inactive brBtnTpl">
+                      <button type="button" class="btn brDel">{{ _("Delete") }}</button>
+                      <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
+                    </span>
+                  </td>
+              </tr>
+              <% _.each(br, function(v, k) { %>
+              <tr>
+                  <td><%= v.name %></td>
+                  <td>(<%= v.interface.join() %>)</td>
+                  <td>
+                    <button type="button" class="btn brDel" opt="<%= k %>">{{ _("Delete") }}</button>
+                    <button type="button" class="btn brEdit" opt="<%= k %>">{{ _("Edit") }}</button>
+                    <input type="hidden" name="STP" value="<%= v.STP %>" />
+                    <input type="hidden" name="name" value="<%= v.name %>" />
+                    <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
+                    <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
+                    <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
+                    <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
+                  </td>
+              </tr>
+              <% }); %>
+          </tbody>
+      </table>
+    </div>
+    <div class="editSystemBridge padding inactive control-group">
+      <table border="1">
+        <tbody>
+            <tr>
+                <th>{{ _("Name") }}</th>
+                <td class="text-center">
+                  <input type="text" name="name" id="br_name" placeholder="{{ _("Name") }}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <th colspan="2">{{ _("Interface")}}</th>
+            </tr>
+            <tr class="addBrInterface">
+                <th>{{ _("Name") }}</th>
+                <td class="text-center">
+                  <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
+                  <span class="inactive">
+                    <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
+                    <span class="brEnable">{{ _("Enable") }}</span>
+                  </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <th colspan="2">{{ _("Attributes") }}</th>
+            </tr>
+            <tr>
+                <td>
+                  <label class="control-label" for="brSTP">
+                    {{ _("STP") }}
+                  </label>
+                </td>
+                <td class="text-center">
+                  <label>
+                    <input type="checkbox" name="STP" id="brSTP" />&nbsp;{{ _("Enable") }}
+                  </label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  <label class="control-label" for="br-hello_time">
+                    {{ _("Hello Time") }}
+                  </label>
+                </td>
+                <td class="text-center">
+                  <input type="number" name="hello_time" id="br-hello_time" placeholder="{{ _("Hello Time") }}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  <label class="control-label" for="br-max_message_age">
+                    {{ _("Max Message Age") }}
+                  </label>
+                </td>
+                <td  class="text-center">
+                  <input type="number" name="max_message_age" id="br-max_message_age" placeholder="{{ _("Max Message Age") }}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                  <label class="control-label" for="br-forward_delay">
+                    {{ _("Forward Delay") }}
+                  </label>
+                </td>
+                <td class="text-center">
+                  <input type="number" name="forward_delay" id="br-forward_delay" placeholder="{{ _("Forward Delay") }}" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right">
+                  <button type="button" class="btn btnSaveBrInterface btnSmt">{{ _("OK") }}</button>
+                  <button type="button" class="btn btnCancelBrInterface btnSmt">{{ _("Cancel") }}</button>
+                </td>
+            </tr>
+        </tbody>
       </table>
     </div>
   </script>

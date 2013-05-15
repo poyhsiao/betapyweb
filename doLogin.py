@@ -11,7 +11,7 @@ Created on 2013/04/30
 import os
 import sys
 import cherrypy as _
-# import libs.tools as tools
+import libs.tools
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
