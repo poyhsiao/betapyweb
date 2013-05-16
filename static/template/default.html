@@ -525,121 +525,217 @@
   <script type="text/template" id="t_SystemBridge">
     <div class="SystemBridge padding">
       <table border="1">
-          <tbody>
-              <tr>
-                  <th>{{ _("Name") }}</th>
-                  <th>{{ _("Interface") }}</th>
-                  <td>
-                    <button type="button" class="btn brAdd">{{ _("Add") }}</button>
-                    <span class="inactive brBtnTpl">
-                      <button type="button" class="btn brDel">{{ _("Delete") }}</button>
-                      <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
-                    </span>
-                  </td>
-              </tr>
-              <% _.each(br, function(v, k) { %>
-              <tr>
-                  <td><%= v.name %></td>
-                  <td>(<%= v.interface.join() %>)</td>
-                  <td>
-                    <button type="button" class="btn brDel" opt="<%= k %>">{{ _("Delete") }}</button>
-                    <button type="button" class="btn brEdit" opt="<%= k %>">{{ _("Edit") }}</button>
-                    <input type="hidden" name="STP" value="<%= v.STP %>" />
-                    <input type="hidden" name="name" value="<%= v.name %>" />
-                    <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
-                    <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
-                    <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
-                    <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
-                  </td>
-              </tr>
-              <% }); %>
-          </tbody>
+            <tr>
+                <th>{{ _("Name") }}</th>
+                <th>{{ _("Interface") }}</th>
+                <td>
+                  <button type="button" class="btn brAdd">{{ _("Add") }}</button>
+                  <div class="inactive brBtnTpl">
+                    <button type="button" class="btn brDel">{{ _("Delete") }}</button>
+                    <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
+                  </div>
+                </td>
+            </tr>
+            <% _.each(br, function(v, k) { %>
+            <tr>
+                <td class="brName"><%= v.name %></td>
+                <td class="brInterface">(<%= v.interface.join() %>)</td>
+                <td>
+                  <button type="button" class="btn brDel" opt="<%= k %>">{{ _("Delete") }}</button>
+                  <button type="button" class="btn brEdit" opt="<%= k %>">{{ _("Edit") }}</button>
+                  <input type="hidden" name="STP" value="<%= v.STP %>" />
+                  <input type="hidden" name="name" value="<%= v.name %>" />
+                  <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
+                  <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
+                  <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
+                  <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
+                </td>
+            </tr>
+            <% }); %>
       </table>
     </div>
     <div class="editSystemBridge padding inactive control-group">
       <table border="1">
-        <tbody>
+          <tr>
+              <th>{{ _("Name") }}</th>
+              <td class="text-center">
+                <input type="text" name="name" id="br_name" placeholder="{{ _("Name") }}" />
+              </td>
+          </tr>
+          <tr>
+              <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+              <th colspan="2">{{ _("Interface")}}</th>
+          </tr>
+          <tr class="addBrInterface">
+              <th>{{ _("Name") }}</th>
+              <td class="text-center">
+                <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
+                <input type="hidden" name="interface" id="br-Interface" />
+                <span class="inactive">
+                  <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
+                  <span class="brEnable">{{ _("Enable") }}</span>
+                </span>
+              </td>
+          </tr>
+          <tr>
+              <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+              <th colspan="2">{{ _("Attributes") }}</th>
+          </tr>
+          <tr>
+              <td>
+                <label class="control-label" for="brSTP">
+                  {{ _("STP") }}
+                </label>
+              </td>
+              <td class="text-center">
+                <label>
+                  <input type="checkbox" name="STP" id="brSTP" />&nbsp;{{ _("Enable") }}
+                </label>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                <label class="control-label" for="br-hello_time">
+                  {{ _("Hello Time") }}
+                </label>
+              </td>
+              <td class="text-center">
+                <input type="number" name="hello_time" id="br-hello_time" placeholder="{{ _("Hello Time") }}" />
+              </td>
+          </tr>
+          <tr>
+              <td>
+                <label class="control-label" for="br-max_message_age">
+                  {{ _("Max Message Age") }}
+                </label>
+              </td>
+              <td  class="text-center">
+                <input type="number" name="max_message_age" id="br-max_message_age" placeholder="{{ _("Max Message Age") }}" />
+              </td>
+          </tr>
+          <tr>
+              <td>
+                <label class="control-label" for="br-forward_delay">
+                  {{ _("Forward Delay") }}
+                </label>
+              </td>
+              <td class="text-center">
+                <input type="number" name="forward_delay" id="br-forward_delay" placeholder="{{ _("Forward Delay") }}" />
+              </td>
+          </tr>
+          <tr>
+              <td colspan="2">&nbsp;</td>
+          </tr>
+          <tr>
+              <td colspan="2" class="text-right">
+                <button type="button" class="btn btnSaveBrInterface btnSmt">{{ _("OK") }}</button>
+                <button type="button" class="btn btnCancelBrInterface btnSmt">{{ _("Cancel") }}</button>
+              </td>
+          </tr>
+      </table>
+    </div>
+  </script>
+  <script type="text/template" id="t_SystemIpAddress">
+    <div class="SystemIpAddress padding IpInterfaceSelect control-group">
+        <table border="1">
             <tr>
-                <th>{{ _("Name") }}</th>
-                <td class="text-center">
-                  <input type="text" name="name" id="br_name" placeholder="{{ _("Name") }}" />
+                <th>
+                  <label class="control-label" for="ipSelecter">{{ _("Interface") }}</label>
+                </th>
+                <td>
+                  <select class="ipSelInterface" id="ipSelecter">
+                    <option disabled="disabled">{{ _("Interface") }}</option>
+                  <% _.each(ip, function(v, k) { %>
+                    <option value="<%= k %>"><%= v["interface"] %></option>
+                  <% }); %>
+                  </select>
                 </td>
             </tr>
+        </table>
+    </div>
+  <% _.each(ip, function(v, k) { %>
+    <div class="SystemIpV4 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= k %>">
+        <table border="1">
             <tr>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-                <th colspan="2">{{ _("Interface")}}</th>
-            </tr>
-            <tr class="addBrInterface">
-                <th>{{ _("Name") }}</th>
-                <td class="text-center">
-                  <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
-                  <span class="inactive">
-                    <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
-                    <span class="brEnable">{{ _("Enable") }}</span>
-                  </span>
+                <th>{{ _("IPv4 Address") }}</th>
+                <th>{{ _("Prefix Length") }}</th>
+                <td>
+                  <button class="btn btnSI4Add">{{ _("Add") }}</button>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">&nbsp;</td>
-            </tr>
-            <tr>
-                <th colspan="2">{{ _("Attributes") }}</th>
-            </tr>
+            <% _.each(v["ipv4"], function(v, k) { %>
             <tr>
                 <td>
-                  <label class="control-label" for="brSTP">
-                    {{ _("STP") }}
-                  </label>
+                  <%= v["ipv4_address"] %>
                 </td>
-                <td class="text-center">
-                  <label>
-                    <input type="checkbox" name="STP" id="brSTP" />&nbsp;{{ _("Enable") }}
-                  </label>
+                <td>
+                  (<%= v["ipv4_prefix"] %>)
+                </td>
+                <td>
+                  <button class="btn btnSI4Delete">{{ _("Delete") }}</button>
+                  <input type="hidden" name="ipv4_address" value="v['ipv4_address']" />
+                  <input type="hidden" name="ipv4_prefix" value="v['ipv4_prefix']" />
                 </td>
             </tr>
+            <% }); %>
+        </table>
+    </div>
+    <div class="SystemIpV6 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= k %>">
+        <table border="1">
+            <tr>
+                <th>{{ _("IPv6 Address") }}</th>
+                <th>{{ _("Prefix Length") }}</th>
+                <td>
+                  <button class="btn btnSI6Add">{{ _("Add") }}</button>
+                </td>
+            </tr>
+            <% _.each(v["ipv6"], function(v, k) { %>
             <tr>
                 <td>
-                  <label class="control-label" for="br-hello_time">
-                    {{ _("Hello Time") }}
-                  </label>
+                  <%= v["ipv6_address"] %>
                 </td>
-                <td class="text-center">
-                  <input type="number" name="hello_time" id="br-hello_time" placeholder="{{ _("Hello Time") }}" />
-                </td>
-            </tr>
-            <tr>
                 <td>
-                  <label class="control-label" for="br-max_message_age">
-                    {{ _("Max Message Age") }}
-                  </label>
+                  (<%= v["ipv6_prefix"] %>)
                 </td>
-                <td  class="text-center">
-                  <input type="number" name="max_message_age" id="br-max_message_age" placeholder="{{ _("Max Message Age") }}" />
-                </td>
-            </tr>
-            <tr>
                 <td>
-                  <label class="control-label" for="br-forward_delay">
-                    {{ _("Forward Delay") }}
-                  </label>
+                  <button class="btn btnSI6Delete">{{ _("Delete") }}</button>
+                  <input type="hidden" name="ipv6_address" value="v['ipv6_address']" />
+                  <input type="hidden" name="ipv6_prefix" value="v['ipv6_prefix']" />
                 </td>
-                <td class="text-center">
-                  <input type="number" name="forward_delay" id="br-forward_delay" placeholder="{{ _("Forward Delay") }}" />
+            </tr>
+            <% }); %>
+        </table>
+    </div>
+  <% }); %>
+    <div class="IpEditor inactive control-group">
+        <table border="1">
+            <tr>
+                <th class="IpV4orV6">
+                  <label class="control-label" for="IpV46_address"></label>
+                </th>
+                <td>
+                  <input type="text" id="IpV46_address" />
                 </td>
             </tr>
             <tr>
-                <td colspan="2">&nbsp;</td>
+                <th>
+                  <label class="control-label" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
+                </th>
+                <td>
+                  <input type="text" id="IpV46_prefix" />
+                </td>
             </tr>
             <tr>
                 <td colspan="2" class="text-right">
-                  <button type="button" class="btn btnSaveBrInterface btnSmt">{{ _("OK") }}</button>
-                  <button type="button" class="btn btnCancelBrInterface btnSmt">{{ _("Cancel") }}</button>
+                  <button type="button" class="btn btnSaveIp btnSmt">{{ _("OK") }}</button>
+                  <button type="button" class="btn btnCancelIp btnSmt">{{ _("Cancel") }}</button>
                 </td>
             </tr>
-        </tbody>
-      </table>
+        </table>
     </div>
   </script>
 </body>

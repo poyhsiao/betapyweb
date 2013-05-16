@@ -202,35 +202,30 @@ View = Backbone.View.extend({
 
     editVlan: function(o) {
     /* add vlan item */
-        var me = this, ct = $("div.addSysVLAN");
-        ct.css({
-            "z-index": 2
-        }).dialog({
+        var me = this, dom = $("div.addSysVLAN"), ct = $("div.SystemVLAN");
+
+        dom.dialog({
             modal: true,
+            closeOnEscape: false,
             close: function(e, u) {
                 $(this).find("input").val("");
             }
         }).children("table").css({
-            "width": "90%",
-            "height": "90%",
+            "width": "100%",
+            "height": "100%",
             "text-align": "center"
         }).find("input").css({
             "width": "90%",
             "height": "90%"
         });
 
-        ct.find("button").on("click", function(o) {
+        dom.find("button").one("click", function(o) {
             if($(o.target).hasClass("vlanSubmit")) {
                 /* add new vlan, press add */
-                ct.wrap('<form id="theForm" />');
-                $.post("/system/svlan", $("#theForm").serialize(), function(d) {
-                    console.log(d);
-                    ct.dialog("close");
-                    return me.runOpReload();
-                });
-            } else {
-                ct.dialog("close");
+                dom.find("input").clone().attr("type", "hidden").removeAttr("id").appendTo($("div.SystemVLAN table"));
+                return me.runOpApply();
             }
+            dom.dialog("close");
         });
     },
 
@@ -261,14 +256,12 @@ View = Backbone.View.extend({
             "height": "90%"
         });
 
-        $("div.SystemBridge").data(dat);
-
         return $("div.popContent").unblock();
     },
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dat = $("div.SystemBridge").data(), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), opt;
+        var me = this, self = $(o.target), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), opt;
 
         ct.find("input").val("");
         ct.find("tr.brInterface").remove();
@@ -277,22 +270,21 @@ View = Backbone.View.extend({
         if(self.hasClass("brEdit")) {
             /* edit existing bridge */
             opt = self.attr("opt");
-            dat = dat.br[opt];
             /* data for current bridge setting */
-            ck += " ( " + dat["name"] + " )";
+            ck += " (" + self.siblings('input[name="name"]').val() + ")";
 
-            $("#br_name").val(dat["name"]);  /* name */
-            $.each(dat["interface"], function(k, v) {  /* interface editor */
+            $("#br_name").val( self.siblings('input[name="name"]').val() );  /* name */
+            $.each(self.siblings('input[name="interface"]').val().split(','), function(k, v) {  /* interface editor */
                 var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
                 $("<td />").text(v).appendTo($("tr.addBrInterface")).appendTo(tr);
                 $("<td />").addClass("text-center").html($("button.btnDelBrInterface").clone(true)).appendTo(tr);
             });
-            if(true === dat["STP"]) {   /* stp setting */
+            if("true" === self.siblings('input[name="STP"]').val()) {  /* stp setting */
                 $("#brSTP").attr("checked", "checked");
             }
-            $("#br-hello_time").val(dat["hello_time"]);  /* hello time setting */
-            $("#br-max_message_age").val(dat["max_message_age"]);  /* max message age setting */
-            $("#br-forward_delay").val(dat["forward_delay"]);  /* forward delay setting */
+            $("#br-hello_time").val( self.siblings('input[name="hello_time"]').val() );  /* hello time setting */
+            $("#br-max_message_age").val( self.siblings('input[name="max_message_age"]').val() );  /* max message age setting */
+            $("#br-forward_delay").val( self.siblings('input[name="forward_delay"]').val() );  /* forward delay setting */
         }
 
         ct.children("table").css({
@@ -310,13 +302,21 @@ View = Backbone.View.extend({
         ct.dialog({
             modal: true,
             title: ck,
+            closeOnEscape: false,
             close: function() {
                 $(this).dialog("destroy");
             }
         });
 
         $("button.btnSaveBrInterface").one("click", function() {
-            return me.saveBridge(ct);
+            me.saveBridge(ct, opt);
+            $("#oApply").show("slow");
+            /* show "Apply" link/button */
+            return ct.dialog("close");
+        });
+
+        $("button.btnCancelBrInterface").one("click", function() {
+            return ct.dialog("close");
         });
     },
 
@@ -336,29 +336,97 @@ View = Backbone.View.extend({
         /* show "Apply" link/button */
     },
 
-    saveBridge: function(dom) {
+    saveBridge: function(dom, opt) {
     /*
         when click ok in dialog will save the new / edited bridge
             dom: is the dialog jquery object not whole dialog  object
+            opt: when edit exist item, assign the opt as the identification. if opt is not given, means it's new one
     */
-        var ct = $("div.SystemBridge").children("tbody"), tr = $("<tr />"), td = $("<td />");
+        var ct = $("div.SystemBridge").children("table"), tr = $("<tr />"), td = $("<td />"), self, row;
+        if(opt) {
+            /* edit exist bridge */
+            self = $('.brEdit[opt="' + opt + '"]');
+            row = self.parents("tr");
+            row.find("td.brName").text( $("#br_name").val() );
+            row.find("td.brInterface").text('(s0e2)');
+            row.find('input[name="name"]').val( $("#br_name").val() );
+            row.find('input[name="STP"]').val( $("#brSTP").is(":checked") );
+            row.find('input[name="hello_time"]').val( $("#br-hello_time").val() );
+            row.find('input[name="max_message_age"]').val( $("#br-max_message_age").val() );
+            row.find('input[name="forward_delay"]').val( $("#br-forward_delay").val() );
+        } else {
+            $("<td />").addClass("brName").text( $("#br_name").val() ).appendTo(tr);
+            $("<td />").addClass("brInterface").text('(s0e2)').appendTo(tr);
+            $("div.brBtnTpl button").clone(true).attr({
+                "opt": function() {
+                    if($("button.brDel").size() > 0) {
+                        /* now at least one bridge exists */
+                        return ~~$("button.brDel:last").attr("opt") + 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            }).appendTo(td);
+            $("#br_name").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+            $("#br-Interface").clone().removeAttr("id").appendTo(td);
+            $("<input />").attr({
+                "type": "hidden",
+                "name": "STP",
+                "value": function() {
+                    return $("#brSTP").is(":checked");
+                }
+            }).appendTo(td);
+            $("#br-hello_time").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+            $("#br-max_message_age").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+            $("#br-forward_delay").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+
+            td.appendTo(tr);
+            tr.appendTo(ct);
+        }
+    },
+
+    viewIpAddress: function(o) {
+    /* ip address setup page display */
+        var me = this, t = _.template($("#t_SystemIpAddress").html()), dat = me.model.attributes[1], ct = $("div.popContent");
+        me.$el.html(t(dat));
+
+        // if(dat["ip"].length) {
+        //     $("div.SystemIpV4[opt=0], div.SystemIpV6[opt=0]").removeClass("inactive");
+        //     /* display default setting for the first select interface */
+        // }
+
+        ct.find("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("select, button, input").css({
+            "width": "90%",
+            "height": "100%"
+        });
+
+        return $("div.popContent").unblock();
     },
 
     runOpApply: function(o) {
     /*
         when the form is savable, click Apply button will call this function
     */
-        var me = this, self = $(o.target), current = $(".subtitle").attr("current"), data = [], url, obj;
+        var me = this, current = $(".subtitle").attr("current"), data = [], url, obj;
         switch(current) {
             case "dns":
             /* for dns saving */
-                url = "/system/sdns/";
+                url = "/system/sdns";
                 obj = $("div.SystemDNS");
                 break;
             case "vlan":
             /* for vlan saving */
                 url = "/system/svlan";
                 obj = $("div.SystemVLAN");
+                break;
+            case "bridge":
+            /* for bridge saving */
+                url = "/system/sbridge";
+                obj = $("div.SystemBridge");
+                break;
             default:
                 break;
         }
@@ -371,6 +439,8 @@ View = Backbone.View.extend({
                     if(confirm("System Fail\n\nReload the Page?")) {
                         return me.execMenu(current);
                     }
+                } else {
+                    return me.runOpReload();
                 }
             });
         }
@@ -582,7 +652,7 @@ MainOperation = {
     /* get Bridge setting */
         var me = this;
         $.getJSON("/system/gbridge", function(d) {
-            me.model = new Model(d),
+            me.model = new Model(d);
             me.view = new View({
                 model: me.model,
                 el: "div.popContent",
@@ -594,6 +664,22 @@ MainOperation = {
             });
 
             return me.view.viewBridge();
+        });
+    },
+
+    ip: function(o) {
+    /* get ip address setting */
+        var me = this;
+        $.getJSON("/system/gip", function(d) {
+            console.log(d);
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                el: "div.popContent",
+                events: {}
+            });
+
+            return me.view.viewIpAddress();
         });
     }
 };

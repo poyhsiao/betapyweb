@@ -150,4 +150,47 @@ class System(object):
         import json
         import libs.tools
         libs.tools.v(kwargs)
-        return True
+        size = len(kwargs["name"])
+        op = []
+
+        for i in range(0, size):
+            if kwargs["STP"][i] == "true":
+                kwargs["STP"][i] = True
+            else:
+                kwargs["STP"][i] = False
+
+            kwargs["interface"][i] = libs.tools.convert(kwargs["interface"][i]).split(",")
+
+            op.append({"name": libs.tools.convert(kwargs["name"][i]),
+                "interface": kwargs["interface"][i],
+                "STP": kwargs["STP"][i],
+                "hello_time": int(kwargs["hello_time"][i]),
+                "max_message_age": int(kwargs["max_message_age"][i]),
+                "forward_delay": int(kwargs["forward_delay"][i])
+            })
+
+        libs.tools.v(op)
+        res = wbr.set({"br": op})
+        return json.dumps(res)
+
+    @_.expose
+    def gip(self, **kwargs):
+        '''
+            get ip address from certain interface
+        '''
+        import ml_w_ip_address as wip
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wip.get())
+
+    @_.expose
+    def sip(self, **kwargs):
+        '''
+            save ip address for each interfaces
+        '''
+        import ml_w_ip_address as wip
+        import json
+        import libs.tools
+        libs.tools.v(kwargs)
+        return json.dumps(wip.set(cfg=kwargs))
