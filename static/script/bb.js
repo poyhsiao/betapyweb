@@ -209,6 +209,7 @@ View = Backbone.View.extend({
             closeOnEscape: false,
             close: function(e, u) {
                 $(this).find("input").val("");
+                $(this).dialog("destroy");
             }
         }).children("table").css({
             "width": "100%",
@@ -711,8 +712,8 @@ MainOperation = {
                 model: me.model,
                 el: "div.popContent",
                 events: {
-                    "click button.btnAdd": "editVlan",
-                    "click button.btnDel": "delVlan",
+                    "click button.btnVlanAdd": "editVlan",
+                    "click button.btnVlanDel": "delVlan",
                     "input input": "viewSaveVLAN"
                 }
             });
