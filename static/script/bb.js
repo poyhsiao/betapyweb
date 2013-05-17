@@ -390,11 +390,6 @@ View = Backbone.View.extend({
         var me = this, t = _.template($("#t_SystemIpAddress").html()), dat = me.model.attributes[1], ct = $("div.popContent");
         me.$el.html(t(dat));
 
-        // if(dat["ip"].length) {
-        //     $("div.SystemIpV4[opt=0], div.SystemIpV6[opt=0]").removeClass("inactive");
-        //     /* display default setting for the first select interface */
-        // }
-
         ct.find("table").css({
             "width": "100%",
             "height": "100%"
@@ -403,7 +398,81 @@ View = Backbone.View.extend({
             "height": "100%"
         });
 
-        return $("div.popContent").unblock();
+        ct.find("button.btnSmt").css({
+            "width": "45%"
+        });
+
+        return ct.unblock();
+    },
+
+    changeIpAddress: function(o) {
+    /* when change interface will display the matched setting */
+        var val = $("#ipSelecter").val();
+        $("div.SystemIpV4, div.SystemIpV6").addClass("inactive");
+        $('div.SystemIpV4[opt="' + val + '"], div.SystemIpV6[opt="' + val + '"]').removeClass("inactive");
+    },
+
+    addIpAddress: function(o) {
+    /* add new a ip address which will pop-up an dialog */
+        var me = this, self = $(o.target), dom = $("div.IpEditor"), inf =  self.parents("div[opt]").attr("opt"), title;
+
+        dom.find("input").val('');
+        /* reset all input value */
+        if(self.hasClass("btnSI4Add")) {
+            /* add IPv4 address */
+            title = $("th.IpV4title:first").text();
+            $("#IpV46_address").attr("name", inf + "-ipv4_address");
+            $("#IpV46_prefix").attr("name", inf + "-ipv4_prefix");
+            dom.attr("opt", "SystemIpV4");
+            /* set the parameter for item which tr added for */
+        } else {
+            /* add IPv6 address */
+            title = $("th.IpV6title:first").text();
+            $("#IpV46_address").attr("name", inf + "-ipv6_address");
+            $("#IpV46_prefix").attr("name", inf + "-ipv6_prefix");
+            dom.attr("opt", "SystemIpV6");
+            /* set the parameter for item which tr added for */
+        }
+
+        $('label[for="IpV46_address"]').text(title);
+
+        dom.dialog({
+            title: title,
+            modal: true,
+            close: function() {
+                $(this).dialog("destroy");
+            }
+        });
+
+        $("button.btnSaveIp").one("click", function() {
+            /* click save new ip address */
+            var tr = $("<tr />"), td = $("<td />"), ct = $("div." + dom.attr("opt")).children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
+            $("<td />").text( add.val() ).appendTo(tr);
+            $("<td />").text( prefix.val() ).appendTo(tr);
+            $("span.ipv46Tpl button").clone(true).appendTo(td);
+            add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+            prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+            td.appendTo(tr);
+            tr.appendTo(ct);
+
+            dom.dialog("close");
+
+            $("#oApply").show("slow");
+        /* show "Apply" link/button */
+        });
+
+        $("button.btnCancelIp").one("click", function() {
+            /* cancel */
+        });
+    },
+
+    delIpAddress: function(o) {
+    /* delete exist ip address setting */
+        var me = this; self = $(o.target);
+        self.parents("tr").remove();
+
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
     },
 
     runOpApply: function(o) {
@@ -427,6 +496,10 @@ View = Backbone.View.extend({
                 url = "/system/sbridge";
                 obj = $("div.SystemBridge");
                 break;
+            case "ip":
+            /* for ip address saving */
+                url = "/system/sip";
+                obj = $("div.SystemIpV46All");
             default:
                 break;
         }
@@ -676,7 +749,11 @@ MainOperation = {
             me.view = new View({
                 model: me.model,
                 el: "div.popContent",
-                events: {}
+                events: {
+                    "change #ipSelecter": "changeIpAddress",
+                    "click button.btnIpAdd": "addIpAddress",
+                    "click button.btnIpDel": "delIpAddress"
+                }
             });
 
             return me.view.viewIpAddress();

@@ -193,4 +193,5 @@ class System(object):
         import json
         import libs.tools
         libs.tools.v(kwargs)
+        print(kwargs)
         return json.dumps(wip.set(cfg=kwargs))
