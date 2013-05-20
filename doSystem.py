@@ -17,7 +17,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(current_dir, '../middleware'))
 # work for middleware access
 
-env = Environment(loader=FileSystemLoader('static/template'), extensions=['jinja2.ext.i18n'])
+env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
 from libs.tools import *
 # all necessary libs
@@ -55,7 +55,7 @@ class System(object):
             env.install_gettext_translations(trans['obj'])
             # import gettext for language translation
             # _.response.headers['Content-Type'] = 'application/json'
-            return tpl.render(info=obj[1])
+            return tpl.render(info = obj[1])
 
     @_.expose
     def s_port(self, **kwargs):
@@ -93,7 +93,7 @@ class System(object):
         # import unicodedata as codec
         for k in kwargs:
             kwargs[k] = libs.tools.convert(kwargs[k])
-        res = dns.set(cfg=kwargs)
+        res = dns.set(cfg = kwargs)
         _.response.headers["Content-Type"] = "application/json"
         # return json.dumps(kwargs)
         return json.dumps(res)
@@ -126,7 +126,7 @@ class System(object):
 
         dat = {"vconfig": op}
         libs.tools.v(dat)
-        res = vlan.set(cfg=dat)
+        res = vlan.set(cfg = dat)
         libs.tools.v(res)
         _.response.headers["Content-Type"] = "application/json"
         return json.dumps(res)
@@ -194,4 +194,37 @@ class System(object):
         import libs.tools
         libs.tools.v(kwargs)
         print(kwargs)
-        return json.dumps(wip.set(cfg=kwargs))
+        output = []
+        interface = []
+        for k in kwargs.keys():
+            interface.append(k.split("-")[0])
+        interface = set(interface)
+        # find out unique interface has changed
+        for inf in interface:
+            ot = {"interface": inf, "ipv4": [], "ipv6": []}
+
+            if inf + '-ipv4_address' in kwargs:
+                if(type(kwargs[inf + '-ipv4_address']).__name__ == 'list'):
+                    for ip in range(0, len(kwargs[inf + '-ipv4_address'])):
+                        ot["ipv4"].append({"ipv4_address": libs.tools.convert(kwargs[inf + '-ipv4_address'][ip]),
+                                           "ipv4_prefix": int(kwargs[inf + '-ipv4_prefix'][ip])
+                                           })
+                else:
+                    ot["ipv4"].append({"ipv4_address": libs.tools.convert(kwargs[inf + '-ipv4_address']),
+                                       "ipv4_prefix": int(kwargs[inf + '-ipv4_prefix'])
+                                       })
+            if inf + '-ipv6_address' in kwargs:
+                if(type(kwargs[inf + '-ipv6_address']).__name__ == 'list'):
+                    for ip in range(0, len(kwargs[inf + '-ipv6_address'])):
+                        ot["ipv6"].append({"ipv6_address": libs.tools.convert(kwargs[inf + '-ipv6_address'][ip]),
+                                           "ipv6_prefix": int(kwargs[inf + '-ipv6_prefix'][ip])
+                                           })
+                else:
+                    ot["ipv6"].append({"ipv6_address": libs.tools.convert(kwargs[inf + '-ipv6_address']),
+                                       "ipv6_prefix": int(kwargs[inf + '-ipv6_prefix'])
+                                       })
+            output.append(ot)
+
+        output = {"ip": output}
+        # change to correct format
+        return json.dumps(wip.set(cfg = output))

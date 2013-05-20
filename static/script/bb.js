@@ -194,8 +194,7 @@ View = Backbone.View.extend({
             "width": "100%",
             "height": "100%"
         }).find("button").css({
-            "width": "90%",
-            "height": "90%"
+            "width": "90%"
         });
         return $("div.popContent").unblock();
     },
@@ -216,8 +215,7 @@ View = Backbone.View.extend({
             "height": "100%",
             "text-align": "center"
         }).find("input").css({
-            "width": "90%",
-            "height": "90%"
+            "width": "90%"
         });
 
         dom.find("button").one("click", function(o) {
@@ -253,8 +251,7 @@ View = Backbone.View.extend({
         }).find("button").css({
             "width": function() {
                 return $(this).hasClass("brAdd") ? "90%" : "45%";
-            },
-            "height": "90%"
+            }
         });
 
         return $("div.popContent").unblock();
@@ -292,8 +289,7 @@ View = Backbone.View.extend({
             "width": "100%",
             "height": "100%"
         }).find("input, button").css({
-            "width": "90%",
-            "height": "100%"
+            "width": "90%"
         });
 
         ct.find(".btnSmt").css({
@@ -395,8 +391,7 @@ View = Backbone.View.extend({
             "width": "100%",
             "height": "100%"
         }).find("select, button, input").css({
-            "width": "90%",
-            "height": "100%"
+            "width": "90%"
         });
 
         ct.find("button.btnSmt").css({
@@ -415,7 +410,7 @@ View = Backbone.View.extend({
 
     addIpAddress: function(o) {
     /* add new a ip address which will pop-up an dialog */
-        var me = this, self = $(o.target), dom = $("div.IpEditor"), inf =  self.parents("div[opt]").attr("opt"), title;
+        var me = this, self = $(o.target), dom = $("div.IpEditor"), inf = $("#ipSelecter").val(), title;
 
         dom.find("input").val('');
         /* reset all input value */
@@ -447,7 +442,7 @@ View = Backbone.View.extend({
 
         $("button.btnSaveIp").one("click", function() {
             /* click save new ip address */
-            var tr = $("<tr />"), td = $("<td />"), ct = $("div." + dom.attr("opt")).children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
+        	var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
             $("<td />").text( add.val() ).appendTo(tr);
             $("<td />").text( prefix.val() ).appendTo(tr);
             $("span.ipv46Tpl button").clone(true).appendTo(td);
@@ -464,6 +459,7 @@ View = Backbone.View.extend({
 
         $("button.btnCancelIp").one("click", function() {
             /* cancel */
+        	dom.dialog("close");
         });
     },
 
@@ -745,7 +741,6 @@ MainOperation = {
     /* get ip address setting */
         var me = this;
         $.getJSON("/system/gip", function(d) {
-            console.log(d);
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
