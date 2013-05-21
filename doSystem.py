@@ -38,6 +38,22 @@ class System(object):
         print kwargs
         return 'Hello World!'
 
+    def _getInterface(self):
+        '''
+            Get all interfaces or False if fail to get interfaces
+            internal function
+        '''
+        import ml_w_ip_address as wip
+        interfaces = []
+        try:
+            items = wip.get()[1]['ip']
+            for its in items:
+                interfaces.append(its['interface'])
+            return interfaces
+        except:
+            return False
+
+
     @_.expose
     def ssys(self, **kwargs):
         '''
@@ -228,3 +244,53 @@ class System(object):
         output = {"ip": output}
         # change to correct format
         return json.dumps(wip.set(cfg = output))
+
+    @_.expose
+    def groute(self, **kwargs):
+        '''
+            Get routing table setting
+        '''
+        import ml_w_routing_table as wrt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wrt.get())
+
+    @_.expose
+    def sroute(self, **kwargs):
+        '''
+            Set routing table setting
+        '''
+        import ml_w_routing_table as wrt
+        import json
+        import libs.tools
+        libs.tools.v(kwargs)
+        protocol = {"ipv4": [], "ipv6": []}
+        for k in protocol.keys():
+            if k + "-destination" in kwargs:
+                if(type(kwargs[k + "-destination"]).__name__ == "list"):
+                    for n in range(0, len(kwargs[k + "-destination"])):
+                        protocol[k].append({"destination": libs.tools.convert(kwargs[k + "-destination"][n]),
+                                            "prefix": int(kwargs[k + "-prefix"][n]),
+                                            "gateway": libs.tools.convert(kwargs[k + "-gateway"][n]),
+                                            "interface": libs.tools.convert(kwargs[k + "-interface"][n])
+                                            })
+                else:
+                    protocol[k].append({"destination": libs.tools.convert(kwargs[k + "-destination"]),
+                                        "prefix": int(kwargs[k + "-prefix"]),
+                                        "gateway": libs.tools.convert(kwargs[k + "-gateway"]),
+                                        "interface": libs.tools.convert(kwargs[k + "-interface"])
+                                        })
+
+        libs.tools.v(protocol)
+        print(protocol)
+        return json.dumps(wrt.set(cfg = protocol))
+
+
+    @_.expose
+    def getInterfaces(self):
+        '''
+            Get all available NIC name, include real device, vlan, and bridge
+        '''
+        import json
+        return json.dumps(self._getInterface())

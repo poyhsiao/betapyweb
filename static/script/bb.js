@@ -13,6 +13,8 @@ View = Backbone.View.extend({
         /* initial the view, just for check. Not necessary */
         console.log("The view is ready");
     },
+    el: "div.popContent",
+    /* initial container, most of item will refer to this, set it as default */
 
     events: {
         /* all the event handler, keep it blank and define it when necessary */
@@ -209,7 +211,21 @@ View = Backbone.View.extend({
             close: function(e, u) {
                 $(this).find("input").val("");
                 $(this).dialog("destroy");
-            }
+            },
+            buttons: [{
+                text: "OK",
+                click: function() {
+                    dom.find("input").clone().attr("type", "hidden").removeAttr("id").appendTo($("div.SystemVLAN table"));
+                    me.runOpApply();
+                    me.runOpReload();
+                    $(this).dialog("close");
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         }).children("table").css({
             "width": "100%",
             "height": "100%",
@@ -217,21 +233,14 @@ View = Backbone.View.extend({
         }).find("input").css({
             "width": "90%"
         });
-
-        dom.find("button").one("click", function(o) {
-            if($(o.target).hasClass("vlanSubmit")) {
-                /* add new vlan, press add */
-                dom.find("input").clone().attr("type", "hidden").removeAttr("id").appendTo($("div.SystemVLAN table"));
-                return me.runOpApply();
-            }
-            dom.dialog("close");
-        });
     },
 
     delVlan: function(o) {
     /* delete vlan item */
         var me = this, self = $(o.target);
-        self.parents("tr").remove();
+        self.parents("tr").hide("slow", function() {
+            $(this).remove();
+        });
         return me.viewSaveVLAN(o);
     },
 
@@ -302,18 +311,21 @@ View = Backbone.View.extend({
             closeOnEscape: false,
             close: function() {
                 $(this).dialog("destroy");
-            }
-        });
-
-        $("button.btnSaveBrInterface").one("click", function() {
-            me.saveBridge(ct, opt);
-            $("#oApply").show("slow");
-            /* show "Apply" link/button */
-            return ct.dialog("close");
-        });
-
-        $("button.btnCancelBrInterface").one("click", function() {
-            return ct.dialog("close");
+            },
+            buttons: [{
+                text: "OK",
+                click: function() {
+                    me.saveBridge(ct, opt);
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+                    return ct.dialog("close");
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
     },
 
@@ -387,18 +399,18 @@ View = Backbone.View.extend({
         var me = this, t = _.template($("#t_SystemIpAddress").html()), dat = me.model.attributes[1], ct = $("div.popContent");
         me.$el.html(t(dat));
 
-        ct.find("table").css({
+        me.$el.find("table").css({
             "width": "100%",
             "height": "100%"
         }).find("select, button, input").css({
             "width": "90%"
         });
 
-        ct.find("button.btnSmt").css({
+        me.$el.find("button.btnSmt").css({
             "width": "45%"
         });
 
-        return ct.unblock();
+        return me.$el.unblock();
     },
 
     changeIpAddress: function(o) {
@@ -435,41 +447,156 @@ View = Backbone.View.extend({
         dom.dialog({
             title: title,
             modal: true,
+            closeOnEscape: false,
             close: function() {
                 $(this).dialog("destroy");
-            }
-        });
+            },
+            buttons: [{
+                text: "OK",
+                click: function() {
+                    /* click save new ip address */
+                    var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
+                    $("<td />").text( add.val() ).appendTo(tr);
+                    $("<td />").text( prefix.val() ).appendTo(tr);
+                    $("span.ipv46Tpl button").clone(true).appendTo(td);
+                    add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                    prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                    td.appendTo(tr);
+                    tr.appendTo(ct);
 
-        $("button.btnSaveIp").one("click", function() {
-            /* click save new ip address */
-        	var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
-            $("<td />").text( add.val() ).appendTo(tr);
-            $("<td />").text( prefix.val() ).appendTo(tr);
-            $("span.ipv46Tpl button").clone(true).appendTo(td);
-            add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-            prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-            td.appendTo(tr);
-            tr.appendTo(ct);
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
 
-            dom.dialog("close");
-
-            $("#oApply").show("slow");
-        /* show "Apply" link/button */
-        });
-
-        $("button.btnCancelIp").one("click", function() {
-            /* cancel */
-        	dom.dialog("close");
+                    dom.dialog("close");
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
         });
     },
 
     delIpAddress: function(o) {
     /* delete exist ip address setting */
         var me = this; self = $(o.target);
-        self.parents("tr").remove();
+        self.parents("tr").hide("slow", function() {
+            $(this).remove();
+        });
 
         $("#oApply").show("slow");
         /* show "Apply" link/button */
+    },
+
+    viewRoutingTable: function(o) {
+    /* routing table display */
+        var me = this, t = _.template($("#t_SystemRoutingTable").html()), dat = {"items": me.model.attributes};
+        me.$el.html(t(dat));
+
+        me.$el.find("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("select, button, input").css({
+            "width": "90%"
+        });
+
+        me.$el.find("button.btnSmt").css({
+            "width": "45%"
+        });
+
+        $('ul.nav-rt li > a[href="#"]').on("click", function() {
+            /* navigation tabs display contorl */
+            var opt = $(this).attr("opt");
+            if(!$(this).parent().hasClass("active")) {
+                me.$el.find("ul.nav-tabs li").removeClass("active");
+                $(this).parent().addClass("active");
+                $("div.SystemRoutingTable-rt").addClass("inactive");
+                $("div.SystemRoutingTable-" + opt).removeClass("inactive");
+            }
+        });
+
+        return me.$el.unblock();
+    },
+
+    delRoutingTable: function(o) {
+    /* delete existing routing table rule */
+        me = this, self = $(o.target);
+        self.parents("tr").hide("slow", function() {
+            $(this).remove();
+        });
+
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
+    },
+
+    addRoutingTable: function(o) {
+    /* add new rule for routing table */
+        var me = this, self = $(o.target), opt = self.attr("opt"), dom = $("div.SystemRoutingTable-edit"), title;
+
+        title = self.text() + " " + me.$el.find("ul.nav-rt li.active a").text();
+
+        $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf").attr({
+            "name": function(i, v) {
+                /* assign name attribute for each input field */
+                return opt + "-" + $(this).attr("opt");
+            }
+        });
+
+        dom.dialog({
+            modal: true,
+            title: title,
+            closeOnEscape: false,
+            open: function() {
+                /* on opening, get available NIC name */
+                dom.block();
+                $('option[rt="new"]').remove();
+                /* remove all existing NIC options and get new */
+                $.getJSON("/system/getInterfaces", function(d) {
+                    /* return an array of NIC names */
+                    $.each(d, function(k, v) {
+                        $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
+                    });
+                    dom.unblock();
+                });
+            },
+            close: function() {
+                $(this).dialog("destroy");
+            },
+            buttons: [{
+                text: "OK",
+                click: function() {
+                    var ct = $("div.SystemRoutingTable-" + opt).find("table"), inputs = $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf"), td = $("<td />"), tr = $("<tr />");
+                    inputs.each(function(k, v) {
+                        $("<td />").text( $(this).val() ).appendTo(tr);
+                    });
+                    $("span.rtv46tpl button").clone(true).appendTo(td);
+                    $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                    $("<input />").attr({
+                        "type": "hidden",
+                        "name": function() {
+                            return $("#rtIpv46Intf").attr("name");
+                        },
+                        "value": function() {
+                            return $("#rtIpv46Intf").val();
+                        }
+                    }).appendTo(td);
+                    td.appendTo(tr);
+                    tr.appendTo(ct);
+
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+                    inputs.val('');
+                    /* empty all input value */
+                    return dom.dialog("close");
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
     },
 
     runOpApply: function(o) {
@@ -497,6 +624,11 @@ View = Backbone.View.extend({
             /* for ip address saving */
                 url = "/system/sip";
                 obj = $("div.SystemIpV46All");
+                break;
+            case "route":
+                url = "/system/sroute";
+                obj = $("div.SystemRoutingTable");
+                break;
             default:
                 break;
         }
@@ -651,7 +783,6 @@ MainOperation = {
                 $('div.popContent').children().remove();
 
                 var cview = new View({
-                    el: "div.popContent",
                     events: {
                         "change #summary_timer": "setSysSummaryTimer"
                         /* set auto-refresh timer */
@@ -675,7 +806,6 @@ MainOperation = {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
-                el: "div.popContent"
             });
 
             return me.view.viewSysSummary();
@@ -689,7 +819,6 @@ MainOperation = {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
-                el: "div.popContent",
                 events: {
                     "input input": "viewSaveDNS"
                 }
@@ -706,7 +835,6 @@ MainOperation = {
             me.model = new Model(d),
             me.view = new View({
                 model: me.model,
-                el: "div.popContent",
                 events: {
                     "click button.btnVlanAdd": "editVlan",
                     "click button.btnVlanDel": "delVlan",
@@ -725,7 +853,6 @@ MainOperation = {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
-                el: "div.popContent",
                 events: {
                     "click button.brAdd": "editBridge",
                     "click button.brDel": "delBridge",
@@ -744,7 +871,6 @@ MainOperation = {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
-                el: "div.popContent",
                 events: {
                     "change #ipSelecter": "changeIpAddress",
                     "click button.btnIpAdd": "addIpAddress",
@@ -753,6 +879,25 @@ MainOperation = {
             });
 
             return me.view.viewIpAddress();
+        });
+    },
+
+    route: function(o) {
+    /* get routing table setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        $.getJSON("/system/groute", function(d) {
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                events: {
+                    "click button.btnRTDel": "delRoutingTable",
+                    "click button.btnRTAdd": "addRoutingTable"
+                }
+            });
+
+            return me.view.viewRoutingTable();
         });
     }
 };
