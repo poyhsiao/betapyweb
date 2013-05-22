@@ -42,13 +42,32 @@ class System(object):
         '''
             Get all interfaces or False if fail to get interfaces
             internal function
+            filter:
+                all -> all interfaces include bridge and vlan
+                real -> only real NIC
+                vlan -> only vlan
+                interface -> include vlan and real NIC
+                bridge -> only bridge
         '''
         import ml_w_ip_address as wip
-        interfaces = []
+        interfaces = {"all": [],
+                      "real": [],
+                      "interface": [],
+                      "vlan": [],
+                      "bridge": []}
         try:
             items = wip.get()[1]['ip']
             for its in items:
-                interfaces.append(its['interface'])
+                interfaces["all"].append(its['interface'])
+                if 'b' in its['interface']:
+                    interfaces["bridge"].append(its["interface"])
+                if 'b' not in its["interface"]:
+                    interfaces["interface"].append(its["interface"])
+                if '.' in its["interface"]:
+                    interfaces["vlan"].append(its["interface"])
+                if '.' not in its["interface"] and 'b' not in its["interface"]:
+                    interfaces["real"].append(its["interface"])
+
             return interfaces
         except:
             return False
@@ -293,4 +312,6 @@ class System(object):
             Get all available NIC name, include real device, vlan, and bridge
         '''
         import json
+        import libs.tools
+        libs.tools.v(self._getInterface())
         return json.dumps(self._getInterface())
