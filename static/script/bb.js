@@ -208,6 +208,19 @@ View = Backbone.View.extend({
         dom.dialog({
             modal: true,
             closeOnEscape: false,
+            open: function() {
+                dom.block();
+                /* block dialog when getting interface data */
+                $('option[vl="new"]').remove();
+                /* remove all existing NIC options and get new */
+                $.getJSON("/system/getInterfaces", function(d) {
+                    /* return an array of NIC names */
+                    $.each(d["real"], function(k, v) {
+                        $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
+                    });
+                    dom.unblock();
+                });
+            },
             close: function(e, u) {
                 $(this).find("input").val("");
                 $(this).dialog("destroy");
@@ -215,7 +228,12 @@ View = Backbone.View.extend({
             buttons: [{
                 text: "OK",
                 click: function() {
-                    dom.find("input").clone().attr("type", "hidden").removeAttr("id").appendTo($("div.SystemVLAN table"));
+                    $("<input />").attr({
+                        "type": "hidden",
+                        "value": $("#lan-interface").val(),
+                        "name": $("#lan-interface").attr("name")
+                    }).appendTo($("div.SystemVLAN table"));
+                    dom.find("input").clone().removeAttr("id").attr("type", "hidden").appendTo($("div.SystemVLAN table"));
                     me.runOpApply();
                     me.runOpReload();
                     $(this).dialog("close");
@@ -230,7 +248,7 @@ View = Backbone.View.extend({
             "width": "100%",
             "height": "100%",
             "text-align": "center"
-        }).find("input").css({
+        }).find("input, select").css({
             "width": "90%"
         });
     },
@@ -238,7 +256,7 @@ View = Backbone.View.extend({
     delVlan: function(o) {
     /* delete vlan item */
         var me = this, self = $(o.target);
-        self.parents("tr").hide("slow", function() {
+        self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
         return me.viewSaveVLAN(o);
@@ -268,9 +286,9 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), opt;
+        var me = this, self = $(o.target), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), opt;
 
-        ct.find("input").val("");
+        ct.find('input[type="number"]').val("");
         ct.find("tr.brInterface").remove();
         /* reset all input data and other item */
 
@@ -278,13 +296,14 @@ View = Backbone.View.extend({
             /* edit existing bridge */
             opt = self.attr("opt");
             /* data for current bridge setting */
-            ck += " (" + self.siblings('input[name="name"]').val() + ")";
+            ck += self.siblings('input[name="name"]').val();
 
+            $("span.br_name").text(self.siblings('input[name="name"]').val()); /* display name */
             $("#br_name").val( self.siblings('input[name="name"]').val() );  /* name */
             $.each(self.siblings('input[name="interface"]').val().split(','), function(k, v) {  /* interface editor */
-                var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
+                var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />");
                 $("<td />").text(v).appendTo($("tr.addBrInterface")).appendTo(tr);
-                $("<td />").addClass("text-center").html($("button.btnDelBrInterface").clone(true)).appendTo(tr);
+                $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", v) ).appendTo(tr);
             });
             if("true" === self.siblings('input[name="STP"]').val()) {  /* stp setting */
                 $("#brSTP").attr("checked", "checked");
@@ -294,10 +313,28 @@ View = Backbone.View.extend({
             $("#br-forward_delay").val( self.siblings('input[name="forward_delay"]').val() );  /* forward delay setting */
         }
 
+        ct.on("click", "button.btnDelBrInterface", function() {
+        /* clicking delete bridge interface */
+            var opt = $(this).attr("opt");
+            $("<option />").attr("br", "new").val(opt).text(opt).appendTo(sel);
+            $(this).parents("tr.brInterface").hide("fast", function() {
+               $(this).remove();
+            });
+        });
+
+        ct.on("click", "button.btnAddBrInterface", function() {
+        /* clicking add bridge interface */
+            var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
+            op.remove();
+            /* remove selected item */
+            $("<td />").text(val).appendTo($("tr.addBrInterface")).appendTo(tr);
+            $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", val) ).appendTo(tr);
+        });
+
         ct.children("table").css({
             "width": "100%",
             "height": "100%"
-        }).find("input, button").css({
+        }).find('input[type="number"], select, button').css({
             "width": "90%"
         });
 
@@ -309,8 +346,50 @@ View = Backbone.View.extend({
             modal: true,
             title: ck,
             closeOnEscape: false,
+            open: function() {
+            /* get new interface name and available interface list */
+                ct.block();
+
+                $.getJSON("/system/getInterfaces", function(d) {
+                    var aif = d["interface"];
+                    /* available interfaces */
+                    $('option[br="new"]').remove();
+                    /* remove all added options */
+
+                    if(!self.hasClass("brEdit")) {
+                        /* new bridge, generate new interface name */
+                       var items = $("div.SystemBridge td.brName").map(function() {
+                           var t = $(this).text();
+                           t = t.split("b");
+                           return ~~t[1];
+                       }),
+                       nic = 's0b' + _.max(items) + 1;  // nic is the new interface name
+
+                       $.each(aif, function(k, v) {
+                           $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
+                       });
+                    } else {
+                        /* edit existing bridge */
+                       var cif = [];
+                       $("tr.brInterface").each(function(k, v) {
+                           /* get current bridge interfaces */
+                           cif.push( $(v).find("button[opt]").attr("opt") );
+                       });
+
+                       aif = _.difference(aif, cif);
+                       /* available interface but exclude added interfaces */
+
+                       $.each(aif, function(k, v) {
+                           $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
+                       });
+                    }
+                    ct.unblock();
+                });
+            },
             close: function() {
                 $(this).dialog("destroy");
+                ct.off("click");
+                /* prevent all event propergation */
             },
             buttons: [{
                 text: "OK",
@@ -481,7 +560,7 @@ View = Backbone.View.extend({
     delIpAddress: function(o) {
     /* delete exist ip address setting */
         var me = this; self = $(o.target);
-        self.parents("tr").hide("slow", function() {
+        self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
 
@@ -522,7 +601,7 @@ View = Backbone.View.extend({
     delRoutingTable: function(o) {
     /* delete existing routing table rule */
         me = this, self = $(o.target);
-        self.parents("tr").hide("slow", function() {
+        self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
 
@@ -554,7 +633,7 @@ View = Backbone.View.extend({
                 /* remove all existing NIC options and get new */
                 $.getJSON("/system/getInterfaces", function(d) {
                     /* return an array of NIC names */
-                    $.each(d, function(k, v) {
+                    $.each(d["all"], function(k, v) {
                         $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
                     });
                     dom.unblock();
@@ -574,12 +653,8 @@ View = Backbone.View.extend({
                     $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
                     $("<input />").attr({
                         "type": "hidden",
-                        "name": function() {
-                            return $("#rtIpv46Intf").attr("name");
-                        },
-                        "value": function() {
-                            return $("#rtIpv46Intf").val();
-                        }
+                        "name": $("#rtIpv46Intf").attr("name"),
+                        "value": $("#rtIpv46Intf").val()
                     }).appendTo(td);
                     td.appendTo(tr);
                     tr.appendTo(ct);

@@ -503,7 +503,11 @@
               <strong>{{ _("Interface") }}</strong>
             </label>
           </th>
-          <td><input type="text" id="lan-interface" name="interface" placeholder="{{ _("Interface") }}" /></td>
+          <td>
+            <select name="interface" id="lan-interface">
+              <option disabled="disabled">{{ _("Interface") }}</option>
+            </select>
+          </td>
         </tr>
         <tr>
           <th>
@@ -512,12 +516,6 @@
             </label>
           </th>
           <td><input type="number" id="lan-vlan_id" name="vlan_id" placeholder="{{ _("VLAN ID") }}" /></td>
-        </tr>
-        <tr>
-          <td colspan="2" class="padding">
-            <button type="button" class="vlanSubmit btn">{{ _("Add") }}</button>&nbsp;&nbsp;
-            <button type="button" class="vlanCancel btn">{{ _("Cancel") }}</button>
-          </td>
         </tr>
       </table>
     </div>
@@ -539,7 +537,7 @@
             <% _.each(br, function(v, k) { %>
             <tr>
                 <td class="brName"><%= v.name %></td>
-                <td class="brInterface">(<%= v.interface.join() %>)</td>
+                <td class="brInterface"><%= v.interface.join() %></td>
                 <td>
                   <button type="button" class="btn brDel" opt="<%= k %>">{{ _("Delete") }}</button>
                   <button type="button" class="btn brEdit" opt="<%= k %>">{{ _("Edit") }}</button>
@@ -559,7 +557,8 @@
           <tr>
               <th>{{ _("Name") }}</th>
               <td class="text-center">
-                <input type="text" name="name" id="br_name" placeholder="{{ _("Name") }}" />
+                <span class="br_name"></span>
+                <input type="hidden" name="name" id="br_name" placeholder="{{ _("Name") }}" />
               </td>
           </tr>
           <tr>
@@ -571,9 +570,10 @@
           <tr class="addBrInterface">
               <th>{{ _("Name") }}</th>
               <td class="text-center">
+                <select class="nicSelect"></select>
                 <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
                 <input type="hidden" name="interface" id="br-Interface" />
-                <span class="inactive">
+                <span class="inactive brBtnTpl">
                   <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
                   <span class="brEnable">{{ _("Enable") }}</span>
                 </span>
@@ -592,7 +592,7 @@
                 </label>
               </td>
               <td class="text-center">
-                <label>
+                <label class="control-label">
                   <input type="checkbox" name="STP" id="brSTP" />&nbsp;{{ _("Enable") }}
                 </label>
               </td>
@@ -806,6 +806,7 @@
           </th>
           <td class="text-center">
             <select id="rtIpv46Intf" opt="interface">
+              <option disabled="disabled">{{ _("Interface") }}</option>
               <option value="">{{ _("auto") }}</option>
             </select>
             <span class="inactive rtv46tpl">
