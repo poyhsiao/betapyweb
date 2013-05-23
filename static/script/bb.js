@@ -288,6 +288,8 @@ View = Backbone.View.extend({
     /* add new bridge, which will pop-up a jQuery dialog */
         var me = this, self = $(o.target), dom = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), newid = new Date().getTime(), opt, title;
 
+        dom.off("click");
+
         dom.on("click", "button.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
             var opt = $(this).attr("opt");
@@ -323,9 +325,38 @@ View = Backbone.View.extend({
                     width: "90%"
                 });
 
+                if(!$("#br-hello_time").children("option").size()) {
+                /* hello time range is 1 to 10 */
+                    for(i = 1; i < 11; i++) {
+                        $("<option />").val(i).text(i).appendTo($("#br-hello_time"));
+                    }
+                }
+
+                if(!$("#br-max_message_age").children("option").size()) {
+                /* max message age range is 6 to 41 */
+                    for(i = 6; i < 41; i++) {
+                        $("<option />").val(i).text(i).appendTo($("#br-max_message_age"));
+                    }
+                }
+
+                if(!$("#br-forward_delay").children("option").size()) {
+                /* forward delay range is 2 to 31 */
+                    for(i = 2; i < 31; i++) {
+                        $("<option />").val(i).text(i).appendTo($("#br-forward_delay"));
+                    }
+                }
+
                 $.getJSON("/system/getInterfaces", function(d) {
                     var dat = d["interface"], cif = [], inf = self.attr("opt");
                     /* available interfaces as an array */
+
+                    me.$el.find('input[name="interface"]').each(function(k, v) {
+                        cif = _.union(cif, $(v).val().split(","));
+                        /* remove all interfaces is exists in other bridge */
+                    });
+
+                    dat = _.difference(dat, cif);
+                    /* find the oterh available interfaces */
 
                     if(self.hasClass("brEdit")) {
                     /* edit existing bridge */
@@ -334,8 +365,6 @@ View = Backbone.View.extend({
                             if("interface" === vname) {
                                 cif = $(v).val().split(',');
                                 /* re-generate the interfaces as an array */
-                                dat = _.difference(dat, cif);
-                                /* find the oterh available interfaces */
                                 $.each(dat, function(kk, vv) {
                                     /* generate available interfaces options */
                                     $("<option />").attr("br", "new").val(vv).text(vv).appendTo(sel);
@@ -355,7 +384,7 @@ View = Backbone.View.extend({
                                     /* make sure checkbox is checked on all browsers */
                                 }
                             } else {
-                                dom.find('input[name="' + vname + '"]').val( $(v).val() );
+                                dom.find('select[name="' + vname + '"]').val( $(v).val() );
                                 if("name" === vname) {
                                     dom.find("span.br_name").text( $(v).val() );
                                 }
@@ -387,7 +416,7 @@ View = Backbone.View.extend({
                 /* remove all added options*/
                 $("tr.brInterface").remove();
                 /* remove all interfaces for previous setting */
-                dom.find('input[type="hidden"], input[type="number"]').val('');
+                dom.find('input[type="hidden"], select').val('');
                 dom.find('input[type="checkbox"]').removeAttr("checked");
 
                 dom.off("click");
@@ -402,7 +431,7 @@ View = Backbone.View.extend({
                             return $(this).children("td:first").text();
                         }).get().join();
                         tr.find("td.brInterface").text(interfaces);
-                        dom.find('input[type="number"]').each(function(k, v) {
+                        dom.find('select[name]').each(function(k, v) {
                             var name = $(v).attr("name"), val = $(v).val();
                             tr.find('input[name="' + name + '"]').val(val);
                         });
@@ -413,11 +442,12 @@ View = Backbone.View.extend({
                         interfaces = dom.find("tr.brInterface").map(function() {
                             return $(this).children("td:first").text();
                         }).get().join();
+                        console.log(interfaces);
                         $("<td />").text( $("#br_name").val() ).appendTo(tr);
                         $("<td />").text(interfaces).appendTo(tr);
                         dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
                         dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
-                        dom.find('input').each(function(k, v) {
+                        dom.find('input, select[name]').each(function(k, v) {
                             var name = $(v).attr("name"), val = $(v).val();
                             if("STP" === name) {
                                 $("<input />").attr({
