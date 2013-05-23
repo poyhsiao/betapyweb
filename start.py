@@ -12,6 +12,8 @@ Created on 2013/04/30
 import os.path
 import sys
 import cherrypy as _
+import gzip
+import cStringIO
 from jinja2 import Environment, FileSystemLoader
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -28,7 +30,7 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 
 # from login import Login
 
-env = Environment(loader=FileSystemLoader('static/template'), extensions=['jinja2.ext.i18n'])
+env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
 from libs.login import cklogin
 # work for login relative checking
@@ -37,6 +39,17 @@ from libs.tools import *
 
 import doSystem as ds
 
+
+def initNonStaticResponse():
+    # Only compress the page if the client said it accepted it
+    if request.headerMap.get('accept-encoding', '').find('gzip') != -1:
+        # Compress page
+        zbuf = cStringIO.StringIO()
+        zfile = gzip.GzipFile(mode = 'wb', fileobj = zbuf, compresslevel = 9)
+        zfile.write(response.body)
+        zfile.close()
+        response.body = zbuf.getvalue()
+        response.headerMap['content-encoding'] = 'gzip'
 
 class Root:
     @_.expose
@@ -54,7 +67,7 @@ class Root:
             trans = translation()
             env.install_gettext_translations(trans['obj'])
             # import gettext for language translation
-            return tpl.render(lang=trans['lang'])
+            return tpl.render(lang = trans['lang'])
         else:
             # if logged in already, show /main/ page
             raise _.HTTPRedirect('/main/')
@@ -78,7 +91,7 @@ class Root:
             # save default language
             tpl = env.get_template('default.html')
             env.install_gettext_translations(trans['obj'])
-            return tpl.render(userinfo=_.session)
+            return tpl.render(userinfo = _.session)
         else:
             # if not login, go back to login page
             raise _.HTTPRedirect('/')
@@ -239,5 +252,5 @@ if __name__ == '__main__':
 
     # _.tree.mount(Login(), '/doLogin', config=conf)
     # _.quickstart(Root(), '/', config=conf)
-    _.tree.mount(root, '/', config=conf)
+    _.tree.mount(root, '/', config = conf)
     _.engine.start()

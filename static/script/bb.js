@@ -286,34 +286,9 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), ct = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), opt;
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), newid = new Date().getTime(), opt, title;
 
-        ct.find('input[type="number"]').val("");
-        ct.find("tr.brInterface").remove();
-        /* reset all input data and other item */
-
-        if(self.hasClass("brEdit")) {
-            /* edit existing bridge */
-            opt = self.attr("opt");
-            /* data for current bridge setting */
-            ck += self.siblings('input[name="name"]').val();
-
-            $("span.br_name").text(self.siblings('input[name="name"]').val()); /* display name */
-            $("#br_name").val( self.siblings('input[name="name"]').val() );  /* name */
-            $.each(self.siblings('input[name="interface"]').val().split(','), function(k, v) {  /* interface editor */
-                var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />");
-                $("<td />").text(v).appendTo($("tr.addBrInterface")).appendTo(tr);
-                $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", v) ).appendTo(tr);
-            });
-            if("true" === self.siblings('input[name="STP"]').val()) {  /* stp setting */
-                $("#brSTP").attr("checked", "checked");
-            }
-            $("#br-hello_time").val( self.siblings('input[name="hello_time"]').val() );  /* hello time setting */
-            $("#br-max_message_age").val( self.siblings('input[name="max_message_age"]').val() );  /* max message age setting */
-            $("#br-forward_delay").val( self.siblings('input[name="forward_delay"]').val() );  /* forward delay setting */
-        }
-
-        ct.on("click", "button.btnDelBrInterface", function() {
+        dom.on("click", "button.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
             var opt = $(this).attr("opt");
             $("<option />").attr("br", "new").val(opt).text(opt).appendTo(sel);
@@ -322,87 +297,155 @@ View = Backbone.View.extend({
             });
         });
 
-        ct.on("click", "button.btnAddBrInterface", function() {
+        dom.on("click", "button.btnAddBrInterface", function() {
         /* clicking add bridge interface */
-            var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
-            op.remove();
-            /* remove selected item */
-            $("<td />").text(val).appendTo($("tr.addBrInterface")).appendTo(tr);
-            $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", val) ).appendTo(tr);
+            if($(sel).find("option").size()) {
+                var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
+                op.remove();
+                /* remove selected item */
+                $("<td />").text(val).appendTo($("tr.addBrInterface")).appendTo(tr);
+                $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", val) ).appendTo(tr);
+            }
         });
 
-        ct.children("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find('input[type="number"], select, button').css({
-            "width": "90%"
-        });
-
-        ct.find(".btnSmt").css({
-            "width": "30%"
-        });
-
-        ct.dialog({
+        dom.dialog({
             modal: true,
             title: ck,
             closeOnEscape: false,
             open: function() {
-            /* get new interface name and available interface list */
-                ct.block();
+                dom.block();
+                /* enable mask before everything is ready */
+
+                me.$el.children("table").css({
+                    width: "100%",
+                    height: "100%"
+                }).find('input[type="number"], select, button').css({
+                    width: "90%"
+                });
 
                 $.getJSON("/system/getInterfaces", function(d) {
-                    var aif = d["interface"];
-                    /* available interfaces */
-                    $('option[br="new"]').remove();
-                    /* remove all added options */
+                    var dat = d["interface"], cif = [], inf = self.attr("opt");
+                    /* available interfaces as an array */
 
-                    if(!self.hasClass("brEdit")) {
-                        /* new bridge, generate new interface name */
-                       var items = $("div.SystemBridge td.brName").map(function() {
-                           var t = $(this).text();
-                           t = t.split("b");
-                           return ~~t[1];
-                       }),
-                       nic = 's0b' + _.max(items) + 1;  // nic is the new interface name
+                    if(self.hasClass("brEdit")) {
+                    /* edit existing bridge */
+                        self.siblings("input").each(function(k, v) {
+                            var vname = $(v).attr("name");
+                            if("interface" === vname) {
+                                cif = $(v).val().split(',');
+                                /* re-generate the interfaces as an array */
+                                dat = _.difference(dat, cif);
+                                /* find the oterh available interfaces */
+                                $.each(dat, function(kk, vv) {
+                                    /* generate available interfaces options */
+                                    $("<option />").attr("br", "new").val(vv).text(vv).appendTo(sel);
+                                });
 
-                       $.each(aif, function(k, v) {
-                           $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
-                       });
+                                $.each(cif, function(kk, vv) {
+                                    /* generate exists interfaces */
+                                   var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />").addClass("text-center");
+                                   $("<td />").text(vv).appendTo(tr);
+                                   $("span.brBtnTpl button.btnDelBrInterface").clone().attr("opt", vv).appendTo(td);
+                                   td.appendTo(tr);
+                                });
+
+                            } else if("STP" === vname) {
+                                if("true" === $(v).val()) {
+                                    dom.find('input[name="' + vname + '"]').trigger("click");
+                                    /* make sure checkbox is checked on all browsers */
+                                }
+                            } else {
+                                dom.find('input[name="' + vname + '"]').val( $(v).val() );
+                                if("name" === vname) {
+                                    dom.find("span.br_name").text( $(v).val() );
+                                }
+                            }
+                        });
+
+                        dom.dialog({title: dom.dialog("option", "title") + " - " + self.attr("opt")});
+                        /* update dialog title */
                     } else {
-                        /* edit existing bridge */
-                       var cif = [];
-                       $("tr.brInterface").each(function(k, v) {
-                           /* get current bridge interfaces */
-                           cif.push( $(v).find("button[opt]").attr("opt") );
-                       });
+                    /* add new bridge */
+                        dom.find("span.br_name").text("Auto");
+                        $("#br_name").val("Auto-" + newid);
+                        /* auto set bridge name, set New */
 
-                       aif = _.difference(aif, cif);
-                       /* available interface but exclude added interfaces */
-
-                       $.each(aif, function(k, v) {
+                        $.each(dat, function(k, v) {
                            $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
-                       });
+                        });
                     }
-                    ct.unblock();
+
+                    dom.find("button").css("width", "90%");
+
+                    dom.unblock();
                 });
             },
             close: function() {
                 $(this).dialog("destroy");
-                ct.off("click");
-                /* prevent all event propergation */
+
+                $('option[br="new"]').remove();
+                /* remove all added options*/
+                $("tr.brInterface").remove();
+                /* remove all interfaces for previous setting */
+                dom.find('input[type="hidden"], input[type="number"]').val('');
+                dom.find('input[type="checkbox"]').removeAttr("checked");
+
+                dom.off("click");
             },
             buttons: [{
                 text: "OK",
                 click: function() {
-                    me.saveBridge(ct, opt);
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
-                    return ct.dialog("close");
+                    if(self.hasClass("brEdit")) {
+                    /* edit existing bridge */
+                        var tr = self.parents("tr"), interfaces;
+                        interfaces = dom.find("tr.brInterface").map(function() {
+                            return $(this).children("td:first").text();
+                        }).get().join();
+                        tr.find("td.brInterface").text(interfaces);
+                        dom.find('input[type="number"]').each(function(k, v) {
+                            var name = $(v).attr("name"), val = $(v).val();
+                            tr.find('input[name="' + name + '"]').val(val);
+                        });
+                        tr.find('input[name="interface"]').val(interfaces);
+                    } else {
+                    /* add new bridge */
+                        var tr = $("<tr />").appendTo($("div.SystemBridge table")), td = $("<td />"), val = $("#br_name").val(), interfaces;
+                        interfaces = dom.find("tr.brInterface").map(function() {
+                            return $(this).children("td:first").text();
+                        }).get().join();
+                        $("<td />").text( $("#br_name").val() ).appendTo(tr);
+                        $("<td />").text(interfaces).appendTo(tr);
+                        dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
+                        dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
+                        dom.find('input').each(function(k, v) {
+                            var name = $(v).attr("name"), val = $(v).val();
+                            if("STP" === name) {
+                                $("<input />").attr({
+                                    name: name,
+                                    type: "hidden"
+                                }).val( $(v).is(":checked").toString() ).appendTo(td);
+                            } else {
+                                $("<input />").attr({
+                                    name: name,
+                                    type: "hidden"
+                                }).val(val).appendTo(td);
+                            }
+                        });
+                        $("<input />").attr({
+                            name: "interface",
+                            type: "hidden"
+                        }).val(interfaces).appendTo(td);
+
+                        td.appendTo(tr);
+                    }
+
+                    $("#oApply").show("fast");
+                    return $(this).dialog("close");
                 }
             }, {
                 text: "Cancel",
                 click: function() {
-                    $(this).dialog("close");
+                    return $(this).dialog("close");
                 }
             }]
         });
@@ -410,67 +453,13 @@ View = Backbone.View.extend({
 
     delBridge: function(o) {
     /* delete existing bridge setting */
-        me = this, self = $(o.target), row = self.parents("tr"), opt = self.attr("opt"), dat = $("div.SystemBridge").data(), res = [];
-        row.remove();
-        delete(dat['br'][opt]);
-        $.each(dat['br'], function(k, v) {
-            if("undefined" !== v) {
-                res.push(v);
-            }
+        me = this, self = $(o.target);
+        self.parents("tr").hide("fast", function() {
+            $(this).remove();
         });
-        var result = {'br': res};
 
         $("#oApply").show("slow");
         /* show "Apply" link/button */
-    },
-
-    saveBridge: function(dom, opt) {
-    /*
-        when click ok in dialog will save the new / edited bridge
-            dom: is the dialog jquery object not whole dialog  object
-            opt: when edit exist item, assign the opt as the identification. if opt is not given, means it's new one
-    */
-        var ct = $("div.SystemBridge").children("table"), tr = $("<tr />"), td = $("<td />"), self, row;
-        if(opt) {
-            /* edit exist bridge */
-            self = $('.brEdit[opt="' + opt + '"]');
-            row = self.parents("tr");
-            row.find("td.brName").text( $("#br_name").val() );
-            row.find("td.brInterface").text('(s0e2)');
-            row.find('input[name="name"]').val( $("#br_name").val() );
-            row.find('input[name="STP"]').val( $("#brSTP").is(":checked") );
-            row.find('input[name="hello_time"]').val( $("#br-hello_time").val() );
-            row.find('input[name="max_message_age"]').val( $("#br-max_message_age").val() );
-            row.find('input[name="forward_delay"]').val( $("#br-forward_delay").val() );
-        } else {
-            $("<td />").addClass("brName").text( $("#br_name").val() ).appendTo(tr);
-            $("<td />").addClass("brInterface").text('(s0e2)').appendTo(tr);
-            $("div.brBtnTpl button").clone(true).attr({
-                "opt": function() {
-                    if($("button.brDel").size() > 0) {
-                        /* now at least one bridge exists */
-                        return ~~$("button.brDel:last").attr("opt") + 1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }).appendTo(td);
-            $("#br_name").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-            $("#br-Interface").clone().removeAttr("id").appendTo(td);
-            $("<input />").attr({
-                "type": "hidden",
-                "name": "STP",
-                "value": function() {
-                    return $("#brSTP").is(":checked");
-                }
-            }).appendTo(td);
-            $("#br-hello_time").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-            $("#br-max_message_age").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-            $("#br-forward_delay").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-
-            td.appendTo(tr);
-            tr.appendTo(ct);
-        }
     },
 
     viewIpAddress: function(o) {
@@ -710,6 +699,7 @@ View = Backbone.View.extend({
 
         if(url.length) {
             obj.wrap('<form id="theForm" />');
+            console.log($("#theForm").serialize());
             $.post(url, $("#theForm").serialize(), function(d) {
                 console.log(d);
                 if(!d[0]) {

@@ -186,7 +186,15 @@ class System(object):
         import libs.tools
         libs.tools.v(kwargs)
         size = len(kwargs["name"])
+        names = []
         op = []
+
+        for na in kwargs["name"]:
+            if not na.startswith("Auto"):
+                names.append(int(na.split("b")[1]))
+
+        names.sort()
+        max = names[-1] + 1
 
         for i in range(0, size):
             if kwargs["STP"][i] == "true":
@@ -194,9 +202,15 @@ class System(object):
             else:
                 kwargs["STP"][i] = False
 
+            if kwargs["name"][i].startswith("Auto"):
+                kwargs["name"][i] = "s0b" + str(max)
+                max = max + 1
+            else:
+                kwargs["name"][i] = libs.tools.convert(kwargs["name"][i])
+
             kwargs["interface"][i] = libs.tools.convert(kwargs["interface"][i]).split(",")
 
-            op.append({"name": libs.tools.convert(kwargs["name"][i]),
+            op.append({"name": kwargs["name"][i],
                 "interface": kwargs["interface"][i],
                 "STP": kwargs["STP"][i],
                 "hello_time": int(kwargs["hello_time"][i]),

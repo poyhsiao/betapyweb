@@ -13,7 +13,7 @@ import cherrypy as _
 
 
 class Cookie:
-    def setCookie(self, expire='session', **kwargs):
+    def setCookie(self, expire = 'session', **kwargs):
         cookie = _.response.cookie
         if len(kwargs) > 0:
             for k in kwargs:
@@ -21,7 +21,7 @@ class Cookie:
                 if not expire == 'session':
                     cookie[k]['expires'] = expire
 
-    def getCookie(self, key=None):
+    def getCookie(self, key = None):
         cookie = _.request.cookie
         if key is None:
             return cookie
@@ -48,10 +48,10 @@ def translation():
         lang = 'en-US'
 
     langdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../locale')
-    return {'obj': gettext.translation(domain='messages', localedir=langdir, languages=[lang]), 'lang': lang}
+    return {'obj': gettext.translation(domain = 'messages', localedir = langdir, languages = [lang]), 'lang': lang}
 
 
-def v(obj, display='print'):
+def v(obj, display = 'print'):
     '''
         debug tool which will over-format the output message
         parameter:
@@ -65,7 +65,14 @@ def v(obj, display='print'):
         '''
         pp.pprint(obj)
         print '''
-        ----------  end ------------------------
+        ======== RAW data start =================
+        '''
+        print obj
+        print '''
+        ======== RAW data end ===================
+        '''
+        print '''
+        ----------- end -------------------------
         '''
 def convert(str):
     import unicodedata as codec

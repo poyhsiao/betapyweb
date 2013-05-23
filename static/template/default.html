@@ -539,8 +539,8 @@
                 <td class="brName"><%= v.name %></td>
                 <td class="brInterface"><%= v.interface.join() %></td>
                 <td>
-                  <button type="button" class="btn brDel" opt="<%= k %>">{{ _("Delete") }}</button>
-                  <button type="button" class="btn brEdit" opt="<%= k %>">{{ _("Edit") }}</button>
+                  <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
+                  <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
                   <input type="hidden" name="STP" value="<%= v.STP %>" />
                   <input type="hidden" name="name" value="<%= v.name %>" />
                   <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
@@ -558,7 +558,7 @@
               <th>{{ _("Name") }}</th>
               <td class="text-center">
                 <span class="br_name"></span>
-                <input type="hidden" name="name" id="br_name" placeholder="{{ _("Name") }}" />
+                <input type="hidden" name="name" id="br_name" />
               </td>
           </tr>
           <tr>
@@ -572,9 +572,10 @@
               <td class="text-center">
                 <select class="nicSelect"></select>
                 <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
-                <input type="hidden" name="interface" id="br-Interface" />
                 <span class="inactive brBtnTpl">
                   <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
+                  <button type="button" class="btn brDel" opt="">{{ _("Delete") }}</button>
+                  <button type="button" class="btn brEdit" opt="">{{ _("Edit") }}</button>
                   <span class="brEnable">{{ _("Enable") }}</span>
                 </span>
               </td>
@@ -587,9 +588,7 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="brSTP">
-                  {{ _("STP") }}
-                </label>
+                <label class="control-label" for="brSTP">{{ _("STP") }}</label>
               </td>
               <td class="text-center">
                 <label class="control-label">
@@ -599,9 +598,7 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-hello_time">
-                  {{ _("Hello Time") }}
-                </label>
+                <label class="control-label" for="br-hello_time">{{ _("Hello Time") }}</label>
               </td>
               <td class="text-center">
                 <input type="number" name="hello_time" id="br-hello_time" placeholder="{{ _("Hello Time") }}" />
@@ -609,9 +606,7 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-max_message_age">
-                  {{ _("Max Message Age") }}
-                </label>
+                <label class="control-label" for="br-max_message_age">{{ _("Max Message Age") }}</label>
               </td>
               <td  class="text-center">
                 <input type="number" name="max_message_age" id="br-max_message_age" placeholder="{{ _("Max Message Age") }}" />
@@ -619,16 +614,11 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-forward_delay">
-                  {{ _("Forward Delay") }}
-                </label>
+                <label class="control-label" for="br-forward_delay">{{ _("Forward Delay") }}</label>
               </td>
               <td class="text-center">
                 <input type="number" name="forward_delay" id="br-forward_delay" placeholder="{{ _("Forward Delay") }}" />
               </td>
-          </tr>
-          <tr>
-              <td colspan="2">&nbsp;</td>
           </tr>
       </table>
     </div>
