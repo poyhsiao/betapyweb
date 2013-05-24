@@ -208,6 +208,7 @@ View = Backbone.View.extend({
         dom.dialog({
             modal: true,
             closeOnEscape: false,
+            width: "auto",
             open: function() {
                 dom.block();
                 /* block dialog when getting interface data */
@@ -244,12 +245,6 @@ View = Backbone.View.extend({
                     $(this).dialog("close");
                 }
             }]
-        }).children("table").css({
-            "width": "100%",
-            "height": "100%",
-            "text-align": "center"
-        }).find("input, select").css({
-            "width": "90%"
         });
     },
 
@@ -314,6 +309,7 @@ View = Backbone.View.extend({
             modal: true,
             title: ck,
             closeOnEscape: false,
+            width: "auto",
             open: function() {
                 dom.block();
                 /* enable mask before everything is ready */
@@ -522,7 +518,7 @@ View = Backbone.View.extend({
     /* add new a ip address which will pop-up an dialog */
         var me = this, self = $(o.target), dom = $("div.IpEditor"), inf = $("#ipSelecter").val(), title;
 
-        dom.find("input").val('');
+        dom.find("form")[0].reset();
         /* reset all input value */
         if(self.hasClass("btnSI4Add")) {
             /* add IPv4 address */
@@ -546,6 +542,7 @@ View = Backbone.View.extend({
             title: title,
             modal: true,
             closeOnEscape: false,
+            width: "auto",
             close: function() {
                 $(this).dialog("destroy");
             },
@@ -556,7 +553,7 @@ View = Backbone.View.extend({
                     var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
                     $("<td />").text( add.val() ).appendTo(tr);
                     $("<td />").text( prefix.val() ).appendTo(tr);
-                    $("span.ipv46Tpl button").clone(true).appendTo(td);
+                    $("span.ipv46Tpl button").clone(true).css("width", "90%").appendTo(td);
                     add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
                     prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
                     td.appendTo(tr);
@@ -645,6 +642,7 @@ View = Backbone.View.extend({
             modal: true,
             title: title,
             closeOnEscape: false,
+            width: "auto",
             open: function() {
                 /* on opening, get available NIC name */
                 dom.block();
@@ -659,6 +657,9 @@ View = Backbone.View.extend({
                 });
             },
             close: function() {
+                // inputs.val('');
+                dom.find("form")[0].reset();
+                /* empty all input value */
                 $(this).dialog("destroy");
             },
             buttons: [{
@@ -668,7 +669,7 @@ View = Backbone.View.extend({
                     inputs.each(function(k, v) {
                         $("<td />").text( $(this).val() ).appendTo(tr);
                     });
-                    $("span.rtv46tpl button").clone(true).appendTo(td);
+                    $("span.rtv46tpl button").clone(true).css("width", "90%").appendTo(td);
                     $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
                     $("<input />").attr({
                         "type": "hidden",
@@ -680,9 +681,102 @@ View = Backbone.View.extend({
 
                     $("#oApply").show("slow");
                     /* show "Apply" link/button */
-                    inputs.val('');
-                    /* empty all input value */
                     return dom.dialog("close");
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
+    },
+
+    viewArpTable: function(o) {
+    /* ip address setup page display */
+        var me = this, t = _.template($("#t_SystemArpTable").html()), dat = me.model.attributes[1];
+        $.each(dat, function(k, v) {
+            v["protocol"] = k.split("_")[0];
+            v["type"] = k.split("_")[1];
+        });
+
+        dat = {"items": dat};
+        me.$el.html(t(dat));
+
+        me.$el.find("table").css({
+            "width": "100%",
+            "height": "100%"
+        }).find("select, button, input").css({
+            "width": "90%"
+        });
+
+        me.$el.find("button.btnSmt").css({
+            "width": "45%"
+        });
+
+        $("div.SystemArpTable").find("a:first").trigger("click");
+
+        return me.$el.unblock();
+    },
+
+    delArpTable: function(o) {
+    /* delete existing arp static ip */
+      var me = this, self = $(o.target);
+      self.parents("tr").hide("fast", function() {
+          $(this).remove();
+      });
+
+      $("#oApply").show("slow");
+      /* show "Apply" link/button */
+    },
+
+    addArpTable: function(o) {
+    /* add new arp static ip */
+        var me = this, self = $(o.target), dom = $("div.editSystemArpTable"), title = $("div.SystemArpTable").find("li.active").children("a").text(), opt = self.attr("opt"), apt = $("#arp-" + opt).children("table");
+
+        dom.dialog({
+            modal: true,
+            title: title,
+            closeOnEscape: false,
+            width: "auto",
+            open: function() {
+                $('option[arp="new"]').remove();
+                /* remove listed interfaces */
+                dom.block();
+                $.getJSON("/system/getInterfaces", function(d) {
+                    /* return an array of NIC names */
+                    $.each(d["interface"], function(k, v) {
+                        $("<option />").attr("arp", "new").val(v).text(v).appendTo("#editArpInterface");
+                    });
+                    dom.unblock();
+                });
+            },
+            close: function() {
+                $(this).find("form")[0].reset();
+                $(this).dialog("destroy");
+            },
+            buttons: [{
+                text: "OK",
+                click: function() {
+                    var tr = $("<tr />").appendTo(apt), td = $("<td />"), btn = dom.find("button.btnArpDel").clone(true).css("width", "90%");
+                    $("<td />").text( $("#editArpInterface").val() ).appendTo(tr);
+                    $("<td />").text( $("#editArpIp").val() ).appendTo(tr);
+                    $("<td />").text( $("#editArpMac").val() ).appendTo(tr);
+                    btn.appendTo(td);
+                    $(this).find("input, select").each(function(k, v) {
+                        $("<input />").attr({
+                            type: "hidden",
+                            name: function() {
+                                return opt + "-" + $(v).attr("name");
+                            }
+                        }).val($(v).val()).appendTo(td);
+                    });
+                    td.appendTo(tr);
+
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+
+                    return $(this).dialog("close");
                 }
             }, {
                 text: "Cancel",
@@ -993,6 +1087,25 @@ MainOperation = {
             });
 
             return me.view.viewRoutingTable();
+        });
+    },
+
+    arp: function(o) {
+    /* get arp table setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        $.getJSON("/system/garp", function(d) {
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                events: {
+                    "click button.btnArpDel": "delArpTable",
+                    "click button.btnArpAdd": "addArpTable"
+                }
+            });
+
+            return me.view.viewArpTable();
         });
     }
 };

@@ -199,6 +199,9 @@
     .text-right {
       text-align: right;
     }
+    .strong {
+      font-weight: bold;
+    }
   </style>
   <script type="text/javascript" src="/script/jquery.js"></script>
   <script type="text/javascript" src="/script/underscore.js"></script>
@@ -397,9 +400,7 @@
   </script>
   <script type="text/template" id="t_summery_control">
     <div class="systemSummaryTimer control-group">
-      <label class="control-label" for="summary_timer">
-        <strong>{{ _('Automatic Refresh') }}</strong>
-      </label>
+      <label class="control-label strong" for="summary_timer">{{ _('Automatic Refresh') }}</label>
       <div class="controls">
         <select name="summary_timer" id="summary_timer">
           <option value="0">{{ _('Disabled') }}</option>
@@ -422,9 +423,7 @@
         <tbody>
             <tr>
               <th>
-                <label class="control-label" for="hostname">
-                  <strong>{{ _("Host Name") }}</strong>
-                </label>
+                <label class="control-label strong" for="hostname">{{ _("Host Name") }}</label>
               </th>
               <td>
                 <div class="controls">
@@ -434,9 +433,7 @@
             </tr>
             <tr>
               <th>
-                <label class="control-label" for="domain-name">
-                  <strong>{{ _("Domain Name") }}</strong>
-                </label>
+                <label class="control-label strong" for="domain-name">{{ _("Domain Name") }}</label>
               </th>
               <td>
                 <div class="controls">
@@ -446,9 +443,7 @@
             </tr>
             <tr>
               <th>
-                <label class="control-label" for="dns-server-1">
-                  <strong>{{ _("DNS Server 1") }}</strong>
-                </label>
+                <label class="control-label strong" for="dns-server-1">{{ _("DNS Server 1") }}</label>
               </th>
               <td>
                 <div class="controls">
@@ -458,9 +453,7 @@
             </tr>
             <tr>
               <th>
-                <label class="control-label" for="dns-server-2">
-                  <strong>{{ _("DNS Server 2") }}</strong>
-                </label>
+                <label class="control-label strong" for="dns-server-2">{{ _("DNS Server 2") }}</label>
               </th>
               <td>
                 <div class="controls">
@@ -496,28 +489,22 @@
     </table>
     </div>
     <div class="addSysVLAN padding control-group inactive" title="{{ _("Add") }} VLAN">
-      <table border="1">
-        <tr>
-          <th>
-            <label class="control-label" for="lan-interface">
-              <strong>{{ _("Interface") }}</strong>
-            </label>
-          </th>
-          <td>
-            <select name="interface" id="lan-interface">
-              <option disabled="disabled">{{ _("Interface") }}</option>
-            </select>
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label strong" for="lan-interface">{{ _("Interface") }}</label>
+          <div class="controls">
+            <select name="interface" id="lan-interface"></select>
+          </div>
           </td>
         </tr>
-        <tr>
-          <th>
-            <label class="control-label" for="lan-vlan_id">
-              <strong>{{ _("VLAN ID") }}</strong>
-            </label>
-          </th>
-          <td><input type="number" id="lan-vlan_id" name="vlan_id" placeholder="{{ _("VLAN ID") }}" /></td>
-        </tr>
-      </table>
+        </div>
+        <div class="control-group">
+          <label class="control-label strong" for="lan-vlan_id">{{ _("VLAN ID") }}</label>
+          <div class="controls">
+            <input type="number" id="lan-vlan_id" name="vlan_id" placeholder="{{ _("VLAN ID") }}" />
+          </div>
+        </div>
+      </form>
     </div>
   </script>
   <script type="text/template" id="t_SystemBridge">
@@ -588,17 +575,16 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="brSTP">{{ _("STP") }}</label>
+                <label class="control-label strong" for="brSTP">{{ _("STP") }}</label>
               </td>
               <td class="text-center">
-                <label class="control-label">
-                  <input type="checkbox" name="STP" id="brSTP" />&nbsp;{{ _("Enable") }}
-                </label>
+                <label class="control-label strong" for="brSTP">&nbsp;{{ _("Enable") }}</label>
+                <input type="checkbox" name="STP" id="brSTP" />
               </td>
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-hello_time">{{ _("Hello Time") }}</label>
+                <label class="control-label strong" for="br-hello_time">{{ _("Hello Time") }}</label>
               </td>
               <td class="text-center">
                 <select name="hello_time" id="br-hello_time"></select>
@@ -606,7 +592,7 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-max_message_age">{{ _("Max Message Age") }}</label>
+                <label class="control-label strong" for="br-max_message_age">{{ _("Max Message Age") }}</label>
               </td>
               <td  class="text-center">
                 <select name="max_message_age" id="br-max_message_age"></select>
@@ -614,7 +600,7 @@
           </tr>
           <tr>
               <td>
-                <label class="control-label" for="br-forward_delay">{{ _("Forward Delay") }}</label>
+                <label class="control-label strong" for="br-forward_delay">{{ _("Forward Delay") }}</label>
               </td>
               <td class="text-center">
                 <select name="forward_delay" id="br-forward_delay"></select>
@@ -628,7 +614,7 @@
         <table border="1">
             <tr>
                 <th>
-                  <label class="control-label" for="ipSelecter">{{ _("Interface") }}</label>
+                  <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
                 </th>
                 <td>
                   <select class="ipSelInterface" id="ipSelecter">
@@ -698,27 +684,23 @@
       <% }); %>
     </div>
     <div class="IpEditor inactive control-group">
-        <table border="1">
-            <tr>
-                <th class="IpV4orV6">
-                  <label class="control-label" for="IpV46_address"></label>
-                </th>
-                <td class="text-center">
-                  <input type="text" id="IpV46_address" />
-                </td>
-            </tr>
-            <tr>
-                <th>
-                  <label class="control-label" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
-                </th>
-                <td class="text-center">
-                  <input type="text" id="IpV46_prefix" />
-                  <span class="ipv46Tpl inactive">
-                    <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
-                  </span>
-                </td>
-            </tr>
-        </table>
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label strong" for="IpV46_address"></label>
+          <div class="controls">
+            <input type="text" id="IpV46_address" />
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label strong" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
+          <div class="controls">
+            <input type="text" id="IpV46_prefix" />
+            <span class="ipv46Tpl inactive">
+              <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
+            </span>
+          </div>
+        </div>
+      </form>
     </div>
   </script>
   <script type="text/template" id="t_SystemRoutingTable">
@@ -765,46 +747,126 @@
       <% }); %>
     </div>
     <div class="SystemRoutingTable-edit padding control-group inactive">
-      <table border="1">
-        <tr>
-          <th>
-            <label class="control-label" for="rtIpv46Dest">{{ _("Destination") }}</label>
-          </th>
-          <td class="text-center">
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label strong" for="rtIpv46Dest">{{ _("Destination") }}</label>
+          <div class="controls">
             <input type="text" id="rtIpv46Dest" placeholder="{{ _("Destination") }}" opt="destination" />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label" for="rtIpv46PreL">{{ _("Prefix Length") }}</label>
-          </th>
-          <td class="text-center">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label strong" for="rtIpv46PreL">{{ _("Prefix Length") }}</label>
+          <div class="controls">
             <input type="number" id="rtIpv46PreL" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label" for="rtIpv46GW">{{ _("Gateway") }}</label>
-          </th>
-          <td class="text-center">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label strong" for="rtIpv46GW">{{ _("Gateway") }}</label>
+          <div class="controls">
             <input type="text" id="rtIpv46GW" placeholder="{{ _("Gateway") }}" opt="gateway" />
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label" for="rtIpv46Intf">{{ _("Interface") }}</label>
-          </th>
-          <td class="text-center">
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label strong" for="rtIpv46Intf">{{ _("Interface") }}</label>
+          <div class="controls">
             <select id="rtIpv46Intf" opt="interface">
-              <option disabled="disabled">{{ _("Interface") }}</option>
               <option value="">{{ _("auto") }}</option>
             </select>
             <span class="inactive rtv46tpl">
               <button class="btn btnRTDel">{{ _("Delete") }}</button>
             </span>
-          </td>
-        </tr>
-      </table>
+          </div>
+        </div>
+      </form>
+    </div>
+  </script>
+  <script id="t_SystemArpTable" type="text/template">
+    <div class="SystemArpTable padding">
+      <ul class="nav nav-tabs">
+      <% _.each(items, function(v, k) { %>
+        <li>
+          <a href="#arp-<%= k %>" data-toggle="tab">
+          <% if("ipv4_dynamic" === k) { %>
+            {{ _("IPv4 Dynamic Entries") }}
+          <% } else if("ipv4_static" === k) { %>
+            {{ _("IPv4 Fixed Entries") }}
+          <% } else if("ipv6_dynamic" === k) { %>
+            {{ _("IPv6 Neighbor Table Dynamic Entries") }}
+          <% } else if("ipv6_static" === k) { %>
+            {{ _("IPv6 Neighbor Table Fixed Entries") }}
+          <% } %>
+          </a>
+        </li>
+      <% }); %>
+      </ul>
+    </div>
+    <div class="tab-content">
+    <% _.each(items, function(v, k) { %>
+      <div id="arp-<%= k %>" class="tab-pane">
+        <table border="1">
+          <tr>
+            <th>{{ _("Interface") }}</th>
+          <% if("ipv4" == v.protocol ) { %>
+            <th>{{ _("IPv4 Address") }}</th>
+          <% } else { %>
+            <th>{{ _("IPv6 Address") }}</th>
+          <% } %>
+            <th>{{ _("MAC Address") }}</th>
+          <% if("static" === v.type) { %>
+            <td>
+              <button class="btn btnArpAdd" opt="<%= k %>">{{ _("Add") }}</button>
+            </td>
+          <% } else { %>
+            <td>
+              <span>{{ _("Fix") }}</span>
+            </td>
+          <% } %>
+          </tr>
+        <% _.each(v, function(vv, kk) { %>
+          <tr>
+            <td><%= vv.interface %></td>
+            <td><%= vv.ip %></td>
+            <td><%= vv.mac %></td>
+            <td>
+            <% if("static" === v.type) { %>
+              <button class="btn btnArpDel">{{ _("Delete") }}</button>
+            <% } else { %>
+              <input type="checkbox" name="<%= k %>-fix" value="fix"<% if("True" == vv.fix) { %> checked="checked"<% } %> />
+            <% } %>
+              <input type="hidden" name="<%= k %>-interface" value="<%= vv.interface %>" />
+              <input type="hidden" name="<%= k %>-ip" value="<%= vv.ip %>" />
+              <input type="hidden" name="<%= k %>-mac" value="<%= vv.mac %>" />
+            </td>
+          </tr>
+        <% }); %>
+        </table>
+      </div>
+    <% }); %>
+    </div>
+    <div class="editSystemArpTable padding inactive form-horizontal">
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label for="editArpInterface" class="control-label strong">{{ _("Interface") }}</label>
+          <div class="controls">
+            <select name="interface" id="editArpInterface"></select>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="editArpIp" class="control-label strong">{{ _("Ip Address") }}</label>
+          <div class="controls">
+            <input type="text" name="ip" id="editArpIp" placeholder="{{ _("Ip Address") }}" />
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="editArpMac" class="control-label strong">{{ _("MAC Address") }}</label>
+          <div class="controls">
+            <input type="text" name="mac" id="editArpMac" placeholder="{{ _("MAC Address") }}" />
+          </div>
+        </div>
+        <span class="arpBtnTpl inactive">
+          <button class="btn btnArpDel">{{ _("Delete") }}</button>
+        </span>
+      </form>
     </div>
   </script>
 </body>

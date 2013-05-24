@@ -152,12 +152,15 @@ class System(object):
         import json
         import libs.tools
         libs.tools.v(kwargs)
+        op = []
         size = len(kwargs["interface"])
-        if len(kwargs["interface"]) > 0:
-            op = []
-            for i in range(0, size):
-                if len(kwargs["interface"][i]) > 1 and len(kwargs["vlan_id"]) > 0:
-                    op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": int(kwargs["vlan_id"][i])})
+        if type(kwargs["interface"]).__name__ == "list":
+            if len(kwargs["interface"]) > 0:
+                for i in range(0, size):
+                    if len(kwargs["interface"][i]) > 1 and len(kwargs["vlan_id"]) > 0:
+                        op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": int(kwargs["vlan_id"][i])})
+        else:
+            op.append({"interface": libs.tools.convert(kwargs["interface"]), "vlan_id": int(kwargs["vlan_id"])});
 
         dat = {"vconfig": op}
         libs.tools.v(dat)
@@ -189,12 +192,15 @@ class System(object):
         names = []
         op = []
 
-        for na in kwargs["name"]:
-            if not na.startswith("Auto"):
-                names.append(int(na.split("b")[1]))
+        try:
+            for na in kwargs["name"]:
+                if not na.startswith("Auto"):
+                    names.append(int(na.split("b")[1]))
 
-        names.sort()
-        max = names[-1] + 1
+            names.sort()
+            max = names[-1] + 1
+        except:
+            max = 1
 
         for i in range(0, size):
             if kwargs["STP"][i] == "true":
@@ -219,7 +225,7 @@ class System(object):
             })
 
         libs.tools.v(op)
-        res = wbr.set({"br": op})
+        res = wbr.set(cfg = {"br": op})
         return json.dumps(res)
 
     @_.expose
@@ -319,6 +325,27 @@ class System(object):
         print(protocol)
         return json.dumps(wrt.set(cfg = protocol))
 
+    @_.expose
+    def garp(self):
+        '''
+            Get ARP table setting
+        '''
+        import ml_w_arp_table as wat
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wat.get())
+
+    @_.expose
+    def sarp(self, **kwargs):
+        '''
+            Set ARP table setting
+        '''
+        import ml_w_arp_table as wat
+        import json
+        import libs.tools
+        libs.tools.v(kwargs)
+        return json.dumps(kwargs)
 
     @_.expose
     def getInterfaces(self):
