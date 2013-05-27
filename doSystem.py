@@ -348,6 +348,111 @@ class System(object):
         return json.dumps(kwargs)
 
     @_.expose
+    def gdate(self, **kwargs):
+        '''
+            Get DateTime setting
+        '''
+        import ml_w_date_time as wdt
+        import json
+        import libs.tools
+
+        timezone_set = ["Adelaide" , "Alaska" , "Amsterdam" , "Apia" , "Arizona" , "Astana" , "Asuncion" , "Athens" , "Atlantic/Azores" , "Auckland" , "Baghdad" , "Baku" , "Bangkok" , "Beijing" , "Beirut" , "Belgrade" , "Berlin" , "Bern" , "Bogota" , "Bratislava" , "Brazil" , "Brisbane" , "Brussels" , "Bucharest" , "Budapest" , "Buenos Aires" , "Canberra" , "Cape Verde" , "Caracas" , "Casablanca" , "Cayenne" , "Central Time (USA/Canada)" , "Copenhagen" , "Cuiaba" , "Dacca" , "Damascus" , "Darwin" , "Dubai" , "Dublin" , "East Indiana" , "Eastern Time" , "Fiji" , "Fortaleza" , "Georgetown" , "Guam" , "Harare" , "Hawaii" , "Helsinki" , "Hobart" , "Irkutsk" , "Islamabad" , "Istanbul" , "Jakarta" , "Kabul" , "Kaliningrad" , "Kathmandu" , "Krasnoyarsk" , "Kuala Lumpur" , "Kuwait" , "La Paz" , "Lima" , "Lisbon" , "Ljubljana" , "London" , "Madrid" , "Magadan" , "Manaus" , "Mazatlan" , "Mexico City" , "Minsk" , "Monrovia" , "Monterrey" , "Montevideo" , "Moscow" , "Mountain Time (USA/Canada)" , "Muscat" , "Nairobi" , "New Delhi" , "Newfoundland" , "Nicosia" , "Noumea" , "Pacific" , "Perth" , "Port Louis" , "Port Moresby" , "Prague" , "Reykjavik" , "Riga" , "Riyadh" , "Rome" , "Saigon" , "Salvador" , "San Juan" , "Sarajevo" , "Saskatchewan" , "Seoul" , "Singapore" , "Skopje" , "Stockholm" , "Taipei" , "Tallinn" , "Tashkent" , "Tbilisi" , "Tokyo" , "Tonga" , "Ulan Bator" , "Vienna" , "Vilnius" , "Vladivostok" , "Warsaw" , "Windhoek" , "Yangon" , "Yekaterinburg" , "Yerevan"]
+        _.response.headers["Content-Type"] = "application/json"
+        res = wdt.get()
+        res[1]["timezone_set"] = timezone_set
+        return json.dumps(res)
+
+    @_.expose
+    def sdate(self, **kwargs):
+        '''
+            Set DateTime setting
+        '''
+        import ml_w_date_time as wdt
+        import json
+        import libs.tools
+        res = {}
+
+        libs.tools.v(kwargs)
+        if len(kwargs["time_server"]) > 0:
+            for k in kwargs:
+                if k != "date" and k != "time":
+                    res[k] = libs.tools.convert(kwargs[k])
+                else:
+                    res[k] = ''
+        else:
+            for k in kwargs:
+                res[k] = libs.tools.convert(kwargs[k])
+
+        libs.tools.v(res)
+        return json.dumps(wdt.set(cfg = res))
+
+    @_.expose
+    def start_arping(self, **kwargs):
+        '''
+            Send request for starting Unsolicited ARP & NDP
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.start_arping())
+
+    @_.expose
+    def stop_arping(self, **kwargs):
+        '''
+            Send request for stopping Unsolicited ARP & NDP
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.stop_arping())
+
+    @_.expose
+    def start_ping(self, **kwargs):
+        '''
+            Send request for starting ping
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.start_ping(target = libs.tools.convert(kwargs["address"])))
+
+    @_.expose
+    def stop_ping(self, **kwargs):
+        '''
+            Send request for starting ping
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.stop_ping())
+
+    @_.expose
+    def start_traceroute(self, **kwargs):
+        '''
+            Send request for starting ping
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.start_traceroute(target = libs.tools.convert(kwargs["address"])))
+
+    @_.expose
+    def stop_traceroute(self, **kwargs):
+        '''
+            Send request for starting ping
+        '''
+        import ml_w_diagnostic_tools as wdt
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wdt.stop_traceroute())
+
+    @_.expose
     def getInterfaces(self):
         '''
             Get all available NIC name, include real device, vlan, and bridge

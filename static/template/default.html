@@ -23,6 +23,7 @@
   <!--link rel="stylesheet" href="/css/style.css" type="text/css" /-->
   <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css" />
+  <link rel="stylesheet" href="/css/bootstrap-timepicker.min.css" type="text/css" />
   <style>
     body {
         color: black;
@@ -201,6 +202,9 @@
     }
     .strong {
       font-weight: bold;
+    }
+    .z3 {
+      z-index: 3;
     }
   </style>
   <script type="text/javascript" src="/script/jquery.js"></script>
@@ -683,24 +687,22 @@
         </div>
       <% }); %>
     </div>
-    <div class="IpEditor inactive control-group">
-      <form class="form-horizontal">
-        <div class="control-group">
-          <label class="control-label strong" for="IpV46_address"></label>
-          <div class="controls">
-            <input type="text" id="IpV46_address" />
-          </div>
+    <div class="IpEditor inactive control-group form-horizontal">
+      <div class="control-group">
+        <label class="control-label strong" for="IpV46_address"></label>
+        <div class="controls">
+          <input type="text" id="IpV46_address" />
         </div>
-        <div class="control-group">
-          <label class="control-label strong" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
-          <div class="controls">
-            <input type="text" id="IpV46_prefix" />
-            <span class="ipv46Tpl inactive">
-              <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
-            </span>
-          </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label strong" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
+        <div class="controls">
+          <input type="text" id="IpV46_prefix" />
+          <span class="ipv46Tpl inactive">
+            <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
+          </span>
         </div>
-      </form>
+      </div>
     </div>
   </script>
   <script type="text/template" id="t_SystemRoutingTable">
@@ -746,38 +748,36 @@
       </div>
       <% }); %>
     </div>
-    <div class="SystemRoutingTable-edit padding control-group inactive">
-      <form class="form-horizontal">
-        <div class="control-group">
-          <label class="control-label strong" for="rtIpv46Dest">{{ _("Destination") }}</label>
-          <div class="controls">
-            <input type="text" id="rtIpv46Dest" placeholder="{{ _("Destination") }}" opt="destination" />
-          </div>
+    <div class="SystemRoutingTable-edit padding control-group inactive form-horizontal">
+      <div class="control-group">
+        <label class="control-label strong" for="rtIpv46Dest">{{ _("Destination") }}</label>
+        <div class="controls">
+          <input type="text" id="rtIpv46Dest" placeholder="{{ _("Destination") }}" opt="destination" />
         </div>
-        <div class="control-group">
-          <label class="control-label strong" for="rtIpv46PreL">{{ _("Prefix Length") }}</label>
-          <div class="controls">
-            <input type="number" id="rtIpv46PreL" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
-          </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label strong" for="rtIpv46PreL">{{ _("Prefix Length") }}</label>
+        <div class="controls">
+          <input type="number" id="rtIpv46PreL" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
         </div>
-        <div class="control-group">
-          <label class="control-label strong" for="rtIpv46GW">{{ _("Gateway") }}</label>
-          <div class="controls">
-            <input type="text" id="rtIpv46GW" placeholder="{{ _("Gateway") }}" opt="gateway" />
-          </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label strong" for="rtIpv46GW">{{ _("Gateway") }}</label>
+        <div class="controls">
+          <input type="text" id="rtIpv46GW" placeholder="{{ _("Gateway") }}" opt="gateway" />
         </div>
-        <div class="control-group">
-          <label class="control-label strong" for="rtIpv46Intf">{{ _("Interface") }}</label>
-          <div class="controls">
-            <select id="rtIpv46Intf" opt="interface">
-              <option value="">{{ _("auto") }}</option>
-            </select>
-            <span class="inactive rtv46tpl">
-              <button class="btn btnRTDel">{{ _("Delete") }}</button>
-            </span>
-          </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label strong" for="rtIpv46Intf">{{ _("Interface") }}</label>
+        <div class="controls">
+          <select id="rtIpv46Intf" opt="interface">
+            <option value="">{{ _("auto") }}</option>
+          </select>
+          <span class="inactive rtv46tpl">
+            <button class="btn btnRTDel">{{ _("Delete") }}</button>
+          </span>
         </div>
-      </form>
+      </div>
     </div>
   </script>
   <script id="t_SystemArpTable" type="text/template">
@@ -844,29 +844,98 @@
     <% }); %>
     </div>
     <div class="editSystemArpTable padding inactive form-horizontal">
-      <form class="form-horizontal">
-        <div class="control-group">
-          <label for="editArpInterface" class="control-label strong">{{ _("Interface") }}</label>
-          <div class="controls">
-            <select name="interface" id="editArpInterface"></select>
+      <div class="control-group">
+        <label for="editArpInterface" class="control-label strong">{{ _("Interface") }}</label>
+        <div class="controls">
+          <select name="interface" id="editArpInterface"></select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editArpIp" class="control-label strong">{{ _("Ip Address") }}</label>
+        <div class="controls">
+          <input type="text" name="ip" id="editArpIp" placeholder="{{ _("Ip Address") }}" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editArpMac" class="control-label strong">{{ _("MAC Address") }}</label>
+        <div class="controls">
+          <input type="text" name="mac" id="editArpMac" placeholder="{{ _("MAC Address") }}" />
+        </div>
+      </div>
+      <span class="arpBtnTpl inactive">
+        <button class="btn btnArpDel">{{ _("Delete") }}</button>
+      </span>
+    </div>
+  </script>
+  <script type="text/template" id="t_SystemDateTime">
+    <div class="editSystemDateTime padding form-horizontal">
+      <div class="control-group">
+        <label for="editDateTZ" class="control-label strong">{{ _("Time Zone") }}</label>
+        <div class="controls">
+          <select id="editDateTZ" name="time_zone">
+          <% _.each(timezone_set, function(v, k) { %>
+            <option value="<%= v %>"<% if(v === time_zone) { %> selected="selected"<% } %>><%= v %></option>
+          <% }); %>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editDateTS" class="control-label strong">{{ _("Time Server") }}</label>
+        <div class="controls">
+          <input type="text" name="time_server" id="editDateTS" value="<%= time_server %>" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editDateDate" class="control-label strong">{{ _("Date") }}</label>
+        <div class="controls">
+          <input type="text" name="date" id="editDateDate" readonly="readonly" opt="dt" value="<%= date %>" placeholder="{{ _("Date") }}" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editDateTime" class="control-label strong">{{ _("Time") }}</label>
+        <div class="controls">
+          <div class="bootstrap-timepicker">
+            <input type="text" name="time" id="editDateTime" readonly="readonly" opt="dt" value="<%= time %>" placeholder="{{ _("Time") }}" />
           </div>
         </div>
-        <div class="control-group">
-          <label for="editArpIp" class="control-label strong">{{ _("Ip Address") }}</label>
+      </div>
+    </div>
+  </script>
+  <script id="t_SystemDiagnostic" type="text/template">
+    <div class="SystemDiagnostic padding form-horizontal">
+      <div class="control-group">
+        <fieldset>
+          <legend>{{ _('Diagnostic Tools') }}</legend>
+          <label for="dtUAN-snd" class="control-label strong">{{ _("Unsolicited ARP & NDP") }}</label>
           <div class="controls">
-            <input type="text" name="ip" id="editArpIp" placeholder="{{ _("Ip Address") }}" />
+            <button class="btn dtStartArpN-snd" id="dtUAN-snd">{{ _("Send") }}</button>
+            <button class="btn dtStartArpN-stp disabled" id="dtUAN-stp">{{ _("Stop") }}</button>
           </div>
-        </div>
-        <div class="control-group">
-          <label for="editArpMac" class="control-label strong">{{ _("MAC Address") }}</label>
-          <div class="controls">
-            <input type="text" name="mac" id="editArpMac" placeholder="{{ _("MAC Address") }}" />
+        </fieldset>
+      </div>
+      <div class="control-group">
+        <fieldset>
+          <legend>{{ _("Ping & Trace Route") }}</legend>
+          <label for="dtPingTracertName" class="control-label strong">{{ _("Target IP") }}</label>
+          <div class="controls padding">
+            <input type="text" id="dtPingTracertName" name="address" />
           </div>
-        </div>
-        <span class="arpBtnTpl inactive">
-          <button class="btn btnArpDel">{{ _("Delete") }}</button>
-        </span>
-      </form>
+          <textarea class="dtARPoutput padding" readonly="readonly"></textarea>
+          <div class="item-controls padding">
+            <button class="btn btnDtArpPing start" opt="ping">{{ _("Ping") }}</button>
+            <button class="btn btnDtArpTrace start" opt="traceroute">{{ _("Trace") }}</button>
+            <button class="btn btnDtArpPT stop disabled">{{ _("Stop") }}</button>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <div class="dtDialog modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-body">
+        <span>{{ _("ARP caches are updated") }}</span>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" arai="true">{{ _("OK") }}</button>
+      </div>
     </div>
   </script>
 </body>

@@ -223,8 +223,8 @@ View = Backbone.View.extend({
                 });
             },
             close: function(e, u) {
-                $(this).find("input").val("");
-                $(this).dialog("destroy");
+                dom.find("input").val("");
+                dom.dialog("destroy");
             },
             buttons: [{
                 text: "OK",
@@ -237,12 +237,12 @@ View = Backbone.View.extend({
                     dom.find("input").clone().removeAttr("id").attr("type", "hidden").appendTo($("div.SystemVLAN table"));
                     me.runOpApply();
                     me.runOpReload();
-                    $(this).dialog("close");
+                    dom.dialog("close");
                 }
             }, {
                 text: "Cancel",
                 click: function() {
-                    $(this).dialog("close");
+                    dom.dialog("close");
                 }
             }]
         });
@@ -406,7 +406,7 @@ View = Backbone.View.extend({
                 });
             },
             close: function() {
-                $(this).dialog("destroy");
+                dom.dialog("destroy");
 
                 $('option[br="new"]').remove();
                 /* remove all added options*/
@@ -466,12 +466,12 @@ View = Backbone.View.extend({
                     }
 
                     $("#oApply").show("fast");
-                    return $(this).dialog("close");
+                    return dom.dialog("close");
                 }
             }, {
                 text: "Cancel",
                 click: function() {
-                    return $(this).dialog("close");
+                    return dom.dialog("close");
                 }
             }]
         });
@@ -544,7 +544,10 @@ View = Backbone.View.extend({
             closeOnEscape: false,
             width: "auto",
             close: function() {
-                $(this).dialog("destroy");
+                dom.wrap("<form />");
+                dom.find("form")[0].reset();
+                dom.parent().unwrap();
+                dom.dialog("destroy");
             },
             buttons: [{
                 text: "OK",
@@ -567,7 +570,7 @@ View = Backbone.View.extend({
             }, {
                 text: "Cancel",
                 click: function() {
-                    $(this).dialog("close");
+                    dom.dialog("close");
                 }
             }]
         });
@@ -658,7 +661,9 @@ View = Backbone.View.extend({
             },
             close: function() {
                 // inputs.val('');
+                dom.wrap("<form />");
                 dom.find("form")[0].reset();
+                dom.parent().unwrap();
                 /* empty all input value */
                 $(this).dialog("destroy");
             },
@@ -752,8 +757,10 @@ View = Backbone.View.extend({
                 });
             },
             close: function() {
-                $(this).find("form")[0].reset();
-                $(this).dialog("destroy");
+                dom.wrap("<form />");
+                dom.parent()[0].reset();
+                dom.unwrap();
+                dom.dialog("destroy");
             },
             buttons: [{
                 text: "OK",
@@ -763,7 +770,7 @@ View = Backbone.View.extend({
                     $("<td />").text( $("#editArpIp").val() ).appendTo(tr);
                     $("<td />").text( $("#editArpMac").val() ).appendTo(tr);
                     btn.appendTo(td);
-                    $(this).find("input, select").each(function(k, v) {
+                    dom.find("input, select").each(function(k, v) {
                         $("<input />").attr({
                             type: "hidden",
                             name: function() {
@@ -776,15 +783,115 @@ View = Backbone.View.extend({
                     $("#oApply").show("slow");
                     /* show "Apply" link/button */
 
-                    return $(this).dialog("close");
+                    return dom.dialog("close");
                 }
             }, {
                 text: "Cancel",
                 click: function() {
-                    $(this).dialog("close");
+                    dom.dialog("close");
                 }
             }]
         });
+    },
+
+    viewDateTime: function(o) {
+    /* date time setup page display */
+        var me = this, t = _.template($("#t_SystemDateTime").html()), d = me.model.attributes[1];
+        me.$el.html(t(d));
+        me.$el.find('input[opt="dt"]').trigger("click");
+        /* sometimes may not trigger date/time selector */
+    },
+
+    editDateTime: function(o) {
+    /* date time configuration */
+
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
+    },
+
+    choiceDateTime: function(o) {
+    /* show date/time selector */
+        var me = this, self = $(o.target);
+        if("date" === self.attr("name")) {
+        /* date selector */
+            return self.datepicker({
+                "dateFormat": "yy/mm/dd"
+            });
+        } else {
+        /* time selector */
+            return self.timepicker({
+                minuteStep: 1,
+                secondStep: 5,
+                showInputs: false,
+                template: 'modal',
+                showSeconds: true,
+                showMeridian: false
+            });
+        }
+    },
+
+    viewDiagnostic: function(o) {
+    /* show diagnostic tools page */
+        var me = this, t = _.template($("#t_SystemDiagnostic").html());
+        me.$el.html(t()).find("textarea").css({
+            resize: "none",
+            background: "#fff",
+            width: "90%",
+            height: "200px"
+        });
+    },
+
+    controlDiagnostic: function(o) {
+    /* control all button events for diagnostic tools */
+        var me = this, self = $(o.target), ct = $("textarea.dtARPoutput"), opt = self.attr("opt");
+        if(self.hasClass("dtStartArpN-snd")) {  /* ARP & NDP fix */
+            self.addClass("disabled");
+            $("button.dtStartArpN-stp").removeClass("disabled");
+            return $.getJSON("/system/start_arping", function(d) {
+                if(true === d[0]) {
+                    $("div.dtDialog").appendTo("body").modal();
+                    $("div.dtDialog").on("hide", function() {
+                        self.removeClass("disabled");
+                        $("button.dtStartArpN-stp").addClass("disabled");
+                    });
+                }
+            });
+        } else if(self.hasClass("dtStartArpN-stp") && !self.hasClass("disabled")) {  /* force stop ARP & NDP fix */
+            return $.getJSON("/system/stop_arping", function(d) {
+                if(true === d[0]) {
+                    $("div.dtDialog").appendTo("body").modal();
+                    $("div.dtDialog").on("hide", function() {
+                        self.removeClass("disabled");
+                        $("button.dtStartArpN-stp").addClass("disabled");
+                    });
+                }
+            });
+        }
+
+        if($("#dtPingTracertName").val().length) {
+            if(self.hasClass("start")) {  /* start to ping/traceroute the target */
+                ct.wrap("<div />").parent().block();
+                $("button.start").addClass("disabled");
+                $("button.btnDtArpPT").removeClass("disabled").attr("opt", opt);
+                return $.post("/system/start_" + opt, {"address": $("#dtPingTracertName").val()}, function(d) {
+                    if(true === d[0]) {
+                        ct.val(d[1]);
+                        $("button.start").removeClass("disabled");
+                        $("button.btnDtArpPT").addClass("disabled").removeAttr("opt");
+                        ct.parent().unblock().unwrap();
+                    }
+                }, "json");
+            }
+        }
+
+        if(self.hasClass("stop") && !!self.attr("opt")) {  /* stop pinging / traceroute the target */
+            $.getJSON("/system/stop_" + opt, function(d) {
+                ct.val('Terminated');
+                $("button.start").removeClass("disabled");
+                self.addClass("disabled").removeAttr("opt");
+                ct.parent().unblock().unwrap();
+            });
+        }
     },
 
     runOpApply: function(o) {
@@ -817,6 +924,9 @@ View = Backbone.View.extend({
                 url = "/system/sroute";
                 obj = $("div.SystemRoutingTable");
                 break;
+            case "date":
+                url = "/system/sdate";
+                obj = $("div.editSystemDateTime");
             default:
                 break;
         }
@@ -1107,6 +1217,39 @@ MainOperation = {
 
             return me.view.viewArpTable();
         });
+    },
+
+    date: function(o) {
+    /* get date setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        $.getJSON("/system/gdate", function(d) {
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                events: {
+                    "change input,select": "editDateTime",
+                    "click input[opt='dt']": "choiceDateTime"
+                }
+            });
+
+            return me.view.viewDateTime();
+        });
+    },
+
+    diagnostic: function(o) {
+    /* diagnostic tools setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        me.view = new View({
+           events: {
+               "click button": "controlDiagnostic"
+           }
+        });
+
+        return me.view.viewDiagnostic();
     }
 };
 
@@ -1153,9 +1296,11 @@ MainOperation = {
     $.getScript("/script/bootstrap.js", function() {
         $.getScript("/script/jquery.blockUI.js", function() {
             $.getScript("/script/jquery-ui.js", function() {
-                $("div.MainMenu:first").trigger("click");
-                $("div.SubMenu:first").trigger("click");
-                /* initial the view, open every first item of the menu as default */
+                $.getScript("/script/bootstrap-timepicker.min.js", function() {
+                    $("div.MainMenu:first").trigger("click");
+                    $("div.SubMenu:first").trigger("click");
+                    /* initial the view, open every first item of the menu as default */
+                });
             });
         });
     });
