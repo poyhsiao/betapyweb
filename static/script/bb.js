@@ -546,7 +546,7 @@ View = Backbone.View.extend({
             close: function() {
                 dom.wrap("<form />");
                 dom.find("form")[0].reset();
-                dom.parent().unwrap();
+                dom.unwrap();
                 dom.dialog("destroy");
             },
             buttons: [{
@@ -663,7 +663,7 @@ View = Backbone.View.extend({
                 // inputs.val('');
                 dom.wrap("<form />");
                 dom.find("form")[0].reset();
-                dom.parent().unwrap();
+                dom.unwrap();
                 /* empty all input value */
                 $(this).dialog("destroy");
             },
@@ -800,6 +800,9 @@ View = Backbone.View.extend({
         me.$el.html(t(d));
         me.$el.find('input[opt="dt"]').trigger("click");
         /* sometimes may not trigger date/time selector */
+
+        $("#oApply").hide();
+        /* hide "Apply" link/button, which may appear because of the timepicker */
     },
 
     editDateTime: function(o) {
@@ -868,7 +871,7 @@ View = Backbone.View.extend({
             });
         }
 
-        if($("#dtPingTracertName").val().length) {
+        if(!!$("#dtPingTracertName").val().length) {
             if(self.hasClass("start")) {  /* start to ping/traceroute the target */
                 ct.wrap("<div />").parent().block();
                 $("button.start").addClass("disabled");
@@ -878,7 +881,8 @@ View = Backbone.View.extend({
                         ct.val(d[1]);
                         $("button.start").removeClass("disabled");
                         $("button.btnDtArpPT").addClass("disabled").removeAttr("opt");
-                        ct.parent().unblock().unwrap();
+                        ct.parent().unblock();
+                        ct.unwrap();
                     }
                 }, "json");
             }
@@ -889,9 +893,113 @@ View = Backbone.View.extend({
                 ct.val('Terminated');
                 $("button.start").removeClass("disabled");
                 self.addClass("disabled").removeAttr("opt");
-                ct.parent().unblock().unwrap();
+                ct.parent().unblock();
+                ct.unwrap();
             });
         }
+    },
+
+    viewAdmin: function(o) {
+    /* display admin page */
+        var me = this, t = _.template($("#t_SystemAdmin").html()), d = me.model.attributes[1];
+        me.$el.html(t(d));
+
+        me.$el.find("table").css({
+            width: "100%",
+            height: "100%"
+        }).find("button.btn").css({
+            width: function() {
+                if($(this).hasClass("btnSaAddAccount")) {
+                    return "90%"
+                } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
+                    return "45%"
+                }
+            }
+        });
+    },
+
+    editAdmin: function(o) {
+    /* edit/add user account */
+        var me = this, self = $(o.target), prefix = self.text(), dom = $("div.editSaAccount"), ed, title, str;
+
+        if(self.hasClass("btnSaAddAccount")) {
+        /* new user */
+            ed = "new";
+            title = prefix;
+            dom.find('input[name="name"]').removeAttr("readonly");
+        } else {
+        /* edit user */
+            ed = "edit";
+            str = self.siblings('input[name="name"]').val();
+            title = prefix + ' - ' + str;
+
+            dom.find('input[name="name"]').attr("readonly", "readonly");
+            $.each(self.siblings("input"), function(k, v) {
+                dom.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+            });
+
+            dom.find("select").val( self.siblings('input[name="group"]').val() );
+            $("#saAddEditConfirm").val( self.siblings('input[name="password"]').val() );
+        }
+
+        dom.dialog({
+            modal: true,
+            closeOnEscape: false,
+            title: title,
+            width: "auto",
+            close: function() {
+                dom.wrap("<form />");
+                dom.parent()[0].reset();
+                dom.unwrap();
+                dom.find("option").removeAttr("selected");
+                dom.dialog("destroy");
+            },
+            buttons: [{
+                text: "Ok",
+                click: function() {
+                    if("new" === ed) {
+                    /* add new account */
+                        var tr = $("<tr />").appendTo(self.parents("table")), tpl = $("span.saAdminTpl").clone(), td = $("<td />"), name = dom.find('input[name="name"]').val();
+                        $("<td />").text(name).appendTo(tr);
+                        $("<td />").text( dom.find('select[name="group"]').val() ).appendTo(tr);
+                        dom.find('input[name], select').each(function(k, v) {
+                            tpl.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+                        });
+                        tpl.find("button").attr("opt", name).css("width", "45%");
+                        $("<td />").append(tpl.children()).appendTo(tr);
+
+                    } else {
+                    /* edit existing account */
+                        $.each(dom.find('input[name], select'), function(k, v) {
+                            self.siblings('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+                        });
+
+                        self.parents("tr").find("td:nth-child(2)").text( dom.find('select[name="group"]').val() );
+                    }
+
+                    dom.dialog("close");
+
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+                }
+            }, {
+                text: "Cancel",
+                click: function() {
+                    dom.dialog("close");
+                }
+            }]
+        });
+    },
+
+    deleteAdmin: function(o) {
+    /* delete selected user */
+        var self = $(o.target);
+        self.parents("tr").hide("fast", function() {
+            $(this).remove();
+        });
+
+        $("#oApply").show("slow");
+        /* show "Apply" link/button */
     },
 
     runOpApply: function(o) {
@@ -927,6 +1035,11 @@ View = Backbone.View.extend({
             case "date":
                 url = "/system/sdate";
                 obj = $("div.editSystemDateTime");
+                break;
+            case "admin":
+                url = "/system/sadmin";
+                obj = $("#saAccount");
+                break;
             default:
                 break;
         }
@@ -938,9 +1051,13 @@ View = Backbone.View.extend({
                 console.log(d);
                 if(!d[0]) {
                     if(confirm("System Fail\n\nReload the Page?")) {
+                        obj.unwrap();
+                        /* remove form */
                         return me.execMenu(current);
                     }
                 } else {
+                    obj.unwrap();
+                    /* remove form */
                     return me.runOpReload();
                 }
             });
@@ -1245,11 +1362,30 @@ MainOperation = {
         delete(me.view);
         me.view = new View({
            events: {
-               "click button": "controlDiagnostic"
+               "click div.SystemDiagnostic button": "controlDiagnostic"
            }
         });
 
         return me.view.viewDiagnostic();
+    },
+
+    admin: function(o) {
+    /* get admin setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        $.getJSON("/system/gadmin", function(d) {
+            me.model = new Model(d);
+            me.view = new View({
+                model: me.model,
+                events: {
+                    "click button.btnSaEditAdd": "editAdmin",
+                    "click button.btnSaDelAccount": "deleteAdmin"
+                }
+            });
+
+            return me.view.viewAdmin();
+        });
     }
 };
 
@@ -1293,15 +1429,6 @@ MainOperation = {
         }
     });
 
-    $.getScript("/script/bootstrap.js", function() {
-        $.getScript("/script/jquery.blockUI.js", function() {
-            $.getScript("/script/jquery-ui.js", function() {
-                $.getScript("/script/bootstrap-timepicker.min.js", function() {
-                    $("div.MainMenu:first").trigger("click");
-                    $("div.SubMenu:first").trigger("click");
-                    /* initial the view, open every first item of the menu as default */
-                });
-            });
-        });
-    });
+    $("div.MainMenu:first").trigger("click");
+    $("div.SubMenu:first").trigger("click");
 }).call(this);

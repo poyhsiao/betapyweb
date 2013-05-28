@@ -453,6 +453,32 @@ class System(object):
         return json.dumps(wdt.stop_traceroute())
 
     @_.expose
+    def gadmin(self, **kwargs):
+        '''
+            Get all user information
+        '''
+        import ml_w_account as wac
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(wac.get())
+
+    @_.expose
+    def sadmin(self, **kwargs):
+        '''
+            Set all user information
+        '''
+        import ml_w_account as wac
+        import json
+        import libs.tools
+        res = []
+        for k in range(0, len(kwargs['name'])):
+            res.append({"name": libs.tools.convert(kwargs["name"][k]), "group": libs.tools.convert(kwargs["group"][k]), "password": libs.tools.convert(kwargs["password"][k])})
+
+        res = {"user": res}
+        return json.dumps(wac.set(cfg = res))
+
+    @_.expose
     def getInterfaces(self):
         '''
             Get all available NIC name, include real device, vlan, and bridge

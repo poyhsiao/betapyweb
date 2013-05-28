@@ -207,9 +207,6 @@
       z-index: 3;
     }
   </style>
-  <script type="text/javascript" src="/script/jquery.js"></script>
-  <script type="text/javascript" src="/script/underscore.js"></script>
-  <script type="text/javascript" src="/script/backbone.js"></script>
 </head>
 
 <body>
@@ -338,7 +335,6 @@
       </div>
   </div>
   <div class="borderArrow inactive" />
-  <script type="text/javascript" src="/script/bb.js" defer></script>
   <script type="text/template" id="t_mainmenu">
     <ul class="topmenu">
       <% _.each(items, function(v, k) { %>
@@ -938,5 +934,86 @@
       </div>
     </div>
   </script>
+  <script id="t_SystemAdmin" type="text/template">
+    <div class="SystemAdmin padding">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#saAccount" data-toggle="tab">{{ _("Account") }}</a>
+        </li>
+        <li>
+          <a href="#saMaintenance" data-toggle="tab">{{ _("Maintenance") }}</a>
+        </li>
+        <li>
+          <a href="#saConfiguration" data-toggle="tab">{{ _("Configuration") }}</a>
+        </li>
+        <li>
+          <a href="#saFirmware" data-toggle="tab">{{ _("Firmware Update") }}</a>
+        </li>
+        <li>
+          <a href="#saCLI" data-toggle="tab">{{ _("CLI") }}</a>
+        </li>
+      </ul>
+    </div>
+    <div class="tab-content">
+      <div id="saAccount" class="tab-pane active">
+        <table border="1" class="padding">
+          <tr>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _("Group") }}</th>
+            <td>
+              <button class="btnSaAddAccount btn btnSaEditAdd">{{ _("Add") }}</button>
+            </td>
+          </tr>
+        <% _.each(user, function(v, k) { %>
+          <tr>
+            <td><%= v.name %></td>
+            <td><%= v.group %></td>
+            <td>
+              <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v.name %>">{{ _("Edit") }}</button>
+              <button class="btnSaDelAccount btn" opt="<%= v.name %>">{{ _("Delete") }}</button>
+              <input type="hidden" name="name" value="<%= v.name %>" />
+              <input type="hidden" name="group" value="<%= v.group %>" />
+              <input type="hidden" name="password" value="<%= v.password %>" />
+            </td>
+          </tr>
+        <% }); %>
+        </table>
+      </div>
+      <div id="saMaintenance" class="tab-pane"></div>
+      <div id="saConfiguration" class="tab-pane"></div>
+      <div id="saFirmware" class="tab-pane"></div>
+      <div id="saCLI" class="tab-pane"></div>
+      <div class="inactive editSaAccount control-group">
+        <label for="saAddEditName" class="control-label">{{ _("Name") }}</label>
+        <div class="controls">
+          <input type="text" id="saAddEditName" name="name" readonly="readonly" />
+        </div>
+        <label for="saAddEditGroup" class="control-label">{{ _("Group") }}</label>
+        <div class="controls">
+          <select name="group" id="saAddEditGroup">
+            <option value="admin">admin</option>
+            <option value="operator">operator</option>
+            <option value="monitor">monitor</option>
+          </select>
+        </div>
+        <label for="saAddEditPass" class="control-label">{{ _("Password") }}</label>
+        <div class="controls">
+          <input type="password" id="saAddEditPass" name="password" />
+        </div>
+        <label for="saAddEditConfirm" class="control-label">{{ _("Password Confirm") }}</label>
+        <div class="controls">
+          <input type="password" id="saAddEditConfirm" />
+        </div>
+      </div>
+      <span class="inactive saAdminTpl">
+        <button class="btnSaEditAccount btn btnSaEditAdd" opt="">{{ _("Edit") }}</button>
+        <button class="btnSaDelAccount btn" opt="">{{ _("Delete") }}</button>
+        <input type="hidden" name="name" />
+        <input type="hidden" name="group" />
+        <input type="hidden" name="password" />
+      </span>
+    </div>
+  </script>
+  <script type="text/javascript" src="/script/require.js" data-main="/script/deps.js"></script>
 </body>
 </html>
