@@ -907,12 +907,14 @@ View = Backbone.View.extend({
         me.$el.find("table").css({
             width: "100%",
             height: "100%"
-        }).find("button.btn").css({
+        }).find("button.btn, input[type='file']").css({
             width: function() {
                 if($(this).hasClass("btnSaAddAccount")) {
-                    return "90%"
+                    return "90%";
                 } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
-                    return "45%"
+                    return "45%";
+                } else {
+                    return "90%";
                 }
             }
         });
@@ -1000,6 +1002,46 @@ View = Backbone.View.extend({
 
         $("#oApply").show("slow");
         /* show "Apply" link/button */
+    },
+
+    maintainAdmin: function(o) {
+    /* system maintenance including return to factory default and reboot system */
+        var me = this, self = $(o.target);
+        if(self.hasClass("btnSaFDefault")) {
+        /* set to Factory Default */
+            tools.alert("confirm", {
+                title: self.text(),
+                content: $("#SysString").find("span.strAlertFactoryDefault").text()
+            }, function() {
+                $.post("/system/smaintenance", {"act": "factory_default"}, function(d) {
+                    console.log(d);
+                });
+            }, self[0]);
+        } else {
+            tools.alert("confirm", {
+                title: self.text(),
+                content: $("#SysString").find("span.strAlertReboot").text()
+            }, function() {
+                $.post("/system/smaintenance", {"act": "reboot"}, function(d) {
+                    console.log(d);
+                });
+            }, self[0]);
+        }
+    },
+
+    saveAdminRCSConf: function(o) {
+    /* Save Running Configuration as Startup Configuation */
+        var me = this, self = $(o.target), flag;
+        if(self.hasClass("btnSaveRSConf")) {
+            flag = "save";
+        } else if(self.hasClass("btnDLRConf")) {
+            flag = "dl_running";
+        } else if(self.hasClass("btnDLSConf")) {
+            flag = "dl_startup";
+        }
+        $.post("/system/ssave_conf", {"act": flag}, function(d) {
+            console.log(d);
+        });
     },
 
     runOpApply: function(o) {
@@ -1099,7 +1141,7 @@ View = Backbone.View.extend({
         } catch(e) {}
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */
@@ -1380,11 +1422,51 @@ MainOperation = {
                 model: me.model,
                 events: {
                     "click button.btnSaEditAdd": "editAdmin",
-                    "click button.btnSaDelAccount": "deleteAdmin"
+                    "click button.btnSaDelAccount": "deleteAdmin",
+                    "click button.btnSaFDefault": "maintainAdmin",
+                    "click button.btnSaReboot": "maintainAdmin",
+                    "click button.btnSaveRSConf": "saveAdminRCSConf",
+                    "click button.btnDLRConf": "saveAdminRCSConf",
+                    "click button.btnDLSConf": "saveAdminRCSConf",
+                    "click button.btnFileUSConf": "ulAdminConf"
                 }
             });
 
             return me.view.viewAdmin();
+        });
+    }
+};
+
+tools = {
+/* all global tools */
+    str: {title: "Alert", content: "Alert"},
+    /* this is the default string which will display as the message will show to users */
+    cb: function() {
+    /* this is the default callback which will return whole tools object */
+        return this;
+    },
+    prefix: "/script/template/",
+    /* path to template */
+    alert: function(type, str, cb, obj) {
+    /*
+        to replace alert message
+        type: (string) default is alert; confirm is alternative if necessary
+        str: (object) the message to display
+        cb: (function) callback function when click ok
+        obj: (object[HTMLdom]) the trigger object
+    */
+        var me = this, type = type || "alert", str = str || me.str, cb = cb || me.cb, t, dom;
+        t = ("alert" === type) ? _.template($("#t_toolsAlert").html()) : _.template($("#t_toolsConfirm").html());
+        $("body").append(t(str));
+        dom = $("div.toolsAlert");
+        dom.modal({keyboard: false}).modal("show");
+        dom.on("click", ".btnTAOk", function() {
+            cb();
+            dom.modal("hide");
+        }).on("click", ".btnTACancel", function() {
+            dom.modal("hide");
+        }).on("hidden", function() {
+            dom.remove();
         });
     }
 };

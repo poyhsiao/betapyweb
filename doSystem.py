@@ -479,6 +479,48 @@ class System(object):
         return json.dumps(wac.set(cfg = res))
 
     @_.expose
+    def smaintenance(self, **kwargs):
+        '''
+            Set factory default or reboot system
+        '''
+        import ml_w_maintenance as wmt
+        import json
+        import libs.tools
+        if kwargs["act"] == "factory_default":
+            return json.dumps(wmt.factory_default())
+        elif kwargs["act"] == "reboot":
+            return json.dumps(wmt.reboot())
+        else:
+            return json.dumps((False, ""))
+
+    @_.expose
+    def ssave_conf(self, **kwargs):
+        '''
+            Save Running Configuration as Startup Configuation,
+        '''
+        import ml_w_configuration as wcf
+        import json
+        import libs.tools
+        from cherrypy.lib.static import serve_file
+        res = ""
+        if kwargs["act"] == "save":
+            return json.dumps(wcf.save_running_to_startup())
+        elif kwargs["act"] == "dl_running":
+            res = wcf.download_running()
+            if(True == res[0]):
+                _.response.headers["Content-Disposition"] = "attachment; filename=" + res[1]
+                return serve_file(res[1], "application/x-application", "attachment")
+#             return json.dumps(wcf.download_running())
+        elif kwargs["act"] == "dl_startup":
+            res = wcf.download_startup()
+            if(True == res[0]):
+                _.response.headers["Content-Disposition"] = "attachment; filename=" + res[1]
+                return serve_file(res[1], "application/x-application", "attachment")
+#             return json.dumps(wcf. download_startup())
+        else:
+            return json.dumps((False, ""))
+
+    @_.expose
     def getInterfaces(self):
         '''
             Get all available NIC name, include real device, vlan, and bridge

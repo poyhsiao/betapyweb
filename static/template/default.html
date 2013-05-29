@@ -15,6 +15,7 @@
 
   <!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
   <link rel="shortcut icon" href="/image/favicon.ico" type="image/vnd.microsoft.icon" />
+  <link rel="stylesheet" href="/css/reset.css" type="text/css" />
   <link rel="stylesheet" href="/css/basic.css" type="text/css" />
   <!--link rel="stylesheet" href="/css/jquery-ui-1.8.20.custom.css" type="text/css" /-->
   <link rel="stylesheet" href="/css/jquery-ui.css" type="text/css">
@@ -206,6 +207,9 @@
     .z3 {
       z-index: 3;
     }
+    th, td {
+      vertical-align: middle;
+    }
   </style>
 </head>
 
@@ -335,6 +339,10 @@
       </div>
   </div>
   <div class="borderArrow inactive" />
+  <div id="SysString" class="inactive">
+    <span class="strAlertFactoryDefault inactive">{{ _("Are you sure to load factory default settings, and reboot?") }}</span>
+    <span class="strAlertReboot">{{ _("Are you sure to reboot system right now?") }}</span>
+  </div>
   <script type="text/template" id="t_mainmenu">
     <ul class="topmenu">
       <% _.each(items, function(v, k) { %>
@@ -979,8 +987,51 @@
         <% }); %>
         </table>
       </div>
-      <div id="saMaintenance" class="tab-pane"></div>
-      <div id="saConfiguration" class="tab-pane"></div>
+      <div id="saMaintenance" class="tab-pane">
+        <table border="1">
+          <tr>
+            <th>{{ _("Factory Default") }}</th>
+            <td>
+              <button class="btn btnSaFDefault">{{ _("Factory Default") }}</button>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ _("Reboot") }}</th>
+            <td>
+              <button class="btn btnSaReboot">{{ _("Reboot") }}</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="saConfiguration" class="tab-pane">
+        <table>
+          <tr>
+            <th>{{ _("Save Running Configuration as Startup Configuation") }}</th>
+            <td>
+              <button class="btn btnSaveRSConf">{{ _("Save") }}</button>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ _("Download Running Configuration") }}</th>
+            <td>
+              <button class="btn btnDLRConf">{{ _("Download") }}</button>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ _("Download Startup Configuration") }}</th>
+            <td>
+              <button class="btn btnDLSConf">{{ _("Download") }}</button>
+            </td>
+          </tr>
+          <tr>
+            <th>{{ _("Upload Startup Configuation") }}</th>
+            <td>
+              <input type="file" id="fileUSConf" name="file" />
+              <button class="btn btnFileUSConf">{{ _("Upload") }}</button>
+            </td>
+          </tr>
+        </table>
+      </div>
       <div id="saFirmware" class="tab-pane"></div>
       <div id="saCLI" class="tab-pane"></div>
       <div class="inactive editSaAccount control-group">
@@ -1012,6 +1063,33 @@
         <input type="hidden" name="group" />
         <input type="hidden" name="password" />
       </span>
+    </div>
+  </script>
+  <script id="t_toolsAlert" type="text/template">
+    <div class="toolsAlert modal hide fade">
+      <div class="modal-header">
+        <h3><%= title %></h3>
+      </div>
+      <div class="modal-body">
+        <p><%= content %></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-primary btnTAOk">{{ _("OK") }}</a>
+      </div>
+    </div>
+  </script>
+  <script id="t_toolsConfirm" type="text/template">
+    <div class="toolsAlert modal hide fade">
+      <div class="modal-header">
+        <h3><%= title %></h3>
+      </div>
+      <div class="modal-body">
+        <p><%= content %></p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn btn-primary btnTAOk">{{ _("OK") }}</a>
+        <a href="#" class="btn btnTACancel">{{ _("Cancel") }}</a>
+      </div>
     </div>
   </script>
   <script type="text/javascript" src="/script/require.js" data-main="/script/deps.js"></script>
