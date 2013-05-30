@@ -89,7 +89,7 @@ class Root:
             # if user logged in, the show the content
             trans = translation()
             # save default language
-            tpl = env.get_template('default.html')
+            tpl = env.get_template("default.html")
             env.install_gettext_translations(trans['obj'])
             return tpl.render(userinfo = _.session)
         else:

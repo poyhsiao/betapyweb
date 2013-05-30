@@ -476,6 +476,7 @@ class System(object):
             res.append({"name": libs.tools.convert(kwargs["name"][k]), "group": libs.tools.convert(kwargs["group"][k]), "password": libs.tools.convert(kwargs["password"][k])})
 
         res = {"user": res}
+        _.response.headers["Content-Type"] = "application/json"
         return json.dumps(wac.set(cfg = res))
 
     @_.expose
@@ -486,6 +487,7 @@ class System(object):
         import ml_w_maintenance as wmt
         import json
         import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
         if kwargs["act"] == "factory_default":
             return json.dumps(wmt.factory_default())
         elif kwargs["act"] == "reboot":
@@ -508,17 +510,86 @@ class System(object):
         elif kwargs["act"] == "dl_running":
             res = wcf.download_running()
             if(True == res[0]):
-                _.response.headers["Content-Disposition"] = "attachment; filename=" + res[1]
-                return serve_file(res[1], "application/x-application", "attachment")
-#             return json.dumps(wcf.download_running())
+                return serve_file(res[1], "application/x-download", "attachment")
         elif kwargs["act"] == "dl_startup":
             res = wcf.download_startup()
             if(True == res[0]):
-                _.response.headers["Content-Disposition"] = "attachment; filename=" + res[1]
-                return serve_file(res[1], "application/x-application", "attachment")
-#             return json.dumps(wcf. download_startup())
+                return serve_file(res[1], "application/x-download", "attachment")
         else:
+            _.response.headers["Content-Type"] = "application/json"
             return json.dumps((False, ""))
+
+    @_.expose
+    def supload_conf(self, **kwargs):
+        '''
+            Upload Startup Configuation
+        '''
+        import ml_w_configuration as wcf
+        import json
+        import libs.tools
+#         return json.dumps(kwargs)
+        file = kwargs["file"]
+        _.response.headers["Content-Type"] = "application/json"
+        libs.tools.v(kwargs);
+        if file is not None:
+            size = 0
+            while True:
+                data = file.file.read(8192)
+                if not data:
+                    break
+                size += len(data)
+            libs.tools.v(file)
+            libs.tools.v({"name": file.filename, "type": file.content_type, "size": size})
+
+            return json.dumps({"name": file.filename, "size": size})
+#             return json.dumps(wcf.upload_startup(cfile = file))
+        else:
+            return json.dumps((False, "No file"))
+
+    @_.expose
+    def supload_fw(self, **kwargs):
+        '''
+            Upload Firmware Update
+        '''
+        import ml_w_firmware as wfw
+        import json
+        import libs.tools
+#         return json.dumps(kwargs)
+        file = kwargs["file"]
+        _.response.headers["Content-Type"] = "application/json"
+        libs.tools.v(kwargs);
+        if file is not None:
+            size = 0
+            while True:
+                data = file.file.read(8192)
+                if not data:
+                    break
+                size += len(data)
+            libs.tools.v(file)
+            libs.tools.v({"name": file.filename, "type": file.content_type, "size": size})
+
+            return json.dumps({"name": file.filename, "size": size})
+#             return json.dumps(wcf.upload_startup(fwfile = file))
+        else:
+            return json.dumps((False, "No file"))
+
+    @_.expose
+    def cli(self, **kwargs):
+        '''
+            Get SSH/Telnet status
+        '''
+        import ml_w_cli as cli
+        import json
+        import libs.tools
+        if "ckCLI" in kwargs:
+            # post data to set cli services
+            libs.tools.v(kwargs)
+            data = {"ssh": ("sshEnable" in kwargs), "telnet": ("telnet" in kwargs)}
+            _.response.headers["Content-Type"] = "application/json"
+            return json.dumps(cli.set(cfg = data))
+        else:
+            _.response.headers["Content-Type"] = "application/json"
+            return json.dumps(cli.get())
 
     @_.expose
     def getInterfaces(self):

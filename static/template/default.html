@@ -24,6 +24,7 @@
   <!--link rel="stylesheet" href="/css/style.css" type="text/css" /-->
   <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css" />
+  <link rel="stylesheet" href="/css/bootstrapSwitch.css" type="text/css" />
   <link rel="stylesheet" href="/css/bootstrap-timepicker.min.css" type="text/css" />
   <style>
     body {
@@ -342,6 +343,8 @@
   <div id="SysString" class="inactive">
     <span class="strAlertFactoryDefault inactive">{{ _("Are you sure to load factory default settings, and reboot?") }}</span>
     <span class="strAlertReboot">{{ _("Are you sure to reboot system right now?") }}</span>
+    <button class="btn btn-primary"><i class="icon-ok"></i> {{ _("ON") }}</button>
+    <button class="btn btn-danger"><i class="icon-off"></i> {{ _("OFF") }}</button>
   </div>
   <script type="text/template" id="t_mainmenu">
     <ul class="topmenu">
@@ -366,7 +369,7 @@
   </script>
   <script type="text/template" id="t_summary">
     <div class="systemSummary padding">
-      <table border="1">
+      <table class="table table-bordered table-hover">
         <% _.each(items, function(v, k) { %>
         <tr>
             <th><%= v.title %></th>
@@ -378,7 +381,7 @@
   </script>
   <script type="text/template" id="t_summaryPort">
     <div class="systemSummaryPort padding">
-      <table border="1">
+      <table class="table table-bordered table-hover">
         <tbody>
           <tr>
               <th rowspan="2">{{ _('Interface') }}</th>
@@ -427,7 +430,7 @@
   </script>
   <script type="text/template" id="t_SystemDNS">
     <div class="SystemDNS padding control-group">
-      <table border="1">
+      <table class="table table-bordered table-hover">
         <tbody>
             <tr>
               <th>
@@ -475,7 +478,7 @@
   </script>
   <script type="text/template" id="t_SystemVLAN">
     <div class="SystemVLAN padding control-group">
-      <table border="1">
+      <table class="table table-bordered table-hover">
         <tr>
             <th>
               {{ _("Interface") }}
@@ -517,7 +520,7 @@
   </script>
   <script type="text/template" id="t_SystemBridge">
     <div class="SystemBridge padding">
-      <table border="1">
+      <table class="table table-bordered table-hover">
             <tr>
                 <th>{{ _("Name") }}</th>
                 <th>{{ _("Interface") }}</th>
@@ -548,7 +551,7 @@
       </table>
     </div>
     <div class="editSystemBridge padding inactive control-group">
-      <table border="1">
+      <table class="table table-bordered table-hover">
           <tr>
               <th>{{ _("Name") }}</th>
               <td class="text-center">
@@ -587,7 +590,9 @@
               </td>
               <td class="text-center">
                 <label class="control-label strong" for="brSTP">&nbsp;{{ _("Enable") }}</label>
-                <input type="checkbox" name="STP" id="brSTP" />
+                <div class="switch" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                  <input type="checkbox" name="STP" id="brSTP" />
+                </div>
               </td>
           </tr>
           <tr>
@@ -619,7 +624,7 @@
   </script>
   <script type="text/template" id="t_SystemIpAddress">
     <div class="SystemIpAddress padding IpInterfaceSelect control-group">
-        <table border="1">
+        <table class="table table-bordered table-hover">
             <tr>
                 <th>
                   <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
@@ -638,7 +643,7 @@
     <div class="SystemIpV46All">
       <% _.each(ip, function(v, k) { %>
         <div class="SystemIpV4 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= v["interface"] %>">
-            <table border="1">
+            <table class="table table-bordered table-hover">
                 <tr>
                     <th class="IpV4title">{{ _("IPv4 Address") }}</th>
                     <th>{{ _("Prefix Length") }}</th>
@@ -664,7 +669,7 @@
             </table>
         </div>
         <div class="SystemIpV6 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= v["interface"] %>">
-            <table border="1">
+            <table class="table table-bordered table-hover">
                 <tr>
                     <th class="IpV6title">{{ _("IPv6 Address") }}</th>
                     <th>{{ _("Prefix Length") }}</th>
@@ -721,7 +726,7 @@
       </ul>
       <% _.each(items[1], function(v, k) { %>
       <div class="SystemRoutingTable-rt SystemRoutingTable-<%= k %> padding<% if(k !== 'ipv4') { %> inactive<% } %>">
-        <table border="1">
+        <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Destination") }}</th>
             <th>{{ _("Prefix Length") }}</th>
@@ -807,7 +812,7 @@
     <div class="tab-content">
     <% _.each(items, function(v, k) { %>
       <div id="arp-<%= k %>" class="tab-pane">
-        <table border="1">
+        <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Interface") }}</th>
           <% if("ipv4" == v.protocol ) { %>
@@ -958,13 +963,13 @@
           <a href="#saFirmware" data-toggle="tab">{{ _("Firmware Update") }}</a>
         </li>
         <li>
-          <a href="#saCLI" data-toggle="tab">{{ _("CLI") }}</a>
+          <a href="#saCLI" data-toggle="tab" opt="cli">{{ _("CLI") }}</a>
         </li>
       </ul>
     </div>
     <div class="tab-content">
       <div id="saAccount" class="tab-pane active">
-        <table border="1" class="padding">
+        <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Name") }}</th>
             <th>{{ _("Group") }}</th>
@@ -988,7 +993,7 @@
         </table>
       </div>
       <div id="saMaintenance" class="tab-pane">
-        <table border="1">
+        <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Factory Default") }}</th>
             <td>
@@ -1004,7 +1009,7 @@
         </table>
       </div>
       <div id="saConfiguration" class="tab-pane">
-        <table>
+        <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Save Running Configuration as Startup Configuation") }}</th>
             <td>
@@ -1027,13 +1032,55 @@
             <th>{{ _("Upload Startup Configuation") }}</th>
             <td>
               <input type="file" id="fileUSConf" name="file" />
-              <button class="btn btnFileUSConf">{{ _("Upload") }}</button>
+              <button class="btn btnFileUSConf inactive">{{ _("Upload") }}</button>
             </td>
           </tr>
         </table>
       </div>
-      <div id="saFirmware" class="tab-pane"></div>
-      <div id="saCLI" class="tab-pane"></div>
+      <div id="saFirmware" class="tab-pane">
+        <table class="table table-bordered table-hover">
+          <tr>
+            <th>{{ _("Current Version") }}</th>
+            <td colspan="2"></td>
+          </tr>
+          <tr>
+            <th rowspan="2">{{ _("Firmware Update") }}</th>
+            <th>{{ _("License Key") }}</th>
+            <td>(12345-12345-12345-12345-12345)</td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <input type="file" name="file" id="fileFWUpdate" />
+              <button class="btn btnFileFWUpload inactive">{{ _("Upload") }}</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="saCLI" class="tab-pane">
+        <table class="table table-bordered table-hover">
+          <tr>
+            <th>
+              <label for="sshEnable" class="control-lable">{{ _("SSH") }}</label>
+            </th>
+            <td clss="ssh-status">
+              <div class="switch" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                <input type="checkbox" name="sshEnable" id="sshEnable" />
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <label for="telnetEnable" class="control-label">{{ _("Telnet") }}</label>
+            </th>
+            <td class="telnet-status">
+              <div class="switch" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+                <input type="checkbox" name="telnetEnable" id="telnetEnable" />
+              </div>
+            </td>
+          </tr>
+        </table>
+        <input type="hidden" class="ckCLI" name="ckCLI" value="true" />
+      </div>
       <div class="inactive editSaAccount control-group">
         <label for="saAddEditName" class="control-label">{{ _("Name") }}</label>
         <div class="controls">

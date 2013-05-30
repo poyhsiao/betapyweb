@@ -13,6 +13,9 @@ requirejs.config({
         blockUI: 'jquery.blockUI',
         jqueryUI: 'jquery-ui',
         timepicker: 'bootstrap-timepicker.min',
+        iframeSupport: 'jquery.iframe-transport',
+        fileupload: 'jquery.fileupload',
+        bsSwitch: 'bootstrapSwitch',
         bb: 'bb'
     },
     shim: {
@@ -35,8 +38,14 @@ requirejs.config({
         'timepicker': {
             deps: ['jquery', 'bootstrap']
         },
+        'bsSwitch': {
+            deps: ['jquery']
+        },
+        'fileupload': {
+            dpes: ['iframeSupport', 'jqueryUI']
+        },
         'bb': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'blockUI', 'jqueryUI', 'timepicker']
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'blockUI', 'jqueryUI', 'timepicker', 'fileupload', 'bsSwitch']
         }
     },
     waitSeconds: 15

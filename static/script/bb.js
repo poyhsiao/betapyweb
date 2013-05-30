@@ -314,6 +314,8 @@ View = Backbone.View.extend({
                 dom.block();
                 /* enable mask before everything is ready */
 
+                dom.find(".switch").bootstrapSwitch();
+
                 me.$el.children("table").css({
                     width: "100%",
                     height: "100%"
@@ -518,8 +520,6 @@ View = Backbone.View.extend({
     /* add new a ip address which will pop-up an dialog */
         var me = this, self = $(o.target), dom = $("div.IpEditor"), inf = $("#ipSelecter").val(), title;
 
-        dom.find("form")[0].reset();
-        /* reset all input value */
         if(self.hasClass("btnSI4Add")) {
             /* add IPv4 address */
             title = $("th.IpV4title:first").text();
@@ -901,7 +901,7 @@ View = Backbone.View.extend({
 
     viewAdmin: function(o) {
     /* display admin page */
-        var me = this, t = _.template($("#t_SystemAdmin").html()), d = me.model.attributes[1];
+        var me = this, t = _.template($("#t_SystemAdmin").html()), d = me.model.attributes[1], conf_file, fw_file;
         me.$el.html(t(d));
 
         me.$el.find("table").css({
@@ -917,6 +917,64 @@ View = Backbone.View.extend({
                     return "90%";
                 }
             }
+        });
+
+        conf_file = $("#fileUSConf");
+        fw_file = $("#fileFWUpdate");
+
+        conf_file.fileupload({
+        /* configuration file upload */
+            url: "/system/supload_conf",
+            add: function(e, d) {
+                console.log(d);
+                $("button.btnFileUSConf").removeClass("inactive").one("click", function() {
+                    $(this).text("Uploading...");
+                    d.submit();
+                });
+            },
+            done: function(e, d) {
+            /* TBD */
+                var res = d.response();
+                console.log(res.result);
+                /* return information */
+            }
+        });
+
+        fw_file.fileupload({
+        /* firmware file upload */
+            url: "/system/supload_fw",
+            add: function(e, d) {
+                console.log(d);
+                $("button.btnFileFWUpload").removeClass("inactive").one("click", function() {
+                    $(this).text("Uploading...");
+                    d.submit();
+                });
+            },
+            done: function(e, d) {
+            /* TBD */
+                var res = d.response();
+                console.log(res.result);
+                /* return information */
+            }
+        });
+
+        $(".switch").bootstrapSwitch();
+        /* enable iphone style switch */
+
+        $("div.SystemAdmin").on("click", "a[opt=cli]", function() {
+        /* get SSH/Telnet status from server */
+            $.getJSON("/system/cli", function(d) {
+                var res = d[1];
+                if(true === d[0]) {
+                    $("#sshEnable").parents(".switch").bootstrapSwitch('setState', res['ssh']);
+                    $("#telnetEnable").parents(".switch").bootstrapSwitch('setState', res['telnet']);
+                }
+
+                $("input[type='checkbox']").parents('.switch').on("switch-change", function(e, d) {
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+                });
+            });
         });
     },
 
@@ -1031,7 +1089,7 @@ View = Backbone.View.extend({
 
     saveAdminRCSConf: function(o) {
     /* Save Running Configuration as Startup Configuation */
-        var me = this, self = $(o.target), flag;
+        var me = this, self = $(o.target), flag, iframe;
         if(self.hasClass("btnSaveRSConf")) {
             flag = "save";
         } else if(self.hasClass("btnDLRConf")) {
@@ -1039,9 +1097,8 @@ View = Backbone.View.extend({
         } else if(self.hasClass("btnDLSConf")) {
             flag = "dl_startup";
         }
-        $.post("/system/ssave_conf", {"act": flag}, function(d) {
-            console.log(d);
-        });
+        return window.location.href = "/system/ssave_conf/?act=" + flag;
+        /* download file */
     },
 
     runOpApply: function(o) {
@@ -1079,8 +1136,8 @@ View = Backbone.View.extend({
                 obj = $("div.editSystemDateTime");
                 break;
             case "admin":
-                url = "/system/sadmin";
-                obj = $("#saAccount");
+                url = $("div.SystemAdmin").find("a[opt=cli]").parent().hasClass("active") ? "/system/cli" : "/system/sadmin";
+                obj = $("div.SystemAdmin").find("a[opt=cli]").parent().hasClass("active") ? $("#saCLI") : $("#saAccount");
                 break;
             default:
                 break;
@@ -1427,8 +1484,7 @@ MainOperation = {
                     "click button.btnSaReboot": "maintainAdmin",
                     "click button.btnSaveRSConf": "saveAdminRCSConf",
                     "click button.btnDLRConf": "saveAdminRCSConf",
-                    "click button.btnDLSConf": "saveAdminRCSConf",
-                    "click button.btnFileUSConf": "ulAdminConf"
+                    "click button.btnDLSConf": "saveAdminRCSConf"
                 }
             });
 
