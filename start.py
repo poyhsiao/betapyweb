@@ -38,6 +38,7 @@ from libs.login import cklogin
 from libs.tools import *
 
 import doSystem as ds
+import doService as de
 
 
 def initNonStaticResponse():
@@ -140,6 +141,21 @@ class Root:
             data = js.getMini()
             return data
 
+    @_.expose
+    def getTpl(self, **kwargs):
+        '''
+            Try to get template file for underscore
+        '''
+        if 'file' in kwargs:
+            try:
+                tpl = env.get_template('/js/' + kwargs['file'] + '.html')
+                trans = translation()
+                env.install_gettext_translations(trans['obj'])
+                # import gettext for language translation
+                return tpl.render(lang = trans['lang'])
+            except:
+                return False
+
 
 if __name__ == '__main__':
     _.config.update({
@@ -227,6 +243,7 @@ if __name__ == '__main__':
 
     root = Root()
     root.system = ds.System()
+    root.service = de.Service()
     # root.doLogin = Login()
     # root.main = main()
 

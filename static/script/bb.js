@@ -110,8 +110,11 @@ View = Backbone.View.extend({
 
     viewPagination: function(o) {
     /* page navigation display */
-        var me = this, template = _.template($("#t_pagnation").html());
-        return me.$el.html(template(me.model.attributes));
+        var me = this, dat = me.model.attributes, t;
+        return $.get("/getTpl?file=pagnation", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
+        }, "html");
     },
 
     runPagination: function(o) {
@@ -125,28 +128,67 @@ View = Backbone.View.extend({
         window.location = '/logout';
     },
 
-    viewSysSummaryTimer: function(o) {
-        var me = this, t = _.template($("#t_summery_control").html());
-        me.$el.append(t());
-        $("div.systemSummaryTimer").css({
-            "position": "relative",
-            "bottom": "20px",
-            "right": "10px"
-        });
+    viewSysSummaryTimer: function(d, kp) {
+    /* d is important now, which include data passed from system information */
+        var me = this, t, smodel, sview, updateInfo;
+
+        updateInfo = function() {
+            var dat = d;
+            $.getJSON("/system/s_port", function(data) {
+                /* retrieval port summary information */
+                var pmodel = new Model(data),
+                pview = new View({
+                    model: pmodel
+                });
+                pview.viewSysSummary("summary_port", "div.systemSummaryPort", 1);
+            });
+
+            smodel = new Model(dat);
+            sview = new View({
+                model: smodel,
+            });
+
+            return sview.viewSysSummary();
+        };
+
+        if(!kp) {
+            $.get("/getTpl?file=summary_control", function(d) {
+                t = _.template(d);
+                me.$el.append(t());
+                $("div.systemSummaryTimer").css({
+                    "position": "relative",
+                    "bottom": "20px",
+                    "right": "10px"
+                });
+
+
+                updateInfo();
+            }, "html");
+        } else {
+            return updateInfo();
+        }
     },
 
-    viewSysSummary: function(tpl, id, selector) {
+    viewSysSummary: function(file, id, selector) {
     /* summary display */
-        var me = this, tpl = tpl || "#t_summary", id = id || "div.systemSummary", selector = me.model.attributes[selector] || me.model.attributes, t = _.template($(tpl).html());
+        var me = this, id = id || "div.systemSummary", selector = me.model.attributes[selector] || me.model.attributes, f = file || "summary", t;
         $(id).remove();
         /* remove and clean-up current data */
-        me.$el.append(t(selector));
-        /* because the SysSummaryTimer is shown before, just append it*/
-        $(id).children("table").css({
-            "width": "100%",
-            "height": "100%"
-        });
-        return $("div.popContent").unblock();
+
+        $.get("/getTpl?file=" + f, function(d) {
+            t = _.template(d)
+            me.$el.append(t(selector));
+            /* because the SysSummaryTimer is shown before, just append it*/
+
+            $(id).children("table").css({
+                "width": "100%",
+                "height": "100%"
+            });
+
+            require(['blockUI'], function() {
+                return $("div.popContent").unblock();
+            });
+        }, "html");
     },
 
     setSysSummaryTimer: function(o) {
@@ -165,7 +207,7 @@ View = Backbone.View.extend({
             val = parseInt(timer_v) * 1000;
             /* conver the given value to second */
             timer = setInterval(function() {
-                $("systemSummary").remove();
+                $(".systemSummary, .systemSummaryPort").remove();
                 MainOperation.summary("keep");
             }, val);
         }
@@ -173,13 +215,16 @@ View = Backbone.View.extend({
 
     viewDNS: function(o) {
     /* it is about DNS get */
-        var me = this, t = _.template($("#t_SystemDNS").html()), data = {"items": me.model.attributes[1]};
-        me.$el.html(t(data));
-        $("div.SystemDNS").children("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("input").css("width", "90%");
-        return $("div.popContent").unblock();
+        var me = this, dat = {"items": me.model.attributes[1]}, t;
+        $.get("/getTpl?file=dns", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
+
+            $("div.SystemDNS").children("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("input").css("width", "90%");
+        }, "html");
     },
 
     viewSaveDNS: function(o) {
@@ -190,61 +235,66 @@ View = Backbone.View.extend({
 
     viewVLAN: function(o) {
     /* it is about VLAN get */
-        var me = this, t = _.template($("#t_SystemVLAN").html());
-        me.$el.html(t(me.model.attributes[1]));
-        $("div.SystemVLAN").children("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("button").css({
-            "width": "90%"
-        });
-        return $("div.popContent").unblock();
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=vlan", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
+
+            $("div.SystemVLAN").children("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("button").css({
+                "width": "90%"
+            });
+        }, "html");
     },
 
     editVlan: function(o) {
     /* add vlan item */
         var me = this, dom = $("div.addSysVLAN"), ct = $("div.SystemVLAN");
 
-        dom.dialog({
-            modal: true,
-            closeOnEscape: false,
-            width: "auto",
-            open: function() {
-                dom.block();
-                /* block dialog when getting interface data */
-                $('option[vl="new"]').remove();
-                /* remove all existing NIC options and get new */
-                $.getJSON("/system/getInterfaces", function(d) {
-                    /* return an array of NIC names */
-                    $.each(d["real"], function(k, v) {
-                        $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
+        require(['jqueryUI'], function() {
+            dom.dialog({
+                modal: true,
+                closeOnEscape: false,
+                width: "auto",
+                open: function() {
+                    dom.block();
+                    /* block dialog when getting interface data */
+                    $('option[vl="new"]').remove();
+                    /* remove all existing NIC options and get new */
+                    $.getJSON("/system/getInterfaces", function(d) {
+                        /* return an array of NIC names */
+                        $.each(d["real"], function(k, v) {
+                            $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
+                        });
+                        dom.unblock();
                     });
-                    dom.unblock();
-                });
-            },
-            close: function(e, u) {
-                dom.find("input").val("");
-                dom.dialog("destroy");
-            },
-            buttons: [{
-                text: "OK",
-                click: function() {
-                    $("<input />").attr({
-                        "type": "hidden",
-                        "value": $("#lan-interface").val(),
-                        "name": $("#lan-interface").attr("name")
-                    }).appendTo($("div.SystemVLAN table"));
-                    dom.find("input").clone().removeAttr("id").attr("type", "hidden").appendTo($("div.SystemVLAN table"));
-                    me.runOpApply();
-                    me.runOpReload();
-                    dom.dialog("close");
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    dom.dialog("close");
-                }
-            }]
+                },
+                close: function(e, u) {
+                    dom.find("input").val("");
+                    dom.dialog("destroy");
+                },
+                buttons: [{
+                    text: "OK",
+                    click: function() {
+                        $("<input />").attr({
+                            "type": "hidden",
+                            "value": $("#lan-interface").val(),
+                            "name": $("#lan-interface").attr("name")
+                        }).appendTo($("div.SystemVLAN table"));
+                        dom.find("input").clone().removeAttr("id").attr("type", "hidden").appendTo($("div.SystemVLAN table"));
+                        me.runOpApply();
+                        me.runOpReload();
+                        dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }]
+            });
         });
     },
 
@@ -265,18 +315,20 @@ View = Backbone.View.extend({
 
     viewBridge: function(o) {
     /* it is about Bridge get */
-        var me = this, t = _.template($("#t_SystemBridge").html()), dat = me.model.attributes[1];
-        me.$el.html(t(dat));
-        $("div.SystemBridge").children("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("button").css({
-            "width": function() {
-                return $(this).hasClass("brAdd") ? "90%" : "45%";
-            }
-        });
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=bridge", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
 
-        return $("div.popContent").unblock();
+            $("div.SystemBridge").children("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("button").css({
+                "width": function() {
+                    return $(this).hasClass("brAdd") ? "90%" : "45%";
+                }
+            });
+        }, "html");
     },
 
     editBridge: function(o) {
@@ -305,177 +357,183 @@ View = Backbone.View.extend({
             }
         });
 
-        dom.dialog({
-            modal: true,
-            title: ck,
-            closeOnEscape: false,
-            width: "auto",
-            open: function() {
-                dom.block();
-                /* enable mask before everything is ready */
+        require(['jqueryUI', 'bsSwitch'], function() {
+            dom.dialog({
+                modal: true,
+                title: ck,
+                closeOnEscape: false,
+                width: "auto",
+                open: function() {
+                    dom.block();
+                    /* enable mask before everything is ready */
 
-                dom.find(".switch").bootstrapSwitch();
+                    //dom.find(".switch").bootstrapSwitch();
+                    dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
 
-                me.$el.children("table").css({
-                    width: "100%",
-                    height: "100%"
-                }).find('input[type="number"], select, button').css({
-                    width: "90%"
-                });
-
-                if(!$("#br-hello_time").children("option").size()) {
-                /* hello time range is 1 to 10 */
-                    for(i = 1; i < 11; i++) {
-                        $("<option />").val(i).text(i).appendTo($("#br-hello_time"));
-                    }
-                }
-
-                if(!$("#br-max_message_age").children("option").size()) {
-                /* max message age range is 6 to 41 */
-                    for(i = 6; i < 41; i++) {
-                        $("<option />").val(i).text(i).appendTo($("#br-max_message_age"));
-                    }
-                }
-
-                if(!$("#br-forward_delay").children("option").size()) {
-                /* forward delay range is 2 to 31 */
-                    for(i = 2; i < 31; i++) {
-                        $("<option />").val(i).text(i).appendTo($("#br-forward_delay"));
-                    }
-                }
-
-                $.getJSON("/system/getInterfaces", function(d) {
-                    var dat = d["interface"], cif = [], inf = self.attr("opt");
-                    /* available interfaces as an array */
-
-                    me.$el.find('input[name="interface"]').each(function(k, v) {
-                        cif = _.union(cif, $(v).val().split(","));
-                        /* remove all interfaces is exists in other bridge */
+                    me.$el.children("table").css({
+                        width: "100%",
+                        height: "100%"
+                    }).find('input[type="number"], select, button').css({
+                        width: "90%"
                     });
 
-                    dat = _.difference(dat, cif);
-                    /* find the oterh available interfaces */
-
-                    if(self.hasClass("brEdit")) {
-                    /* edit existing bridge */
-                        self.siblings("input").each(function(k, v) {
-                            var vname = $(v).attr("name");
-                            if("interface" === vname) {
-                                cif = $(v).val().split(',');
-                                /* re-generate the interfaces as an array */
-                                $.each(dat, function(kk, vv) {
-                                    /* generate available interfaces options */
-                                    $("<option />").attr("br", "new").val(vv).text(vv).appendTo(sel);
-                                });
-
-                                $.each(cif, function(kk, vv) {
-                                    /* generate exists interfaces */
-                                   var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />").addClass("text-center");
-                                   $("<td />").text(vv).appendTo(tr);
-                                   $("span.brBtnTpl button.btnDelBrInterface").clone().attr("opt", vv).appendTo(td);
-                                   td.appendTo(tr);
-                                });
-
-                            } else if("STP" === vname) {
-                                if("true" === $(v).val()) {
-                                    dom.find('input[name="' + vname + '"]').trigger("click");
-                                    /* make sure checkbox is checked on all browsers */
-                                }
-                            } else {
-                                dom.find('select[name="' + vname + '"]').val( $(v).val() );
-                                if("name" === vname) {
-                                    dom.find("span.br_name").text( $(v).val() );
-                                }
-                            }
-                        });
-
-                        dom.dialog({title: dom.dialog("option", "title") + " - " + self.attr("opt")});
-                        /* update dialog title */
-                    } else {
-                    /* add new bridge */
-                        dom.find("span.br_name").text("Auto");
-                        $("#br_name").val("Auto-" + newid);
-                        /* auto set bridge name, set New */
-
-                        $.each(dat, function(k, v) {
-                           $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
-                        });
+                    if(!$("#br-hello_time").children("option").size()) {
+                    /* hello time range is 1 to 10 */
+                        for(i = 1; i < 11; i++) {
+                            $("<option />").val(i).text(i).appendTo($("#br-hello_time"));
+                        }
                     }
 
-                    dom.find("button").css("width", "90%");
-
-                    dom.unblock();
-                });
-            },
-            close: function() {
-                dom.dialog("destroy");
-
-                $('option[br="new"]').remove();
-                /* remove all added options*/
-                $("tr.brInterface").remove();
-                /* remove all interfaces for previous setting */
-                dom.find('input[type="hidden"], select').val('');
-                dom.find('input[type="checkbox"]').removeAttr("checked");
-
-                dom.off("click");
-            },
-            buttons: [{
-                text: "OK",
-                click: function() {
-                    if(self.hasClass("brEdit")) {
-                    /* edit existing bridge */
-                        var tr = self.parents("tr"), interfaces;
-                        interfaces = dom.find("tr.brInterface").map(function() {
-                            return $(this).children("td:first").text();
-                        }).get().join();
-                        tr.find("td.brInterface").text(interfaces);
-                        dom.find('select[name]').each(function(k, v) {
-                            var name = $(v).attr("name"), val = $(v).val();
-                            tr.find('input[name="' + name + '"]').val(val);
-                        });
-                        tr.find('input[name="interface"]').val(interfaces);
-                    } else {
-                    /* add new bridge */
-                        var tr = $("<tr />").appendTo($("div.SystemBridge table")), td = $("<td />"), val = $("#br_name").val(), interfaces;
-                        interfaces = dom.find("tr.brInterface").map(function() {
-                            return $(this).children("td:first").text();
-                        }).get().join();
-                        console.log(interfaces);
-                        $("<td />").text( $("#br_name").val() ).appendTo(tr);
-                        $("<td />").text(interfaces).appendTo(tr);
-                        dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
-                        dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
-                        dom.find('input, select[name]').each(function(k, v) {
-                            var name = $(v).attr("name"), val = $(v).val();
-                            if("STP" === name) {
-                                $("<input />").attr({
-                                    name: name,
-                                    type: "hidden"
-                                }).val( $(v).is(":checked").toString() ).appendTo(td);
-                            } else {
-                                $("<input />").attr({
-                                    name: name,
-                                    type: "hidden"
-                                }).val(val).appendTo(td);
-                            }
-                        });
-                        $("<input />").attr({
-                            name: "interface",
-                            type: "hidden"
-                        }).val(interfaces).appendTo(td);
-
-                        td.appendTo(tr);
+                    if(!$("#br-max_message_age").children("option").size()) {
+                    /* max message age range is 6 to 41 */
+                        for(i = 6; i < 41; i++) {
+                            $("<option />").val(i).text(i).appendTo($("#br-max_message_age"));
+                        }
                     }
 
-                    $("#oApply").show("fast");
-                    return dom.dialog("close");
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    return dom.dialog("close");
-                }
-            }]
+                    if(!$("#br-forward_delay").children("option").size()) {
+                    /* forward delay range is 2 to 31 */
+                        for(i = 2; i < 31; i++) {
+                            $("<option />").val(i).text(i).appendTo($("#br-forward_delay"));
+                        }
+                    }
+
+                    $.getJSON("/system/getInterfaces", function(d) {
+                        var dat = d["interface"], cif = [], inf = self.attr("opt");
+                        /* available interfaces as an array */
+
+                        me.$el.find('input[name="interface"]').each(function(k, v) {
+                            cif = _.union(cif, $(v).val().split(","));
+                            /* remove all interfaces is exists in other bridge */
+                        });
+
+                        dat = _.difference(dat, cif);
+                        /* find the oterh available interfaces */
+
+                        if(self.hasClass("brEdit")) {
+                        /* edit existing bridge */
+                            self.siblings("input").each(function(k, v) {
+                                var vname = $(v).attr("name");
+                                if("interface" === vname) {
+                                    cif = $(v).val().split(',');
+                                    /* re-generate the interfaces as an array */
+                                    $.each(dat, function(kk, vv) {
+                                        /* generate available interfaces options */
+                                        $("<option />").attr("br", "new").val(vv).text(vv).appendTo(sel);
+                                    });
+
+                                    $.each(cif, function(kk, vv) {
+                                        /* generate exists interfaces */
+                                       var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />").addClass("text-center");
+                                       $("<td />").text(vv).appendTo(tr);
+                                       $("span.brBtnTpl button.btnDelBrInterface").clone().attr("opt", vv).appendTo(td);
+                                       td.appendTo(tr);
+                                    });
+
+                                } else if("STP" === vname) {
+                                    if("true" === $(v).val()) {
+                                        dom.find('input[name="' + vname + '"]').trigger("click");
+                                        /* make sure checkbox is checked on all browsers */
+                                    }
+                                } else {
+                                    dom.find('select[name="' + vname + '"]').val( $(v).val() );
+                                    if("name" === vname) {
+                                        dom.find("span.br_name").text( $(v).val() );
+                                    }
+                                }
+                            });
+
+                            dom.dialog({title: dom.dialog("option", "title") + " - " + self.attr("opt")});
+                            /* update dialog title */
+                        } else {
+                        /* add new bridge */
+                            dom.find("span.br_name").text("Auto");
+                            $("#br_name").val("Auto-" + newid);
+                            /* auto set bridge name, set New */
+
+                            $.each(dat, function(k, v) {
+                               $("<option />").attr("br", "new").val(v).text(v).appendTo(sel);
+                            });
+                        }
+
+                        dom.find("button").css("width", "90%");
+
+                        dom.unblock();
+                    });
+                },
+                close: function() {
+                    dom.dialog("destroy");
+
+                    $('option[br="new"]').remove();
+                    /* remove all added options*/
+                    $("tr.brInterface").remove();
+                    /* remove all interfaces for previous setting */
+                    dom.find('input[type="hidden"], select').val('');
+                    dom.find('input[type="checkbox"]').removeAttr("checked");
+
+                    dom.find(".switch").bootstrapSwitch("destroy");
+                    dom.find("input[type=checkbox]").parent().unwrap();
+
+                    dom.off("click");
+                },
+                buttons: [{
+                    text: "OK",
+                    click: function() {
+                        if(self.hasClass("brEdit")) {
+                        /* edit existing bridge */
+                            var tr = self.parents("tr"), interfaces;
+                            interfaces = dom.find("tr.brInterface").map(function() {
+                                return $(this).children("td:first").text();
+                            }).get().join();
+                            tr.find("td.brInterface").text(interfaces);
+                            dom.find('select[name]').each(function(k, v) {
+                                var name = $(v).attr("name"), val = $(v).val();
+                                tr.find('input[name="' + name + '"]').val(val);
+                            });
+                            tr.find('input[name="interface"]').val(interfaces);
+                        } else {
+                        /* add new bridge */
+                            var tr = $("<tr />").appendTo($("div.SystemBridge table")), td = $("<td />"), val = $("#br_name").val(), interfaces;
+                            interfaces = dom.find("tr.brInterface").map(function() {
+                                return $(this).children("td:first").text();
+                            }).get().join();
+                            console.log(interfaces);
+                            $("<td />").text( $("#br_name").val() ).appendTo(tr);
+                            $("<td />").text(interfaces).appendTo(tr);
+                            dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
+                            dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
+                            dom.find('input, select[name]').each(function(k, v) {
+                                var name = $(v).attr("name"), val = $(v).val();
+                                if("STP" === name) {
+                                    $("<input />").attr({
+                                        name: name,
+                                        type: "hidden"
+                                    }).val( $(v).is(":checked").toString() ).appendTo(td);
+                                } else {
+                                    $("<input />").attr({
+                                        name: name,
+                                        type: "hidden"
+                                    }).val(val).appendTo(td);
+                                }
+                            });
+                            $("<input />").attr({
+                                name: "interface",
+                                type: "hidden"
+                            }).val(interfaces).appendTo(td);
+
+                            td.appendTo(tr);
+                        }
+
+                        $("#oApply").show("fast");
+                        return dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        return dom.dialog("close");
+                    }
+                }]
+            });
         });
     },
 
@@ -492,21 +550,22 @@ View = Backbone.View.extend({
 
     viewIpAddress: function(o) {
     /* ip address setup page display */
-        var me = this, t = _.template($("#t_SystemIpAddress").html()), dat = me.model.attributes[1], ct = $("div.popContent");
-        me.$el.html(t(dat));
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=ip_address", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
 
-        me.$el.find("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("select, button, input").css({
-            "width": "90%"
-        });
+            me.$el.find("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("select, button, input").css({
+                "width": "90%"
+            });
 
-        me.$el.find("button.btnSmt").css({
-            "width": "45%"
-        });
-
-        return me.$el.unblock();
+            me.$el.find("button.btnSmt").css({
+                "width": "45%"
+            });
+        }, "html");
     },
 
     changeIpAddress: function(o) {
@@ -538,41 +597,43 @@ View = Backbone.View.extend({
 
         $('label[for="IpV46_address"]').text(title);
 
-        dom.dialog({
-            title: title,
-            modal: true,
-            closeOnEscape: false,
-            width: "auto",
-            close: function() {
-                dom.wrap("<form />");
-                dom.find("form")[0].reset();
-                dom.unwrap();
-                dom.dialog("destroy");
-            },
-            buttons: [{
-                text: "OK",
-                click: function() {
-                    /* click save new ip address */
-                    var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
-                    $("<td />").text( add.val() ).appendTo(tr);
-                    $("<td />").text( prefix.val() ).appendTo(tr);
-                    $("span.ipv46Tpl button").clone(true).css("width", "90%").appendTo(td);
-                    add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                    prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                    td.appendTo(tr);
-                    tr.appendTo(ct);
+        require(['jqueryUI'], function() {
+            dom.dialog({
+                title: title,
+                modal: true,
+                closeOnEscape: false,
+                width: "auto",
+                close: function() {
+                    dom.wrap("<form />");
+                    dom.parent()[0].reset();
+                    dom.unwrap();
+                    dom.dialog("destroy");
+                },
+                buttons: [{
+                    text: "OK",
+                    click: function() {
+                        /* click save new ip address */
+                        var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
+                        $("<td />").text( add.val() ).appendTo(tr);
+                        $("<td />").text( prefix.val() ).appendTo(tr);
+                        $("span.ipv46Tpl button").clone(true).css("width", "90%").appendTo(td);
+                        add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                        prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                        td.appendTo(tr);
+                        tr.appendTo(ct);
 
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
+                        $("#oApply").show("slow");
+                        /* show "Apply" link/button */
 
-                    dom.dialog("close");
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    dom.dialog("close");
-                }
-            }]
+                        dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }]
+            });
         });
     },
 
@@ -589,32 +650,33 @@ View = Backbone.View.extend({
 
     viewRoutingTable: function(o) {
     /* routing table display */
-        var me = this, t = _.template($("#t_SystemRoutingTable").html()), dat = {"items": me.model.attributes};
-        me.$el.html(t(dat));
+        var me = this, dat = {"items": me.model.attributes}, t;
+        $.get("/getTpl?file=routing_table", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
 
-        me.$el.find("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("select, button, input").css({
-            "width": "90%"
-        });
+            me.$el.find("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("select, button, input").css({
+                "width": "90%"
+            });
 
-        me.$el.find("button.btnSmt").css({
-            "width": "45%"
-        });
+            me.$el.find("button.btnSmt").css({
+                "width": "45%"
+            });
 
-        $('ul.nav-rt li > a[href="#"]').on("click", function() {
-            /* navigation tabs display contorl */
-            var opt = $(this).attr("opt");
-            if(!$(this).parent().hasClass("active")) {
-                me.$el.find("ul.nav-tabs li").removeClass("active");
-                $(this).parent().addClass("active");
-                $("div.SystemRoutingTable-rt").addClass("inactive");
-                $("div.SystemRoutingTable-" + opt).removeClass("inactive");
-            }
-        });
-
-        return me.$el.unblock();
+            $('ul.nav-rt li > a[href="#"]').on("click", function() {
+                // navigation tabs display contorl
+                var opt = $(this).attr("opt");
+                if(!$(this).parent().hasClass("active")) {
+                    me.$el.find("ul.nav-tabs li").removeClass("active");
+                    $(this).parent().addClass("active");
+                    $("div.SystemRoutingTable-rt").addClass("inactive");
+                    $("div.SystemRoutingTable-" + opt).removeClass("inactive");
+                }
+            });
+        }, "html");
     },
 
     delRoutingTable: function(o) {
@@ -641,87 +703,91 @@ View = Backbone.View.extend({
             }
         });
 
-        dom.dialog({
-            modal: true,
-            title: title,
-            closeOnEscape: false,
-            width: "auto",
-            open: function() {
-                /* on opening, get available NIC name */
-                dom.block();
-                $('option[rt="new"]').remove();
-                /* remove all existing NIC options and get new */
-                $.getJSON("/system/getInterfaces", function(d) {
-                    /* return an array of NIC names */
-                    $.each(d["all"], function(k, v) {
-                        $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
+        require(['jqueryUI'], function() {
+            dom.dialog({
+                modal: true,
+                title: title,
+                closeOnEscape: false,
+                width: "auto",
+                open: function() {
+                    /* on opening, get available NIC name */
+                    dom.block();
+                    $('option[rt="new"]').remove();
+                    /* remove all existing NIC options and get new */
+                    $.getJSON("/system/getInterfaces", function(d) {
+                        /* return an array of NIC names */
+                        $.each(d["all"], function(k, v) {
+                            $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
+                        });
+                        dom.unblock();
                     });
-                    dom.unblock();
-                });
-            },
-            close: function() {
-                // inputs.val('');
-                dom.wrap("<form />");
-                dom.find("form")[0].reset();
-                dom.unwrap();
-                /* empty all input value */
-                $(this).dialog("destroy");
-            },
-            buttons: [{
-                text: "OK",
-                click: function() {
-                    var ct = $("div.SystemRoutingTable-" + opt).find("table"), inputs = $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf"), td = $("<td />"), tr = $("<tr />");
-                    inputs.each(function(k, v) {
-                        $("<td />").text( $(this).val() ).appendTo(tr);
-                    });
-                    $("span.rtv46tpl button").clone(true).css("width", "90%").appendTo(td);
-                    $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                    $("<input />").attr({
-                        "type": "hidden",
-                        "name": $("#rtIpv46Intf").attr("name"),
-                        "value": $("#rtIpv46Intf").val()
-                    }).appendTo(td);
-                    td.appendTo(tr);
-                    tr.appendTo(ct);
+                },
+                close: function() {
+                    // inputs.val('');
+                    dom.wrap("<form />");
+                    dom.parent()[0].reset();
+                    dom.unwrap();
+                    /* empty all input value */
+                    $(this).dialog("destroy");
+                },
+                buttons: [{
+                    text: "OK",
+                    click: function() {
+                        var ct = $("div.SystemRoutingTable-" + opt).find("table"), inputs = $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf"), td = $("<td />"), tr = $("<tr />");
+                        inputs.each(function(k, v) {
+                            $("<td />").text( $(this).val() ).appendTo(tr);
+                        });
+                        $("span.rtv46tpl button").clone(true).css("width", "90%").appendTo(td);
+                        $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
+                        $("<input />").attr({
+                            "type": "hidden",
+                            "name": $("#rtIpv46Intf").attr("name"),
+                            "value": $("#rtIpv46Intf").val()
+                        }).appendTo(td);
+                        td.appendTo(tr);
+                        tr.appendTo(ct);
 
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
-                    return dom.dialog("close");
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    $(this).dialog("close");
-                }
-            }]
+                        $("#oApply").show("slow");
+                        /* show "Apply" link/button */
+                        return dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
         });
     },
 
     viewArpTable: function(o) {
     /* ip address setup page display */
-        var me = this, t = _.template($("#t_SystemArpTable").html()), dat = me.model.attributes[1];
-        $.each(dat, function(k, v) {
-            v["protocol"] = k.split("_")[0];
-            v["type"] = k.split("_")[1];
-        });
+       var me = this, dat = me.model.attributes[1], t;
+       $.get("/getTpl?file=arp_table", function(d) {
+           $.each(dat, function(k, v) {
+               v["protocol"] = k.split("_")[0];
+               v["type"] = k.split("_")[1];
+           });
 
-        dat = {"items": dat};
-        me.$el.html(t(dat));
+           dat = {"items" : dat};
 
-        me.$el.find("table").css({
-            "width": "100%",
-            "height": "100%"
-        }).find("select, button, input").css({
-            "width": "90%"
-        });
+           t = _.template(d);
+           me.$el.empty().html(t(dat));
 
-        me.$el.find("button.btnSmt").css({
-            "width": "45%"
-        });
+           me.$el.find("table").css({
+               "width": "100%",
+               "height": "100%"
+           }).find("select, button, input").css({
+               "width": "90%"
+           });
 
-        $("div.SystemArpTable").find("a:first").trigger("click");
+           me.$el.find("button.btnSmt").css({
+               "width": "45%"
+           });
 
-        return me.$el.unblock();
+           $("div.SystemArpTable").find("a:first").trigger("click");
+       }, "html");
     },
 
     delArpTable: function(o) {
@@ -739,70 +805,75 @@ View = Backbone.View.extend({
     /* add new arp static ip */
         var me = this, self = $(o.target), dom = $("div.editSystemArpTable"), title = $("div.SystemArpTable").find("li.active").children("a").text(), opt = self.attr("opt"), apt = $("#arp-" + opt).children("table");
 
-        dom.dialog({
-            modal: true,
-            title: title,
-            closeOnEscape: false,
-            width: "auto",
-            open: function() {
-                $('option[arp="new"]').remove();
-                /* remove listed interfaces */
-                dom.block();
-                $.getJSON("/system/getInterfaces", function(d) {
-                    /* return an array of NIC names */
-                    $.each(d["interface"], function(k, v) {
-                        $("<option />").attr("arp", "new").val(v).text(v).appendTo("#editArpInterface");
+        require(['jqueryUI'], function() {
+            dom.dialog({
+                modal: true,
+                title: title,
+                closeOnEscape: false,
+                width: "auto",
+                open: function() {
+                    $('option[arp="new"]').remove();
+                    /* remove listed interfaces */
+                    dom.block();
+                    $.getJSON("/system/getInterfaces", function(d) {
+                        /* return an array of NIC names */
+                        $.each(d["interface"], function(k, v) {
+                            $("<option />").attr("arp", "new").val(v).text(v).appendTo("#editArpInterface");
+                        });
+                        dom.unblock();
                     });
-                    dom.unblock();
-                });
-            },
-            close: function() {
-                dom.wrap("<form />");
-                dom.parent()[0].reset();
-                dom.unwrap();
-                dom.dialog("destroy");
-            },
-            buttons: [{
-                text: "OK",
-                click: function() {
-                    var tr = $("<tr />").appendTo(apt), td = $("<td />"), btn = dom.find("button.btnArpDel").clone(true).css("width", "90%");
-                    $("<td />").text( $("#editArpInterface").val() ).appendTo(tr);
-                    $("<td />").text( $("#editArpIp").val() ).appendTo(tr);
-                    $("<td />").text( $("#editArpMac").val() ).appendTo(tr);
-                    btn.appendTo(td);
-                    dom.find("input, select").each(function(k, v) {
-                        $("<input />").attr({
-                            type: "hidden",
-                            name: function() {
-                                return opt + "-" + $(v).attr("name");
-                            }
-                        }).val($(v).val()).appendTo(td);
-                    });
-                    td.appendTo(tr);
+                },
+                close: function() {
+                    dom.wrap("<form />");
+                    dom.parent()[0].reset();
+                    dom.unwrap();
+                    dom.dialog("destroy");
+                },
+                buttons: [{
+                    text: "OK",
+                    click: function() {
+                        var tr = $("<tr />").appendTo(apt), td = $("<td />"), btn = dom.find("button.btnArpDel").clone(true).css("width", "90%");
+                        $("<td />").text( $("#editArpInterface").val() ).appendTo(tr);
+                        $("<td />").text( $("#editArpIp").val() ).appendTo(tr);
+                        $("<td />").text( $("#editArpMac").val() ).appendTo(tr);
+                        btn.appendTo(td);
+                        dom.find("input, select").each(function(k, v) {
+                            $("<input />").attr({
+                                type: "hidden",
+                                name: function() {
+                                    return opt + "-" + $(v).attr("name");
+                                }
+                            }).val($(v).val()).appendTo(td);
+                        });
+                        td.appendTo(tr);
 
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
+                        $("#oApply").show("slow");
+                        /* show "Apply" link/button */
 
-                    return dom.dialog("close");
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    dom.dialog("close");
-                }
-            }]
+                        return dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }]
+            });
         });
     },
 
     viewDateTime: function(o) {
     /* date time setup page display */
-        var me = this, t = _.template($("#t_SystemDateTime").html()), d = me.model.attributes[1];
-        me.$el.html(t(d));
-        me.$el.find('input[opt="dt"]').trigger("click");
-        /* sometimes may not trigger date/time selector */
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=datetime", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
 
-        $("#oApply").hide();
-        /* hide "Apply" link/button, which may appear because of the timepicker */
+            me.$el.find('input[opt="dt"]').trigger("click");
+
+            $("#oApply").hide();
+            /* hide "Apply" link/button, which may appear because of the timepicker */
+        }, "html");
     },
 
     editDateTime: function(o) {
@@ -817,31 +888,40 @@ View = Backbone.View.extend({
         var me = this, self = $(o.target);
         if("date" === self.attr("name")) {
         /* date selector */
-            return self.datepicker({
-                "dateFormat": "yy/mm/dd"
+            require(['jqueryUI'], function() {
+                return self.datepicker({
+                    "dateFormat": "yy/mm/dd"
+                });
             });
         } else {
         /* time selector */
-            return self.timepicker({
-                minuteStep: 1,
-                secondStep: 5,
-                showInputs: false,
-                template: 'modal',
-                showSeconds: true,
-                showMeridian: false
+            require(['timepicker'], function() {
+                return self.timepicker({
+                    minuteStep: 1,
+                    secondStep: 5,
+                    showInputs: false,
+                    template: 'modal',
+                    showSeconds: true,
+                    showMeridian: false
+                });
             });
         }
     },
 
     viewDiagnostic: function(o) {
     /* show diagnostic tools page */
-        var me = this, t = _.template($("#t_SystemDiagnostic").html());
-        me.$el.html(t()).find("textarea").css({
-            resize: "none",
-            background: "#fff",
-            width: "90%",
-            height: "200px"
-        });
+        var me = this, t;
+        $.get("/getTpl?file=diagnostic", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t());
+
+            me.$el.empty().html(t()).find("textarea").css({
+                resize: "none",
+                background: "#fff",
+                width: "90%",
+                height: "200px"
+            });
+        }, "html");
     },
 
     controlDiagnostic: function(o) {
@@ -877,13 +957,11 @@ View = Backbone.View.extend({
                 $("button.start").addClass("disabled");
                 $("button.btnDtArpPT").removeClass("disabled").attr("opt", opt);
                 return $.post("/system/start_" + opt, {"address": $("#dtPingTracertName").val()}, function(d) {
-                    if(true === d[0]) {
-                        ct.val(d[1]);
-                        $("button.start").removeClass("disabled");
-                        $("button.btnDtArpPT").addClass("disabled").removeAttr("opt");
-                        ct.parent().unblock();
-                        ct.unwrap();
-                    }
+                    ct.val(d[1]);
+                    $("button.start").removeClass("disabled");
+                    $("button.btnDtArpPT").addClass("disabled").removeAttr("opt");
+                    ct.parent().unblock();
+                    ct.unwrap();
                 }, "json");
             }
         }
@@ -901,81 +979,86 @@ View = Backbone.View.extend({
 
     viewAdmin: function(o) {
     /* display admin page */
-        var me = this, t = _.template($("#t_SystemAdmin").html()), d = me.model.attributes[1], conf_file, fw_file;
-        me.$el.html(t(d));
-
-        me.$el.find("table").css({
-            width: "100%",
-            height: "100%"
-        }).find("button.btn, input[type='file']").css({
-            width: function() {
-                if($(this).hasClass("btnSaAddAccount")) {
-                    return "90%";
-                } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
-                    return "45%";
-                } else {
-                    return "90%";
+        var me = this, dat = me.model.attributes[1], t, conf_file, fw_file;
+        $.get("/getTpl?file=admin", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t(dat)).find("table").css({
+                width: "100%",
+                height: "100%"
+            }).find("button.btn, input[type='file']").css({
+                width: function() {
+                    if($(this).hasClass("btnSaAddAccount")) {
+                        return "90%";
+                    } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
+                        return "45%";
+                    } else {
+                        return "90%";
+                    }
                 }
-            }
-        });
+            });
 
-        conf_file = $("#fileUSConf");
-        fw_file = $("#fileFWUpdate");
+            require(['fileupload'], function() {
+                conf_file = $("#fileUSConf");
+                fw_file = $("#fileFWUpdate");
 
-        conf_file.fileupload({
-        /* configuration file upload */
-            url: "/system/supload_conf",
-            add: function(e, d) {
-                console.log(d);
-                $("button.btnFileUSConf").removeClass("inactive").one("click", function() {
-                    $(this).text("Uploading...");
-                    d.submit();
+                conf_file.fileupload({
+                /* configuration file upload */
+                    url: "/system/supload_conf",
+                    add: function(e, d) {
+                        console.log(d);
+                        $("button.btnFileUSConf").removeClass("inactive").one("click", function() {
+                            $(this).text("Uploading...");
+                            d.submit();
+                        });
+                    },
+                    done: function(e, d) {
+                    /* TBD */
+                        var res = d.response();
+                        console.log(res.result);
+                        /* return information */
+                    }
                 });
-            },
-            done: function(e, d) {
-            /* TBD */
-                var res = d.response();
-                console.log(res.result);
-                /* return information */
-            }
-        });
 
-        fw_file.fileupload({
-        /* firmware file upload */
-            url: "/system/supload_fw",
-            add: function(e, d) {
-                console.log(d);
-                $("button.btnFileFWUpload").removeClass("inactive").one("click", function() {
-                    $(this).text("Uploading...");
-                    d.submit();
-                });
-            },
-            done: function(e, d) {
-            /* TBD */
-                var res = d.response();
-                console.log(res.result);
-                /* return information */
-            }
-        });
-
-        $(".switch").bootstrapSwitch();
-        /* enable iphone style switch */
-
-        $("div.SystemAdmin").on("click", "a[opt=cli]", function() {
-        /* get SSH/Telnet status from server */
-            $.getJSON("/system/cli", function(d) {
-                var res = d[1];
-                if(true === d[0]) {
-                    $("#sshEnable").parents(".switch").bootstrapSwitch('setState', res['ssh']);
-                    $("#telnetEnable").parents(".switch").bootstrapSwitch('setState', res['telnet']);
-                }
-
-                $("input[type='checkbox']").parents('.switch').on("switch-change", function(e, d) {
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
+                fw_file.fileupload({
+                /* firmware file upload */
+                    url: "/system/supload_fw",
+                    add: function(e, d) {
+                        console.log(d);
+                        $("button.btnFileFWUpload").removeClass("inactive").one("click", function() {
+                            $(this).text("Uploading...");
+                            d.submit();
+                        });
+                    },
+                    done: function(e, d) {
+                    /* TBD */
+                        var res = d.response();
+                        console.log(res.result);
+                        /* return information */
+                    }
                 });
             });
-        });
+
+            require(['bsSwitch'], function() {
+                $(".switch").bootstrapSwitch();
+                /* enable iphone style switch */
+            });
+
+            $("div.SystemAdmin").on("click", "a[opt=cli]", function() {
+            /* get SSH/Telnet status from server */
+                $.getJSON("/system/cli", function(d) {
+                    var res = d[1];
+                    if(true === d[0]) {
+                        $("#sshEnable").parents(".switch").bootstrapSwitch('setState', res['ssh']);
+                        $("#telnetEnable").parents(".switch").bootstrapSwitch('setState', res['telnet']);
+                    }
+
+                    $("input[type='checkbox']").parents('.switch').on("switch-change", function(e, d) {
+                        $("#oApply").show("slow");
+                        /* show "Apply" link/button */
+                    });
+                });
+            });
+        }, "html");
     },
 
     editAdmin: function(o) {
@@ -1002,52 +1085,54 @@ View = Backbone.View.extend({
             $("#saAddEditConfirm").val( self.siblings('input[name="password"]').val() );
         }
 
-        dom.dialog({
-            modal: true,
-            closeOnEscape: false,
-            title: title,
-            width: "auto",
-            close: function() {
-                dom.wrap("<form />");
-                dom.parent()[0].reset();
-                dom.unwrap();
-                dom.find("option").removeAttr("selected");
-                dom.dialog("destroy");
-            },
-            buttons: [{
-                text: "Ok",
-                click: function() {
-                    if("new" === ed) {
-                    /* add new account */
-                        var tr = $("<tr />").appendTo(self.parents("table")), tpl = $("span.saAdminTpl").clone(), td = $("<td />"), name = dom.find('input[name="name"]').val();
-                        $("<td />").text(name).appendTo(tr);
-                        $("<td />").text( dom.find('select[name="group"]').val() ).appendTo(tr);
-                        dom.find('input[name], select').each(function(k, v) {
-                            tpl.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
-                        });
-                        tpl.find("button").attr("opt", name).css("width", "45%");
-                        $("<td />").append(tpl.children()).appendTo(tr);
+        require(['jqueryUI', 'bsSwitch'], function() {
+            dom.dialog({
+                modal: true,
+                closeOnEscape: false,
+                title: title,
+                width: "auto",
+                close: function() {
+                    dom.wrap("<form />");
+                    dom.parent()[0].reset();
+                    dom.unwrap();
+                    dom.find("option").removeAttr("selected");
+                    dom.dialog("destroy");
+                },
+                buttons: [{
+                    text: "Ok",
+                    click: function() {
+                        if("new" === ed) {
+                        /* add new account */
+                            var tr = $("<tr />").appendTo(self.parents("table")), tpl = $("span.saAdminTpl").clone(), td = $("<td />"), name = dom.find('input[name="name"]').val();
+                            $("<td />").text(name).appendTo(tr);
+                            $("<td />").text( dom.find('select[name="group"]').val() ).appendTo(tr);
+                            dom.find('input[name], select').each(function(k, v) {
+                                tpl.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+                            });
+                            tpl.find("button").attr("opt", name).css("width", "45%");
+                            $("<td />").append(tpl.children()).appendTo(tr);
 
-                    } else {
-                    /* edit existing account */
-                        $.each(dom.find('input[name], select'), function(k, v) {
-                            self.siblings('input[name="' + $(v).attr("name") + '"]').val($(v).val());
-                        });
+                        } else {
+                        /* edit existing account */
+                            $.each(dom.find('input[name], select'), function(k, v) {
+                                self.siblings('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+                            });
 
-                        self.parents("tr").find("td:nth-child(2)").text( dom.find('select[name="group"]').val() );
+                            self.parents("tr").find("td:nth-child(2)").text( dom.find('select[name="group"]').val() );
+                        }
+
+                        dom.dialog("close");
+
+                        $("#oApply").show("slow");
+                        /* show "Apply" link/button */
                     }
-
-                    dom.dialog("close");
-
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
-                }
-            }, {
-                text: "Cancel",
-                click: function() {
-                    dom.dialog("close");
-                }
-            }]
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }]
+            });
         });
     },
 
@@ -1139,6 +1224,9 @@ View = Backbone.View.extend({
                 url = $("div.SystemAdmin").find("a[opt=cli]").parent().hasClass("active") ? "/system/cli" : "/system/sadmin";
                 obj = $("div.SystemAdmin").find("a[opt=cli]").parent().hasClass("active") ? $("#saCLI") : $("#saAccount");
                 break;
+            case "snmp":
+                url = "/service/snmp";
+                obj = $("div.svSNMP");
             default:
                 break;
         }
@@ -1191,11 +1279,22 @@ View = Backbone.View.extend({
             /* reset auto-refresh option */
         } catch(e) {}
 
-        $("div.popContent").block();
-        try {
-        /* this should be remove once every function is ready */
-            return MainOperation[o]();
-        } catch(e) {}
+        require(["blockUI"], function() {
+            $("div.popContent").block({
+                onBlock: function() {
+                    try {
+                    /* this should be remove once every function is ready */
+                        if(o in MainOperation) {
+                            return MainOperation[o]();
+                        } else {
+                            require(['ExtHandler'], function() {
+                                return ExtHandler[o]();
+                            });
+                        }
+                    } catch(e) {}
+                }
+            });
+        });
     }
 }),
 ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, timer_v = 0;
@@ -1292,10 +1391,11 @@ MainOperation = {
     */
         $.getJSON("/system/ssys", function(d) {
             var me = this;
-            if(o) {
-                $('.systemSummary, systemSummaryPort').remove();
-            } else {
-                $('div.popContent').children().remove();
+                if(o) {
+                    $('.systemSummary, .systemSummaryPort').remove();
+                } else {
+                    $('div.popContent').children().remove();
+                }
 
                 var cview = new View({
                     events: {
@@ -1304,26 +1404,7 @@ MainOperation = {
                     }
                 });
 
-                cview.viewSysSummaryTimer();
-            }
-            /* clean up popContent its children dom */
-
-            $.getJSON("/system/s_port", function(data) {
-                /* retrieval port summary information */
-                var pmodel = new Model(data),
-                pview = new View({
-                    model: pmodel,
-                    el: "div.popContent"
-                });
-                pview.viewSysSummary("#t_summaryPort", "div.systemSummaryPort", 1);
-            });
-
-            me.model = new Model(d);
-            me.view = new View({
-                model: me.model,
-            });
-
-            return me.view.viewSysSummary();
+                cview.viewSysSummaryTimer(d, o);
         });
     },
 
@@ -1459,10 +1540,11 @@ MainOperation = {
         var me = this;
         delete(me.model);
         delete(me.view);
+        me.model = new Model();
         me.view = new View({
-           events: {
-               "click div.SystemDiagnostic button": "controlDiagnostic"
-           }
+            events: {
+                "click div.SystemDiagnostic button": "controlDiagnostic"
+            }
         });
 
         return me.view.viewDiagnostic();
@@ -1511,19 +1593,23 @@ tools = {
         cb: (function) callback function when click ok
         obj: (object[HTMLdom]) the trigger object
     */
-        var me = this, type = type || "alert", str = str || me.str, cb = cb || me.cb, t, dom;
-        t = ("alert" === type) ? _.template($("#t_toolsAlert").html()) : _.template($("#t_toolsConfirm").html());
-        $("body").append(t(str));
-        dom = $("div.toolsAlert");
-        dom.modal({keyboard: false}).modal("show");
-        dom.on("click", ".btnTAOk", function() {
-            cb();
-            dom.modal("hide");
-        }).on("click", ".btnTACancel", function() {
-            dom.modal("hide");
-        }).on("hidden", function() {
-            dom.remove();
-        });
+        var me = this, type = type || "alert", str = str || me.str, cb = cb || me.cb, f, t, dom;
+        f = ("alert" === type) ? "toolsAlert" : "toolsConfirm";
+        $.get("/getTpl?file=" + f, function(d) {
+            t = _.template(d);
+            $("body").append(t(str));
+
+            dom = $("div.toolsAlert");
+            dom.modal({keyboard: false}).modal("show");
+            dom.on("click", ".btnTAOk", function() {
+                cb();
+                dom.modal("hide");
+            }).on("click", ".btnTACancel", function() {
+                dom.modal("hide");
+            }).on("hidden", function() {
+                dom.remove();
+            });
+        }, "html");
     }
 };
 

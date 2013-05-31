@@ -1,0 +1,10 @@
+<div class="systemSummary padding">
+  <table class="table table-bordered table-hover">
+    <% _.each(items, function(v, k) { %>
+    <tr>
+        <th><%= v.title %></th>
+        <td><%= v.value %></td>
+    </tr>
+    <% }); %>
+  </table>
+</div>

@@ -12,13 +12,18 @@ requirejs.config({
         bootstrap: 'bootstrap',
         blockUI: 'jquery.blockUI',
         jqueryUI: 'jquery-ui',
+        'jquery.ui.widget': 'jquery-ui',
         timepicker: 'bootstrap-timepicker.min',
         iframeSupport: 'jquery.iframe-transport',
         fileupload: 'jquery.fileupload',
         bsSwitch: 'bootstrapSwitch',
-        bb: 'bb'
+        bb: 'bb',
+        ExtHandler: 'ExtHandler'
     },
     shim: {
+        'jquery': {
+            exports: '$'
+        },
         'undersocre': {
             exports: '_'
         },
@@ -42,15 +47,18 @@ requirejs.config({
             deps: ['jquery']
         },
         'fileupload': {
-            dpes: ['iframeSupport', 'jqueryUI']
+            dpes: ['jquery', 'iframeSupport', 'jqueryUI']
         },
         'bb': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'blockUI', 'jqueryUI', 'timepicker', 'fileupload', 'bsSwitch']
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
+        },
+        'ExtHandler': {
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
         }
     },
     waitSeconds: 15
 });
 
-require(['jquery', 'underscore', 'backbone', 'bootstrap','blockUI', 'jqueryUI', 'timepicker', 'bb'], function($, _, Backbone) {
+require(['bb'], function() {
     return true;
 });

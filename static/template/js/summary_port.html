@@ -1,0 +1,28 @@
+<div class="systemSummaryPort padding">
+  <table class="table table-bordered table-hover">
+    <tbody>
+      <tr>
+          <th rowspan="2">{{ _('Interface') }}</th>
+          <th rowspan="2">{{ _('Status') }}</th>
+          <th colspan="2">{{ _('Rx (Kbps)') }}</th>
+          <th colspan="2">{{ _("TX (Kbps)") }}</th>
+      </tr>
+      <tr>
+          <th>{{ _("Packets") }}</th>
+          <th>{{ _("Bytes") }}</th>
+          <th>{{ _("Packets") }}</th>
+          <th>{{ _("Bytes") }}</th>
+      </tr>
+      <% _.each(port, function(v, k) { %>
+      <tr>
+          <th><%= v["interface"] %></th>
+          <td><%= v["status"] %></td>
+          <td><%= v["RX"]["bytes"] %></td>
+          <td><%= v["RX"]["packets"] %></td>
+          <td><%= v["TX"]["bytes"] %></td>
+          <td><%= v["TX"]["packets"] %></td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>

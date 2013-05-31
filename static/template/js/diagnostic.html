@@ -1,0 +1,35 @@
+<div class="SystemDiagnostic padding form-horizontal">
+  <div class="control-group">
+    <fieldset>
+      <legend>{{ _('Diagnostic Tools') }}</legend>
+      <label for="dtUAN-snd" class="control-label strong">{{ _("Unsolicited ARP & NDP") }}</label>
+      <div class="controls">
+        <button class="btn dtStartArpN-snd" id="dtUAN-snd">{{ _("Send") }}</button>
+        <button class="btn dtStartArpN-stp disabled" id="dtUAN-stp">{{ _("Stop") }}</button>
+      </div>
+    </fieldset>
+  </div>
+  <div class="control-group">
+    <fieldset>
+      <legend>{{ _("Ping & Trace Route") }}</legend>
+      <label for="dtPingTracertName" class="control-label strong">{{ _("Target IP") }}</label>
+      <div class="controls padding">
+        <input type="text" id="dtPingTracertName" name="address" />
+      </div>
+      <textarea class="dtARPoutput padding" readonly="readonly"></textarea>
+      <div class="item-controls padding">
+        <button class="btn btnDtArpPing start" opt="ping">{{ _("Ping") }}</button>
+        <button class="btn btnDtArpTrace start" opt="traceroute">{{ _("Trace") }}</button>
+        <button class="btn btnDtArpPT stop disabled">{{ _("Stop") }}</button>
+      </div>
+    </fieldset>
+  </div>
+</div>
+<div class="dtDialog modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-body">
+    <span>{{ _("ARP caches are updated") }}</span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" arai="true">{{ _("OK") }}</button>
+  </div>
+</div>

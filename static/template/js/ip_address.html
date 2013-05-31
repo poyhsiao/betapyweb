@@ -1,0 +1,90 @@
+<div class="SystemIpAddress padding IpInterfaceSelect control-group">
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>
+              <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
+            </th>
+            <td>
+              <select class="ipSelInterface" id="ipSelecter">
+                <option disabled="disabled">{{ _("Interface") }}</option>
+              <% _.each(ip, function(v, k) { %>
+                <option value="<%= v["interface"] %>"><%= v["interface"] %></option>
+              <% }); %>
+              </select>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="SystemIpV46All">
+  <% _.each(ip, function(v, k) { %>
+    <div class="SystemIpV4 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= v["interface"] %>">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th class="IpV4title">{{ _("IPv4 Address") }}</th>
+                <th>{{ _("Prefix Length") }}</th>
+                <td>
+                  <button class="btn btnSI4Add btnIpAdd">{{ _("Add") }}</button>
+                </td>
+            </tr>
+            <% _.each(v["ipv4"], function(vv, kk) { %>
+            <tr>
+                <td>
+                  <%= vv["ipv4_address"] %>
+                </td>
+                <td>
+                  <%= vv["ipv4_prefix"] %>
+                </td>
+                <td>
+                  <button class="btn btnSI4Delete btnIpDel">{{ _("Delete") }}</button>
+                  <input type="hidden" name="<%= v["interface"] %>-ipv4_address" value="<%= vv['ipv4_address'] %>" />
+                  <input type="hidden" name="<%= v["interface"] %>-ipv4_prefix" value="<%= vv['ipv4_prefix'] %>" />
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </div>
+    <div class="SystemIpV6 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= v["interface"] %>">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <th class="IpV6title">{{ _("IPv6 Address") }}</th>
+                <th>{{ _("Prefix Length") }}</th>
+                <td>
+                  <button class="btn btnSI6Add btnIpAdd">{{ _("Add") }}</button>
+                </td>
+            </tr>
+            <% _.each(v["ipv6"], function(vv, kk) { %>
+            <tr>
+                <td>
+                  <%= vv["ipv6_address"] %>
+                </td>
+                <td>
+                  <%= vv["ipv6_prefix"] %>
+                </td>
+                <td>
+                  <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
+                  <input type="hidden" name="<%= v["interface"] %>-ipv6_address" value="<%= vv['ipv6_address'] %>" />
+                  <input type="hidden" name="<%= v["interface"] %>-ipv6_prefix" value="<%= vv['ipv6_prefix'] %>" />
+                </td>
+            </tr>
+            <% }); %>
+        </table>
+    </div>
+  <% }); %>
+</div>
+<div class="IpEditor inactive control-group form-horizontal">
+  <div class="control-group">
+    <label class="control-label strong" for="IpV46_address"></label>
+    <div class="controls">
+      <input type="text" id="IpV46_address" />
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label strong" for="IpV46_prefix">{{ _("Prefix Length") }}</label>
+    <div class="controls">
+      <input type="text" id="IpV46_prefix" />
+      <span class="ipv46Tpl inactive">
+        <button class="btn btnSI6Delete btnIpDel">{{ _("Delete") }}</button>
+      </span>
+    </div>
+  </div>
+</div>

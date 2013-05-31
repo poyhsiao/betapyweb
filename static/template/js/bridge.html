@@ -1,0 +1,100 @@
+<div class="SystemBridge padding">
+  <table class="table table-bordered table-hover">
+        <tr>
+            <th>{{ _("Name") }}</th>
+            <th>{{ _("Interface") }}</th>
+            <td>
+              <button type="button" class="btn brAdd">{{ _("Add") }}</button>
+              <div class="inactive brBtnTpl">
+                <button type="button" class="btn brDel">{{ _("Delete") }}</button>
+                <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
+              </div>
+            </td>
+        </tr>
+        <% _.each(br, function(v, k) { %>
+        <tr>
+            <td class="brName"><%= v.name %></td>
+            <td class="brInterface"><%= v.interface.join() %></td>
+            <td>
+              <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
+              <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
+              <input type="hidden" name="STP" value="<%= v.STP %>" />
+              <input type="hidden" name="name" value="<%= v.name %>" />
+              <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
+              <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
+              <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
+              <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
+            </td>
+        </tr>
+        <% }); %>
+  </table>
+</div>
+<div class="editSystemBridge padding inactive control-group">
+  <table class="table table-bordered table-hover">
+      <tr>
+          <th>{{ _("Name") }}</th>
+          <td class="text-center">
+            <span class="br_name"></span>
+            <input type="hidden" name="name" id="br_name" />
+          </td>
+      </tr>
+      <tr>
+          <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+          <th colspan="2">{{ _("Interface")}}</th>
+      </tr>
+      <tr class="addBrInterface">
+          <th>{{ _("Name") }}</th>
+          <td class="text-center">
+            <select class="nicSelect"></select>
+            <button type="button" class="btn btnAddBrInterface">{{ _("Add") }}</button>
+            <span class="inactive brBtnTpl">
+              <button type="button" class="btn btnDelBrInterface">{{ _("Delete") }}</button>
+              <button type="button" class="btn brDel" opt="">{{ _("Delete") }}</button>
+              <button type="button" class="btn brEdit" opt="">{{ _("Edit") }}</button>
+              <span class="brEnable">{{ _("Enable") }}</span>
+            </span>
+          </td>
+      </tr>
+      <tr>
+          <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+          <th colspan="2">{{ _("Attributes") }}</th>
+      </tr>
+      <tr>
+          <td>
+            <label class="control-label strong" for="brSTP">{{ _("STP") }}</label>
+          </td>
+          <td class="text-center">
+            <label class="control-label strong" for="brSTP">&nbsp;{{ _("Enable") }}</label>
+            <input type="checkbox" name="STP" id="brSTP" />
+          </td>
+      </tr>
+      <tr>
+          <td>
+            <label class="control-label strong" for="br-hello_time">{{ _("Hello Time") }}</label>
+          </td>
+          <td class="text-center">
+            <select name="hello_time" id="br-hello_time"></select>
+          </td>
+      </tr>
+      <tr>
+          <td>
+            <label class="control-label strong" for="br-max_message_age">{{ _("Max Message Age") }}</label>
+          </td>
+          <td  class="text-center">
+            <select name="max_message_age" id="br-max_message_age"></select>
+          </td>
+      </tr>
+      <tr>
+          <td>
+            <label class="control-label strong" for="br-forward_delay">{{ _("Forward Delay") }}</label>
+          </td>
+          <td class="text-center">
+            <select name="forward_delay" id="br-forward_delay"></select>
+          </td>
+      </tr>
+  </table>
+</div>
