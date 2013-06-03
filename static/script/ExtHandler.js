@@ -90,6 +90,27 @@ var eView = Backbone.View.extend({
             ct.find("tbody tr").addClass("inactive");
         }
     },
+
+    viewView: function(o) {
+    /* display view log */
+        console.log(333);
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=views", function(d) {
+            t = _.template(d);
+            me.$el.empty().html(t()).find("textarea").css({
+                resize: "none",
+                background: "#fff",
+                width: "90%",
+                height: "200px"
+            });
+
+            $.each(dat, function(k, v) {
+                me.$el.find("textarea").val(function(i, vv) {
+                    return vv + v;
+                });
+            });
+        }, "html");
+    }
 });
 
 var ExtHandler = {
@@ -130,6 +151,23 @@ var ExtHandler = {
             });
 
             return me.view.viewEmail();
+        });
+    },
+
+    views: function() {
+    /* Log -> view */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        console.log(123);
+        $.getJSON("/log/view", function(d) {
+            me.model = new eModel(d);
+            me.view = new eView({
+                model: me.model,
+                events: {}
+            });
+
+            return me.view.viewView();
         });
     }
 };

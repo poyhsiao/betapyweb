@@ -333,7 +333,7 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dom = $("div.editSystemBridge"), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), newid = new Date().getTime(), opt, title;
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(true), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), newid = new Date().getTime(), opt, title;
 
         dom.off("click");
 
@@ -461,10 +461,7 @@ View = Backbone.View.extend({
                         dom.unblock();
                     });
                 },
-                close: function() {
-                    dom.dialog("destroy");
-
-                    $('option[br="new"]').remove();
+                close: function() {$('option[br="new"]').remove();
                     /* remove all added options*/
                     $("tr.brInterface").remove();
                     /* remove all interfaces for previous setting */
@@ -475,6 +472,8 @@ View = Backbone.View.extend({
                     dom.find("input[type=checkbox]").parent().unwrap();
 
                     dom.off("click");
+
+                    dom.dialog("destroy");
                 },
                 buttons: [{
                     text: "OK",
@@ -525,6 +524,7 @@ View = Backbone.View.extend({
                         }
 
                         $("#oApply").show("fast");
+
                         return dom.dialog("close");
                     }
                 }, {

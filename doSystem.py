@@ -126,6 +126,7 @@ class System(object):
         import json
         import libs.tools
         # import unicodedata as codec
+        libs.tools.v(kwargs)
         for k in kwargs:
             kwargs[k] = libs.tools.convert(kwargs[k])
         res = dns.set(cfg = kwargs)
