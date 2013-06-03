@@ -53,7 +53,7 @@ requirejs.config({
             deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
         },
         'ExtHandler': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bb']
         }
     },
     waitSeconds: 15

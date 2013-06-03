@@ -763,31 +763,39 @@ View = Backbone.View.extend({
 
     viewArpTable: function(o) {
     /* ip address setup page display */
-       var me = this, dat = me.model.attributes[1], t;
-       $.get("/getTpl?file=arp_table", function(d) {
-           $.each(dat, function(k, v) {
-               v["protocol"] = k.split("_")[0];
-               v["type"] = k.split("_")[1];
-           });
+        var me = this, dat = me.model.attributes[1], t;
+        $.get("/getTpl?file=arp_table", function(d) {
+            $.each(dat, function(k, v) {
+                v["protocol"] = k.split("_")[0];
+                v["type"] = k.split("_")[1];
+            });
 
-           dat = {"items" : dat};
+            dat = {"items" : dat};
 
-           t = _.template(d);
-           me.$el.empty().html(t(dat));
+            t = _.template(d);
+            me.$el.empty().html(t(dat));
 
-           me.$el.find("table").css({
-               "width": "100%",
-               "height": "100%"
-           }).find("select, button, input").css({
-               "width": "90%"
-           });
+            me.$el.find("table").css({
+                "width": "100%",
+                "height": "100%"
+            }).find("select, button, input").css({
+                "width": "90%"
+            });
 
-           me.$el.find("button.btnSmt").css({
-               "width": "45%"
-           });
+            me.$el.find("button.btnSmt").css({
+                "width": "45%"
+            });
 
-           $("div.SystemArpTable").find("a:first").trigger("click");
-       }, "html");
+            $("div.SystemArpTable").find("a:first").trigger("click");
+
+            require(['bsSwitch'], function() {
+                me.$el.find("input[type='checkbox']").one("change", function() {
+                    $("#oApply").show("slow");
+                    /* show "Apply" link/button */
+                }).wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+            });
+
+        }, "html");
     },
 
     delArpTable: function(o) {
@@ -1227,6 +1235,11 @@ View = Backbone.View.extend({
             case "snmp":
                 url = "/service/snmp";
                 obj = $("div.svSNMP");
+                break;
+            case "email":
+                url = "/service/email";
+                obj = $("div.svEmail");
+                break;
             default:
                 break;
         }
@@ -1288,10 +1301,12 @@ View = Backbone.View.extend({
                             return MainOperation[o]();
                         } else {
                             require(['ExtHandler'], function() {
-                                return ExtHandler[o]();
+                                if(o in ExtHandler) {
+                                    return ExtHandler[o]();
+                                }
                             });
                         }
-                    } catch(e) {}
+                    } catch(e) { console.error(e); }
                 }
             });
         });

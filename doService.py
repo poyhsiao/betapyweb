@@ -27,6 +27,7 @@ class Service(object):
     @_.expose
     def snmp(self, **kwargs):
         '''
+            snmp setting
             data format from middleware
             (True, {'system_name': 'SLB', 'system_contact': '', 'enable': False, 'system_loca
 tion': '', 'community': 'public'})
@@ -53,3 +54,40 @@ tion': '', 'community': 'public'})
         else:
             # for information getter
             return json.dumps(snmp.get())
+
+    @_.expose
+    def email(self, **kwargs):
+        '''
+            snmp email notification setting
+            data format from middleware
+            (True, {'to': [], 'server': '', 'from': '', 'timeout': 0, 'alert': False})
+        '''
+        import ml_w_email as wem
+        import json
+        import libs.tools
+
+        _.response.headers["Content-Type"] = "application/json"
+        if "from" in kwargs:
+            # for updating setting
+            libs.tools.v(kwargs)
+            tos = []
+            if type(kwargs["to"]).__name__ == "list":
+                for v in kwargs["to"]:
+                    if len(v) > 0:
+                        tos.append(libs.tools.convert(v))
+            else:
+                if len(kwargs['to']) > 0:
+                    tos.append(libs.tools.convert(kwargs['to']))
+
+            res = {'to': tos,
+                   'server': libs.tools.convert(kwargs['server']),
+                   'from': libs.tools.convert(kwargs['from']),
+                   'timeout': int(kwargs['timeout']),
+                   'alert': 'alert' in kwargs}
+
+            libs.tools.v(res)
+
+            return json.dumps(wem.set(cfg = res))
+        else:
+            # for information getter
+            return json.dumps(wem.get())
