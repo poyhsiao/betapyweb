@@ -16,9 +16,9 @@ var eView = Backbone.View.extend({
     viewSNMP: function(o) {
     /* display snmp page  */
         var me = this, dat = me.model.attributes[1], t ;
-        $.get("/getTpl?file=snmp", function(d) {
+        Ajax = $.get("/getTpl?file=snmp", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat)).find("table").css({
+            me.$el.html(t(dat)).find("table").css({
                 width: "100%",
                 height: "100%"
             }).find("input[type=text]").css({
@@ -42,9 +42,9 @@ var eView = Backbone.View.extend({
     viewEmail: function(o) {
     /* display email page */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=email", function(d) {
+        Ajax = $.get("/getTpl?file=email", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat)).find("table").css({
+            me.$el.html(t(dat)).find("table").css({
                 width: "100%",
                 height: "100%"
             }).find("th, td").css({
@@ -91,13 +91,43 @@ var eView = Backbone.View.extend({
         }
     },
 
+    viewVrrp: function(o) {
+    /* display of VRRPv2 page */
+        var me = this, dat = me.model.attributes[1], t;
+        Ajax = $.get("/getTpl?file=vrrp", function(d) {
+            t = _.template(d);
+            me.$el.html(t(dat)).find("td, th").css({
+                "vertical-align": "middle",
+                "text-align": "center"
+            });
+        }, "html");
+    },
+
+    deleteSvVrrp: function(o) {
+    /* remove VRRP group or instance */
+        var me = this, self = $(o.target), tr = self.parents("tr"), gp = self.parents("tr").attr("group");
+
+        if(self.hasClass("btnSvVrrpDelGp")) {
+            $("tr[group='" + gp + "']").hide("fast", function() {
+                $(this).remove();
+            });
+
+        } else {
+        /* remove an instance of a group */
+            tr.hide("fast", function() {
+                $(this).remove();
+            });
+        }
+
+        return me.saveSNMP();
+    },
+
     viewView: function(o) {
     /* display view log */
-        console.log(333);
-        var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=views", function(d) {
+        var me = this, dat = me.model.attributes[1], t, txa;
+        Ajax = $.get("/getTpl?file=views", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t()).find("textarea").css({
+            me.$el.html(t()).find("textarea").css({
                 resize: "none",
                 background: "#fff",
                 width: "90%",
@@ -109,6 +139,26 @@ var eView = Backbone.View.extend({
                     return vv + v;
                 });
             });
+
+            txa = me.$el.find("textarea");
+            txa.scrollTop(
+                txa[0].scrollHeight - txa.height()
+            );
+        }, "html");
+    },
+
+    refeshViews: function(o) {
+    /* press views refresh button */
+        return $("#oReload").trigger("click");
+    },
+
+    viewSyslog: function(o) {
+    /* display syslog */
+        var me = this, dat = me.model.attributes[1], t;
+        console.log(dat);
+        Ajax = $.get("/getTpl?file=syslog", function(d) {
+            t = _.template(d);
+            me.$el.html(t(dat));
         }, "html");
     }
 });
@@ -122,7 +172,7 @@ var ExtHandler = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON('/service/snmp', function(d) {
+        Ajax = $.getJSON('/service/snmp', function(d) {
             me.model = new eModel(d),
             me.view = new eView({
                 model: me.model,
@@ -140,7 +190,7 @@ var ExtHandler = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON("/service/email", function(d) {
+        Ajax = $.getJSON("/service/email", function(d) {
             me.model = new eModel(d);
             me.view = new eView({
                 model: me.model,
@@ -154,20 +204,58 @@ var ExtHandler = {
         });
     },
 
+    vrrp: function() {
+    /* vrrpv2 setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/service/vrrp", function(d) {
+            me.model = new eModel(d);
+            me.view = new eView({
+                model: me.model,
+                events: {
+                    "click a.btnSvVrrpDel": "deleteSvVrrp"
+                }
+            });
+
+            return me.view.viewVrrp();
+        });
+    },
+
     views: function() {
     /* Log -> view */
         var me = this;
         delete(me.model);
         delete(me.view);
-        console.log(123);
-        $.getJSON("/log/view", function(d) {
+        Ajax = $.getJSON("/log/view", function(d) {
             me.model = new eModel(d);
             me.view = new eView({
                 model: me.model,
-                events: {}
+                events: {
+                    "click a.btn": "refeshViews"
+                }
             });
 
             return me.view.viewView();
+        });
+    },
+
+    syslog: function() {
+    /* Log -> Syslog */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/log/syslog", function(d) {
+            me.model = new eModel(d);
+            me.view = new eView({
+                model: me.model,
+                events: {
+                    "change input": "saveSNMP",
+                    "change select": "saveSNMP"
+                }
+            });
+
+            return me.view.viewSyslog();
         });
     }
 };

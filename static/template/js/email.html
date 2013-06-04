@@ -1,78 +1,81 @@
 <div class="svEmail padding">
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th colspan="2">
-          <label class="control-label strong">
-            <input type="checkbox" id="svCkSNMPAlert" name="alert" value="true"<% if(true === alert) { %> checked="checked"<% }%> /> {{ _("SMTP Alert") }}
-          </label>
-        </th>
-      </tr>
-      <tr>
-        <th>
-          <label for="svSNMPFrom" class="control-label strong">{{ _("Notify From Email") }}</label>
-        </th>
-        <td>
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-envelope"></i></span>
-              <input type="text" id="svSNMPFrom" name="from" value="<%= from %>" placeholder="{{ _("Notify From Email") }}" />
+  <fieldset id="" class="">
+    <legend>{{ _('Email') }}</legend>
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th colspan="2">
+            <label class="control-label strong">
+              <input type="checkbox" id="svCkSNMPAlert" name="alert" value="true"<% if(true === alert) { %> checked="checked"<% }%> /> {{ _("SMTP Alert") }}
+            </label>
+          </th>
+        </tr>
+        <tr>
+          <th>
+            <label for="svSNMPFrom" class="control-label strong">{{ _("Notify From Email") }}</label>
+          </th>
+          <td>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-envelope"></i></span>
+                <input type="text" id="svSNMPFrom" name="from" value="<%= from %>" placeholder="{{ _("Notify From Email") }}" />
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="inactive">
-        <th>
-          <label class="control-label strong">{{ _("Notify To Email") }}</label>
-        </th>
-        <td>
-          <div class="controls">
-          <% _.each(to, function(v, k) { %>
-            <div class="input-prepend input-append svToEamil">
-              <span class="add-on"><i class="icon-inbox"></i></span>
-              <input type="text" name="to" value="<%= v %>" placeholder="{{ _("Notify To Email") }}" />
-              <a href="#" class="btn btnAddToEmail"><i class="icon-plus"></i></a>
-              <a href="#" class="btn btnDelToEmail"><i class="icon-minus"></i></a>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="inactive">
+          <th>
+            <label class="control-label strong">{{ _("Notify To Email") }}</label>
+          </th>
+          <td>
+            <div class="controls">
+            <% _.each(to, function(v, k) { %>
+              <div class="input-prepend input-append svToEamil">
+                <span class="add-on"><i class="icon-inbox"></i></span>
+                <input type="text" name="to" value="<%= v %>" placeholder="{{ _("Notify To Email") }}" />
+                <a href="#" class="btn btnAddToEmail"><i class="icon-plus"></i></a>
+                <a href="#" class="btn btnDelToEmail"><i class="icon-minus"></i></a>
+              </div>
+            <% }); %>
+              <div class="input-prepend input-append svToEamil">
+                <span class="add-on"><i class="icon-inbox"></i></span>
+                <input type="text" name="to" placeholder="{{ _("Notify To Email") }}" />
+                <a href="#" class="btn btnAddToEmail"><i class="icon-plus"></i></a>
+                <a href="#" class="btn btnDelToEmail"><i class="icon-minus"></i></a>
+              </div>
             </div>
-          <% }); %>
-            <div class="input-prepend input-append svToEamil">
-              <span class="add-on"><i class="icon-inbox"></i></span>
-              <input type="text" name="to" placeholder="{{ _("Notify To Email") }}" />
-              <a href="#" class="btn btnAddToEmail"><i class="icon-plus"></i></a>
-              <a href="#" class="btn btnDelToEmail"><i class="icon-minus"></i></a>
+          </td>
+        </tr>
+        <tr class="inactive">
+          <th>
+            <label for="svSNMPES" class="control-label strong">{{ _("Email Server") }}</label>
+          </th>
+          <td>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-hdd"></i></span>
+                <input type="text" id="svSNMPES" name="server" value="<%= server %>" placeholder="{{ _("Email Server") }}" />
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-      <tr class="inactive">
-        <th>
-          <label for="svSNMPES" class="control-label strong">{{ _("Email Server") }}</label>
-        </th>
-        <td>
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-hdd"></i></span>
-              <input type="text" id="svSNMPES" name="server" value="<%= server %>" placeholder="{{ _("Email Server") }}" />
+          </td>
+        </tr>
+        <tr class="inactive">
+          <th>
+            <label for="svSNMPTout" class="control-label strong">{{ _("Email Server Connection Timeout") }}</label>
+          </th>
+          <td>
+            <div class="controls">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-time"></i></span>
+                <input type="number" name="timeout" id="svSNMPTout" value="<%= timeout %>" placeholder="{{ _("Email Server Connection Timeout") }}" />
+                <span class="add-on">{{ _("sec") }}</span>
+              </div>
             </div>
-          </div>
-        </td>
-      </tr>
-      <tr class="inactive">
-        <th>
-          <label for="svSNMPTout" class="control-label strong">{{ _("Email Server Connection Timeout") }}</label>
-        </th>
-        <td>
-          <div class="controls">
-            <div class="input-prepend input-append">
-              <span class="add-on"><i class="icon-time"></i></span>
-              <input type="number" name="timeout" id="svSNMPTout" value="<%= timeout %>" placeholder="{{ _("Email Server Connection Timeout") }}" />
-              <span class="add-on">{{ _("sec") }}</span>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
 </div>

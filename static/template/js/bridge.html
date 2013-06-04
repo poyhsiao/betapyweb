@@ -1,33 +1,36 @@
 <div class="SystemBridge padding">
-  <table class="table table-bordered table-hover">
-        <tr>
-            <th>{{ _("Name") }}</th>
-            <th>{{ _("Interface") }}</th>
-            <td>
-              <button type="button" class="btn brAdd">{{ _("Add") }}</button>
-              <div class="inactive brBtnTpl">
-                <button type="button" class="btn brDel">{{ _("Delete") }}</button>
-                <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
-              </div>
-            </td>
-        </tr>
-        <% _.each(br, function(v, k) { %>
-        <tr>
-            <td class="brName"><%= v.name %></td>
-            <td class="brInterface"><%= v.interface.join() %></td>
-            <td>
-              <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
-              <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
-              <input type="hidden" name="STP" value="<%= v.STP %>" />
-              <input type="hidden" name="name" value="<%= v.name %>" />
-              <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
-              <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
-              <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
-              <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
-            </td>
-        </tr>
-        <% }); %>
-  </table>
+  <fieldset id="" class="">
+    <legend>{{ _('Bridge') }}</legend>
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th>{{ _("Name") }}</th>
+        <th>{{ _("Interface") }}</th>
+        <td>
+          <button type="button" class="btn brAdd">{{ _("Add") }}</button>
+          <div class="inactive brBtnTpl">
+            <button type="button" class="btn brDel">{{ _("Delete") }}</button>
+            <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
+          </div>
+        </td>
+      </tr>
+      <% _.each(br, function(v, k) { %>
+      <tr>
+        <td class="brName"><%= v.name %></td>
+        <td class="brInterface"><%= v.interface.join() %></td>
+        <td>
+          <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
+          <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
+          <input type="hidden" name="STP" value="<%= v.STP %>" />
+          <input type="hidden" name="name" value="<%= v.name %>" />
+          <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />
+          <input type="hidden" name="interface" value="<%= v.interface.join() %>" />
+          <input type="hidden" name="max_message_age" value="<%= v.max_message_age %>" />
+          <input type="hidden" name="forward_delay" value="<%= v.forward_delay %>" />
+        </td>
+      </tr>
+      <% }); %>
+    </table>
+  </fieldset>
 </div>
 <div class="editSystemBridge padding inactive control-group">
   <table class="table table-bordered table-hover">

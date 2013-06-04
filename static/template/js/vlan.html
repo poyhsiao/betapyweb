@@ -1,24 +1,27 @@
 <div class="SystemVLAN padding control-group">
-  <table class="table table-bordered table-hover">
-    <tr>
-        <th>
-          {{ _("Interface") }}
-        </th>
-        <th>
-          {{ _("VLAN ID") }}
-        </th>
-        <td>
-          <button type="button" class="btn btnAdd btnVlanAdd">{{ _("Add") }}</button>
-        </td>
-    </tr>
-    <% _.each(vconfig, function(v, k) { %>
-    <tr class="item-<%= v.vlan_id %>">
-        <td><%= v.interface %><input type="hidden" name="interface" value="<%= v.interface %>" /></td>
-        <td><%= v.vlan_id %><input type="hidden" name="vlan_id" value="<%= v.vlan_id %>" /></td>
-        <td><button type="button" class="btn btnDel btnVlanDel">{{ _("Delete") }}</button></td>
-    </tr>
-    <% }); %>
-</table>
+  <fieldset id="" class="">
+    <legend>{{ _('VLAN') }}</legend>
+    <table class="table table-bordered table-hover">
+      <tr>
+          <th>
+            {{ _("Interface") }}
+          </th>
+          <th>
+            {{ _("VLAN ID") }}
+          </th>
+          <td>
+            <button type="button" class="btn btnAdd btnVlanAdd">{{ _("Add") }}</button>
+          </td>
+      </tr>
+      <% _.each(vconfig, function(v, k) { %>
+      <tr class="item-<%= v.vlan_id %>">
+          <td><%= v.interface %><input type="hidden" name="interface" value="<%= v.interface %>" /></td>
+          <td><%= v.vlan_id %><input type="hidden" name="vlan_id" value="<%= v.vlan_id %>" /></td>
+          <td><button type="button" class="btn btnDel btnVlanDel">{{ _("Delete") }}</button></td>
+      </tr>
+      <% }); %>
+    </table>
+  </fieldset>
 </div>
 <div class="addSysVLAN padding control-group inactive" title="{{ _("Add") }} VLAN">
   <form class="form-horizontal">

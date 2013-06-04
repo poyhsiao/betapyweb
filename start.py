@@ -148,15 +148,19 @@ class Root:
         '''
             Try to get template file for underscore
         '''
-        if 'file' in kwargs:
-            try:
+        try:
+            if 'file' in kwargs:
                 tpl = env.get_template('/js/' + kwargs['file'] + '.html')
                 trans = translation()
                 env.install_gettext_translations(trans['obj'])
                 # import gettext for language translation
                 return tpl.render(lang = trans['lang'])
-            except:
-                return False
+            else:
+                return kwargs
+        except Exception as e:
+            import libs.tools
+            libs.tools.v(e)
+            return e
 
 
 if __name__ == '__main__':

@@ -111,9 +111,9 @@ View = Backbone.View.extend({
     viewPagination: function(o) {
     /* page navigation display */
         var me = this, dat = me.model.attributes, t;
-        return $.get("/getTpl?file=pagnation", function(d) {
+        Ajax = $.get("/getTpl?file=pagnation", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
         }, "html");
     },
 
@@ -134,7 +134,7 @@ View = Backbone.View.extend({
 
         updateInfo = function() {
             var dat = d;
-            $.getJSON("/system/s_port", function(data) {
+            Ajax = $.getJSON("/system/s_port", function(data) {
                 /* retrieval port summary information */
                 var pmodel = new Model(data),
                 pview = new View({
@@ -152,7 +152,7 @@ View = Backbone.View.extend({
         };
 
         if(!kp) {
-            $.get("/getTpl?file=summary_control", function(d) {
+            Ajax = $.get("/getTpl?file=summary_control", function(d) {
                 t = _.template(d);
                 me.$el.append(t());
                 $("div.systemSummaryTimer").css({
@@ -175,7 +175,7 @@ View = Backbone.View.extend({
         $(id).remove();
         /* remove and clean-up current data */
 
-        $.get("/getTpl?file=" + f, function(d) {
+        Ajax = $.get("/getTpl?file=" + f, function(d) {
             t = _.template(d)
             me.$el.append(t(selector));
             /* because the SysSummaryTimer is shown before, just append it*/
@@ -216,11 +216,11 @@ View = Backbone.View.extend({
     viewDNS: function(o) {
     /* it is about DNS get */
         var me = this, dat = {"items": me.model.attributes[1]}, t;
-        $.get("/getTpl?file=dns", function(d) {
+        Ajax = $.get("/getTpl?file=dns", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
-            $("div.SystemDNS").children("table").css({
+            $("div.SystemDNS").find("table").css({
                 "width": "100%",
                 "height": "100%"
             }).find("input").css("width", "90%");
@@ -236,9 +236,9 @@ View = Backbone.View.extend({
     viewVLAN: function(o) {
     /* it is about VLAN get */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=vlan", function(d) {
+        Ajax = $.get("/getTpl?file=vlan", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             $("div.SystemVLAN").children("table").css({
                 "width": "100%",
@@ -263,7 +263,7 @@ View = Backbone.View.extend({
                     /* block dialog when getting interface data */
                     $('option[vl="new"]').remove();
                     /* remove all existing NIC options and get new */
-                    $.getJSON("/system/getInterfaces", function(d) {
+                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
                         /* return an array of NIC names */
                         $.each(d["real"], function(k, v) {
                             $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
@@ -316,9 +316,9 @@ View = Backbone.View.extend({
     viewBridge: function(o) {
     /* it is about Bridge get */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=bridge", function(d) {
+        Ajax = $.get("/getTpl?file=bridge", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             $("div.SystemBridge").children("table").css({
                 "width": "100%",
@@ -333,9 +333,7 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(true), ck = self.text() + " " + $("span.subtitle").text(), sel = $("select.nicSelect"), newid = new Date().getTime(), opt, title;
-
-        dom.off("click");
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), newid = new Date().getTime(), opt, title;
 
         dom.on("click", "button.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
@@ -349,15 +347,15 @@ View = Backbone.View.extend({
         dom.on("click", "button.btnAddBrInterface", function() {
         /* clicking add bridge interface */
             if($(sel).find("option").size()) {
-                var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface");
+                var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface:last");
                 op.remove();
                 /* remove selected item */
-                $("<td />").text(val).appendTo($("tr.addBrInterface")).appendTo(tr);
-                $("<td />").addClass("text-center").html( $("span button.btnDelBrInterface").clone().attr("opt", val) ).appendTo(tr);
+                $("<td />").text(val).appendTo($("tr.addBrInterface:last")).appendTo(tr);
+                $("<td />").addClass("text-center").append( $("span button.btnDelBrInterface:last").clone().attr("opt", val) ).appendTo(tr);
             }
         });
 
-        require(['jqueryUI', 'bsSwitch'], function() {
+        require(['jqueryUI'], function() {
             dom.dialog({
                 modal: true,
                 title: ck,
@@ -368,7 +366,9 @@ View = Backbone.View.extend({
                     /* enable mask before everything is ready */
 
                     //dom.find(".switch").bootstrapSwitch();
-                    dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                    require(['bsSwitch'], function() {
+                        dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                    });
 
                     me.$el.children("table").css({
                         width: "100%",
@@ -380,25 +380,25 @@ View = Backbone.View.extend({
                     if(!$("#br-hello_time").children("option").size()) {
                     /* hello time range is 1 to 10 */
                         for(i = 1; i < 11; i++) {
-                            $("<option />").val(i).text(i).appendTo($("#br-hello_time"));
+                            $("<option />").val(i).text(i).appendTo(dom.find("#br-hello_time"));
                         }
                     }
 
                     if(!$("#br-max_message_age").children("option").size()) {
                     /* max message age range is 6 to 41 */
                         for(i = 6; i < 41; i++) {
-                            $("<option />").val(i).text(i).appendTo($("#br-max_message_age"));
+                            $("<option />").val(i).text(i).appendTo(dom.find("#br-max_message_age"));
                         }
                     }
 
                     if(!$("#br-forward_delay").children("option").size()) {
                     /* forward delay range is 2 to 31 */
                         for(i = 2; i < 31; i++) {
-                            $("<option />").val(i).text(i).appendTo($("#br-forward_delay"));
+                            $("<option />").val(i).text(i).appendTo(dom.find("#br-forward_delay"));
                         }
                     }
 
-                    $.getJSON("/system/getInterfaces", function(d) {
+                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
                         var dat = d["interface"], cif = [], inf = self.attr("opt");
                         /* available interfaces as an array */
 
@@ -424,9 +424,9 @@ View = Backbone.View.extend({
 
                                     $.each(cif, function(kk, vv) {
                                         /* generate exists interfaces */
-                                       var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface"), td = $("<td />").addClass("text-center");
+                                       var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface:last"), td = $("<td />").addClass("text-center");
                                        $("<td />").text(vv).appendTo(tr);
-                                       $("span.brBtnTpl button.btnDelBrInterface").clone().attr("opt", vv).appendTo(td);
+                                       $("span.brBtnTpl button.btnDelBrInterface:last").clone().attr("opt", vv).appendTo(td);
                                        td.appendTo(tr);
                                     });
 
@@ -498,7 +498,7 @@ View = Backbone.View.extend({
                             }).get().join();
                             console.log(interfaces);
                             $("<td />").text( $("#br_name").val() ).appendTo(tr);
-                            $("<td />").text(interfaces).appendTo(tr);
+                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
                             dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
                             dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
                             dom.find('input, select[name]').each(function(k, v) {
@@ -551,9 +551,9 @@ View = Backbone.View.extend({
     viewIpAddress: function(o) {
     /* ip address setup page display */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=ip_address", function(d) {
+        Ajax = $.get("/getTpl?file=ip_address", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             me.$el.find("table").css({
                 "width": "100%",
@@ -651,9 +651,9 @@ View = Backbone.View.extend({
     viewRoutingTable: function(o) {
     /* routing table display */
         var me = this, dat = {"items": me.model.attributes}, t;
-        $.get("/getTpl?file=routing_table", function(d) {
+        Ajax = $.get("/getTpl?file=routing_table", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             me.$el.find("table").css({
                 "width": "100%",
@@ -714,7 +714,7 @@ View = Backbone.View.extend({
                     dom.block();
                     $('option[rt="new"]').remove();
                     /* remove all existing NIC options and get new */
-                    $.getJSON("/system/getInterfaces", function(d) {
+                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
                         /* return an array of NIC names */
                         $.each(d["all"], function(k, v) {
                             $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
@@ -764,7 +764,7 @@ View = Backbone.View.extend({
     viewArpTable: function(o) {
     /* ip address setup page display */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=arp_table", function(d) {
+        Ajax = $.get("/getTpl?file=arp_table", function(d) {
             $.each(dat, function(k, v) {
                 v["protocol"] = k.split("_")[0];
                 v["type"] = k.split("_")[1];
@@ -773,7 +773,7 @@ View = Backbone.View.extend({
             dat = {"items" : dat};
 
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             me.$el.find("table").css({
                 "width": "100%",
@@ -823,7 +823,7 @@ View = Backbone.View.extend({
                     $('option[arp="new"]').remove();
                     /* remove listed interfaces */
                     dom.block();
-                    $.getJSON("/system/getInterfaces", function(d) {
+                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
                         /* return an array of NIC names */
                         $.each(d["interface"], function(k, v) {
                             $("<option />").attr("arp", "new").val(v).text(v).appendTo("#editArpInterface");
@@ -873,9 +873,9 @@ View = Backbone.View.extend({
     viewDateTime: function(o) {
     /* date time setup page display */
         var me = this, dat = me.model.attributes[1], t;
-        $.get("/getTpl?file=datetime", function(d) {
+        Ajax = $.get("/getTpl?file=datetime", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat));
+            me.$el.html(t(dat));
 
             me.$el.find('input[opt="dt"]').trigger("click");
 
@@ -919,11 +919,9 @@ View = Backbone.View.extend({
     viewDiagnostic: function(o) {
     /* show diagnostic tools page */
         var me = this, t;
-        $.get("/getTpl?file=diagnostic", function(d) {
+        Ajax = $.get("/getTpl?file=diagnostic", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t());
-
-            me.$el.empty().html(t()).find("textarea").css({
+            me.$el.html(t()).find("textarea").css({
                 resize: "none",
                 background: "#fff",
                 width: "90%",
@@ -938,7 +936,7 @@ View = Backbone.View.extend({
         if(self.hasClass("dtStartArpN-snd")) {  /* ARP & NDP fix */
             self.addClass("disabled");
             $("button.dtStartArpN-stp").removeClass("disabled");
-            return $.getJSON("/system/start_arping", function(d) {
+            return Ajax = $.getJSON("/system/start_arping", function(d) {
                 if(true === d[0]) {
                     $("div.dtDialog").appendTo("body").modal();
                     $("div.dtDialog").on("hide", function() {
@@ -948,7 +946,7 @@ View = Backbone.View.extend({
                 }
             });
         } else if(self.hasClass("dtStartArpN-stp") && !self.hasClass("disabled")) {  /* force stop ARP & NDP fix */
-            return $.getJSON("/system/stop_arping", function(d) {
+            return Ajax = $.getJSON("/system/stop_arping", function(d) {
                 if(true === d[0]) {
                     $("div.dtDialog").appendTo("body").modal();
                     $("div.dtDialog").on("hide", function() {
@@ -975,7 +973,7 @@ View = Backbone.View.extend({
         }
 
         if(self.hasClass("stop") && !!self.attr("opt")) {  /* stop pinging / traceroute the target */
-            $.getJSON("/system/stop_" + opt, function(d) {
+            Ajax = $.getJSON("/system/stop_" + opt, function(d) {
                 ct.val('Terminated');
                 $("button.start").removeClass("disabled");
                 self.addClass("disabled").removeAttr("opt");
@@ -988,9 +986,9 @@ View = Backbone.View.extend({
     viewAdmin: function(o) {
     /* display admin page */
         var me = this, dat = me.model.attributes[1], t, conf_file, fw_file;
-        $.get("/getTpl?file=admin", function(d) {
+        Ajax = $.get("/getTpl?file=admin", function(d) {
             t = _.template(d);
-            me.$el.empty().html(t(dat)).find("table").css({
+            me.$el.html(t(dat)).find("table").css({
                 width: "100%",
                 height: "100%"
             }).find("button.btn, input[type='file']").css({
@@ -1053,7 +1051,7 @@ View = Backbone.View.extend({
 
             $("div.SystemAdmin").on("click", "a[opt=cli]", function() {
             /* get SSH/Telnet status from server */
-                $.getJSON("/system/cli", function(d) {
+                Ajax = $.getJSON("/system/cli", function(d) {
                     var res = d[1];
                     if(true === d[0]) {
                         $("#sshEnable").parents(".switch").bootstrapSwitch('setState', res['ssh']);
@@ -1240,6 +1238,10 @@ View = Backbone.View.extend({
                 url = "/service/email";
                 obj = $("div.svEmail");
                 break;
+            case "syslog":
+                url = "/log/syslog";
+                obj = $("div.logSyslog");
+                break;
             default:
                 break;
         }
@@ -1285,15 +1287,24 @@ View = Backbone.View.extend({
 
     execMenu: function(o) {
     /* when click menu item will separate model/template with this function */
+        var ct = $("div.popContent");
         try {
+            Ajax.abort();
+            /* Stop all ajax request */
             clearInterval(timer);
             /* remove auto-refresh timer */
             timer_v = 0;
             /* reset auto-refresh option */
+            $("div.popContent").off("click");
+            $("div.popContent").off("change");
+            $("div.popContent").off("input");
+            /* reset all bind events */
+            ct.empty();
+            /* empty all popContent content */
         } catch(e) {}
 
         require(["blockUI"], function() {
-            $("div.popContent").block({
+            ct.block({
                 onBlock: function() {
                     try {
                     /* this should be remove once every function is ready */
@@ -1312,7 +1323,7 @@ View = Backbone.View.extend({
         });
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */
@@ -1404,7 +1415,7 @@ MainOperation = {
         system summary handling
         o: keep the auto-refresh item or not, if not set, will remove all
     */
-        $.getJSON("/system/ssys", function(d) {
+        Ajax = $.getJSON("/system/ssys", function(d) {
             var me = this;
                 if(o) {
                     $('.systemSummary, .systemSummaryPort').remove();
@@ -1426,7 +1437,7 @@ MainOperation = {
     dns: function(o) {
     /* get DNS setting */
         var me = this;
-        $.getJSON("/system/gdns", function(d) {
+        Ajax = $.getJSON("/system/gdns", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1442,7 +1453,7 @@ MainOperation = {
     vlan: function(o) {
     /* get VLAN setting */
         var me = this;
-        $.getJSON("/system/gvlan", function(d) {
+        Ajax = $.getJSON("/system/gvlan", function(d) {
             me.model = new Model(d),
             me.view = new View({
                 model: me.model,
@@ -1460,7 +1471,7 @@ MainOperation = {
     bridge: function(o) {
     /* get Bridge setting */
         var me = this;
-        $.getJSON("/system/gbridge", function(d) {
+        Ajax = $.getJSON("/system/gbridge", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1478,7 +1489,7 @@ MainOperation = {
     ip: function(o) {
     /* get ip address setting */
         var me = this;
-        $.getJSON("/system/gip", function(d) {
+        Ajax = $.getJSON("/system/gip", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1498,7 +1509,7 @@ MainOperation = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON("/system/groute", function(d) {
+        Ajax = $.getJSON("/system/groute", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1517,7 +1528,7 @@ MainOperation = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON("/system/garp", function(d) {
+        Ajax = $.getJSON("/system/garp", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1536,7 +1547,7 @@ MainOperation = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON("/system/gdate", function(d) {
+        Ajax = $.getJSON("/system/gdate", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1570,7 +1581,7 @@ MainOperation = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        $.getJSON("/system/gadmin", function(d) {
+        Ajax = $.getJSON("/system/gadmin", function(d) {
             me.model = new Model(d);
             me.view = new View({
                 model: me.model,
@@ -1610,7 +1621,7 @@ tools = {
     */
         var me = this, type = type || "alert", str = str || me.str, cb = cb || me.cb, f, t, dom;
         f = ("alert" === type) ? "toolsAlert" : "toolsConfirm";
-        $.get("/getTpl?file=" + f, function(d) {
+        Ajax = $.get("/getTpl?file=" + f, function(d) {
             t = _.template(d);
             $("body").append(t(str));
 

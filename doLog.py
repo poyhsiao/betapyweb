@@ -38,3 +38,22 @@ class Log(object):
         import libs.tools
         _.response.headers["Content-Type"] = "application/json"
         return json.dumps(wvi.refresh())
+
+    @_.expose
+    def syslog(self, **kwargs):
+        '''
+            Syslog getter and setter
+            format:
+            (True, {'server_ip': '192.168.0.1', 'facility': 'local0'})
+        '''
+        import ml_w_syslog as wsl
+        import json
+        import libs.tools
+        _.response.headers["Content-Type"] = "application/json"
+        if "facility" in kwargs:
+            # syslog setter
+            libs.tools.v(kwargs)
+            return json.dumps(wsl.set(cfg = kwargs))
+        else:
+            # syslog getter
+            return json.dumps(wsl.get())

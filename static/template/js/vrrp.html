@@ -1,0 +1,48 @@
+<div class="svVRRP padding">
+  <fieldset>
+    <legend>{{ _("VRRPv2 Setup") }}</legend>
+      <table class="table table-bordered table-hover">
+      <tr>
+        <th>
+          <a href="#" class="btn btnSvVrrpAddGp">{{ _("Add") }}</a>
+        </th>
+        <th colspan="4">{{ _("VRRP Group") }}</th>
+      </tr>
+    <% _.each(group, function(v, k) { %>
+      <tr group="<%= v["group-name"] %>">
+        <td rowspan="5">
+          <a href="#" class="btn btnSvVrrpDelGp btnSvVrrpDel">{{ _("Delete") }}</a>
+        </td>
+        <td rowspan="5"><%= v["group-name"] %></td>
+        <th colspan="3"><a href="#" class="btn btnSvVrrpAddIt">{{ _("Add") }}</a>&nbsp;{{ _("VRRP Instance") }}</th>
+      </tr>
+      <% _.each(v["instance"], function(vv, kk) { %>
+      <tr group="<%= v["group-name"] %>">
+        <th>
+          <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel">{{ _("Delete") }}</a>
+        </th>
+        <td>
+          <%= vv["instance-name"] %>
+          <span class="inactive svVrrpTpl">
+            <% _.each(vv, function(nv, nk) { %>
+              <% if("ipv4_vip" === nk || "ipv4_vr" === nk || "ipv6_vip" === nk || "ipv6_vr" === nk || "additional_track_interface" == nk) { %>
+                <% _.each(nv, function(mv, mk) { %>
+                  <% _.each(mv, function(ov, ok) { %>
+                    <input type="hidden" data-group="<%= v['group-name'] %>" data-InstNumber="<%= kk %>" data-setNumber="<%= mk %>" data-opt="<%= nk %>" name="<%= ok %>" value="<%= ov %>" />
+                  <% }); %>
+                <% }); %>
+              <% } else { %>
+                <input type="hidden" data-group="<%= v['group-name'] %>" data-InstNumber="<%= kk %>" name="<%= nk %>" value="<%= nv %>" />
+              <% } %>
+            <% }); %>
+          </span>
+        </td>
+        <th>
+          <a href="#" class="btn btnSvVrrpEditIt">{{ _("Edit") }}</a>
+        </th>
+      </tr>
+      <% }); %>
+    <% }); %>
+    </table>
+  </fieldset>
+</div>

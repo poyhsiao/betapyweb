@@ -1,19 +1,22 @@
 <div class="SystemIpAddress padding IpInterfaceSelect control-group">
+  <fieldset id="" class="">
+    <legend>{{ _('IP Address') }}</legend>
     <table class="table table-bordered table-hover">
-        <tr>
-            <th>
-              <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
-            </th>
-            <td>
-              <select class="ipSelInterface" id="ipSelecter">
-                <option disabled="disabled">{{ _("Interface") }}</option>
-              <% _.each(ip, function(v, k) { %>
-                <option value="<%= v["interface"] %>"><%= v["interface"] %></option>
-              <% }); %>
-              </select>
-            </td>
-        </tr>
+      <tr>
+        <th>
+          <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
+        </th>
+        <td>
+          <select class="ipSelInterface" id="ipSelecter">
+            <option disabled="disabled">{{ _("Interface") }}</option>
+          <% _.each(ip, function(v, k) { %>
+            <option value="<%= v["interface"] %>"><%= v["interface"] %></option>
+          <% }); %>
+          </select>
+        </td>
+      </tr>
     </table>
+  </fieldset>
 </div>
 <div class="SystemIpV46All">
   <% _.each(ip, function(v, k) { %>

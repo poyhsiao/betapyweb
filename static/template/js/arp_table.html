@@ -1,21 +1,24 @@
 <div class="SystemArpTable padding">
-  <ul class="nav nav-tabs">
-  <% _.each(items, function(v, k) { %>
-    <li>
-      <a href="#arp-<%= k %>" data-toggle="tab">
-      <% if("ipv4_dynamic" === k) { %>
-        {{ _("IPv4 Dynamic Entries") }}
-      <% } else if("ipv4_static" === k) { %>
-        {{ _("IPv4 Fixed Entries") }}
-      <% } else if("ipv6_dynamic" === k) { %>
-        {{ _("IPv6 Neighbor Table Dynamic Entries") }}
-      <% } else if("ipv6_static" === k) { %>
-        {{ _("IPv6 Neighbor Table Fixed Entries") }}
-      <% } %>
-      </a>
-    </li>
-  <% }); %>
-  </ul>
+  <fieldset id="" class="">
+    <legend>{{ _('ARP Table') }}</legend>
+    <ul class="nav nav-tabs">
+    <% _.each(items, function(v, k) { %>
+      <li>
+        <a href="#arp-<%= k %>" data-toggle="tab">
+        <% if("ipv4_dynamic" === k) { %>
+          {{ _("IPv4 Dynamic Entries") }}
+        <% } else if("ipv4_static" === k) { %>
+          {{ _("IPv4 Fixed Entries") }}
+        <% } else if("ipv6_dynamic" === k) { %>
+          {{ _("IPv6 Neighbor Table Dynamic Entries") }}
+        <% } else if("ipv6_static" === k) { %>
+          {{ _("IPv6 Neighbor Table Fixed Entries") }}
+        <% } %>
+        </a>
+      </li>
+    <% }); %>
+    </ul>
+  </fieldset>
 </div>
 <div class="tab-content">
 <% _.each(items, function(v, k) { %>

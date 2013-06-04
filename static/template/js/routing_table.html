@@ -1,44 +1,47 @@
 <div class="SystemRoutingTable padding">
-  <ul class="nav nav-tabs nav-rt">
-    <li class="active">
-      <a href="#" opt="ipv4">{{ _("IPv4 Routing Table") }}</a>
-    </li>
-    <li>
-      <a href="#" opt="ipv6">{{ _("IPv6 Routing Table") }}</a>
-    </li>
-  </ul>
-  <% _.each(items[1], function(v, k) { %>
-  <div class="SystemRoutingTable-rt SystemRoutingTable-<%= k %> padding<% if(k !== 'ipv4') { %> inactive<% } %>">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>{{ _("Destination") }}</th>
-        <th>{{ _("Prefix Length") }}</th>
-        <th>{{ _("Gateway") }}</th>
-        <th>{{ _("Interface") }}</th>
-        <td>
-          <button class="btn btnRTAdd" opt="<%= k %>">{{ _("Add") }}</button>
-        </td>
-      </tr>
-      <% if(items[1][k].length) { %>
-        <% for(var kk = 0; kk < v.length; kk++) { %>
-      <tr>
-        <td><%= v[kk]["destination"] %></td>
-        <td><%= v[kk]["prefix"] %></td>
-        <td><%= v[kk]["gateway"] %></td>
-        <td><%= v[kk]["interface"] %></td>
-        <td>
-          <button class="btn btnRTDel">{{ _("Delete") }}</button>
-          <input type="hidden" name="<%= k %>-destination" value="<%= v[kk]["destination"] %>" />
-          <input type="hidden" name="<%= k %>-prefix" value="<%= v[kk]["prefix"] %>" />
-          <input type="hidden" name="<%= k %>-gateway" value="<%= v[kk]["gateway"] %>" />
-          <input type="hidden" name="<%= k %>-interface" value="<%= v[kk]["interface"] %>" />
-        </td>
-      </tr>
+  <fieldset id="" class="">
+    <legend>{{ _('Routing Table') }}</legend>
+    <ul class="nav nav-tabs nav-rt">
+      <li class="active">
+        <a href="#" opt="ipv4">{{ _("IPv4 Routing Table") }}</a>
+      </li>
+      <li>
+        <a href="#" opt="ipv6">{{ _("IPv6 Routing Table") }}</a>
+      </li>
+    </ul>
+    <% _.each(items[1], function(v, k) { %>
+    <div class="SystemRoutingTable-rt SystemRoutingTable-<%= k %> padding<% if(k !== 'ipv4') { %> inactive<% } %>">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Destination") }}</th>
+          <th>{{ _("Prefix Length") }}</th>
+          <th>{{ _("Gateway") }}</th>
+          <th>{{ _("Interface") }}</th>
+          <td>
+            <button class="btn btnRTAdd" opt="<%= k %>">{{ _("Add") }}</button>
+          </td>
+        </tr>
+        <% if(items[1][k].length) { %>
+          <% for(var kk = 0; kk < v.length; kk++) { %>
+        <tr>
+          <td><%= v[kk]["destination"] %></td>
+          <td><%= v[kk]["prefix"] %></td>
+          <td><%= v[kk]["gateway"] %></td>
+          <td><%= v[kk]["interface"] %></td>
+          <td>
+            <button class="btn btnRTDel">{{ _("Delete") }}</button>
+            <input type="hidden" name="<%= k %>-destination" value="<%= v[kk]["destination"] %>" />
+            <input type="hidden" name="<%= k %>-prefix" value="<%= v[kk]["prefix"] %>" />
+            <input type="hidden" name="<%= k %>-gateway" value="<%= v[kk]["gateway"] %>" />
+            <input type="hidden" name="<%= k %>-interface" value="<%= v[kk]["interface"] %>" />
+          </td>
+        </tr>
+          <% } %>
         <% } %>
-      <% } %>
-    </table>
-  </div>
-  <% }); %>
+      </table>
+    </div>
+    <% }); %>
+  </fieldset>
 </div>
 <div class="SystemRoutingTable-edit padding control-group inactive form-horizontal">
   <div class="control-group">

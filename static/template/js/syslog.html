@@ -1,0 +1,17 @@
+<div class="logSyslog padding">
+  <fieldset id="" class="">
+    <legend>{{ _("Syslog Setting") }}</legend>
+    <label for="slServerIp" class="control-label strong">{{ _("Server IP") }}</label>
+    <div class="controls">
+      <input id="slServerIp" type="text" name="server_ip" placeholder="{{ _("Server IP") }}" value="<%= server_ip %>" />
+    </div>
+    <label for="slFacility" class="control-label strong">{{ _("Facility") }}</label>
+    <div class="controls">
+      <select name="facility" id="slFacility" value="<%= facility %>">
+      <% for(var i = 0; i < 8; i++) { %>
+        <option value="local<%= i %>" <% if("local" + i === facility) { %>selected="selected"<% } %>>Local<%= i%></option>
+      <% } %>
+      </select>
+    </div>
+  </fieldset>
+</div>

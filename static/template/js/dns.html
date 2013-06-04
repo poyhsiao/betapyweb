@@ -1,46 +1,47 @@
 <div class="SystemDNS padding control-group">
-  <table class="table table-bordered table-hover">
-    <tbody>
-        <tr>
-          <th>
-            <label class="control-label strong" for="hostname">{{ _("Host Name") }}</label>
-          </th>
-          <td>
-            <div class="controls">
-              <input type="text" value="<%= items["hostname"] %>" id="hostname" name="hostname" placeholder="{{ _("Host Name") }}" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label strong" for="domain-name">{{ _("Domain Name") }}</label>
-          </th>
-          <td>
-            <div class="controls">
-              <input type="text" value="<%= items["domain-name"] %>" id="domain-name" name="domain-name" placeholder="{{ _("Domain Name") }}" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label strong" for="dns-server-1">{{ _("DNS Server 1") }}</label>
-          </th>
-          <td>
-            <div class="controls">
-              <input type="text" value="<%= items["dns-server-1"] %>" id="dns-server-1" name="dns-server-1" placeholder="{{ _("DNS Server 1") }}" />
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>
-            <label class="control-label strong" for="dns-server-2">{{ _("DNS Server 2") }}</label>
-          </th>
-          <td>
-            <div class="controls">
-              <input type="text" value="<%= items["dns-server-2"] %>" id="dns-server-2" name="dns-server-2" placeholder="{{ _("DNS Server 2") }}" />
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
+  <fieldset id="" class="">
+    <legend>{{ _('DNS') }}</legend>
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th>
+          <label class="control-label strong" for="hostname">{{ _("Host Name") }}</label>
+        </th>
+        <td>
+          <div class="controls">
+            <input type="text" value="<%= items["hostname"] %>" id="hostname" name="hostname" placeholder="{{ _("Host Name") }}" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label class="control-label strong" for="domain-name">{{ _("Domain Name") }}</label>
+        </th>
+        <td>
+          <div class="controls">
+            <input type="text" value="<%= items["domain-name"] %>" id="domain-name" name="domain-name" placeholder="{{ _("Domain Name") }}" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label class="control-label strong" for="dns-server-1">{{ _("DNS Server 1") }}</label>
+        </th>
+        <td>
+          <div class="controls">
+            <input type="text" value="<%= items["dns-server-1"] %>" id="dns-server-1" name="dns-server-1" placeholder="{{ _("DNS Server 1") }}" />
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          <label class="control-label strong" for="dns-server-2">{{ _("DNS Server 2") }}</label>
+        </th>
+        <td>
+          <div class="controls">
+            <input type="text" value="<%= items["dns-server-2"] %>" id="dns-server-2" name="dns-server-2" placeholder="{{ _("DNS Server 2") }}" />
+          </div>
+        </td>
+      </tr>
+    </table>
+  </fieldset>
 </div>
