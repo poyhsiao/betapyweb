@@ -131,7 +131,8 @@ tion': '', 'community': 'public'})
         _.response.headers["Content-Type"] = "application/json"
         if 'group' in kwargs:
             # setter
-            pass
+            libs.tools.v(kwargs)
+            return json.dumps(kwargs)
         else:
             # getter
             return json.dumps(wvr.get())

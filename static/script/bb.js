@@ -1238,6 +1238,10 @@ View = Backbone.View.extend({
                 url = "/service/email";
                 obj = $("div.svEmail");
                 break;
+            case "vrrp":
+                url = "/service/vrrp";
+                obj = $("div.svVRRP");
+                break;
             case "syslog":
                 url = "/log/syslog";
                 obj = $("div.logSyslog");
@@ -1291,17 +1295,21 @@ View = Backbone.View.extend({
         try {
             Ajax.abort();
             /* Stop all ajax request */
+       } catch(e) {}
+
+       try {
             clearInterval(timer);
             /* remove auto-refresh timer */
             timer_v = 0;
             /* reset auto-refresh option */
-            $("div.popContent").off("click");
-            $("div.popContent").off("change");
-            $("div.popContent").off("input");
-            /* reset all bind events */
-            ct.empty();
-            /* empty all popContent content */
         } catch(e) {}
+
+        $("div.popContent").off("click");
+        $("div.popContent").off("change");
+        $("div.popContent").off("input");
+        /* reset all bind events */
+        ct.empty();
+        /* empty all popContent content */
 
         require(["blockUI"], function() {
             ct.block({

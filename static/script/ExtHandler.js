@@ -96,11 +96,65 @@ var eView = Backbone.View.extend({
         var me = this, dat = me.model.attributes[1], t;
         Ajax = $.get("/getTpl?file=vrrp", function(d) {
             t = _.template(d);
+            Ajax = dat;
             me.$el.html(t(dat)).find("td, th").css({
                 "vertical-align": "middle",
                 "text-align": "center"
             });
         }, "html");
+    },
+
+    addSvVrrpG: function(o) {
+    /* add new VRRP group */
+        var me = this, self = $(o.target), ct = $("div.svVRRP"), uid = new Date().getTime(), tr, td;
+
+        tr = $("<tr />", {
+            group: "Auto-" + uid
+        }).appendTo(ct.find("table"));
+
+        $("<td />", {
+        }).append(
+            ct.find("span.svVrrpTpl a.btnSvVrrpDelGp").clone()
+        ).appendTo(tr);
+
+        $("<td />", {
+            text: "Auto-" + uid
+        }).appendTo(tr);
+
+        $("<th />", {
+            colspan: 3
+        }).append(
+            ct.find("span.svVrrpTpl span.svVrrpNewInst").clone()
+        ).appendTo(tr);
+
+        ct.find("td, th").css({
+            "vertical-align": "middle",
+            "text-align": "center"
+        });
+    },
+
+    updateSvVrrpGpName: function(o) {
+    /* Change and update group name */
+        var me = this, self = $(o.target), uid = new Date().getTime(), orgVal = self.data("group"), val = self.siblings("input").val(), inputs;
+        if(!val.length) {
+        /* for empty value will auto-set group name */
+            val = "Auto-" + uid;
+            self.siblings("input").val(val);
+        }
+
+        inputs = $("input[name^='" + orgVal + "@@']");
+
+        console.log(inputs);
+        inputs.each(function(k, v) {
+            $(v).attr("name", function(i, name) {
+                ov = new RegExp('^' + orgVal + '@@');
+                return name.replace(ov, val + "@@", "g");
+            });
+            $(v).data("group", val);
+            /* when update data-group, the html code will not change, but still can get the updated number with data("group") */
+        });
+
+        console.log(inputs);
     },
 
     deleteSvVrrp: function(o) {
@@ -214,6 +268,8 @@ var ExtHandler = {
             me.view = new eView({
                 model: me.model,
                 events: {
+                    "click a.btnSvVrrpAddGp": "addSvVrrpG",
+                    "click a.btnSvVrrpEditGpName": "updateSvVrrpGpName",
                     "click a.btnSvVrrpDel": "deleteSvVrrp"
                 }
             });
