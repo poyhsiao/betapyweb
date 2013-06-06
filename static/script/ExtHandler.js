@@ -113,11 +113,13 @@ var eView = Backbone.View.extend({
         }).appendTo(ct.find("table"));
 
         $("<td />", {
+            rowspan: 1
         }).append(
             ct.find("span.svVrrpTpl a.btnSvVrrpDelGp").clone()
         ).appendTo(tr);
 
         $("<td />", {
+            rowspan: 1,
             text: "Auto-" + uid
         }).appendTo(tr);
 
@@ -133,28 +135,16 @@ var eView = Backbone.View.extend({
         });
     },
 
-    updateSvVrrpGpName: function(o) {
+    updateSvVrrpNames: function(o) {
     /* Change and update group name */
-        var me = this, self = $(o.target), uid = new Date().getTime(), orgVal = self.data("group"), val = self.siblings("input").val(), inputs;
+        var me = this, self = $(o.target), uid = new Date().getTime(), orgVal = self.data("group"), val = self.siblings("input").val(), prefix = self.hasClass("btnSvVrrpEditGpName") ? 'VG-' : 'VI-';
         if(!val.length) {
         /* for empty value will auto-set group name */
-            val = "Auto-" + uid;
+            val = prefix + uid;
             self.siblings("input").val(val);
         }
 
-        inputs = $("input[name^='" + orgVal + "@@']");
-
-        console.log(inputs);
-        inputs.each(function(k, v) {
-            $(v).attr("name", function(i, name) {
-                ov = new RegExp('^' + orgVal + '@@');
-                return name.replace(ov, val + "@@", "g");
-            });
-            $(v).data("group", val);
-            /* when update data-group, the html code will not change, but still can get the updated number with data("group") */
-        });
-
-        console.log(inputs);
+        return me.saveSNMP();
     },
 
     deleteSvVrrp: function(o) {
@@ -174,6 +164,136 @@ var eView = Backbone.View.extend({
         }
 
         return me.saveSNMP();
+    },
+
+    addEditSvVrrpIns: function(o) {
+    /* Add or Edit VRRP instance */
+        var me = this, self = $(o.target), gpnumber = self.attr("gpnumber"), instnumber = self.attr("instnumber"), dat, dom, t, items;
+
+        Ajax = $.get("/getTpl?file=vrrpEdit", function(d) {
+            if(self.hasClass("btnSvVrrpEditIt")) {
+            /* Edit mode */
+                dat = {"items": me.model.attributes[1]['group'][gpnumber]['instance'][instnumber]};
+                console.log(dat);
+                t = _.template(d);
+                me.$el.append(t(dat));
+            } else {
+            /* Add mode */
+                t = _.template(d);
+                me.$el.append(t({"items": ""}));
+            }
+
+            dom = $("div.vrrpEdit");
+            dom.dialog({
+                modal: true,
+                closeOnEscape: false,
+                width: "auto",
+                open: function() {
+                    $(".no-close, .ui-dialog-titlebar-close").hide();
+                    /* remove all close window button */
+
+                    dom.block();
+
+                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
+                        /* return an array of NIC names */
+                        $.each(d["real"], function(k, v) {
+                            $("<option />", {
+                                value: v,
+                                text: v
+                            }).val(v).text(v).appendTo("select.ifs");
+                        });
+
+                        require(['bsSwitch'], function() {
+                            dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                        });
+
+                        if("undefined" != typeof(dat)) {
+                        /* edit existing instance*/
+                            items = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr"];
+                            $.each(items, function(k, v) {
+                                $.each(dat["items"][v], function(kk, vv) {
+                                    dom.find("select[opt='" + v + "-" + kk + "']").find("option[value='" + vv["interface"] + "']").attr("selected", "selected");
+                                    /* set the interface selected */
+                                });
+                            });
+
+                            items = ["sync-interface"];
+                            $.each(items, function(k, v) {
+                                dom.find("select[name='" + v + "']").find("option[value='" + dat['items'][v] + "']").attr("selected", "selected");
+                                /* set the interface selected */
+                            });
+                        }
+
+                        dom.on("click", ".btnAddAtInterface", function() {
+                        /* click add new Additional Track Interface */
+                            var ck = $(this), sel = ck.siblings("select"), tr = ck.parents("tr"), ntr;
+                            if(sel.children().size()) {
+                                ntr = $("tr.newSelAvailAtIf").clone(true);
+                                console.log(ntr);
+                                ntr.find(".usedAtIf").text(sel.val());
+                                ntr.find("input[type=hidden]").val( sel.val() );
+                                sel.find("option[value='" + sel.val() + "']").remove();
+                                ntr.removeClass("newSelAvailAtIf").insertAfter(tr);
+                            }
+                            return false;
+                        });
+
+                        dom.on("click", ".btnDelAtInterface", function() {
+                        /* click delete button to remove Additional Track Interface */
+                            var ck = $(this), input = ck.siblings("input"), sel = $("#svAvailableAtIf");
+                            $("<option />", {
+                                value: input.val(),
+                                text: input.val()
+                            }).appendTo(sel);
+
+                            ck.parents("tr").hide("fast", function() {
+                                $(this).remove();
+                            });
+                            return false;
+                        });
+
+                        dom.on("click", ".btnAdd", function() {
+                        /* click to add ipv4 or ipv6 VIP or Virtual Router setting */
+                            var ck = $(this), tpl = $("tr." + ck.data("tpl")).clone(true).hide(), base = ck.parents("tr").data("class");
+                            tpl.removeClass(ck.data("tpl")).insertAfter($("tr." + base + ":last")).show("fast");
+                            return false;
+                        });
+
+                        dom.on("click", ".btnDel", function() {
+                        /* click to remove ipv4 or ipv6 VIP or Virtual Router setting */
+                            var ck = $(this);
+                            ck.parents("tr").hide("fast", function() {
+                                $(this).remove();
+                            });
+                            return false;
+                        });
+
+                        dom.unblock();
+                    });
+                },
+                close: function() {
+                    dom.off("*");
+                    /* unbind all events */
+
+                    dom.dialog("destroy");
+                    dom.andSelf().remove();
+                    /* completly remove dom */
+                    $("table.svVrrpTpl").andSelf().remove();
+                    /* completly remove template table */
+                },
+                buttons: [{
+                    text: "Ok",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function() {
+                        dom.dialog("close");
+                    }
+                }]
+            });
+        }, "html");
     },
 
     viewView: function(o) {
@@ -269,8 +389,11 @@ var ExtHandler = {
                 model: me.model,
                 events: {
                     "click a.btnSvVrrpAddGp": "addSvVrrpG",
-                    "click a.btnSvVrrpEditGpName": "updateSvVrrpGpName",
-                    "click a.btnSvVrrpDel": "deleteSvVrrp"
+                    "click a.btnSvVrrpEditGpName": "updateSvVrrpNames",
+                    "click a.btnSvVrrpEditInstName": "updateSvVrrpNames",
+                    "click a.btnSvVrrpDel": "deleteSvVrrp",
+                    "click a.btnSvVrrpAddIt": "addEditSvVrrpIns",
+                    "click a.btnSvVrrpEditIt": "addEditSvVrrpIns"
                 }
             });
 

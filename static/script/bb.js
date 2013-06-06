@@ -268,6 +268,7 @@ View = Backbone.View.extend({
                         $.each(d["real"], function(k, v) {
                             $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
                         });
+
                         dom.unblock();
                     });
                 },

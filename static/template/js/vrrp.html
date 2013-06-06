@@ -10,7 +10,7 @@
           <th colspan="4">{{ _("VRRP Group") }}</th>
         </tr>
       <% _.each(group, function(v, k) { %>
-        <tr group="<%= v["group-name"] %>">
+        <tr group="<%= k %>">
           <td rowspan="<%= v["instance"].length + 1 %>">
             <a href="#" class="btn btnSvVrrpDelGp btnSvVrrpDel">{{ _("Delete") }}</a>
           </td>
@@ -23,33 +23,37 @@
           </td>
           <th colspan="3">
             <span class="svVrrpNewInst">
-              <a href="#" class="btn btnSvVrrpAddIt">{{ _("Add") }}</a>&nbsp;{{ _("VRRP Instance") }}
+              <a href="#" class="btn btnSvVrrpAddIt" gpnumber="<%= k %>">{{ _("Add") }}</a>&nbsp;{{ _("VRRP Instance") }}
             </span>
           </th>
         </tr>
         <% _.each(v["instance"], function(vv, kk) { %>
-        <tr group="<%= v["group-name"] %>">
+        <tr group="<%= k %>">
           <th>
             <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel">{{ _("Delete") }}</a>
           </th>
           <td>
-            <%= vv["instance-name"] %>
+            <div class="input-prepend input-append">
+              <span class="add-on"><i class="icon-pencil"></i></span>
+              <input type="text" class="span2" value="<%= vv["instance-name"] %>" data-groupnum="<%= k %>" data-instnumber="<%= kk %>" placeholder="{{ _("VRRP Group Name") }}" />
+              <a href="#" class="btn btnSvVrrpEditInstName" data-instance="<%= vv["instance-name"] %>">{{ _("Edit") }}</a>
+            </div>
             <span class="inactive svVrrpTpl">
               <% _.each(vv, function(nv, nk) { %>
                 <% if("ipv4_vip" === nk || "ipv4_vr" === nk || "ipv6_vip" === nk || "ipv6_vr" === nk || "additional_track_interface" == nk) { %>
                   <% _.each(nv, function(mv, mk) { %>
                     <% _.each(mv, function(ov, ok) { %>
-                      <input type="hidden" data-group="<%= v['group-name'] %>" data-InstNumber="<%= kk %>" data-<%= nk %>="<%= mk %>" data-opt="<%= nk %>" name="<%= v['group-name'] %>@@<%= kk %>@@<%= nk %>@@<%= mk %>@@<%= ok %>" value="<%= ov %>" />
+                      <input type="hidden" data-groupnum="<%= k %>" data-InstNumber="<%= kk %>" data-<%= nk %>="<%= mk %>" data-opt="<%= nk %>" name="<%= k %>@@<%= kk %>@@<%= nk %>@@<%= mk %>@@<%= ok %>" value="<%= ov %>" />
                     <% }); %>
                   <% }); %>
                 <% } else { %>
-                  <input type="hidden" data-group="<%= v['group-name'] %>" data-InstNumber="<%= kk %>" name="<%= v['group-name'] %>@@<%= kk %>@@<%= nk %>" value="<%= nv %>" />
+                  <input type="hidden" data-groupnum="<%= k %>" data-instnumber="<%= kk %>" name="<%= k %>@@<%= kk %>@@<%= nk %>" value="<%= nv %>" />
                 <% } %>
               <% }); %>
             </span>
           </td>
           <th>
-            <a href="#" class="btn btnSvVrrpEditIt">{{ _("Edit") }}</a>
+            <a href="#" class="btn btnSvVrrpEditIt" gpnumber="<%= k %>" instnumber="<%= kk %>">{{ _("Edit") }}</a>
           </th>
         </tr>
       <% }); %>
