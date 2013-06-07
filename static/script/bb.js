@@ -1332,7 +1332,7 @@ View = Backbone.View.extend({
         });
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */

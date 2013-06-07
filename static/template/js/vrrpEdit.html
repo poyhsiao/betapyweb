@@ -26,7 +26,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-tag"></i></span>
-          <select name="sync-interface" id="svVrrpSyncIf" class="selsvVrrpSyncIf ifs all-ifs span3"></select>
+          <select name="<%= gp.no %>@@<%= ist.no %>@@sync-interface" id="svVrrpSyncIf" class="selsvVrrpSyncIf ifs all-ifs span3"></select>
         </div>
       </td>
     </tr>
@@ -37,7 +37,7 @@
       <td colspan="2">
         <div class="input-prepend input-append">
           <span class="add-on"><i class="icon-time"></i></span>
-          <input id="svVrrpDga" type="number" name="delay-gratuitous-arp" value="<%= items["delay-gratuitous-arp"] %>" placeholder="{{ _("Delay for Gratuitous ARP after transistion to MASTER") }}" class="span3" />
+          <input id="svVrrpDga" type="number" name="<%= gp.no %>@@<%= ist.no %>@@delay-gratuitous-arp" value="<%= items["delay-gratuitous-arp"] %>" placeholder="{{ _("Delay for Gratuitous ARP after transistion to MASTER") }}" class="span3" />
           <span class="add-on">{{ _("sec")}}</span>
         </div>
       </td>
@@ -49,7 +49,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-magnet"></i></span>
-          <select name="virtual-router-id" id="selSvVrrpVrid" class="span3">
+          <select name="<%= gp.no %>@@<%= ist.no %>@@virtual-router-id" id="selSvVrrpVrid" class="span3">
           <% for(var i = 1; i < 256; i++) { %>
             <option value="<%= i %>"<% if(i === items["virtual-router-id"]) { %> selected="selected"<% } %>><%= i %></option>
           <% } %>
@@ -64,7 +64,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select name="priority" id="selSvVrrpPri" class="span3">
+          <select name="<%= gp.no %>@@<%= ist.no %>@@priority" id="selSvVrrpPri" class="span3">
           <% for(var i = 1; i < 256; i++) { %>
             <option value="<%= i %>"<% if(i === items["priority"]) { %> selected="selected"<% } %>><%= i %></option>
           <% } %>
@@ -79,7 +79,7 @@
       <td colspan="2">
         <div class="input-prepend input-append">
           <span class="add-on"><i class="icon-time"></i></span>
-          <input id="svVrrpVai" type="number" name="advertisement-interval" value="<%= items["advertisement-interval"] %>" placeholder="{{ _("VRRP Advertisment Interval") }}" class="span3" />
+          <input id="svVrrpVai" type="number" name="<%= gp.no %>@@<%= ist.no %>@@advertisement-interval" value="<%= items["advertisement-interval"] %>" placeholder="{{ _("VRRP Advertisment Interval") }}" class="span3" />
           <span class="add-on">{{ _("sec")}}</span>
         </div>
       </td>
@@ -87,7 +87,7 @@
     <tr>
       <th colspan="5">{{ _("IPv4 Virtual IP Address") }}</th>
     </tr>
-    <tr data-class="ipv4Vip" class="ipv4Vip">
+    <tr data-class="ipv4Vip" class="ipv4Vip ipv4VipHead" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv4_vip">
       <th colspan="1">
         <a href="#" class="btn btnAdd btnAddIpv4Vip" data-tpl="newIpv4VipTpl">{{ _("Add") }}</a>
       </th>
@@ -96,26 +96,26 @@
       <th colspan="1">{{ _("Interface") }}</th>
     </tr>
   <% _.each(items["ipv4_vip"], function(v, k) { %>
-    <tr data-class="ipv4Vip" class="ipv4Vip">
+    <tr data-class="ipv4Vip" class="ipv4Vip" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv4_vip"  serial="<%= k %>">
       <th colspan="1">
         <a href="#" class="btn btnDel btnDelIpv4Vip">{{ _("Delete") }}</a>
       </th>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="ipv4" value="<%= v["ipv4"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@ipv4" value="<%= v["ipv4"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="interface" opt="ipv4_vip-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@interface" opt="ipv4_vip-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -123,7 +123,7 @@
     <tr>
       <th colspan="5">{{ _("IPv4 Virtual Routes") }}</th>
     </tr>
-    <tr data-class="ipv4Vr" class="ipv4Vr">
+    <tr data-class="ipv4Vr" class="ipv4Vr ipv4VrHead" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv4_vr">
       <th colspan="1">
         <a href="#" class="btn btnAdd btnAddIpv4Vr" data-tpl="newIpv4VrTpl">{{ _("Add") }}</a>
       </th>
@@ -133,32 +133,32 @@
       <th colspan="1">{{ _("Interface") }}</th>
     </tr>
   <% _.each(items["ipv4_vr"], function(v, k) { %>
-    <tr data-class="ipv4Vr" class="ipv4Vr">
+    <tr data-class="ipv4Vr" class="ipv4Vr" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv4_vr" serial="<%= k %>">
       <th colspan="1">
         <a href="#" class="btn btnDel btnDelIpv4Vr">{{ _("Delete") }}</a>
       </th>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="destination-ipv4" value="<%= v["destination-ipv4"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@destination-ipv4" value="<%= v["destination-ipv4"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="interface" opt="ipv4_vr-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@interface" opt="ipv4_vr-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -166,7 +166,7 @@
     <tr>
       <th colspan="5">{{ _("IPv6 Virtual IP Address") }}</th>
     </tr>
-    <tr data-class="ipv6Vip" class="ipv6Vip">
+    <tr data-class="ipv6Vip" class="ipv6Vip ipv6VipHead" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv6_vip">
       <th colspan="1">
         <a href="#" class="btn btnAdd btnAddIpv6Vip" data-tpl="newIpv6VipTpl">{{ _("Add") }}</a>
       </th>
@@ -175,26 +175,26 @@
       <th colspan="1">{{ _("Interface") }}</th>
     </tr>
   <% _.each(items["ipv6_vip"], function(v, k) { %>
-    <tr data-class="ipv6Vip" class="ipv6Vip">
+    <tr data-class="ipv6Vip" class="ipv6Vip" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv6_vip" serial="<%= k %>">
       <th colspan="1">
         <a href="#" class="btn btnDel btnDelIpv6Vip">{{ _("Delete") }}</a>
       </th>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="ipv6" value="<%= v["ipv6"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@ipv6" value="<%= v["ipv6"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="interface" opt="ipv6_vip-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@interface" opt="ipv6_vip-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -202,7 +202,7 @@
     <tr>
       <th colspan="5">{{ _("IPv6 Virtual Routes") }}</th>
     </tr>
-    <tr data-class="ipv6Vr" class="ipv6Vr">
+    <tr data-class="ipv6Vr" class="ipv6Vr ipv6VrHead" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv6_vr">
       <th colspan="1">
         <a href="#" class="btn btnAdd btnAddIpv6Vr" data-tpl="newIpv6VrTpl">{{ _("Add") }}</a>
       </th>
@@ -212,32 +212,32 @@
       <th colspan="1">{{ _("Interface") }}</th>
     </tr>
   <% _.each(items["ipv6_vr"], function(v, k) { %>
-    <tr data-class="ipv6Vr" class="ipv6Vr">
+    <tr data-class="ipv6Vr" class="ipv6Vr" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" opt="ipv6_vr" serial="<%= k %>">
       <th colspan="1">
         <a href="#" class="btn btnDel btnDelIpv6Vr">{{ _("Delete") }}</a>
       </th>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="destination-ipv6" value="<%= v["destination-ipv6"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@destination-ipv6" value="<%= v["destination-ipv6"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="interface" opt="ipv6_vr-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@interface" opt="ipv6_vr-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -245,7 +245,7 @@
     <tr>
       <th colspan="5">
         <label class="control-label strong">
-          <input type="checkbox" name="preempt" value="true" />&nbsp;{{ _("Preempt") }}
+          <input type="checkbox" name="<%= gp.no %>@@<%= ist.no %>@@preempt" value="true" />&nbsp;{{ _("Preempt") }}
         </label>
       </th>
     </tr>
@@ -255,7 +255,7 @@
   <tr class="newSelAvailAtIf">
     <th colspan="3">
       <a href="#" class="btn btnDelAtInterface">{{ _("Delete" )}}</a>
-      <input type="hidden" name="additional_track_interface" />
+      <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@interface" />
     </th>
     <td colspan="2">
       <span class="usedAtIf">&nbsp;</span>
