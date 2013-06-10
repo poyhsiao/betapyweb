@@ -101,6 +101,8 @@ var eView = Backbone.View.extend({
                 "vertical-align": "middle",
                 "text-align": "center"
             });
+
+            ov = me.model.attributes[1] || {"group": [{"instance": []}]};
         }, "html");
     },
 
@@ -152,7 +154,7 @@ var eView = Backbone.View.extend({
 
     updateSvVrrpNames: function(o) {
     /* Change and update group name */
-        var me = this, self = $(o.target), uid = new Date().getTime(), orgVal = self.attr("gname"), val = self.siblings("input").val(), prefix = self.hasClass("btnSvVrrpEditGpName") ? 'VG-' : 'VI-';
+        var me = this, self = $(o.target), uid = $.now(), orgVal = self.attr("gname"), val = self.siblings("input").val(), prefix = self.hasClass("btnSvVrrpEditGpName") ? 'VG-' : 'VI-';
 
         if(!val.length) {
         /* for empty value will auto-set group name */
@@ -202,7 +204,7 @@ var eView = Backbone.View.extend({
      * for ipv4/v6 Vip/Vr will return:
      *      {"no": (next number), "gnumber": (group number), "inumber": (instance number), "opt": (item name)}
      */
-        var me = this, type = type || "group", uid = new Date().getTime(), ngn = [], gn, opt, tr;
+        var me = this, type = type || "group", uid = $.now(), ngn = [], gn, opt, tr;
 
         if("group" === type) {
             opt = $("tr[gnumber]");
@@ -260,6 +262,78 @@ var eView = Backbone.View.extend({
         }
     },
 
+    _inputsToObject: function(gnumber, inumber, other) {
+    /*
+     * Just work for Vrrp items' check
+     * convert input values to json or convert json to input values
+     *
+     * Parameters:
+     * gnumber: group number (int) - required
+     * inumber: instance number (int) - required
+     * other: other object like ipv4_vip/ipv4_vr/ipv6_vip/ipv6_vr and it's number, the format should be like below:
+     * {"ipv4_vip", [{'interface': 's0e1', 'ipv4': '192.168.1.1', 'netmask': '255.255.255.0'}]} ... - optional
+     */
+        var me = this, ips = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr", "additional_track_interface"], names = [], obj, paras, prefix, swap;
+
+        if("undefined" === typeof(ov['group'][gnumber])) {
+            ov['group'][gnumber] = {"instance": []};
+        }
+
+        if("undefined" === typeof(ov['group'][gnumber]['instance'])) {
+            ov['group'][gnumber]["instance"] = [];
+        }
+
+        if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber])) {
+            ov['group'][gnumber]['instance'][inumber] = {};
+        }
+
+        obj = [];
+        prefix = gnumber + "@@" + inumber + "@@";
+        params = $(":input[name^='" + prefix + "']");
+
+        params.each(function(k, v) {
+            names = $(v).attr("name").replace(prefix, '');
+            if(-1 !== names.indexOf('@@')) {
+            /* names contains with @@ */
+                names = names.split("@@");
+                names[1] = ~~names[1];
+                obj.push(names[0]);
+
+                if(!$.isArray(ov['group'][gnumber]['instance'][inumber][names[0]])) {
+                    ov['group'][gnumber]['instance'][inumber][names[0]] = [];
+                }
+                if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber][names[0]][names[1]])) {
+                    ov['group'][gnumber]['instance'][inumber][names[0]][names[1]] = {};
+                }
+                ov['group'][gnumber]['instance'][inumber][names[0]][names[1]][names[2]] = $(v).val();
+
+            } else {
+                if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber])) {
+                    ov['group'][gnumber]['instance'][inumber] = {};
+                }
+                ov['group'][gnumber]['instance'][inumber][names] = $(v).val();
+            }
+        });
+        swap = _.intersection(ips, _.uniq(obj));
+
+        if(swap.length) {
+            $.each(swap, function(k, v) {
+                ov['group'][gnumber]['instance'][inumber][v] = _.compact(ov['group'][gnumber]['instance'][inumber][v]);
+                /* remove empty items of the array */
+            });
+        }
+
+        swap = _.difference(ips, swap);
+        if(swap.length) {
+            $.each(swap, function(k, v) {
+                ov['group'][gnumber]['instance'][inumber][v] = [];
+                /* set empty value for null array */
+            });
+        }
+
+        return ov['group'][gnumber]['instance'][inumber];
+    },
+
     addEditSvVrrpIns: function(o) {
     /* Add or Edit VRRP instance */
         var me = this, self = $(o.target), gp = {"no": self.attr("gnumber"), "name": self.attr("gname")}, ist, dat, dom, t, items;
@@ -268,7 +342,7 @@ var eView = Backbone.View.extend({
             if(self.hasClass("btnSvVrrpEditIt")) {
             /* Edit mode */
                 ist = {"no": self.attr("inumber"), "name": self.attr("iname")};
-                dat = {"items": ("undefined" === typeof(ov)) ? me.model.attributes[1]['group'][gp.no]['instance'][ist.no] : ov['group'][gp.no]['instance'][ist.no],
+                dat = {"items": me._inputsToObject(gp.no, ist.no),
                     "gp": gp,
                     "ist": ist};
                 t = _.template(d);
@@ -278,12 +352,10 @@ var eView = Backbone.View.extend({
             /* Add mode */
                 ist = me._genNextVrrpItem(self);
                 dat = {"items": "", "gp": gp, "ist": ist};
-                // ov = me.model.attributes[1];
-                // ov['group'][gp.no]['instance'][ist.no] = {};
                 t = _.template(d);
+                console.log(dat);
                 me.$el.append(t(dat));
                 item = "Add new instant of " + gp.name;
-                console.log(dat);
             }
 
             dom = $("div.vrrpEdit");
@@ -293,6 +365,7 @@ var eView = Backbone.View.extend({
                 width: "auto",
                 title: item,
                 open: function() {
+                    var addAtIfTimes = 4;
                     $(".no-close, .ui-dialog-titlebar-close").hide();
                     /* remove all close window button */
 
@@ -306,6 +379,14 @@ var eView = Backbone.View.extend({
                                 text: v
                             }).val(v).text(v).appendTo("select.ifs");
                         });
+
+                        item = $("tr.orgSelAvailAtIf").find("input[type=hidden]");
+                        if(item.length) {
+                            item.each(function(k, v) {
+                                $("#svAvailableAtIf").find("option[value='" + $(v).val() + "']").remove();
+                                /* remove interfaces which is selected already */
+                            });
+                        }
 
                         require(['bsSwitch'], function() {
                             dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
@@ -333,11 +414,15 @@ var eView = Backbone.View.extend({
                             var ck = $(this), sel = ck.siblings("select"), tr = ck.parents("tr"), ntr;
                             if(sel.children().size()) {
                                 ntr = $("tr.newSelAvailAtIf").clone(true);
-                                console.log(ntr);
                                 ntr.find(".usedAtIf").text(sel.val());
-                                ntr.find("input[type=hidden]").val( sel.val() );
+                                ntr.find("input[type=hidden]").attr({
+                                    "name": function(k, v) {
+                                        return v + addAtIfTimes + "@@interface";
+                                    }
+                                }).val( sel.val() );
                                 sel.find("option[value='" + sel.val() + "']").remove();
                                 ntr.removeClass("newSelAvailAtIf").insertAfter(tr);
+                                addAtIfTimes += 1;
                             }
                             return false;
                         });
@@ -359,13 +444,12 @@ var eView = Backbone.View.extend({
                         dom.on("click", ".btnAdd", function() {
                         /* click to add ipv4 or ipv6 VIP or Virtual Router setting */
                             var ck = $(this), tpl = $("tr." + ck.data("tpl")).clone(true).hide(), base = ck.parents("tr").data("class"), opt = me["_genNextVrrpItem"](ck);
-                            console.log(opt);
                             tpl.attr({
                                 gnumber: opt.gnumber,
                                 inumber: opt.inumber,
                                 opt: opt.opt,
                                 serial: opt.no
-                            }).find("input[name], select[name]").attr({
+                            }).find(":input[name]").attr({
                                 name: function(k, name) {
                                     return opt.gnumber + "@@" + opt.inumber + "@@" + opt.opt + "@@" + opt.no + "@@" + name;
                                 }
@@ -401,9 +485,9 @@ var eView = Backbone.View.extend({
                     text: "Ok",
                     click: function() {
                         var inputs = [], ntr, ngn, gno;
-                        dom.find("input[name], select[name]").clone().removeAttr("id").each(function(k, v) {
+                        dom.find(":input[name]").clone().removeAttr("id").each(function(k, v) {
                         /* unified all input and data format */
-                            if("select" === v.tagName) {
+                            if("select" === v.tagName.toLowerCase()) {
                                 inputs.push($("<input />", {
                                     type: "hidden",
                                     name: $(v).attr("name"),
@@ -411,6 +495,7 @@ var eView = Backbone.View.extend({
                                     inumber: '',
                                     value: $(v).val()
                                 })[0]);
+                                console.log( $(v).children(":selected").val() );
                             } else if("checkbox" === $(v).attr("type")) {
                                 inputs.push($("<input />", {
                                     type: "hidden",
@@ -432,7 +517,6 @@ var eView = Backbone.View.extend({
 
                         inputs = $(inputs);
                         /* change the jQuery format */
-                        console.log(inputs);
 
                         if(self.hasClass("btnSvVrrpEditIt")) {
                         /* edit exist instance */
@@ -440,6 +524,10 @@ var eView = Backbone.View.extend({
                             gno.find("span.svVrrpTpl").html(inputs);
                             gno.find("[gnumber]").attr("gnumber", gp.no);
                             gno.find("[inumber]").attr("inumber", ist.no);
+
+                            delete(ov['group'][gp.no]['instance'][ist.no]);
+                            ov['group'][gp.no]['instance'] = _.compact(ov['group'][gp.no]['instance']);
+                            /* remove exist ov value to make sure every information is updated */
                         } else {
                         /* add new instance */
                             gno = self.parents("tr").attr("gnumber");
@@ -458,6 +546,14 @@ var eView = Backbone.View.extend({
                             inputs.appendTo(ntr.find("span.svVrrpTpl"));
                             /* put input fields into capacity */
 
+                            $("<input />", {
+                                type: "hidden",
+                                name: ngn.no + "@@" + ist.no + "@@instance-name",
+                                gnumber: ngn.no,
+                                inumber: ist.no
+                            }).val(ist.name).appendTo(ntr.find("span.svVrrpTpl"));
+                            /* put instance-name into hidden values as well */
+
                             ntr.find("[gname]").attr("gname", ngn.name);
                             ntr.find("[gnumber]").attr("gnumber", ngn.no);
                             ntr.find("[iname]").attr("iname", ist.name);
@@ -466,12 +562,14 @@ var eView = Backbone.View.extend({
                             ntr.find("input[name='instance-name']").attr({
                                 name: function(k, v) {
                                     return ngn.no + "@@" + ist.no + "@@" + v;
-                                }
+                                },
+                                value: ist.name
                             }).val(ist.name);
 
                             ntr.insertAfter( $(".svVRRP .vrrpTable").find("tr[gnumber='" + ngn.no + "']:last") );
                         }
 
+                        me.saveSNMP();
                         dom.dialog("close");
                     }
                 }, {

@@ -19,6 +19,17 @@
         </div>
       </td>
     </tr>
+  <% _.each(items["additional_track_interface"], function(v, k) { %>
+    <tr class="orgSelAvailAtIf">
+      <th colspan="3">
+        <a href="#" class="btn btnDelAtInterface">{{ _("Delete" )}}</a>
+        <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@<%= k %>@@interface" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" value="<%= v["interface"] %>" />
+      </th>
+      <td colspan="2">
+        <span class="usedAtIf"><%= v["interface"] %></span>
+      </td>
+    </tr>
+  <% }); %>
     <tr>
       <th colspan="3">
         <label for="svVrrpSyncIf" class="control-label strong">{{ _("Sync Interface") }}</label>
@@ -255,7 +266,7 @@
   <tr class="newSelAvailAtIf">
     <th colspan="3">
       <a href="#" class="btn btnDelAtInterface">{{ _("Delete" )}}</a>
-      <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@interface" />
+      <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" />
     </th>
     <td colspan="2">
       <span class="usedAtIf">&nbsp;</span>

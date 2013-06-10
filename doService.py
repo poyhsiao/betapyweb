@@ -133,6 +133,20 @@ tion': '', 'community': 'public'})
         if 'group' in kwargs:
             # setter
             libs.tools.v(kwargs)
+
+            opt = {}
+
+            for k in kwargs:
+                if '@@' in k:
+                    gstr = k.split("@@")[0]
+                    if not gstr in opt:
+                        glen = len(gstr + '@@')
+                        opt[gstr] = []
+
+                    opt[gstr].append({k[glen:]: kwargs[k]})
+
+            libs.tools.v(opt)
+
             return json.dumps(kwargs)
         else:
             # getter
