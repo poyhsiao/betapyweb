@@ -30,29 +30,61 @@ class Statistics(object):
             Statistics >> Counters
             format:
             {
-                "vips": [{"vip": "192.168.200.200",
+                "vips": [
+                    {
+                        "vip": "192.168.200.200",
+                        "port": 443,
+                        "connections": 0,
+                        "inbound_packets": 0,
+                        "inbound_bytes": 0,
+                        "outbound_packets": 0,
+                        "outbound_bytes": 0,
+                        "rips": [
+                            {
+                                "rip": "192.168.200.200",
                                 "port": 443,
                                 "connections": 0,
                                 "inbound_packets": 0,
                                 "inbound_bytes": 0,
                                 "outbound_packets": 0,
-                                "outbound_bytes": 0,
-                                "rips": [{"rip": "192.168.200.200",
-                                                "port": 443,
-                                                "connections": 0,
-                                                "inbound_packets": 0,
-                                                "inbound_bytes": 0,
-                                                "outbound_packets": 0,
-                                                "outbound_bytes": 0
-                                        },
-                                        ...
-                                ]
-                        },
-                        ...
+                                "outbound_bytes": 0
+                            },
+                            ...
+                        ]
+                    },
+                    ...
                 ]
-        }
+            }
         '''
         import ml_w_counters as wcn
         import json
         import libs.tools
-        return json.dumps(wcn.get())
+
+        if "counters" in kwargs:
+            pass
+        else:
+            data = wcn.get()
+            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
+                '''
+                    generate sample data
+                '''
+                data = (True, {'vips': [{"vip": "192.168.200.200",
+                                         "port": 443,
+                                         "connections": 0,
+                                         "inbound_packages": 0,
+                                         "inbound_bytes": 0,
+                                         "outbound_packages": 0,
+                                         "outbound_bytes": 0,
+                                         "rips": [{"rip": "192.168.200.200",
+                                                   "port": 443,
+                                                   "connections": 0,
+                                                   "inbound_packages": 0,
+                                                   "inbound_bytes": 0,
+                                                   "outbound_packages": 0,
+                                                   "outbound_bytes": 0,
+                                                   }]
+                                         }]
+                               }
+                        )
+            return json.dumps(data)
+

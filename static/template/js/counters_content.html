@@ -1,0 +1,45 @@
+  <table class="table table-bordered table-hover statCtTable">
+    <tr>
+      <td rowspan="2">
+        <a href="#" class="btn openStatAllVip btn-mini btnOpenClose" data-toggle="trAll" data-opt="open"><i class="icon-plus"></i></a>
+        <a href="#" class="btn closeStatAllVip btn-mini btnOpenClose inactive" data-toggle="trAll" data-opt="close"><i class="icon-minus"></i></a>
+      </td>
+      <th rowspan="2">{{ _("Server") }}</th>
+      <th rowspan="2">{{ _("Connections" ) }}</th>
+      <th colspan="2">{{ _("Inbound") }}</th>
+      <th colspan="2">{{ _("Outbound") }}</th>
+    </tr>
+    <tr>
+      <th>{{ _("Packets") }}</th>
+      <th>{{ _("Bytes") }}</th>
+      <th>{{ _("Packets") }}</th>
+      <th>{{ _("Bytes") }}</th>
+    </tr>
+<% _.each(vips, function(v, k) { %>
+    <tr class="trAll trCollapse">
+      <td>
+        <div class="btn-set">
+          <a href="#" class="btn openStatSubVip btn-mini btnOpenClose" data-toggle="trSubs" data-opt="open" opt="<%= k %>"><i class="icon-plus"></i></a>
+          <a href="#" class="btn closeStatSubVip btn-mini btnOpenClose inactive" data-toggle="trSubs" data-opt="close" opt="<%= k %>"><i class="icon-minus"></i></a>
+        </div>
+      </td>
+      <td><%= v["vip"] %></td>
+      <td><%= v["connections"] %></td>
+      <td><%= v["inbound_packages"] %></td>
+      <td><%= v["inbound_bytes"] %></td>
+      <td><%= v["outbound_packages"] %></td>
+      <td><%= v["outbound_bytes"] %></td>
+    </tr>
+  <% _.each(v["rips"], function(vv, kk) { %>
+    <tr class="trSubs trCollapse" opt="<%= k %>">
+      <td>&nbsp;</td>
+      <td><%= vv["rip"] %></td>
+      <td><%= vv["connections"] %></td>
+      <td><%= vv["inbound_packages"] %></td>
+      <td><%= vv["inbound_bytes"] %></td>
+      <td><%= vv["outbound_packages"] %></td>
+      <td><%= vv["outbound_bytes"] %></td>
+    </tr>
+  <% }); %>
+<% }); %>
+  </table>

@@ -582,6 +582,93 @@ var eView = Backbone.View.extend({
         }, "html");
     },
 
+    viewCounters: function(o) {
+    /* display stat -> counters */
+        var me = this, dat = me.model.attributes[1], t;
+        Ajax = $.get("/getTpl?file=counters", function(d) {
+            t = _.template(d);
+            me.$el.html(t());
+            require(["blockUI"], function() {
+                $("div.statCtContent").block();
+            });
+            me.updatCounters(dat);
+        }, "html");
+    },
+
+    updatCounters: function(data) {
+    /* get content and display it */
+        var me = this, t, tpl;
+
+        tpl = function(dat) {
+            Ajax = $.get("/getTpl?file=counters_content", function(dd) {
+                t = _.template(dd);
+                me.$el.find("div.statCtContent").html(t(dat)).find("tr.trCollapse").hide();
+
+                me.$el.find("td, th").css({
+                    "text-align": "center",
+                    "vertical-align": "middle"
+                });
+            }, "html");
+        };
+
+        if(!data) {
+            Ajax = $.getJSON("/stat/counters", function(d) {
+                data = new eModel(d);
+                tpl(data.attributes[1]);
+                return $("div.statCtContent").unblock();
+            });
+        } else {
+            tpl(data);
+            return $("div.statCtContent").unblock();
+        }
+    },
+
+    controlCounters: function(o) {
+    /* set and update auto-refresh */
+        var me = this, self = $(o.target);
+        try {
+            clearInterval(timer);
+        } catch(e) {}
+
+        if(0 != ~~self.val()) {
+            timer = setInterval(function() {
+                $("div.popContent").find("div.statCtContent").empty();
+                return me.updatCounters();
+            }, (~~self.val()*1000));
+        }
+    },
+
+    openCloseCounters: function(o) {
+    /* open / close all /sub items */
+        var me = this, self = $(o.target);
+        if("a" !== self[0].tagName.toLowerCase()) {
+            self = self.parent();
+        }
+
+        if("open" === self.data("opt")) {
+        /* open sub items */
+            if("trSubs" === self.data("toggle")) {
+                $("tr.trSubs[opt='" + self.attr("opt") + "']").show("fast");
+            } else {
+                $("tr.trAll").show("fast");
+            }
+        } else {
+        /* close sub items */
+            if("trSubs" === self.data("toggle")) {
+                $("tr.trSubs[opt='" + self.attr("opt") + "']").hide("fast");
+            } else {
+                $("tr.trAll").hide("fast");
+                $("tr.trSubs").hide("fast");
+                $("tr.trAll").find("a.closeStatSubVip").trigger("click");
+            }
+        }
+
+        self.addClass("inactive");
+        self.siblings("a.btn").removeClass("inactive");
+
+        return false;
+    },
+
     viewView: function(o) {
     /* display view log */
         var me = this, dat = me.model.attributes[1], t, txa;
@@ -684,6 +771,25 @@ var ExtHandler = {
             });
 
             return me.view.viewVrrp();
+        });
+    },
+
+    counters: function() {
+    /* Statistics -> Counters setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/stat/counters", function(d) {
+            me.model = new eModel(d);
+            me.view = new eView({
+                model: me.model,
+                events: {
+                    "change select#statCtTimer": "controlCounters",
+                    "click a.btnOpenClose": "openCloseCounters"
+                }
+            });
+
+            return me.view.viewCounters();
         });
     },
 

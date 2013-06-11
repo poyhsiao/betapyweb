@@ -250,7 +250,7 @@ if __name__ == '__main__':
     root = Root()
     root.system = ds.System()
     root.service = de.Service()
-    root.statistics = dt.Statistics()
+    root.stat = dt.Statistics()
     root.log = dl.Log()
     # root.doLogin = Login()
     # root.main = main()
