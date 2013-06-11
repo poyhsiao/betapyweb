@@ -584,18 +584,18 @@ var eView = Backbone.View.extend({
 
     viewCounters: function(o) {
     /* display stat -> counters */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, t;
         Ajax = $.get("/getTpl?file=counters", function(d) {
             t = _.template(d);
             me.$el.html(t());
             require(["blockUI"], function() {
                 $("div.statCtContent").block();
             });
-            me.updatCounters(dat);
+            me.updatCounters();
         }, "html");
     },
 
-    updatCounters: function(data) {
+    updatCounters: function() {
     /* get content and display it */
         var me = this, t, tpl;
 
@@ -611,16 +611,11 @@ var eView = Backbone.View.extend({
             }, "html");
         };
 
-        if(!data) {
-            Ajax = $.getJSON("/stat/counters", function(d) {
-                data = new eModel(d);
-                tpl(data.attributes[1]);
-                return $("div.statCtContent").unblock();
-            });
-        } else {
-            tpl(data);
+        Ajax = $.getJSON("/stat/counters", function(d) {
+            data = new eModel(d);
+            tpl(data.attributes[1]);
             return $("div.statCtContent").unblock();
-        }
+        });
     },
 
     controlCounters: function(o) {
@@ -780,9 +775,7 @@ var ExtHandler = {
         delete(me.model);
         delete(me.view);
         Ajax = $.getJSON("/stat/counters", function(d) {
-            me.model = new eModel(d);
             me.view = new eView({
-                model: me.model,
                 events: {
                     "change select#statCtTimer": "controlCounters",
                     "click a.btnOpenClose": "openCloseCounters"
