@@ -155,6 +155,10 @@ View = Backbone.View.extend({
             Ajax = $.get("/getTpl?file=summary_control", function(d) {
                 t = _.template(d);
                 me.$el.append(t());
+
+                $("div.borderArrow").show("fast");
+                /* show arrow image */
+
                 $("div.systemSummaryTimer").css({
                     "position": "relative",
                     "bottom": "20px",
@@ -220,6 +224,9 @@ View = Backbone.View.extend({
             t = _.template(d);
             me.$el.html(t(dat));
 
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             $("div.SystemDNS").find("table").css({
                 "width": "100%",
                 "height": "100%"
@@ -239,6 +246,9 @@ View = Backbone.View.extend({
         Ajax = $.get("/getTpl?file=vlan", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             $("div.SystemVLAN").children("table").css({
                 "width": "100%",
@@ -320,6 +330,9 @@ View = Backbone.View.extend({
         Ajax = $.get("/getTpl?file=bridge", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             $("div.SystemBridge").children("table").css({
                 "width": "100%",
@@ -556,6 +569,9 @@ View = Backbone.View.extend({
             t = _.template(d);
             me.$el.html(t(dat));
 
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             me.$el.find("table").css({
                 "width": "100%",
                 "height": "100%"
@@ -655,6 +671,9 @@ View = Backbone.View.extend({
         Ajax = $.get("/getTpl?file=routing_table", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             me.$el.find("table").css({
                 "width": "100%",
@@ -776,6 +795,9 @@ View = Backbone.View.extend({
             t = _.template(d);
             me.$el.html(t(dat));
 
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             me.$el.find("table").css({
                 "width": "100%",
                 "height": "100%"
@@ -878,6 +900,9 @@ View = Backbone.View.extend({
             t = _.template(d);
             me.$el.html(t(dat));
 
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             me.$el.find('input[opt="dt"]').trigger("click");
 
             $("#oApply").hide();
@@ -928,6 +953,10 @@ View = Backbone.View.extend({
                 width: "90%",
                 height: "200px"
             });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
         }, "html");
     },
 
@@ -1003,6 +1032,9 @@ View = Backbone.View.extend({
                     }
                 }
             });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             require(['fileupload'], function() {
                 conf_file = $("#fileUSConf");
@@ -1293,6 +1325,10 @@ View = Backbone.View.extend({
     execMenu: function(o) {
     /* when click menu item will separate model/template with this function */
         var ct = $("div.popContent");
+
+        $("div.borderArrow").hide();
+        /* hide arrow image */
+
         try {
             Ajax.abort();
             /* Stop all ajax request */

@@ -25,6 +25,9 @@ var eView = Backbone.View.extend({
                 width: "90%"
             });
 
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             require(['bsSwitch'], function() {
                 me.$el.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
 
@@ -50,6 +53,9 @@ var eView = Backbone.View.extend({
             }).find("th, td").css({
                 "text-align": "center"
             });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             me.$el.find("div.svToEamil").css({
                 width: "100%"
@@ -101,6 +107,9 @@ var eView = Backbone.View.extend({
                 "vertical-align": "middle",
                 "text-align": "center"
             });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             ov = me.model.attributes[1] || {"group": [{"instance": []}]};
         }, "html");
@@ -588,14 +597,18 @@ var eView = Backbone.View.extend({
         Ajax = $.get("/getTpl?file=counters", function(d) {
             t = _.template(d);
             me.$el.html(t());
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
             require(["blockUI"], function() {
                 $("div.statCtContent").block();
             });
-            me.updatCounters();
+            me.updateCounters();
         }, "html");
     },
 
-    updatCounters: function() {
+    updateCounters: function() {
     /* get content and display it */
         var me = this, t, tpl;
 
@@ -628,7 +641,7 @@ var eView = Backbone.View.extend({
         if(0 != ~~self.val()) {
             timer = setInterval(function() {
                 $("div.popContent").find("div.statCtContent").empty();
-                return me.updatCounters();
+                return me.updateCounters();
             }, (~~self.val()*1000));
         }
     },
@@ -664,6 +677,126 @@ var eView = Backbone.View.extend({
         return false;
     },
 
+    viewRates: function(o) {
+    /* display stat -> counters */
+        var me = this, t;
+        Ajax = $.get("/getTpl?file=rates", function(d) {
+            t = _.template(d);
+            me.$el.html(t());
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
+            require(["blockUI"], function() {
+                $("div.statRtContent").block();
+            });
+            me.updateRates();
+        }, "html");
+    },
+
+    updateRates: function() {
+    /* get content and display it */
+        var me = this, t, tpl;
+
+        tpl = function(dat) {
+            Ajax = $.get("/getTpl?file=rates_content", function(dd) {
+                t = _.template(dd);
+                me.$el.find("div.statRtContent").html(t(dat)).find("tr.trCollapse").hide();
+
+                me.$el.find("td, th").css({
+                    "text-align": "center",
+                    "vertical-align": "middle"
+                });
+            }, "html");
+        };
+
+        Ajax = $.getJSON("/stat/rates", function(d) {
+            data = new eModel(d);
+            tpl(data.attributes[1]);
+            return $("div.statRtContent").unblock();
+        });
+    },
+
+    controlRates: function(o) {
+    /* set and update auto-refresh */
+        var me = this, self = $(o.target);
+        try {
+            clearInterval(timer);
+        } catch(e) {}
+
+        if(0 != ~~self.val()) {
+            timer = setInterval(function() {
+                $("div.popContent").find("div.statRtContent").empty();
+                return me.updateRates();
+            }, (~~self.val()*1000));
+        }
+    },
+
+    openCloseRates: function(o) {
+        var me = this;
+        return me.openCloseCounters(o);
+    },
+
+    viewPersistence: function(o) {
+    /* display stat -> Persistence Info */
+        var me = this, t;
+        Ajax = $.get("/getTpl?file=persistence", function(d) {
+            t = _.template(d);
+            me.$el.html(t());
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+
+            require(["blockUI"], function() {
+                $("div.statPIContent").block();
+            });
+            me.updatePersistence();
+        }, "html");
+    },
+
+    updatePersistence: function() {
+    /* get content and display it */
+        var me = this, t, tpl;
+
+        tpl = function(dat) {
+            Ajax = $.get("/getTpl?file=persistence_content", function(dd) {
+                t = _.template(dd);
+                me.$el.find("div.statPIContent").html(t(dat)).find("tr.trCollapse").hide();
+
+                me.$el.find("td, th").css({
+                    "text-align": "center",
+                    "vertical-align": "middle"
+                });
+            }, "html");
+        };
+
+        Ajax = $.getJSON("/stat/persistence", function(d) {
+            data = new eModel(d);
+            tpl(data.attributes[1]);
+            return $("div.statPIContent").unblock();
+        });
+    },
+
+    controlPersistence: function(o) {
+    /* set and update auto-refresh */
+        var me = this, self = $(o.target);
+        try {
+            clearInterval(timer);
+        } catch(e) {}
+
+        if(0 != ~~self.val()) {
+            timer = setInterval(function() {
+                $("div.popContent").find("div.statPIContent").empty();
+                return me.updatePersistence();
+            }, (~~self.val()*1000));
+        }
+    },
+
+    openClosePersistence: function(o) {
+        var me = this;
+        return me.openCloseCounters(o);
+    },
+
     viewView: function(o) {
     /* display view log */
         var me = this, dat = me.model.attributes[1], t, txa;
@@ -675,6 +808,9 @@ var eView = Backbone.View.extend({
                 width: "90%",
                 height: "200px"
             });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
 
             $.each(dat, function(k, v) {
                 me.$el.find("textarea").val(function(i, vv) {
@@ -697,10 +833,13 @@ var eView = Backbone.View.extend({
     viewSyslog: function(o) {
     /* display syslog */
         var me = this, dat = me.model.attributes[1], t;
-        console.log(dat);
+
         Ajax = $.get("/getTpl?file=syslog", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
         }, "html");
     }
 });
@@ -783,6 +922,40 @@ var ExtHandler = {
             });
 
             return me.view.viewCounters();
+        });
+    },
+
+    rates: function() {
+    /* Statistics -> Rates setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/stat/rates", function(d) {
+            me.view = new eView({
+                events: {
+                    "change select#statRtTimer": "controlRates",
+                    "click a.btnOpenClose": "openCloseRates"
+                }
+            });
+
+            return me.view.viewRates();
+        });
+    },
+
+    persistence: function() {
+    /* Statistics >> Persistence Info setting*/
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/stat/persistence", function(d) {
+            me.view = new eView({
+                events: {
+                    "change select#statPITimer": "controlPersistence",
+                    "click a.btnOpenClose": "openClosePersistence"
+                }
+            });
+
+            return me.view.viewPersistence();
         });
     },
 

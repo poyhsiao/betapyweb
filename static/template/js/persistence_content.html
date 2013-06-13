@@ -1,0 +1,55 @@
+  <table class="table table-bordered table-hover statPITable">
+    <tr>
+      <td rowspan="2">
+        <a href="#" class="btn openStatAllVip btn-mini btnOpenClose" data-toggle="trAll" data-opt="open"><i class="icon-plus"></i></a>
+        <a href="#" class="btn closeStatAllVip btn-mini btnOpenClose inactive" data-toggle="trAll" data-opt="close"><i class="icon-minus"></i></a>
+      </td>
+      <th rowspan="2">{{ _("Virtual Server") }}</th>
+      <th colspan="2">{{ _("IPv4") }}</th>
+      <th colspan="2">{{ _("IPv6") }}</th>
+    </tr>
+    <tr>
+      <th>{{ _("Persistent") }}&nbsp;({{ _("sec") }})</th>
+      <th>{{ _("Netmask") }}</th>
+      <th>{{ _("Persistent") }}&nbsp;({{ _("sec") }})</th>
+      <th>{{ _("Prefix") }}</th>
+    </tr>
+<% _.each(vips, function(v, k) { %>
+    <tr class="trAll trCollapse">
+      <td>
+        <div class="btn-set">
+          <a href="#" class="btn openStatSubVip btn-mini btnOpenClose" data-toggle="trSubs" data-opt="open" opt="<%= k %>"><i class="icon-plus"></i></a>
+          <a href="#" class="btn closeStatSubVip btn-mini btnOpenClose inactive" data-toggle="trSubs" data-opt="close" opt="<%= k %>"><i class="icon-minus"></i></a>
+        </div>
+      </td>
+      <td><%= v["vip"] %></td>
+      <td><%= v["persistent"] %></td>
+      <td><%= v["netmask"] %></td>
+      <td><%= v["persistent"] %></td>
+      <td><%= v["prefix"] %></td>
+    </tr>
+  <% if(v["rips"].length) { %>
+    <tr class="trSubs trCollapse" opt="<%= k %>">
+      <td rowspan="2">&nbsp;</td>
+      <th rowspan="2">{{ _("Real Server") }}</th>
+      <th rowspan="2">{{ _("Weight") }}</th>
+      <th colspan="3">{{ _("Connections") }}</th>
+    </tr>
+    <tr class="trSubs trCollapse" opt="<%= k %>">
+      <th>{{ _("Persistent") }}</th>
+      <th>{{ _("Active") }}</th>
+      <th>{{ _("Inactive") }}</th>
+    </tr>
+    <% _.each(v["rips"], function(vv, kk) { %>
+      <tr class="trSubs trCollapse" opt="<%= k %>">
+        <td>&nbsp;</td>
+        <td><%= vv["rip"] %></td>
+        <td><%= vv["weight"] %></td>
+        <td><%= vv["persistent"] %></td>
+        <td><%= vv["active"] %></td>
+        <td><%= vv["inactive"] %></td>
+      </tr>
+    <% }); %>
+  <% } %>
+<% }); %>
+  </table>

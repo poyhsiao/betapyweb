@@ -88,3 +88,141 @@ class Statistics(object):
                         )
             return json.dumps(data)
 
+    @_.expose
+    def rates(self, **kwargs):
+        '''
+            Statistics >> rates
+            format:
+            {
+                "vips": [
+                    {
+                        "vip": "192.168.200.200",
+                        "port": 443,
+                        "connections/sec": 0,
+                        "inbound_packets/sec": 0,
+                        "inbound_bytes/sec": 0,
+                        "outbound_packets/sec": 0,
+                        "outbound_bytes/sec": 0,
+                        "rips": [
+                            {
+                                "rip": "192.168.200.200",
+                                "port": 443,
+                                "connections/sec": 0,
+                                "inbound_packets/sec": 0,
+                                "inbound_bytes/sec": 0,
+                                "outbound_packets/sec": 0,
+                                "outbound_bytes/sec": 0
+                            },
+                            ...
+                        ]
+                    },
+                    ...
+                ]
+            }
+        '''
+        import ml_w_rates as wrt
+        import json
+        import libs.tools
+
+        if "rates" in kwargs:
+            pass
+        else:
+            data = wrt.get()
+            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
+                '''
+                    Generate sample data
+                '''
+                data = (True, {"vips": [{"vip": "192.168.200.200",
+                          "port": 443,
+                          "connections/sec": 0,
+                          "inbound_packets/sec": 0,
+                          "inbound_bytes/sec": 0,
+                          "outbound_packets/sec": 0,
+                          "outbound_bytes/sec": 0,
+                          "rips": [{"rip": "192.168.200.200",
+                                    "port": 443,
+                                    "connections/sec": 0,
+                                    "inbound_packets/sec": 0,
+                                    "inbound_bytes/sec": 0,
+                                    "outbound_packets/sec": 0,
+                                    "outbound_bytes/sec": 0,
+                                    }]
+                             }]
+                       })
+
+            return json.dumps(data)
+
+    @_.expose
+    def persistence(self, **kwargs):
+        '''
+            Statistics >> Persistence Info
+            format:
+                {"vips": [{"vip": "192.168.200.200",
+                            "persistent": 300,
+                            "netmask": 24,
+                            "prefix": 0,
+                            "rips": [{"rip": "192.168.200.200",
+                                    "weight": 1,
+                                    "persistent": 100,
+                                    "active": 0,
+                                    "inactive": 0
+                                },
+                                ...
+                            ]
+                        },
+                        {
+                            "vip": "2001::1",
+                            "persistent": 300,
+                            "netmask": 0,
+                            "prefix": 128,
+                            "rips": [
+                                {
+                                    "rip": "2001::2",
+                                    "weight": 1,
+                                    "persistent": 100,
+                                    "active": 0,
+                                    "inactive": 0
+                                },
+                                ...
+                            ]
+                        },
+                        ...
+                    ]
+                }
+        '''
+        import ml_w_persistence_info as wpi
+        import json
+        import libs.tools
+
+        if "persistence" in kwargs:
+            pass
+        else:
+            data = wpi.get()
+            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
+                '''
+                    Generate sample data
+                '''
+                data = (True, {"vips": [{"vip": "192.168.200.200",
+                                  "persistent": 300,
+                                  "netmask": 24,
+                                  "prefix": 0,
+                                  "rips": [{"rip": "192.168.200.200",
+                                            "weight": 1,
+                                            "persistent": 100,
+                                            "active": 0,
+                                            "inactive": 0
+                                            }]
+                                  }, {"vip": "2001::1",
+                                      "persistent": 300,
+                                      "netmask": 0,
+                                      "prefix": 128,
+                                      "rips": [{"rip": "2001::2",
+                                                "weight": 1,
+                                                "persistent": 100,
+                                                "active": 0,
+                                                "inactive": 0
+                                                }]
+                                  }]
+                        })
+
+            return json.dumps(data)
