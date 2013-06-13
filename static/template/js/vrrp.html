@@ -35,7 +35,7 @@
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-pencil"></i></span>
-              <input type="text" class="span2" name="<%= k %>@@<%= kk %>@@instance-name" value="<%= vv["instance-name"] %>" gnumber="<%= k %>" inumber="<%= kk %>" placeholder="{{ _("VRRP Group Name") }}" />
+              <input type="text" class="span2" name="<%= k %>@@instance@@<%= kk %>@@instance-name" value="<%= vv["instance-name"] %>" gnumber="<%= k %>" inumber="<%= kk %>" placeholder="{{ _("VRRP Group Name") }}" />
               <a href="#" class="btn btnSvVrrpEditInstName" gname="<%= v["group-name"] %>" iname="<%= vv["instance-name"] %>"  gnumber="<%= k %>" inumber="<%= kk %>">{{ _("Edit") }}</a>
             </div>
             <span class="inactive svVrrpTpl">
@@ -43,11 +43,11 @@
                 <% if("ipv4_vip" === nk || "ipv4_vr" === nk || "ipv6_vip" === nk || "ipv6_vr" === nk || "additional_track_interface" == nk) { %>
                   <% _.each(nv, function(mv, mk) { %>
                     <% _.each(mv, function(ov, ok) { %>
-                      <input type="hidden" gnumber="<%= k %>" inumber="<%= kk %>" name="<%= k %>@@<%= kk %>@@<%= nk %>@@<%= mk %>@@<%= ok %>" value="<%= ov %>" />
+                      <input type="hidden" gnumber="<%= k %>" inumber="<%= kk %>" name="<%= k %>@@instance@@<%= kk %>@@<%= nk %>@@<%= mk %>@@<%= ok %>" value="<%= ov %>" />
                     <% }); %>
                   <% }); %>
                 <% } else { %>
-                  <input type="hidden" gnumber="<%= k %>" inumber="<%= kk %>" name="<%= k %>@@<%= kk %>@@<%= nk %>" value="<%= nv %>" />
+                  <input type="hidden" gnumber="<%= k %>" inumber="<%= kk %>" name="<%= k %>@@instance@@<%= kk %>@@<%= nk %>" value="<%= nv %>" />
                 <% } %>
               <% }); %>
             </span>
@@ -60,36 +60,36 @@
     <% }); %>
     </table>
   </fieldset>
-  <span class="svVrrpTpl inactive">
-    <a href="#" class="btn btnSvVrrpDelGp btnSvVrrpDel">{{ _("Delete") }}</a>
-    <span class="svVrrpNewInst">
-      <a href="#" class="btn btnSvVrrpAddIt">{{ _("Add") }}</a>&nbsp;{{ _("VRRP Instance") }}
-    </span>
-    <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel">{{ _("Delete") }}</a>
-    <a href="#" class="btn btnSvVrrpEditIt">{{ _("Edit") }}</a>
-    <div class="input-prepend input-append svVrrpGpEditGp">
-      <span class="add-on"><i class="icon-pencil"></i></span>
-      <input type="text" class="span2" value="" placeholder="{{ _("VRRP Group Name") }}" />
-      <a href="#" class="btn btnSvVrrpEditGpName" gname="" gnumber="">{{ _("Edit") }}</a>
-    </div>
-
-    <table>
-      <tr gnumber="" inumber="" class="newInstance">
-        <th>
-          <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel" gname="" iname=""  gnumber="" inumber="">{{ _("Delete") }}</a>
-        </th>
-        <td>
-          <div class="input-prepend input-append">
-            <span class="add-on"><i class="icon-pencil"></i></span>
-            <input type="text" class="span2" name="instance-name" value="" gnumber="" inumber="" placeholder="{{ _("VRRP Group Name") }}" />
-            <a href="#" class="btn btnSvVrrpEditInstName" gname="" iname=""  gnumber="" inumber="">{{ _("Edit") }}</a>
-          </div>
-          <span class="inactive svVrrpTpl"></span>
-        </td>
-        <th>
-          <a href="#" class="btn btnSvVrrpEditIt" gname="" iname=""  gnumber="" inumber="">{{ _("Edit") }}</a>
-        </th>
-      </tr>
-    </table>
-  </span>
 </div>
+<span class="svVrrpTpl inactive">
+  <a href="#" class="btn btnSvVrrpDelGp btnSvVrrpDel">{{ _("Delete") }}</a>
+  <span class="svVrrpNewInst">
+    <a href="#" class="btn btnSvVrrpAddIt">{{ _("Add") }}</a>&nbsp;{{ _("VRRP Instance") }}
+  </span>
+  <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel">{{ _("Delete") }}</a>
+  <a href="#" class="btn btnSvVrrpEditIt">{{ _("Edit") }}</a>
+  <div class="input-prepend input-append svVrrpGpEditGp">
+    <span class="add-on"><i class="icon-pencil"></i></span>
+    <input type="text" class="span2" value="" placeholder="{{ _("VRRP Group Name") }}" />
+    <a href="#" class="btn btnSvVrrpEditGpName" gname="" gnumber="">{{ _("Edit") }}</a>
+  </div>
+
+  <table>
+    <tr gnumber="" inumber="" class="newInstance">
+      <th>
+        <a href="#" class="btn btnSvVrrpDelIt btnSvVrrpDel" gname="" iname=""  gnumber="" inumber="">{{ _("Delete") }}</a>
+      </th>
+      <td>
+        <div class="input-prepend input-append">
+          <span class="add-on"><i class="icon-pencil"></i></span>
+          <input type="text" class="span2" name="instance-name" value="" gnumber="" inumber="" placeholder="{{ _("VRRP Group Name") }}" />
+          <a href="#" class="btn btnSvVrrpEditInstName" gname="" iname=""  gnumber="" inumber="">{{ _("Edit") }}</a>
+        </div>
+        <span class="inactive svVrrpTpl"></span>
+      </td>
+      <th>
+        <a href="#" class="btn btnSvVrrpEditIt" gname="" iname=""  gnumber="" inumber="">{{ _("Edit") }}</a>
+      </th>
+    </tr>
+  </table>
+</span>

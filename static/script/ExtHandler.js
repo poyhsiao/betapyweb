@@ -127,14 +127,14 @@ var eView = Backbone.View.extend({
         $("<td />", {
             rowspan: 1
         }).append(
-            ct.find("span.svVrrpTpl a.btnSvVrrpDelGp").clone()
+            $("span.svVrrpTpl a.btnSvVrrpDelGp").clone()
             /* delete group button */
         ).appendTo(tr);
 
         td = $("<td />", {
             rowspan: 1,
         }).append(
-            ct.find("span.svVrrpTpl div.svVrrpGpEditGp").clone()
+            $("span.svVrrpTpl div.svVrrpGpEditGp").clone()
             /* edit group name input styled area */
         ).appendTo(tr);
 
@@ -147,7 +147,7 @@ var eView = Backbone.View.extend({
         $("<th />", {
             colspan: 3
         }).append(
-            ct.find("span.svVrrpTpl span.svVrrpNewInst").clone()
+            $("span.svVrrpTpl span.svVrrpNewInst").clone()
         ).appendTo(tr);
 
         tr.find(".svVrrpNewInst a").attr({
@@ -460,7 +460,7 @@ var eView = Backbone.View.extend({
                                 serial: opt.no
                             }).find(":input[name]").attr({
                                 name: function(k, name) {
-                                    return opt.gnumber + "@@" + opt.inumber + "@@" + opt.opt + "@@" + opt.no + "@@" + name;
+                                    return opt.gnumber + "@@instance@@" + opt.inumber + "@@" + opt.opt + "@@" + opt.no + "@@" + name;
                                 }
                             });
 
@@ -552,12 +552,12 @@ var eView = Backbone.View.extend({
                                 gnumber: ngn.no,
                                 inumber: ist.no
                             }).removeClass("newInstance");
-                            inputs.appendTo(ntr.find("span.svVrrpTpl"));
+                            inputs.appendTo($(".svVrrpTpl"));
                             /* put input fields into capacity */
 
                             $("<input />", {
                                 type: "hidden",
-                                name: ngn.no + "@@" + ist.no + "@@instance-name",
+                                name: ngn.no + "@@instance@@" + ist.no + "@@instance-name",
                                 gnumber: ngn.no,
                                 inumber: ist.no
                             }).val(ist.name).appendTo(ntr.find("span.svVrrpTpl"));
@@ -570,7 +570,7 @@ var eView = Backbone.View.extend({
 
                             ntr.find("input[name='instance-name']").attr({
                                 name: function(k, v) {
-                                    return ngn.no + "@@" + ist.no + "@@" + v;
+                                    return ngn.no + "@@instance@@" + ist.no + "@@" + v;
                                 },
                                 value: ist.name
                             }).val(ist.name);

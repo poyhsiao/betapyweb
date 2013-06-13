@@ -23,7 +23,7 @@
     <tr class="orgSelAvailAtIf">
       <th colspan="3">
         <a href="#" class="btn btnDelAtInterface">{{ _("Delete" )}}</a>
-        <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@<%= k %>@@interface" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" value="<%= v["interface"] %>" />
+        <input type="hidden" name="<%= gp.no %>@@instance@@<%= ist.no %>@@additional_track_interface@@<%= k %>@@interface" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" value="<%= v["interface"] %>" />
       </th>
       <td colspan="2">
         <span class="usedAtIf"><%= v["interface"] %></span>
@@ -37,7 +37,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-tag"></i></span>
-          <select name="<%= gp.no %>@@<%= ist.no %>@@sync-interface" id="svVrrpSyncIf" class="selsvVrrpSyncIf ifs all-ifs span3"></select>
+          <select name="<%= gp.no %>@@instance@@<%= ist.no %>@@sync-interface" id="svVrrpSyncIf" class="selsvVrrpSyncIf ifs all-ifs span3"></select>
         </div>
       </td>
     </tr>
@@ -48,7 +48,7 @@
       <td colspan="2">
         <div class="input-prepend input-append">
           <span class="add-on"><i class="icon-time"></i></span>
-          <input id="svVrrpDga" type="number" name="<%= gp.no %>@@<%= ist.no %>@@delay-gratuitous-arp" value="<%= items["delay-gratuitous-arp"] %>" placeholder="{{ _("Delay for Gratuitous ARP after transistion to MASTER") }}" class="span3" />
+          <input id="svVrrpDga" type="number" name="<%= gp.no %>@@instance@@<%= ist.no %>@@delay-gratuitous-arp" value="<%= items["delay-gratuitous-arp"] %>" placeholder="{{ _("Delay for Gratuitous ARP after transistion to MASTER") }}" class="span3" />
           <span class="add-on">{{ _("sec")}}</span>
         </div>
       </td>
@@ -60,7 +60,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-magnet"></i></span>
-          <select name="<%= gp.no %>@@<%= ist.no %>@@virtual-router-id" id="selSvVrrpVrid" class="span3">
+          <select name="<%= gp.no %>@@instance@@<%= ist.no %>@@virtual-router-id" id="selSvVrrpVrid" class="span3">
           <% for(var i = 1; i < 256; i++) { %>
             <option value="<%= i %>"<% if(i === items["virtual-router-id"]) { %> selected="selected"<% } %>><%= i %></option>
           <% } %>
@@ -75,7 +75,7 @@
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select name="<%= gp.no %>@@<%= ist.no %>@@priority" id="selSvVrrpPri" class="span3">
+          <select name="<%= gp.no %>@@instance@@<%= ist.no %>@@priority" id="selSvVrrpPri" class="span3">
           <% for(var i = 1; i < 256; i++) { %>
             <option value="<%= i %>"<% if(i === items["priority"]) { %> selected="selected"<% } %>><%= i %></option>
           <% } %>
@@ -90,7 +90,7 @@
       <td colspan="2">
         <div class="input-prepend input-append">
           <span class="add-on"><i class="icon-time"></i></span>
-          <input id="svVrrpVai" type="number" name="<%= gp.no %>@@<%= ist.no %>@@advertisement-interval" value="<%= items["advertisement-interval"] %>" placeholder="{{ _("VRRP Advertisment Interval") }}" class="span3" />
+          <input id="svVrrpVai" type="number" name="<%= gp.no %>@@instance@@<%= ist.no %>@@advertisement-interval" value="<%= items["advertisement-interval"] %>" placeholder="{{ _("VRRP Advertisment Interval") }}" class="span3" />
           <span class="add-on">{{ _("sec")}}</span>
         </div>
       </td>
@@ -114,19 +114,19 @@
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@ipv4" value="<%= v["ipv4"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@ipv4" value="<%= v["ipv4"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@interface" opt="ipv4_vip-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vip@@<%= k %>@@interface" opt="ipv4_vip-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -151,25 +151,25 @@
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@destination-ipv4" value="<%= v["destination-ipv4"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@destination-ipv4" value="<%= v["destination-ipv4"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@interface" opt="ipv4_vr-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv4_vr@@<%= k %>@@interface" opt="ipv4_vr-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -193,19 +193,19 @@
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@ipv6" value="<%= v["ipv6"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@ipv6" value="<%= v["ipv6"] %>" placeholder="{{ _("IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="2">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span3" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@interface" opt="ipv6_vip-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vip@@<%= k %>@@interface" opt="ipv6_vip-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -230,25 +230,25 @@
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-book"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@destination-ipv6" value="<%= v["destination-ipv6"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@destination-ipv6" value="<%= v["destination-ipv6"] %>" placeholder="{{ _("Destination IP Address") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@netmask" value="<%= v["netmask"] %>" placeholder="{{ _("Netmask") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-th-large"></i></span>
-          <input type="text" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
+          <input type="text" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@gateway" value="<%= v["gateway"] %>" placeholder="{{ _("Gateway") }}" class="span2" />
         </div>
       </td>
       <td colspan="1">
         <div class="input-prepend">
           <span class="add-on"><i class="icon-flag"></i></span>
-          <select class="ifs span2" name="<%= gp.no %>@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@interface" opt="ipv6_vr-<%= k %>"></select>
+          <select class="ifs span2" name="<%= gp.no %>@@instance@@<%= ist.no %>@@ipv6_vr@@<%= k %>@@interface" opt="ipv6_vr-<%= k %>"></select>
         </div>
       </td>
     </tr>
@@ -256,7 +256,7 @@
     <tr>
       <th colspan="5">
         <label class="control-label strong">
-          <input type="checkbox" name="<%= gp.no %>@@<%= ist.no %>@@preempt" value="true" />&nbsp;{{ _("Preempt") }}
+          <input type="checkbox" name="<%= gp.no %>@@instance@@<%= ist.no %>@@preempt" value="true" />&nbsp;{{ _("Preempt") }}
         </label>
       </th>
     </tr>
@@ -266,7 +266,7 @@
   <tr class="newSelAvailAtIf">
     <th colspan="3">
       <a href="#" class="btn btnDelAtInterface">{{ _("Delete" )}}</a>
-      <input type="hidden" name="<%= gp.no %>@@<%= ist.no %>@@additional_track_interface@@" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" />
+      <input type="hidden" name="<%= gp.no %>@@instance@@<%= ist.no %>@@additional_track_interface@@" gnumber="<%= gp.no %>" inumber="<%= ist.no %>" />
     </th>
     <td colspan="2">
       <span class="usedAtIf">&nbsp;</span>
