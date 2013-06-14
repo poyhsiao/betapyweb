@@ -92,6 +92,36 @@ tion': '', 'community': 'public'})
             # for information getter
             return json.dumps(wem.get())
 
+    def _unstructDict(self, indict, sep, debug = False):
+        '''
+            tools to convert string to dict
+            indict:
+                input dict which is string contained will be convert to stuctrued dict
+            sep:
+                separator (detemeter) to separate string
+            debug:
+                no use right now
+        '''
+        from libs.tools import convert as convert
+        from libs.tools import v as v
+
+        outdict = {}
+        for k in indict:
+            if sep in k:
+                gstr = k.split(sep)
+                base = gstr[0]
+                glen = len(base + sep)
+                if not base in outdict:
+                    outdict[base] = {}
+
+                key = convert(k[glen:])
+                outdict[base][key] = convert(indict[k])
+            else:
+                k = convert(k)
+                outdict[k] = convert(indict[k])
+
+        return outdict
+
     @_.expose
     def vrrp(self, **kwargs):
         '''
@@ -132,22 +162,76 @@ tion': '', 'community': 'public'})
         _.response.headers["Content-Type"] = "application/json"
         if 'group' in kwargs:
             # setter
-            libs.tools.v(kwargs)
 
-            opt = {}
+            dat = kwargs
 
-            for k in kwargs:
-                if '@@' in k:
-                    gstr = k.split("@@")[0]
-                    if not gstr in opt:
-                        glen = len(gstr + '@@')
-                        opt[gstr] = []
+            res = []
+            opt = []
+            goptTmp = []
+            nopt = {}
 
-                    opt[gstr].append({k[glen:]: kwargs[k]})
+            for k in dat:
+                if "@@" in k:
+                    kk = k.split("@@")
+                    if "list" == type(kk).__name__ and len(kk) > 1:
+                        libs.tools.v(dat)
+                        goptTmp = self._unstructDict(dat, "@@")
 
-            libs.tools.v(opt)
+            gopt = []
+            for k in goptTmp:
+                if not "vrrpv2" == goptTmp[k]:
+                    gopt.append(goptTmp[k])
 
-            return json.dumps(kwargs)
+
+            prefix = "instance@@"
+            for k in range(0, len(gopt)):
+                dat = self._unstructDict(gopt[k], "@@")
+                iopt = []
+                ioptTmp = self._unstructDict(dat["instance"], "@@")
+
+                for kk in ioptTmp:
+                    if "list" == type(ioptTmp[kk]["instance-name"]).__name__:
+                        ov = ioptTmp[kk]["instance-name"][0]
+                        ioptTmp[kk]["instance-name"] = ov
+
+                    data = self._unstructDict(ioptTmp[kk], "@@")
+                    if "ipv4_vip" in data.keys():
+                        ov = []
+                        da = self._unstructDict(data["ipv4_vip"], "@@")
+                        for kt in da:
+                            ov.append(da[kt])
+                        data["ipv4_vip"] = ov
+                    if "ipv4_vr" in data.keys():
+                        ov = []
+                        da = self._unstructDict(data["ipv4_vr"], "@@")
+                        for kt in da:
+                            ov.append(da[kt])
+                        data["ipv4_vr"] = ov
+                    if "ipv6_vip" in data.keys():
+                        ov = []
+                        da = self._unstructDict(data["ipv6_vip"], "@@")
+                        for kt in da:
+                            ov.append(da[kt])
+                        data["ipv6_vip"] = ov
+                    if "ipv6_vr" in data.keys():
+                        ov = []
+                        da = self._unstructDict(data["ipv6_vr"], "@@")
+                        for kt in da:
+                            ov.append(da[kt])
+                        data["ipv6_vr"] = ov
+                    if "additional_track_interface" in data.keys():
+                        ov = []
+                        da = self._unstructDict(data["additional_track_interface"], "@@")
+                        for kt in da:
+                            ov.append(da[kt])
+                        data["additional_track_interface"] = ov
+                    iopt.append(data)
+
+                res.append({"group-name": dat["group-name"], "instance": iopt})
+
+            res = {"group": res}
+
+            return json.dumps(wvr.set(cfg = res))
         else:
             # getter
             return json.dumps(wvr.get())
