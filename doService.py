@@ -195,6 +195,11 @@ tion': '', 'community': 'public'})
                         ioptTmp[kk]["instance-name"] = ov
 
                     data = self._unstructDict(ioptTmp[kk], "@@")
+                    if "preempt" in data.keys():
+                        if "true" == data["preempt"]:
+                            data["preempt"] = True
+                        else:
+                            data["preempt"] = False
                     if "ipv4_vip" in data.keys():
                         ov = []
                         da = self._unstructDict(data["ipv4_vip"], "@@")
@@ -235,3 +240,183 @@ tion': '', 'community': 'public'})
         else:
             # getter
             return json.dumps(wvr.get())
+
+    @_.expose
+    def slb(self, **kwargs):
+        '''
+            slb getter and setter
+            format:
+            {"ip":
+                {"ipv4":
+                    [{"label": "one",
+                    "ip_address": ["10.1.1.4"]
+                    },
+                    {"label": "many",
+                    "ip_address": ["10.1.1.1", "10.1.1.2", "10.1.1.3", "10.1.1.4"]
+                    },
+                    {"label": "ANY",
+                    "ip_address": ["ANY"]
+                    }],
+                "ipv6":
+                    [{"label": "one",
+                    "ip_address": ["2001::1"]
+                    },
+                    {"label": "many",
+                    "ip_address": ["2001::1", "2001::2", "2001::3", "2001::4"]
+                    },
+                    {"label": "ANY",
+                    "ip_address": ["ANY"]
+                    }]
+                },
+            "service_group":
+                {"ipv4":
+                    [{"label": "group1_v4",
+                    "protocol": "TCP",
+                    "application_port": [80, 443]
+                    }],
+                "ipv6":
+                    [{"label": "group1_v6",
+                    "protocol": "TCP",
+                    "application_port": [80, 443]
+                    }]
+                },
+            "real_server_group":
+                {"ipv4":
+                    [{"label": "real1_v4",
+                    "ip_address": "10.1.1.1",
+                    "weight": 1,
+                    "health_check": "NA",
+                    "maintenance_mode": False
+                    },
+                    {"label": "real2_v4",
+                    "ip_address": "10.1.1.1",
+                    "weight": 1,
+                    "health_check": "HTTP_GET",
+                    "http_get":
+                        {"url": "/",
+                        "status_code": 200,
+                        "from_local_ip": "10.1.1.1",
+                        "to_remote_port": 80,
+                        "connection_timeout": 10,
+                        "delay_before_retry": 10
+                        },
+                    "maintenance_mode": False
+                    },
+                    {"label": "real3_v4",
+                    "ip_address": "10.1.1.1",
+                    "weight": 1,
+                    "health_check": "HTTPS_GET",
+                    "https_get":
+                        {"url": "/",
+                        "status_code": 200,
+                        "from_local_ip": "10.1.1.1",
+                        "to_remote_port": 80,
+                        "connection_timeout": 10,
+                        "delay_before_retry": 10
+                        },
+                    "maintenance_mode": False
+                    },
+                    {"label": "real4_v4",
+                    "ip_address": "10.1.1.1",
+                    "weight": 1,
+                    "health_check": "ICMP_CHECK",
+                    "icmp_check":
+                        {"timeout": 10},
+                    "maintenance_mode": False
+                    }]
+                "ipv6":
+                    [{"label": "real1_v6",
+                    "ip_address": "2001::1",
+                    "weight": 1,
+                    "health_check": "TCP_CHECK",
+                    "tcp_check":
+                        {"from_local_ip": "2001::2",
+                        "to_remote_ip": "2001::3",
+                        "connection_timeout": 10
+                        },
+                    "maintenance_mode": False
+                    },
+                    {"label": "real2_v6",
+                    "ip_address": "2001::1",
+                    "weight": 1,
+                    "health_check": "SMTP_CHECK",
+                    "smtp_check":
+                        {"helo_name": "",
+                        "from_local_ip": "2001::2",
+                        "to_remote_ip": "2001::3",
+                        "to_remote_port": 25,
+                        "connection_timeout": 10
+                        },
+                    "maintenance_mode": False
+                    },
+                    {"label": "real3_v6",
+                    "ip_address": "2001::1",
+                    "weight": 1,
+                    "health_check": "PATTERN_CHECK",
+                    "pattern_check":
+                        {"send": "GET / HTTP/1.0\r\n\r\n",
+                        "expect": "HTTP",
+                        "to_remote_ip": "2001::3",
+                        "to_remote_port": 80,
+                        "timeout": 10
+                        },
+                    "maintenance_mode": False
+                    }]
+                },
+            "fallback_server":
+                {"ipv4":
+                    [{"label": "fall1_v4",
+                    "ip_address": "10.1.1.1"
+                    },
+                    {"label": "NA",
+                    "ip_address": "NA"
+                    }],
+                "ipv6":
+                    [{"label": "fall1_v6",
+                    "ip_address": "2001::1"
+                    },
+                    {"label": "NA",
+                    "ip_address": "NA"
+                    }]
+                },
+            "property":
+                [{"label": "proper1",
+                "forward_method": "NAT",
+                "balance_mode": "Round-robin",
+                "health_check_interval": 10,
+                "persistence": 10,
+                "ipv4_netmask": "255.255.255.0",
+                "ipv6_prefix": 64
+                }]
+            "policy":
+                {"ipv4":
+                    [{"source_ip": "one",
+                    "destination_ip": "many",
+                    "service_group": "group1_v4",
+                    "action": "VIP",
+                    "real_server_group": "real1_v4",
+                    "fallback_server": "fall1_v4",
+                    "property": "proper1"
+                    }],
+                "ipv6":
+                    [{"source_ip": "one",
+                    "destination_ip": "many",
+                    "service_group": "group1_v6",
+                    "action": "Accept",
+                    "real_server_group": "",
+                    "fallback_server": "",
+                    "property": ""
+                    }]
+                }
+            }
+        '''
+        import ml_w_slb as slb
+        import json
+        import libs.tools
+        if "slb" in kwargs:
+            # setter
+            pass
+        else:
+            # getter
+            return json.dumps(slb.get())
+

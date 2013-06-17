@@ -1,0 +1,75 @@
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th colspan="4">{{ _("IP") }}</th>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          <a href="#" class="btn btnAddIpSet" opt="ipv4">{{ _("Add") }}</a>
+        </td>
+        <th colspan="3">{{ _("Ipv4") }}</th>
+      </tr>
+      <tr>
+        <th>{{ _("Lable") }}</th>
+        <th>{{ _("IP Address") }}</th>
+      </tr>
+  <% _.each(ip["ipv4"], function(v, k) { %>
+      <tr>
+        <td rowspan="<%= v["ip_address"].length + 1 %>">
+          <a href="" class="btn btnDelIpSet" opt="ipv4">{{ _("Delete") }}</a>
+        </td>
+        <td rowspan="<%= v["ip_address"].length + 1 %>">
+          <%= v["label"] %>
+          <% if("many" === v["label"]) { %><a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a><% } %>
+          <input type="hidden" name="ip@@ipv4@@<%= k %>@@label" value="<%= v["label"] %>" />
+        </td>
+      </tr>
+    <% _.each(v["ip_address"], function(vv, kk) { %>
+      <tr>
+        <td>
+          <%= vv %>
+          <% if("many" === v["label"]) { %><a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a><% } %>
+          <input type="hidden" name="ip@@ipv4@@<%= k %>@@ip_address" value="<%= vv %>" />
+        </td>
+      </tr>
+    <% }); %>
+  <% }); %>
+      <tr>
+        <td></td>
+        <td colspan="2">{{ _("Any") }}</td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          <a href="#" class="btn btnAddIpSet" opt="ipv6">{{ _("Add") }}</a>
+        </td>
+        <th colspan="3">{{ _("Ipv6") }}</th>
+      </tr>
+      <tr>
+        <th>{{ _("Lable") }}</th>
+        <th>{{ _("IP Address") }}</th>
+      </tr>
+  <% _.each(ip["ipv6"], function(v, k) { %>
+      <tr>
+        <td rowspan="<%= v["ip_address"].length + 1 %>">
+          <a href="" class="btn btnDelIpSet" opt="ipv6">{{ _("Delete") }}</a>
+        </td>
+        <td rowspan="<%= v["ip_address"].length + 1 %>">
+          <%= v["label"] %>
+          <% if("many" === v["label"]) { %><a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a><% } %>
+          <input type="hidden" name="ip@@ipv6@@<%= k %>@@label" value="<%= v["label"] %>" />
+        </td>
+      </tr>
+    <% _.each(v["ip_address"], function(vv, kk) { %>
+      <tr>
+        <td>
+          <%= vv %>
+          <% if("many" === v["label"]) { %><a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a><% } %>
+          <input type="hidden" name="ip@@ipv6@@<%= k %>@@ip_address" value="<%= vv %>" />
+        </td>
+      </tr>
+    <% }); %>
+  <% }); %>
+      <tr>
+        <td></td>
+        <td colspan="2">{{ _("Any") }}</td>
+      </tr>
+    </table>

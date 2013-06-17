@@ -1,0 +1,83 @@
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th colspan="4">{{ _("Service Group") }}</th>
+      </tr>
+      <tr>
+        <th colspan="4">
+          <a href="#" class="btn btnSGAddSG" opt="ipv4">{{ _("Add") }}</a>&nbsp;
+          {{ _("Ipv4") }}
+        </th>
+      </tr>
+      <tr>
+        <td></td>
+        <td>{{ _("Lable") }}</td>
+        <td>{{ _("Protocol") }}</td>
+        <td>
+          <a href="#" class="btn btnSGAddAppPort" opt="ipv4">{{ _("Add") }}</a>&nbsp;
+          {{ _("Application Port")}}
+        </td>
+      </tr>
+  <% _.each(service_group["ipv4"], function(v, k) { %>
+      <tr>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <a href="#" class="btn btnDelSg" opt="ipv4">{{ _("Delete") }}</a>
+        </td>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <%= v["label"] %>
+          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@label" value="<%= v["label"] %>" />
+        </td>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <%= v["protocol"] %>
+          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@protocol" value="<%= v["protocol"] %>" />
+        </td>
+      </tr>
+    <% _.each(v["application_port"], function(vv, kk) { %>
+      <tr>
+        <td>
+          <%= vv %>
+          <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
+          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@application_port" value="<%= vv %>" />
+        </td>
+      </tr>
+    <% }); %>
+  <% }); %>
+      <tr>
+        <th colspan="4">
+          <a href="#" class="btn btnSGAddSG" opt="ipv6">{{ _("Add") }}</a>&nbsp;
+          {{ _("Ipv6") }}
+        </th>
+      </tr>
+      <tr>
+        <td></td>
+        <td>{{ _("Lable") }}</td>
+        <td>{{ _("Protocol") }}</td>
+        <td>
+          <a href="#" class="btn btnSGAddAppPort" opt="ipv6">{{ _("Add") }}</a>&nbsp;
+          {{ _("Application Port")}}
+        </td>
+      </tr>
+  <% _.each(service_group["ipv4"], function(v, k) { %>
+      <tr>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <a href="#" class="btn btnDelSg" opt="ipv6">{{ _("Delete") }}</a>
+        </td>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <%= v["label"] %>
+          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@label" value="<%= v["label"] %>" />
+        </td>
+        <td rowspan="<%= v["application_port"].length + 1 %>">
+          <%= v["protocol"] %>
+          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@protocol" value="<%= v["protocol"] %>" />
+        </td>
+      </tr>
+    <% _.each(v["application_port"], function(vv, kk) { %>
+      <tr>
+        <td>
+          <%= vv %>
+          <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
+          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@application_port" value="<%= vv %>" />
+        </td>
+      </tr>
+    <% }); %>
+  <% }); %>
+    </table>

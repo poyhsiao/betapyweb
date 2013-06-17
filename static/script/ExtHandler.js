@@ -100,6 +100,7 @@ var eView = Backbone.View.extend({
     viewVrrp: function(o) {
     /* display of VRRPv2 page */
         var me = this, dat = me.model.attributes[1], t;
+
         Ajax = $.get("/getTpl?file=vrrp", function(d) {
             t = _.template(d);
             Ajax = dat;
@@ -111,7 +112,7 @@ var eView = Backbone.View.extend({
             $("div.borderArrow").show("fast");
             /* show arrow image */
 
-            ov = me.model.attributes[1] || {"group": [{"instance": []}]};
+            window.ov = me.model.attributes[1] || {"group": [{"instance": []}]};
         }, "html");
     },
 
@@ -163,11 +164,11 @@ var eView = Backbone.View.extend({
 
     updateSvVrrpNames: function(o) {
     /* Change and update group name */
-        var me = this, self = $(o.target), uid = $.now(), orgVal = self.attr("gname"), val = self.siblings("input").val(), prefix = self.hasClass("btnSvVrrpEditGpName") ? 'VG-' : 'VI-';
+        var me = this, self = $(o.target), orgVal = self.attr("gname"), val = self.siblings("input").val(), prefix = self.hasClass("btnSvVrrpEditGpName") ? 'VG-' : 'VI-';
 
         if(!val.length) {
         /* for empty value will auto-set group name */
-            val = prefix + uid;
+            val = _.uniqueId(prefix);
             self.siblings("input").val(val);
         }
 
@@ -213,7 +214,7 @@ var eView = Backbone.View.extend({
      * for ipv4/v6 Vip/Vr will return:
      *      {"no": (next number), "gnumber": (group number), "inumber": (instance number), "opt": (item name)}
      */
-        var me = this, type = type || "group", uid = $.now(), ngn = [], gn, opt, tr;
+        var me = this, type = type || "group", ngn = [], gn, opt, tr;
 
         if("group" === type) {
             opt = $("tr[gnumber]");
@@ -229,10 +230,10 @@ var eView = Backbone.View.extend({
                 /* next group number */
             }
 
-            return {"no": ngn, "name": "VG-" + uid};
+            return {"no": ngn, "name": _.uniqueId("VG-")};
         } else {
             gn = type.attr("gnumber");
-            if("undefined" === typeof(gn)) {
+            if(_.isUndefined(gn)) {
             /* ipv4/6 VIP/VR item */
                 tr = type.parents("tr[opt]");
                 opt = tr.attr("opt");
@@ -266,7 +267,7 @@ var eView = Backbone.View.extend({
                     /* next instance number */
                 }
 
-                return {"no": ngn, "name": "VI-" + uid};
+                return {"no": ngn, "name": _.uniqueId("VI-")};
             }
         }
     },
@@ -284,20 +285,20 @@ var eView = Backbone.View.extend({
      */
         var me = this, ips = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr", "additional_track_interface"], names = [], obj, paras, prefix, swap;
 
-        if("undefined" === typeof(ov['group'][gnumber])) {
+        if(_.isUndefined(ov['group'][gnumber])) {
             ov['group'][gnumber] = {"instance": []};
         }
 
-        if("undefined" === typeof(ov['group'][gnumber]['instance'])) {
+        if(_.isUndefined(ov['group'][gnumber]['instance'])) {
             ov['group'][gnumber]["instance"] = [];
         }
 
-        if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber])) {
+        if(_.isUndefined(ov['group'][gnumber]['instance'][inumber])) {
             ov['group'][gnumber]['instance'][inumber] = {};
         }
 
         obj = [];
-        prefix = gnumber + "@@" + inumber + "@@";
+        prefix = gnumber + "@@instance@@" + inumber + "@@";
         params = $(":input[name^='" + prefix + "']");
 
         params.each(function(k, v) {
@@ -311,18 +312,19 @@ var eView = Backbone.View.extend({
                 if(!$.isArray(ov['group'][gnumber]['instance'][inumber][names[0]])) {
                     ov['group'][gnumber]['instance'][inumber][names[0]] = [];
                 }
-                if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber][names[0]][names[1]])) {
+                if(_.isUndefined(ov['group'][gnumber]['instance'][inumber][names[0]][names[1]])) {
                     ov['group'][gnumber]['instance'][inumber][names[0]][names[1]] = {};
                 }
                 ov['group'][gnumber]['instance'][inumber][names[0]][names[1]][names[2]] = $(v).val();
 
             } else {
-                if("undefined" === typeof(ov['group'][gnumber]['instance'][inumber])) {
+                if(_.isUndefined(ov['group'][gnumber]['instance'][inumber])) {
                     ov['group'][gnumber]['instance'][inumber] = {};
                 }
                 ov['group'][gnumber]['instance'][inumber][names] = $(v).val();
             }
         });
+        swap = [];
         swap = _.intersection(ips, _.uniq(obj));
 
         if(swap.length) {
@@ -345,15 +347,13 @@ var eView = Backbone.View.extend({
 
     addEditSvVrrpIns: function(o) {
     /* Add or Edit VRRP instance */
-        var me = this, self = $(o.target), gp = {"no": self.attr("gnumber"), "name": self.attr("gname")}, ist, dat, dom, t, items;
+        var me = this, self = $(o.target), ov = window.ov, gp = {"no": self.attr("gnumber"), "name": self.attr("gname")}, ist, dat, dom, t, items;
 
         Ajax = $.get("/getTpl?file=vrrpEdit", function(d) {
             if(self.hasClass("btnSvVrrpEditIt")) {
             /* Edit mode */
                 ist = {"no": self.attr("inumber"), "name": self.attr("iname")};
-                dat = {"items": me._inputsToObject(gp.no, ist.no),
-                    "gp": gp,
-                    "ist": ist};
+                dat = {"items": me._inputsToObject(gp.no, ist.no), "gp": gp, "ist": ist};
                 t = _.template(d);
                 me.$el.append(t(dat));
                 item = "Edit " + ist.name + " of " + gp.name;
@@ -362,7 +362,6 @@ var eView = Backbone.View.extend({
                 ist = me._genNextVrrpItem(self);
                 dat = {"items": "", "gp": gp, "ist": ist};
                 t = _.template(d);
-                console.log(dat);
                 me.$el.append(t(dat));
                 item = "Add new instant of " + gp.name;
             }
@@ -494,7 +493,8 @@ var eView = Backbone.View.extend({
                     text: "Ok",
                     click: function() {
                         var inputs = [], ntr, ngn, gno;
-                        dom.find(":input[name]").clone().removeAttr("id").each(function(k, v) {
+                        // dom.find(":input[name]").clone().removeAttr("id").each(function(k, v) {
+                        dom.find(":input[name]").removeAttr("id").each(function(k, v) {
                         /* unified all input and data format */
                             if("select" === v.tagName.toLowerCase()) {
                                 inputs.push($("<input />", {
@@ -504,7 +504,6 @@ var eView = Backbone.View.extend({
                                     inumber: '',
                                     value: $(v).val()
                                 })[0]);
-                                console.log( $(v).children(":selected").val() );
                             } else if("checkbox" === $(v).attr("type")) {
                                 inputs.push($("<input />", {
                                     type: "hidden",
@@ -589,6 +588,63 @@ var eView = Backbone.View.extend({
                 }]
             });
         }, "html");
+    },
+
+    viewSLB: function(o) {
+    /* display service -> slb */
+        var me = this, dat = me.model.attributes[1], t;
+        Ajax = $.get("/getTpl?file=slb", function(d) {
+            return me._loadAllSLB($(d), dat);
+            t = _.template(d);
+            me.$el.html(t(dat)).find("td, th").css({
+                "vertical-align": "middle",
+                "text-align": "center"
+            });
+
+            $("div.borderArrow").show("fast");
+            /* show arrow image */
+        }, "html");
+    },
+
+    _loadAllSLB: function(o, dat) {
+    /* internal function to load all slb template automatically */
+        var me = this, main = "slb", pre = main + "-", t;
+
+        $.when(
+            $.get("/getTpl?file=slb-ip", function(d) {
+                o.find("#svSlbIp").html(d);
+            }, "html"),
+            $.get("/getTpl?file=slb-service_group", function(d) {
+                o.find("#svSlbSG").html(d);
+            }, "html"),
+            $.get("/getTpl?file=slb-real_server_group", function(d) {
+                o.find("#svSlbRSG").html(d);
+            }, "html"),
+            $.get("/getTpl?file=slb-fallback_server", function(d) {
+                o.find("#svSlbFS").html(d);
+            }, "html"),
+            $.get("/getTpl?file=slb-property", function(d) {
+                o.find("#svSlbProperty").html(d);
+            }, "html"),
+            $.get("/getTpl?file=slb-policy", function(d) {
+                o.find("#svSlbPolicy").html(d);
+            }, "html")
+        ).then(
+            function() {
+                console.log(_.unescape(o.html()));
+                t = _.template(_.unescape(o.html()));
+                me.$el.html(t(dat)).find("td, th").css({
+                    "vertical-align": "middle",
+                    "text-align": "center"
+                });
+
+                $("div.borderArrow").show("fast");
+                /* show arrow image */
+            },
+            function() {
+                return me._loadAllSLB(o, dat);
+            }
+        );
     },
 
     viewCounters: function(o) {
@@ -905,6 +961,22 @@ var ExtHandler = {
             });
 
             return me.view.viewVrrp();
+        });
+    },
+
+    slb: function() {
+    /* slb setting */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        Ajax = $.getJSON("/service/slb", function(d) {
+            me.model = new eModel(d);
+            me.view = new eView({
+                model: me.model,
+                events: {}
+            });
+
+            return me.view.viewSLB();
         });
     },
 

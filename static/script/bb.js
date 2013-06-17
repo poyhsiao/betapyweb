@@ -53,7 +53,7 @@ View = Backbone.View.extend({
             self.removeClass("closeMenu").addClass("openMenu").siblings("ul.inactive").slideDown("slow");
             /* open selected menu which has closeMenu class name */
 
-            if("undefined" === typeof(mtitle.attr("opt")) || self.attr("opt") === mtitle.attr("opt")) {
+            if(_.isUndefined(mtitle.attr("opt")) || self.attr("opt") === mtitle.attr("opt")) {
             /* when switch to other menu item, hide arrow image by checking the page navigation options */
                 arrow.show("slow");
             } else {
@@ -347,7 +347,7 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), newid = new Date().getTime(), opt, title;
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), opt, title;
 
         dom.on("click", "button.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
@@ -462,7 +462,7 @@ View = Backbone.View.extend({
                         } else {
                         /* add new bridge */
                             dom.find("span.br_name").text("Auto");
-                            $("#br_name").val("Auto-" + newid);
+                            $("#br_name").val(_.uniqueId("Auto-"));
                             /* auto set bridge name, set New */
 
                             $.each(dat, function(k, v) {
@@ -1332,13 +1332,18 @@ View = Backbone.View.extend({
         try {
             Ajax.abort();
             /* Stop all ajax request */
-       } catch(e) {}
+        } catch(e) {}
 
-       try {
+        try {
             clearInterval(timer);
             /* remove auto-refresh timer */
             timer_v = 0;
             /* reset auto-refresh option */
+        } catch(e) {}
+
+        try {
+            delete(ov.group);
+            /* delete vrrp model clone (ov) */
         } catch(e) {}
 
         $("div.popContent").off("click");
