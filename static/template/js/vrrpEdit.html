@@ -256,7 +256,7 @@
     <tr>
       <th colspan="5">
         <label class="control-label strong">
-          <input type="checkbox" name="<%= gp.no %>@@instance@@<%= ist.no %>@@preempt" value="true" />&nbsp;{{ _("Preempt") }}
+          <input type="checkbox" name="<%= gp.no %>@@instance@@<%= ist.no %>@@preempt" value="true" <% if("true" === items["preempt"]) { %>checked="checked"<% } %>/>&nbsp;{{ _("Preempt") }}
         </label>
       </th>
     </tr>
