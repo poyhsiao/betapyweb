@@ -2,74 +2,101 @@
       <tr>
         <th colspan="4">{{ _("IP") }}</th>
       </tr>
-      <tr>
+<% _.each(ip, function(av, ak) { %>
+      <tr opt="<%= ak %>">
         <td rowspan="2">
-          <a href="#" class="btn btnAddIpSet" opt="ipv4">{{ _("Add") }}</a>
+          <a href="#" class="btn btnAddIpSet" opt="<%= ak %>">{{ _("Add") }}</a>
         </td>
+      <% if("ipv4" === ak) { %>
         <th colspan="3">{{ _("Ipv4") }}</th>
-      </tr>
-      <tr>
-        <th>{{ _("Lable") }}</th>
-        <th>{{ _("IP Address") }}</th>
-      </tr>
-  <% _.each(ip["ipv4"], function(v, k) { %>
-      <tr>
-        <td rowspan="<%= v["ip_address"].length + 1 %>">
-          <a href="" class="btn btnDelIpSet" opt="ipv4">{{ _("Delete") }}</a>
-        </td>
-        <td rowspan="<%= v["ip_address"].length + 1 %>">
-          <%= v["label"] %>
-          <% if("many" === v["label"]) { %><a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a><% } %>
-          <input type="hidden" name="ip@@ipv4@@<%= k %>@@label" value="<%= v["label"] %>" />
-        </td>
-      </tr>
-    <% _.each(v["ip_address"], function(vv, kk) { %>
-      <tr>
-        <td>
-          <%= vv %>
-          <% if("many" === v["label"]) { %><a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a><% } %>
-          <input type="hidden" name="ip@@ipv4@@<%= k %>@@ip_address" value="<%= vv %>" />
-        </td>
-      </tr>
-    <% }); %>
-  <% }); %>
-      <tr>
-        <td></td>
-        <td colspan="2">{{ _("Any") }}</td>
-      </tr>
-      <tr>
-        <td rowspan="2">
-          <a href="#" class="btn btnAddIpSet" opt="ipv6">{{ _("Add") }}</a>
-        </td>
+      <% } else { %>
         <th colspan="3">{{ _("Ipv6") }}</th>
+      <% } %>
       </tr>
-      <tr>
+      <tr opt="<%= ak %>">
         <th>{{ _("Lable") }}</th>
-        <th>{{ _("IP Address") }}</th>
+        <th colspan="2">{{ _("IP Address") }}</th>
       </tr>
-  <% _.each(ip["ipv6"], function(v, k) { %>
-      <tr>
+  <% _.each(av, function(v, k) { %>
+      <tr opt="<%= ak %>" gnumber="<%= k %>">
         <td rowspan="<%= v["ip_address"].length + 1 %>">
-          <a href="" class="btn btnDelIpSet" opt="ipv6">{{ _("Delete") }}</a>
+          <a href="#" class="btn btnDelIpSet" opt="<%= ak %>">{{ _("Delete") }}</a>
         </td>
         <td rowspan="<%= v["ip_address"].length + 1 %>">
-          <%= v["label"] %>
-          <% if("many" === v["label"]) { %><a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a><% } %>
-          <input type="hidden" name="ip@@ipv6@@<%= k %>@@label" value="<%= v["label"] %>" />
+          <div class="input-prepend input-append">
+            <span class="add-on"><i class="icon-pencil"></i></span>
+            <input type="text" name="ip@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span2" />
+            <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+          </div>
         </td>
       </tr>
     <% _.each(v["ip_address"], function(vv, kk) { %>
-      <tr>
+      <tr opt="<%= ak %>" gnumber="<%= k %>" inumber="<%= kk %>" >
         <td>
-          <%= vv %>
-          <% if("many" === v["label"]) { %><a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a><% } %>
-          <input type="hidden" name="ip@@ipv6@@<%= k %>@@ip_address" value="<%= vv %>" />
+        <% if(0 === kk) { %>
+          <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
+        <% } else { %>
+          <a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a>
+        <% } %>
+        </td>
+        <td>
+          <div class="input-prepend input-append">
+            <span class="add-on"><i class="icon-cog"></i></span>
+            <input type="text" name="ip@@<%= ak %>@@<%= k %>@@ip_address" value="<%= vv %>" class="span2" />
+            <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+          </div>
         </td>
       </tr>
     <% }); %>
   <% }); %>
       <tr>
         <td></td>
-        <td colspan="2">{{ _("Any") }}</td>
+        <td colspan="3">{{ _("Any") }}</td>
       </tr>
+<% }); %>
     </table>
+
+    <div class="slb-ipTpl inactive">
+      <table>
+        <tbody class="newSlbIpSet">
+        	<tr>
+        		<td rowspan="2">
+              <a href="#" class="btn btnDelIpSet" opt="">{{ _("Delete") }}</a>
+            </td>
+            <td rowspan="2">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" name="" value="" class="span2" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+        	</tr>
+        	<tr>
+        	  <td>
+        	    <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
+        	  </td>
+        	  <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" name="" value="" class="span2" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+        	</tr>
+      	</tbody>
+      	<tfoot class="newSlbIpSet">
+      	  <tr>
+            <td>
+              <a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" name="" value="" class="span2" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+          </tr>
+      	</tfoot>
+      </table>
+    </div>

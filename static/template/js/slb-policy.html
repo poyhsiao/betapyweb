@@ -1,0 +1,119 @@
+    <table class="table table-bordered table-hover">
+      <tr>
+        <th colspan="8">{{ _("Policy")}}</th>
+      </tr>
+  <% _.each(policy, function(av, ak) { %>
+      <tr>
+        <td rowspan="2">
+          <a href="#" class="btn btnAddPolicty" opt="<%= av %>">{{ _("Add") }}</a>
+        </td>
+        <th colspan="8">
+        <% if("ipv4" === ak) { %>
+          <span>{{ _("IPv4")}}</span>
+        <% } else { %>
+          <span>{{ _("IPv6")}}</span>
+        <% } %>
+        </th>
+      </tr>
+      <tr>
+        <th>
+          <span>{{ _("Source IP") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Destination IP") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Service Group") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Action") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Real Server Group") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Fallback Server") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Property") }}</span>
+        </th>
+      </tr>
+    <% _.each(av, function(v, k) { %>
+      <tr>
+        <td>
+          <a href="#" class="btn btnDelPolicy" opt="<%= av %>">{{ _("Delete") }}</a>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-map-marker"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@source_ip" class="span1">
+            <% _.each(ip[ak], function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>" <% if(ipv["label"] === v["source_ip"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-flag"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@destination_ip" class="slbDstIp span1">
+            <% _.each(ip[ak], function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>" <% if(ipv["ip_address"].length > 1) { %>opt="many"<% } else { %>opt="one"<% } %> <% if(ipv["label"] === v["destination_ip"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-tags"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@service_group" class="span1">
+            <% _.each(service_group[ak], function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>" <% if(ipv["label"] === v["service_group"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-hand-right"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@action" class="span1">
+              <option value="Accept" <% if("Accept" === v["action"]) { %>selected="selected"<% } %> >{{ _("Accept") }}</option>
+              <option value="Deny" <% if("Deny" === v["action"]) { %>selected="selected"<% } %> >{{ _("Deny") }}</option>
+              <option value="VIP" <% if("VIP" === v["action"]) { %>selected="selected"<% } %> disabled="disabled" >{{ _("VIP") }}</option>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-hdd"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@real_server_group" class="span1">
+            <% _.each(real_server_group[ak], function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>"<% if(ipv["label"] === v["real_server_group"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-tasks"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@fallback_server" class="span1">
+            <% _.each(fallback_server[ak], function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>"<% if(ipv["label"] === v["fallback_server"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-briefcase"></i></span>
+            <select name="policy@@<%= av %>@@<%= k %>@@property" class="span1">
+            <% _.each(property, function(ipv, ipk) { %>
+              <option value="<%= ipv["label"] %>"<% if(ipv["label"] === v["property"]) { %>selected="selected"<% } %> ><%= ipv["label"] %></option>
+            <% }); %>
+            </select>
+          </div>
+        </td>
+      </tr>
+    <% }); %>
+  <% }); %>
+    </table>

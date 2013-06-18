@@ -11,17 +11,29 @@
         <li><a href="#svSlbPolicy" data-toggle="tab">{{ _("Policy") }}</a></li>
       </ul>
       <div class="tab-content">
-        <div id="svSlbIp" class="tab-pane active"></div>
+        <div id="svSlbIp" class="tab-pane active">
+          {% include "js/slb-ip.html" %}
+        </div>
 
-        <div id="svSlbSG" class="tab-pane"></div>
+        <div id="svSlbSG" class="tab-pane">
+          {% include "js/slb-service_group.html" %}
+        </div>
 
-        <div id="svSlbRSG" class="tab-pane"></div>
+        <div id="svSlbRSG" class="tab-pane">
+          {% include "js/slb-real_server_group.html" %}
+        </div>
 
-        <div id="svSlbFS" class="tab-pane"></div>
+        <div id="svSlbFS" class="tab-pane">
+          {% include "js/slb-fallback_server.html" %}
+        </div>
 
-        <div id="svSlbProperty" class="tab-pane"></div>
+        <div id="svSlbProperty" class="tab-pane">
+          {% include "js/slb-property.html" %}
+        </div>
 
-        <div id="svSlbPolicy" class="tab-pane"></div>
+        <div id="svSlbPolicy" class="tab-pane">
+          {% include "js/slb-policy.html" %}
+        </div>
       </div>
     </div>
   </fieldset>

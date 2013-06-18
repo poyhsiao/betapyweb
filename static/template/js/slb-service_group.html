@@ -1,83 +1,73 @@
     <table class="table table-bordered table-hover">
       <tr>
-        <th colspan="4">{{ _("Service Group") }}</th>
+        <th colspan="5">{{ _("Service Group") }}</th>
+      </tr>
+<% _.each(service_group, function(av, ak) { %>
+      <tr>
+        <td rowspan="3">
+          <a href="#" class="btn btnSGAddSG" opt="<%= ak %>">{{ _("Add") }}</a>
+        </td>
       </tr>
       <tr>
         <th colspan="4">
-          <a href="#" class="btn btnSGAddSG" opt="ipv4">{{ _("Add") }}</a>&nbsp;
-          {{ _("Ipv4") }}
+        <% if("ipv4" === ak) { %>
+          <span>{{ _("Ipv4") }}</span>
+        <% } else { %>
+          <span>{{ _("Ipv6") }}</span>
+        <% } %>
+        </th>
+      </tr>
+  <% _.each(av, function(v, k) { %>
+      <tr>
+        <th>
+          <span>{{ _("Lable") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Protocol") }}</span>
+        </th>
+        <th>
+          <span>{{ _("Application Port")}}</span>
+        </th>
+        <th>
+          <a href="#" class="btn btnSGAddAppPort" opt="<%= ak %>">{{ _("Add") }}</a>
         </th>
       </tr>
       <tr>
-        <td></td>
-        <td>{{ _("Lable") }}</td>
-        <td>{{ _("Protocol") }}</td>
-        <td>
-          <a href="#" class="btn btnSGAddAppPort" opt="ipv4">{{ _("Add") }}</a>&nbsp;
-          {{ _("Application Port")}}
-        </td>
-      </tr>
-  <% _.each(service_group["ipv4"], function(v, k) { %>
-      <tr>
         <td rowspan="<%= v["application_port"].length + 1 %>">
-          <a href="#" class="btn btnDelSg" opt="ipv4">{{ _("Delete") }}</a>
+          <a href="#" class="btn btnDelSg" opt="<%= ak %>">{{ _("Delete") }}</a>
         </td>
         <td rowspan="<%= v["application_port"].length + 1 %>">
-          <%= v["label"] %>
-          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@label" value="<%= v["label"] %>" />
+          <div class="input-prepend input-append">
+            <span class="add-on"><i class="icon-pencil"></i></span>
+            <input type="text" name="service_group@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span2" />
+            <a href="#" class="btn btnConrim">{{ _("Edit") }}</a>
+          </div>
         </td>
         <td rowspan="<%= v["application_port"].length + 1 %>">
-          <%= v["protocol"] %>
-          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@protocol" value="<%= v["protocol"] %>" />
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-wrench"></i></span>
+            <select name="service_group@@<%= ak %>@@<%= k %>@@protocol" class="span1">
+              <option value="TCP" <% if("TCP" === v["protocol"]) { %>selected="selected"<% } %> >{{ _("TCP") }}</option>
+              <option value="UDP" <% if("UDP" === v["protocol"]) { %>selected="selected"<% } %> >{{ _("UDP") }}</option>
+              <option value="BOTH" <% if("BOTH" === v["protocol"]) { %>selected="selected"<% } %> >{{ _("BOTH") }}</option>
+            </select>
+          </div>
         </td>
       </tr>
     <% _.each(v["application_port"], function(vv, kk) { %>
       <tr>
-        <td>
-          <%= vv %>
-          <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
-          <input type="hidden" name="service_group@@ipv4@@<%= k %>@@application_port" value="<%= vv %>" />
+        <td class="port">
+          <div class="input-prepend input-append">
+            <span class="add-on"><i class="icon-cog"></i></span>
+            <input type="text" name="service_group@@<%= ak %>@@<%= k %>@@application_port" value="<%= vv %>" class="span1" />
+            <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+          </div>
+        </td>
+        <td class="port">
+          <a href="#" class="btn btnSgDelAP" opt="<%= ak %>">{{ _("Delete") }}</a>
         </td>
       </tr>
     <% }); %>
   <% }); %>
-      <tr>
-        <th colspan="4">
-          <a href="#" class="btn btnSGAddSG" opt="ipv6">{{ _("Add") }}</a>&nbsp;
-          {{ _("Ipv6") }}
-        </th>
-      </tr>
-      <tr>
-        <td></td>
-        <td>{{ _("Lable") }}</td>
-        <td>{{ _("Protocol") }}</td>
-        <td>
-          <a href="#" class="btn btnSGAddAppPort" opt="ipv6">{{ _("Add") }}</a>&nbsp;
-          {{ _("Application Port")}}
-        </td>
-      </tr>
-  <% _.each(service_group["ipv4"], function(v, k) { %>
-      <tr>
-        <td rowspan="<%= v["application_port"].length + 1 %>">
-          <a href="#" class="btn btnDelSg" opt="ipv6">{{ _("Delete") }}</a>
-        </td>
-        <td rowspan="<%= v["application_port"].length + 1 %>">
-          <%= v["label"] %>
-          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@label" value="<%= v["label"] %>" />
-        </td>
-        <td rowspan="<%= v["application_port"].length + 1 %>">
-          <%= v["protocol"] %>
-          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@protocol" value="<%= v["protocol"] %>" />
-        </td>
-      </tr>
-    <% _.each(v["application_port"], function(vv, kk) { %>
-      <tr>
-        <td>
-          <%= vv %>
-          <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
-          <input type="hidden" name="service_group@@ipv6@@<%= k %>@@application_port" value="<%= vv %>" />
-        </td>
-      </tr>
-    <% }); %>
-  <% }); %>
+<% }); %>
     </table>

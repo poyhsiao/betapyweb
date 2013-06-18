@@ -594,7 +594,6 @@ var eView = Backbone.View.extend({
     /* display service -> slb */
         var me = this, dat = me.model.attributes[1], t;
         Ajax = $.get("/getTpl?file=slb", function(d) {
-            return me._loadAllSLB($(d), dat);
             t = _.template(d);
             me.$el.html(t(dat)).find("td, th").css({
                 "vertical-align": "middle",
@@ -603,48 +602,44 @@ var eView = Backbone.View.extend({
 
             $("div.borderArrow").show("fast");
             /* show arrow image */
+
+            require(['bsSwitch'], function() {
+                me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+            });
         }, "html");
     },
 
-    _loadAllSLB: function(o, dat) {
-    /* internal function to load all slb template automatically */
-        var me = this, main = "slb", pre = main + "-", t;
+    addSlbIpSet: function(o) {
+    /* add new ip set for slb */
+        var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), tpl;
+        tpl = $("tbody.newSlbIpSet").find("tr").clone(true);
+        tpl.find("tr").attr({
+            opt: opt
+        });
+        tpl.insertAfter( $("tr[opt=ipv4]:not([gnumber]):last") );
+    },
 
-        $.when(
-            $.get("/getTpl?file=slb-ip", function(d) {
-                o.find("#svSlbIp").html(d);
-            }, "html"),
-            $.get("/getTpl?file=slb-service_group", function(d) {
-                o.find("#svSlbSG").html(d);
-            }, "html"),
-            $.get("/getTpl?file=slb-real_server_group", function(d) {
-                o.find("#svSlbRSG").html(d);
-            }, "html"),
-            $.get("/getTpl?file=slb-fallback_server", function(d) {
-                o.find("#svSlbFS").html(d);
-            }, "html"),
-            $.get("/getTpl?file=slb-property", function(d) {
-                o.find("#svSlbProperty").html(d);
-            }, "html"),
-            $.get("/getTpl?file=slb-policy", function(d) {
-                o.find("#svSlbPolicy").html(d);
-            }, "html")
-        ).then(
-            function() {
-                console.log(_.unescape(o.html()));
-                t = _.template(_.unescape(o.html()));
-                me.$el.html(t(dat)).find("td, th").css({
-                    "vertical-align": "middle",
-                    "text-align": "center"
-                });
+    delSlbIpSet: function(o) {
+    /* delete slb -> ip set */
+        var me = this, self = $(o.target), gnumber = self.parents("tr").attr("gnumber"), opt = self.parents("tr").attr("opt");
+        $("tr[gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
+            $(this).remove();
+            me.saveSNMP();
+        });
+        return false;
+    },
 
-                $("div.borderArrow").show("fast");
-                /* show arrow image */
-            },
-            function() {
-                return me._loadAllSLB(o, dat);
-            }
-        );
+    delSlbIpAddress: function(o) {
+    /* delete slb -> ip -> ip set -> single ip */
+        var me = this, self = $(o.target), gnumber = self.parents("tr").attr("gnumber"), opt = self.parents("tr").attr("opt");
+        self.parents("tr").hide("slow", function() {
+            $("tr[gnumber='" + gnumber + "'][opt='" + opt + "']").find("td[rowspan]").attr({
+                rowspan: function(k, v) {
+                    v = ~~v;
+                    return v-=1;
+                }
+            });
+        });
     },
 
     viewCounters: function(o) {
@@ -973,7 +968,13 @@ var ExtHandler = {
             me.model = new eModel(d);
             me.view = new eView({
                 model: me.model,
-                events: {}
+                events: {
+                    "click a.btnConfirm": "saveSNMP",
+                    "click a.btnAddIpSet": "addSlbIpSet",
+                    "click a.btnDelIpSet": "delSlbIpSet",
+                    "click a.btnAddIpAddress": "addSlbIpAddress",
+                    "click a.btnDelIpAddress": "delSlbIpAddress"
+                }
             });
 
             return me.view.viewSLB();
