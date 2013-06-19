@@ -611,18 +611,55 @@ var eView = Backbone.View.extend({
 
     addSlbIpSet: function(o) {
     /* add new ip set for slb */
-        var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), tpl;
-        tpl = $("tbody.newSlbIpSet").find("tr").clone(true);
+        var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), uid = _.uniqueId(), tpl;
+        tpl = $("tbody.newSlbIpSet").clone(true);
         tpl.find("tr").attr({
-            opt: opt
+            opt: opt,
+            gnumber: uid
+        }).hide();
+
+        tpl.find("tr").each(function(k, v) {
+            if($(v).has("td[rowspan]").length) {
+            /* group label */
+                $(v).find("input").attr("name", "ip@@" + opt + "@@" + uid + "@@label")
+            } else {
+            /* group instance */
+                $(v).attr("inumber", "0").find("input").attr("name", "ip@@" + opt + "@@" + uid + "@@ip_address");
+            }
         });
-        tpl.insertAfter( $("tr[opt=ipv4]:not([gnumber]):last") );
+        tpl.find("tr").insertAfter( $("tr[set=ip][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    addSlbIpAddress: function(o) {
+    /* add new ip address for single ip set of slb */
+        var me = this, self = $(o.target), tr = self.parents("tr[opt]"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber"), inumber = _.uniqueId(), tpl;
+        tpl = $("tfoot.newSlbIpSet").clone(true);
+        tpl.find("tr").attr({
+            opt: opt,
+            gnumber: gnumber,
+            inumber: inumber
+        }).hide().find("input").attr("name", "ip@@" + opt + "@@" + gnumber + "@@ip_address");
+
+        tr.siblings("tr[set=ip][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])").children("td").attr({
+            rowspan: function(k, v) {
+                v = ~~v;
+                return v+=1;
+            }
+        });
+
+        tpl.find("tr").insertAfter( tr ).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
     },
 
     delSlbIpSet: function(o) {
     /* delete slb -> ip set */
         var me = this, self = $(o.target), gnumber = self.parents("tr").attr("gnumber"), opt = self.parents("tr").attr("opt");
-        $("tr[gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
+        $("tr[set=ip][gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
             $(this).remove();
             me.saveSNMP();
         });
@@ -633,13 +670,95 @@ var eView = Backbone.View.extend({
     /* delete slb -> ip -> ip set -> single ip */
         var me = this, self = $(o.target), gnumber = self.parents("tr").attr("gnumber"), opt = self.parents("tr").attr("opt");
         self.parents("tr").hide("slow", function() {
-            $("tr[gnumber='" + gnumber + "'][opt='" + opt + "']").find("td[rowspan]").attr({
+            $("tr[set=ip][gnumber='" + gnumber + "'][opt='" + opt + "']").find("td[rowspan]").attr({
                 rowspan: function(k, v) {
                     v = ~~v;
                     return v-=1;
                 }
             });
+            $(this).remove();
+            me.saveSNMP();
         });
+        return false;
+    },
+
+    addSlbSgSg: function(o) {
+    /* add new slb service group */
+        var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = _.uniqueId();
+        tpl = $("tbody.newSlbSg").clone(true);
+        tpl.find("tr").attr({
+            opt: opt,
+            gnumber: gnumber
+        }).hide();
+
+        tpl.find("tr").each(function(k, v) {
+            if($(v).has("td[rowspan]").length) {
+            /* group */
+                $(v).find("input").attr("name", "service_group@@" + opt + "@@" + gnumber + "@@label");
+                $(v).find("select").attr("name", "service_group@@" + opt + "@@" + gnumber + "@@protocol");
+            } else {
+            /* group instance */
+                $(v).attr("inumber", "0").find("input").attr("name", "service_group@@" + opt + "@@" + gnumber + "@@application_port");
+            }
+            $(v).find("a.btnSGAddAppPort").attr("opt", opt);
+        });
+
+        tpl.find("tr").insertAfter( $("tr[opt='" + opt + "'][set=sg]:not([gnumber]):last") ).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    delSlbSgSg: function(o) {
+    /* delete slb service group */
+        var me = this, self = $(o.target), tr = self.parents("tr"), gnumber = tr.attr("gnumber"), opt = tr.attr("opt");
+        $("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
+            $(this).remove();
+            me.saveSNMP();
+        });
+        return false;;
+    },
+
+    addSlbSgAppPort: function(o) {
+    /* add new port of slb service group */
+        var me = this, self = $(o.target), tr = self.parents("tr[opt]"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber"), inumber = _.uniqueId(), tpl;
+        tpl = $("tfoot.newSlbSg").clone(true);
+        tpl.find("tr").attr({
+            opt: opt,
+            gnumber: gnumber,
+            inumber: inumber
+        }).hide().find("input").attr("name", "service_group@@" + opt + "@@" + gnumber + "@@application_port");
+
+        $("tr[set=sg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])").children("td").attr({
+            rowspan: function(k, v) {
+                v = ~~v;
+                return v+=1;
+            }
+        });
+
+        tpl.find("tr").insertAfter( $("tr[set=sg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])") ).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    delSlbSgAp: function(o) {
+    /* delete port of slb service group */
+        var me = this, self = $(o.target), tr = self.parents("tr"), gnumber = tr.attr("gnumber"), opt = tr.attr("opt");
+        console.log($("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "'][inumber]"));
+        if($("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "'][inumber]").length > 1) {
+            tr.hide("slow", function() {
+                $("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "']").find("td[rowspan]").attr({
+                    rowspan: function(k, v) {
+                        v = ~~v;
+                        return v-=1;
+                    }
+                });
+                tr.remove();
+                me.saveSNMP();
+            });
+        }
+        return false;
     },
 
     viewCounters: function(o) {
@@ -973,7 +1092,11 @@ var ExtHandler = {
                     "click a.btnAddIpSet": "addSlbIpSet",
                     "click a.btnDelIpSet": "delSlbIpSet",
                     "click a.btnAddIpAddress": "addSlbIpAddress",
-                    "click a.btnDelIpAddress": "delSlbIpAddress"
+                    "click a.btnDelIpAddress": "delSlbIpAddress",
+                    "click a.btnSGAddSG": "addSlbSgSg",
+                    "click a.btnDelSg": "delSlbSgSg",
+                    "click a.btnSGAddAppPort": "addSlbSgAppPort",
+                    "click a.btnSgDelAP": "delSlbSgAp"
                 }
             });
 

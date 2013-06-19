@@ -5,7 +5,7 @@
 <% _.each(ip, function(av, ak) { %>
       <tr opt="<%= ak %>">
         <td rowspan="2">
-          <a href="#" class="btn btnAddIpSet" opt="<%= ak %>">{{ _("Add") }}</a>
+          <a href="#" class="btn btnAddIpSet" opt="<%= ak %>" set="ip">{{ _("Add") }}</a>
         </td>
       <% if("ipv4" === ak) { %>
         <th colspan="3">{{ _("Ipv4") }}</th>
@@ -13,12 +13,12 @@
         <th colspan="3">{{ _("Ipv6") }}</th>
       <% } %>
       </tr>
-      <tr opt="<%= ak %>">
+      <tr opt="<%= ak %>" set="ip">
         <th>{{ _("Lable") }}</th>
         <th colspan="2">{{ _("IP Address") }}</th>
       </tr>
   <% _.each(av, function(v, k) { %>
-      <tr opt="<%= ak %>" gnumber="<%= k %>">
+      <tr opt="<%= ak %>" gnumber="<%= k %>" set="ip">
         <td rowspan="<%= v["ip_address"].length + 1 %>">
           <a href="#" class="btn btnDelIpSet" opt="<%= ak %>">{{ _("Delete") }}</a>
         </td>
@@ -31,7 +31,7 @@
         </td>
       </tr>
     <% _.each(v["ip_address"], function(vv, kk) { %>
-      <tr opt="<%= ak %>" gnumber="<%= k %>" inumber="<%= kk %>" >
+      <tr opt="<%= ak %>" gnumber="<%= k %>" inumber="<%= kk %>" set="ip">
         <td>
         <% if(0 === kk) { %>
           <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
@@ -59,40 +59,40 @@
     <div class="slb-ipTpl inactive">
       <table>
         <tbody class="newSlbIpSet">
-        	<tr>
+        	<tr set="ip">
         		<td rowspan="2">
               <a href="#" class="btn btnDelIpSet" opt="">{{ _("Delete") }}</a>
             </td>
             <td rowspan="2">
               <div class="input-prepend input-append">
                 <span class="add-on"><i class="icon-pencil"></i></span>
-                <input type="text" name="" value="" class="span2" />
+                <input type="text" class="span2" />
                 <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
               </div>
             </td>
         	</tr>
-        	<tr>
+        	<tr set="ip">
         	  <td>
         	    <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
         	  </td>
         	  <td>
               <div class="input-prepend input-append">
                 <span class="add-on"><i class="icon-cog"></i></span>
-                <input type="text" name="" value="" class="span2" />
+                <input type="text" class="span2" />
                 <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
               </div>
             </td>
         	</tr>
       	</tbody>
       	<tfoot class="newSlbIpSet">
-      	  <tr>
+      	  <tr set="ip">
             <td>
               <a href="#" class="btn btnDelIpAddress">{{ _("Delete") }}</a>
             </td>
             <td>
               <div class="input-prepend input-append">
                 <span class="add-on"><i class="icon-cog"></i></span>
-                <input type="text" name="" value="" class="span2" />
+                <input type="text" class="span2" />
                 <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
               </div>
             </td>
