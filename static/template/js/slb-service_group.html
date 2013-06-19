@@ -3,12 +3,12 @@
         <th colspan="5">{{ _("Service Group") }}</th>
       </tr>
 <% _.each(service_group, function(av, ak) { %>
-      <tr>
-        <td rowspan="3">
+      <tr opt="<%= ak %>">
+        <th rowspan="2" class="slbSgAddSg" opt="<%= ak %>">
           <a href="#" class="btn btnSGAddSG" opt="<%= ak %>">{{ _("Add") }}</a>
-        </td>
+        </th>
       </tr>
-      <tr>
+      <tr opt="<%= ak %>" set="sg">
         <th colspan="4">
         <% if("ipv4" === ak) { %>
           <span>{{ _("Ipv4") }}</span>
@@ -18,8 +18,8 @@
         </th>
       </tr>
   <% _.each(av, function(v, k) { %>
-      <tr>
-        <th>
+      <tr gnumber="<%= k %>" opt="<%= ak %>" set="sg">
+        <th colspan="2">
           <span>{{ _("Lable") }}</span>
         </th>
         <th>
@@ -32,7 +32,7 @@
           <a href="#" class="btn btnSGAddAppPort" opt="<%= ak %>">{{ _("Add") }}</a>
         </th>
       </tr>
-      <tr>
+      <tr gnumber="<%= k %>" opt="<%= ak %>" set="sg">
         <td rowspan="<%= v["application_port"].length + 1 %>">
           <a href="#" class="btn btnDelSg" opt="<%= ak %>">{{ _("Delete") }}</a>
         </td>
@@ -55,7 +55,7 @@
         </td>
       </tr>
     <% _.each(v["application_port"], function(vv, kk) { %>
-      <tr>
+      <tr gnumber="<%= k %>" inumber="<%= kk %>" opt="<%= ak %>" set="sg">
         <td class="port">
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-cog"></i></span>
@@ -71,3 +71,72 @@
   <% }); %>
 <% }); %>
     </table>
+
+    <div class="slb-SGTpl inactive">
+      <table>
+      	<tbody class="newSlbSg">
+      	  <tr set="sg">
+            <th colspan="2">
+              <span>{{ _("Lable") }}</span>
+            </th>
+            <th>
+              <span>{{ _("Protocol") }}</span>
+            </th>
+            <th>
+              <span>{{ _("Application Port")}}</span>
+            </th>
+            <th>
+              <a href="#" class="btn btnSGAddAppPort">{{ _("Add") }}</a>
+            </th>
+          </tr>
+      	  <tr set="sg">
+            <td rowspan="2">
+              <a href="#" class="btn btnDelSg" opt="">{{ _("Delete") }}</a>
+            </td>
+            <td rowspan="2">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" class="span2" />
+                <a href="#" class="btn btnConrim">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td rowspan="2">
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-wrench"></i></span>
+                <select class="span1">
+                  <option value="TCP">{{ _("TCP") }}</option>
+                  <option value="UDP">{{ _("UDP") }}</option>
+                  <option value="BOTH">{{ _("BOTH") }}</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr set="sg">
+            <td class="port">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" class="span1" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td class="port">
+              <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
+            </td>
+          </tr>
+      	</tbody>
+      	<tfoot class="newSlbSg">
+      	  <tr set="sg">
+            <td class="port">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" class="span1" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td class="port">
+              <a href="#" class="btn btnSgDelAP">{{ _("Delete") }}</a>
+            </td>
+          </tr>
+      	</tfoot>
+      </table>
+    </div>
