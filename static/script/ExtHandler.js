@@ -745,8 +745,7 @@ var eView = Backbone.View.extend({
     delSlbSgAp: function(o) {
     /* delete port of slb service group */
         var me = this, self = $(o.target), tr = self.parents("tr"), gnumber = tr.attr("gnumber"), opt = tr.attr("opt");
-        console.log($("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "'][inumber]"));
-        if($("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "'][inumber]").length > 1) {
+        if(~~$("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "']:has(td[rowspan])").find("td").attr("rowspan") > 2) {
             tr.hide("slow", function() {
                 $("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "']").find("td[rowspan]").attr({
                     rowspan: function(k, v) {
@@ -759,6 +758,205 @@ var eView = Backbone.View.extend({
             });
         }
         return false;
+    },
+
+    addSlbRsgGp: function(o) {
+    /* add new group of real server group */
+    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = _.uniqueId();
+        tpl = $("tbody.newSlbRsg").clone(true);
+        tpl.find("tr").attr({
+            opt: opt,
+            gnumber: gnumber
+        }).hide().find(":input").each(function(k, v) {
+        	if("select" !== v.tagName.toLowerCase()) {
+        		if("glabel" === $(v).attr("ck")) {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" + gnumber+ "@@label");
+	        	} else if("ilabel" === $(v).attr("ck")) {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@0@@label");
+	        	} else {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@0@@" + $(v).attr("ck"));
+	        	}
+        	}
+        });
+
+        tpl.find("tr").insertAfter(tr).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    delSlbRsgGp: function(o) {
+    /* delete group of real server group */
+        var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber");
+        $("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']").hide("slow", function() {
+            $(this).remove();
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    addSlbRsgInst: function(o) {
+    /* add instance of real server group */
+    	var me = this, self = $(o.target), tr = self.parents("tr[opt]"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber"), inumber = _.uniqueId(), tpl;
+    	tpl = $("tfoot.newSlbRsg").clone(true);
+        tpl.find("tr").attr({
+            opt: opt,
+            gnumber: gnumber,
+            inumber: inumber
+        }).hide().find(":input").each(function(k, v) {
+        	if("select" !== v.tagName.toLowerCase()) {
+        		if("glabel" === $(v).attr("ck")) {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" +  gnumber+ "@@label");
+	        	} else if("ilabel" === $(v).attr("ck")) {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@" + inumber + "@@label");
+	        	} else {
+	        		$(v).attr("name", "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@" + inumber + "@@" + $(v).attr("ck"));
+	        	}
+        	}
+        });
+
+        $("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])").children("td").attr({
+            rowspan: function(k, v) {
+                v = ~~v;
+                return v+=1;
+            }
+        });
+
+        tpl.find("tr").insertAfter( $("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan]):last") ).show("slow", function() {
+            me.saveSNMP();
+        });
+        return false;
+    },
+
+    delSlbRsgInst: function(o) {
+    /* delete instance of real server group */
+        var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber");
+        if($("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan]):last").children("td").attr("rowspan") > 2) {
+	        tr.hide("slow", function() {
+	        	$("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])").children("td").attr({
+	        		rowspan: function(k, v) {
+	        			v = ~~v;
+	        			return v-=1;
+	        		}
+	        	});
+	        	tr.remove();
+	        	me.saveSNMP();
+	        });
+        }
+        return false;
+    },
+
+    delSlbRsgHc: function(o) {
+	/* delete selected and configured health check item by click "remove" icon */
+    	var me = this, self = $(o.target);
+    	self.parents("span.badge").hide("slow", function() {
+    		$("<option />", {
+    			value: $(this).attr("ck"),
+    			text: $(this).attr("txt")
+    		}).appendTo( self.parents("td").find("select") );
+
+    		$(this).remove();
+    	});
+
+    	me.saveSNMP();
+    	return false;
+    },
+
+    delSlbRsgAllHc: function(o) {
+	/* remove and delete all selected and configured health check items by click NA button */
+    	var me = this, self = $(o.target), select = self.parents("td").find("select");
+    	self.parents("td").find("span[ck][txt]").hide("slow", function() {
+    		$("<option />", {
+    			value: $(this).attr("ck"),
+    			text: $(this).attr("txt")
+    		}).appendTo(select);
+
+    		$(this).remove();
+    	});
+
+    	me.saveSNMP();
+    	return false;
+    },
+
+    addSlbRsgCheck: function(o) {
+	/* add / modify health check of rsg of slb */
+    	var me = this, self = $(o.target), select = self.parents("td").find("select"), tr = self.parents("tr"), gnumber = tr.attr("gnumber"), inumber= tr.attr("inumber"), opt = tr.attr("opt"), title, cf, ck, dom, tpl;
+    	if("a" === self[0].tagName.toLowerCase()) {
+		/* add new health ckeck */
+    		ck = select.val();
+    		if(_.isNull(ck)) {
+    			return false;
+    		}
+    		cf = "new";
+    		title = select.find("option:selected").text();
+    	} else {
+		/* modify health check */
+    		ck = self.parent().attr("ck");
+    		cf = "edit";
+    		title = self.text();
+    	}
+    	tpl = "/getTpl?file=slb-rsg-" + ck;
+
+    	me.$el.block();
+    	/* block popContent */
+
+    	Ajax = $.get(tpl, function(d) {
+    		dom = $(d);
+    		dom.dialog({
+    			modal: true,
+                closeOnEscape: false,
+                width: "auto",
+                title: title,
+                open: function() {
+                	$(".no-close, .ui-dialog-titlebar-close").hide();
+                    /* remove all close window button */
+
+                	me.$el.unblock();
+                	/* unblock popContetn */
+
+                	if("edit" === cf) {
+            		/* edit mode */
+                		dom.find(":input").each(function(k, v) {
+                			$(v).attr({
+                				name: "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@" + inumber + "@@" + ck + "@@" + $(v).attr("chk")
+                			}).val( self.parent().find(":input[chk='" + $(v).attr("chk") + "']").val() );
+                		});
+                	} else {
+                	/* add new check */
+                		dom.find(":input").attr({
+                			name: function(k, v) {
+                				return "real_server_group@@" + opt + "@@" + gnumber + "@@real_server@@" + inumber + "@@" + ck + "@@" + $(this).attr("chk");
+                			}
+                		});
+                	}
+                },
+                close: function() {
+                	dom.dialog("destroy");
+                },
+                buttons: [{
+                	text: "Ok",
+                	click: function() {
+                		if("edit" === cf) {
+            			/* edit mode */
+                			self.siblings(":input").remove();
+                			dom.find(":input").removeAttr("id").attr("type", "hidden").insertAfter(self);
+                		} else {
+            			/* add new check */
+                			tpl = $("div.badgeTpl").find("span[ck='" + ck + "']").clone(true);
+                			dom.find(":input").removeAttr("id").attr("type", "hidden").appendTo(tpl);
+                			tpl.appendTo( self.parents("td").find("p") );
+                			select.find("option[value='" + ck + "']").remove();
+                		}
+                		dom.dialog("close");
+                	}
+                }, {
+                	text: "Cancel",
+                	click: function() {
+                		dom.dialog("close");
+                	}
+                }]
+    		});
+    	}, "html");
     },
 
     viewCounters: function(o) {
@@ -1096,7 +1294,15 @@ var ExtHandler = {
                     "click a.btnSGAddSG": "addSlbSgSg",
                     "click a.btnDelSg": "delSlbSgSg",
                     "click a.btnSGAddAppPort": "addSlbSgAppPort",
-                    "click a.btnSgDelAP": "delSlbSgAp"
+                    "click a.btnSgDelAP": "delSlbSgAp",
+                    "click a.btnAddRSGGroup": "addSlbRsgGp",
+                    "click a.btnDelRSGGroup": "delSlbRsgGp",
+                    "click a.btnAddRSGInstance": "addSlbRsgInst",
+                    "click a.btnDelRSGInstance": "delSlbRsgInst",
+                    "click span.badge i.icon-remove": "delSlbRsgHc",
+                    "click a.btnSetRSGNa": "delSlbRsgAllHc",
+                    "click a.btnAddRSGCheck": "addSlbRsgCheck",
+                    "click span.badge[ck][txt] span": "addSlbRsgCheck"
                 }
             });
 

@@ -1,0 +1,25 @@
+<div class="slbRsg-tcp_check padding">
+  <fieldset>
+    <legend>{{ _("TCP Check") }}</legend>
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label for="slbRsgTcpCheckFlip" class="control-label strong">{{ _("From Local IP") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgTcpCheckFlip" placeholder="{{ _("From Local IP") }}" class="span2" chk="from_local_ip" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgTcpCheckTrp" class="control-label strong">{{ _("To Remote Port") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgTcpCheckTrp" placeholder="{{ _("To Remote Port") }}" class="span2" chk="to_remote_port" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgTcpCheckCt" class="control-label strong">{{ _("Connection Timeout") }}&nbsp;({{ _("sec") }})</label>
+        <div class="controls">
+          <input type="number" id="slbRsgTcpCheckCt" placeholder="{{ _("Connection Timeout") }}" class="span2" chk="connection_timeout" />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

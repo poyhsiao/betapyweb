@@ -1,0 +1,37 @@
+<div class="slbRsg-pattern_check padding">
+  <fieldset>
+    <legend>{{ _("PATTERN Check") }}</legend>
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label for="slbRsgPatternCheckURL" class="control-label strong">{{ _("Send") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgPatternCheckURL" placeholder="{{ _("Send") }}" class="span2" chk="send" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgPatternCheckSC" class="control-label strong">{{ _("Expect") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgPatternCheckSC" placeholder="{{ _("Expect") }}" class="span2" chk="expect" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgPatternCheckFlip" class="control-label strong">{{ _("To Remote IP") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgPatternCheckFlip" placeholder="{{ _("To Remote IP") }}" class="span2" chk="to_remote_ip" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgPatternCheckTrp" class="control-label strong">{{ _("To Remote Port") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgPatternCheckTrp" placeholder="{{ _("To Remote Port") }}" class="span2" chk="to_remote_port" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgPatternCheckCt" class="control-label strong">{{ _("Timeout") }}&nbsp;({{ _("sec") }})</label>
+        <div class="controls">
+          <input type="number" id="slbRsgPatternCheckCt" placeholder="{{ _("Timeout") }}" class="span2" chk="timeout" />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

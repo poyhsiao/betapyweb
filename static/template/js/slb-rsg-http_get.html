@@ -1,0 +1,43 @@
+<div class="slbRsg-http_get padding">
+  <fieldset>
+    <legend>{{ _("HTTP Get") }}</legend>
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label for="slbRsgHttpGetURL" class="control-label strong">{{ _("URL") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgHttpGetURL" placeholder="{{ _("URL") }}" class="span2" chk="url" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgHttpGetSC" class="control-label strong">{{ _("Status Code") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgHttpGetSC" placeholder="{{ _("Status Code") }}" class="span2" chk="status_code" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgHttpGetFlip" class="control-label strong">{{ _("From Local IP") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgHttpGetFlip" placeholder="{{ _("From Local IP") }}" class="span2" chk="from_local_ip" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgHttpGetTrp" class="control-label strong">{{ _("To Remote Port") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgHttpGetTrp" placeholder="{{ _("To Remote Port") }}" class="span2" chk="to_remote_port" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgHttpGetCt" class="control-label strong">{{ _("Connection Timeout") }}&nbsp;({{ _("sec") }})</label>
+        <div class="controls">
+          <input type="number" id="slbRsgHttpGetCt" placeholder="{{ _("Connection Timeout") }}" class="span2" chk="connection_timeout" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgHttpGetDbr" class="control-label strong">{{ _("Delay Before Retry") }}&nbsp;({{ _("sec") }})</label>
+        <div class="controls">
+          <input type="number" id="slbRsgHttpGetDbr" placeholder="{{ _("Delay Before Retry") }}" class="span2" chk="delay_before_retry" />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>

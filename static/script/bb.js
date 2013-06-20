@@ -1342,7 +1342,7 @@ View = Backbone.View.extend({
         } catch(e) {}
 
         try {
-            delete(ov.group);
+            delete(ov["group"]);
             /* delete vrrp model clone (ov) */
         } catch(e) {}
 

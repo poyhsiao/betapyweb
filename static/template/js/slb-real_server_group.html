@@ -3,9 +3,9 @@
       	<th colspan="8">{{ _("Real Server Group") }}</th>
       </tr>
 <% _.each(real_server_group, function(av, ak) { %>
-      <tr>
+      <tr opt="<%= ak %>">
         <td>
-          <a href="#" class="btn btnAddRSG" opt="<%= ak %>">{{ _("Add") }}</a>
+          <a href="#" class="btn btnAddRSGGroup" opt="<%= ak %>">{{ _("Add") }}</a>
         </td>
       	<th colspan="7">
     	  <% if("ipv4" == ak) { %>
@@ -16,9 +16,9 @@
       	</th>
       </tr>
   <% _.each(av, function(v, k) { %>
-      <tr>
+      <tr gnumber="<%= k %>" opt="<%= ak %>" set="rsg">
       	<td rowspan="<%= v["real_server"].length + 2 %>">
-      	  <a href="#" class="btn btnDelRSG" opt="<%= ak %>">{{ _("Delete") }}</a>
+      	  <a href="#" class="btn btnDelRSGGroup" opt="<%= ak %>">{{ _("Delete") }}</a>
       	</td>
       	<th>
       	  <span>{{ _("Label") }}</span>
@@ -42,111 +42,290 @@
       	  <span>{{ _("Maintenance Mode") }}</span>
       	</th>
       </tr>
-      <tr>
+      <tr gnumber="<%= k %>" opt="<%= ak %>" set="rsg">
         <td rowspan="<%= v["real_server"].length + 1 %>">
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-pencil"></i></span>
-            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span1" />
+            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span1" ck="glabel" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
       </tr>
     <% _.each(v["real_server"], function(vv, kk) { %>
-      <tr>
+      <tr gnumber="<%= k %>" inumber="<%= kk %>" opt="<%= ak %>" set="rsg">
         <td>
           <a href="#" class="btn btn-mini btnDelRSGInstance" opt="<%= ak %>" gnumber="<%= k %>" inumber="<%= kk %>">{{ _("Delete") }}</a>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-pencil"></i></span>
-            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@label" value="<%= vv["label"] %>" class="span1" />
+            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@label" value="<%= vv["label"] %>" class="span1" ck="ilabel" />
             <a href="#" class="btn btnConrim">{{ _("Edit") }}</a>
           </div>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-cog"></i></span>
-            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@ip_address" value="<%= vv["ip_address"] %>" class="span2" />
+            <input type="text" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@ip_address" value="<%= vv["ip_address"] %>" class="span2" ck="ip_address" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-list-alt"></i></span>
-            <input type="number" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@weight" value="<%= vv["weight"] %>" class="span1" />
+            <input type="number" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@weight" value="<%= vv["weight"] %>" class="span1" ck="weight" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-check"></i></span>
+            <a href="#" class="btn btnSetRSGNa">{{ _("NA") }}</a>
             <select class="span2">
-              <option value="NA">{{ _("NA") }}</option>
+            <% if(!"http_get" in v["real_server"][kk]) { %>
+              <option value="http_get">{{ _("HTTP Get") }}</option>
+            <% } %>
+            <% if(!"https_get" in v["real_server"][kk]) { %>
+              <option value="https_get">{{ _("HTTPS Get") }}</option>
+            <% } %>
+            <% if(!"icmp_check" in v["real_server"][kk]) { %>
+              <option value="icmp_check">{{ _("ICMP Check") }}</option>
+            <% } %>
+            <% if(!"tcp_check" in v["real_server"][kk]) { %>
+              <option value="tcp_check">{{ _("TCP Check") }}</option>
+            <% } %>
+            <% if(!"smtp_check" in v["real_server"][kk]) { %>
+              <option value="smtp_check">{{ _("SMTP Check") }}</option>
+            <% } %>
+            <% if(!"pattern_check" in v["real_server"][kk]) { %>
+              <option value="pattern_check">{{ _("PATTERN Check") }}</option>
+            <% } %>
             </select>
             <a href="#" class="btn btnAddRSGCheck" opt="<%= ak %>" gnumber="<%= k %>" inumber="<%= kk %>">{{ _("Add") }}</a>
           </div>
           <p>
         <% if("http_get" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("HTTP_GET") }}&nbsp;</span>
+            <span class="badge badge-info ck-http_get" ck="http_get" txt="{{ _("HTTP Get") }}">
+              <span class="clickable">{{ _("HTTP Get") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["http_get"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@http_get@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@http_get@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
         <% if("https_get" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("HTTPS_GET") }}&nbsp;</span>
+            <span class="badge badge-info ck-https_get" ck="https_get" txt="{{ _("HTTPS Get") }}">
+              <span class="clickable">{{ _("HTTPS Get") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["https_get"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@https_get@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@https_get@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
         <% if("icmp_check" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("ICMP_CHECK") }}&nbsp;</span>
+            <span class="badge badge-info ck-icmp_check" ck="icmp_check" txt="{{ _("ICMP Check") }}">
+              <span class="clickable">{{ _("ICMP Check") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["icmp_check"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@icmp_check@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@icmp_check@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
         <% if("tcp_check" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("TCP_CHECK") }}&nbsp;</span>
+            <span class="badge badge-info ck-tcp_check" ck="tcp_check" txt="{{ _("TCP Check") }}">
+              <span class="clickable">{{ _("TCP Check") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["tcp_check"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@tcp_check@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@tcp_check@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
         <% if("smtp_check" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("SMTP_CHECK") }}&nbsp;</span>
+            <span class="badge badge-info ck-smtp_check" ck="smtp_check" txt="{{ _("SMTP Check") }}">
+              <span class="clickable">{{ _("SMTP Check") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["smtp_check"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@smtp_check@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@smtp_check@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
         <% if("pattern_check" in v["real_server"][kk]) { %>
-            <span class="badge badge-info">
-              <span>{{ _("PATTERN_CHECK") }}&nbsp;</span>
+            <span class="badge badge-info ck-pattern_check" ck="pattern_check" txt="{{ _("PATTERN Check") }}">
+              <span class="clickable">{{ _("PATTERN Check") }}&nbsp;</span>
               <i class="icon-remove clickable"></i>
             <% _.each(v["real_server"][kk]["pattern_check"], function(va, ka) { %>
-              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@pattern_check@@<%= ka %>" value="<%= va %>" />
+              <input type="hidden" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@pattern_check@@<%= ka %>" value="<%= va %>" chk="<%= ka %>" />
             <% }); %>
             </span>
         <% } %>
           </p>
         </td>
         <td>
-          <input type="checkbox" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@maintenance_mode" value="true" <% if(true === vv["maintenance_mode"]) { %>checked="checked"<% } %>/>
+          <input type="checkbox" name="real_server_group@@<%= ak %>@@<%= k %>@@real_server@@<%= kk %>@@maintenance_mode" value="true" ck="maintenance_mode" <% if(true === vv["maintenance_mode"]) { %>checked="checked"<% } %> />
         </td>
       </tr>
     <% }); %>
   <% }); %>
 <% }); %>
     </table>
+
+    <div class="slb-RSGTpl inactive">
+      <table>
+        <tbody class="newSlbRsg">
+          <tr set="rsg">
+            <td rowspan="3">
+              <a href="#" class="btn btnDelRSGGroup">{{ _("Delete") }}</a>
+            </td>
+            <th>
+              <span>{{ _("Label") }}</span>
+            </th>
+            <th>
+              <a href="#" class="btn btnAddRSGInstance">{{ _("Add") }}</a>
+            </th>
+            <th>
+              <span>{{ _("Label") }}</span>
+            </th>
+            <th>
+              <span>{{ _("IP Address") }}</span>
+            </th>
+            <th>
+              <span>{{ _("Weight") }}</span>
+            </th>
+            <th>
+              <span>{{ _("Health Check") }}</span>
+            </th>
+            <th>
+              <span>{{ _("Maintenance Mode") }}</span>
+            </th>
+          </tr>
+          <tr set="rsg">
+            <td rowspan="2">
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" class="span1" ck="glabel" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+          </tr>
+          <tr set="rsg" inumber="0">
+            <td>
+              <a href="#" class="btn btn-mini btnDelRSGInstance">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" class="span1" ck="ilabel" />
+                <a href="#" class="btn btnConrim">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" class="span2" ck="ip_address" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-list-alt"></i></span>
+                <input type="number" class="span1" ck="weight" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-check"></i></span>
+                <a href="#" class="btn btnSetRSGNa">{{ _("NA") }}</a>
+                <select class="span2">
+                  <option value="http_get">{{ _("HTTP Get") }}</option>
+                  <option value="https_get">{{ _("HTTPS Get") }}</option>
+                  <option value="icmp_check">{{ _("ICMP Check") }}</option>
+                  <option value="tcp_check">{{ _("TCP Check") }}</option>
+                  <option value="smtp_check">{{ _("SMTP Check") }}</option>
+                  <option value="pattern_check">{{ _("PATTERN Check") }}</option>
+                </select>
+                <a href="#" class="btn btnAddRSGCheck">{{ _("Add") }}</a>
+              </div>
+              <p ></p>
+            </td>
+            <td>
+              <input type="checkbox" value="true" ck="maintenance_mode" />
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="newSlbRsg">
+           <tr set="rsg">
+            <td>
+              <a href="#" class="btn btn-mini btnDelRSGInstance">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" class="span1" ck="ilabel" />
+                <a href="#" class="btn btnConrim">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="text" class="span2" ck="ip_address" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-list-alt"></i></span>
+                <input type="number" class="span1" ck="weight" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-check"></i></span>
+                <a href="#" class="btn btnSetRSGNa">{{ _("NA") }}</a>
+                <select class="span2">
+                  <option value="http_get">{{ _("HTTP Get") }}</option>
+                  <option value="https_get">{{ _("HTTPS Get") }}</option>
+                  <option value="icmp_check">{{ _("ICMP Check") }}</option>
+                  <option value="tcp_check">{{ _("TCP Check") }}</option>
+                  <option value="smtp_check">{{ _("SMTP Check") }}</option>
+                  <option value="pattern_check">{{ _("PATTERN Check") }}</option>
+                </select>
+                <a href="#" class="btn btnAddRSGCheck">{{ _("Add") }}</a>
+              </div>
+              <p ></p>
+            </td>
+            <td>
+              <input type="checkbox" value="true" ck="maintenance_mode" />
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="badgeTpl">
+        <span class="badge badge-info ck-http_get" ck="http_get" txt="{{ _("HTTP Get") }}">
+          <span class="clickable">{{ _("HTTP Get") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span>
+        <span class="badge badge-info ck-https_get" ck="https_get" txt="{{ _("HTTPS Get") }}">
+          <span class="clickable">{{ _("HTTPS Get") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span>
+        <span class="badge badge-info ck-icmp_check" ck="icmp_check" txt="{{ _("ICMP Check") }}">
+          <span class="clickable">{{ _("ICMP Check") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span>
+        <span class="badge badge-info ck-tcp_check" ck="tcp_check" txt="{{ _("TCP Check") }}">
+          <span class="clickable">{{ _("TCP Check") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span class="clickable">
+        <span class="badge badge-info ck-smtp_check" ck="smtp_check" txt="{{ _("SMTP Check") }}">
+          <span class="clickable">{{ _("SMTP Check") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span>
+        <span class="badge badge-info ck-pattern_check" ck="pattern_check" txt="{{ _("PATTERN Check") }}">
+          <span class="clickable">{{ _("PATTERN Check") }}&nbsp;</span>
+          <i class="icon-remove clickable"></i>
+        </span>
+      </div>
+      {% include "js/slb-rsg-http_get.html" %}
+    </div>

@@ -1,0 +1,37 @@
+<div class="slbRsg-smtp_check padding">
+  <fieldset>
+    <legend>{{ _("SMTP Check") }}</legend>
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label for="slbRsgSmtpCheckURL" class="control-label strong">{{ _("Helo Name") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgSmtpCheckURL" placeholder="{{ _("URL") }}" class="span2" chk="helo_name" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgSmtpCheckFlip" class="control-label strong">{{ _("From Local IP") }}</label>
+        <div class="controls">
+          <input type="text" id="slbRsgSmtpCheckFlip" placeholder="{{ _("From Local IP") }}" class="span2" chk="from_local_ip" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgSmtpCheckSC" class="control-label strong">{{ _("To Remote IP") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgSmtpCheckSC" placeholder="{{ _("Status Code") }}" class="span2" chk="to_remote_ip" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgSmtpCheckTrp" class="control-label strong">{{ _("To Remote Port") }}</label>
+        <div class="controls">
+          <input type="number" id="slbRsgSmtpCheckTrp" placeholder="{{ _("To Remote Port") }}" class="span2" chk="to_remote_port" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="slbRsgSmtpCheckCt" class="control-label strong">{{ _("Connection Timeout") }}&nbsp;({{ _("sec") }})</label>
+        <div class="controls">
+          <input type="number" id="slbRsgSmtpCheckCt" placeholder="{{ _("Connection Timeout") }}" class="span2" chk="connection_timeout" />
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
