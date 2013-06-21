@@ -609,6 +609,13 @@ var eView = Backbone.View.extend({
         }, "html");
     },
 
+    ckSlbSave: function(o) {
+	/* when any thing change on slb, will let user check policy setting before save */
+    	var me = this;
+    	checkSlb = 1;
+    	return me.saveSNMP();
+    },
+
     addSlbIpSet: function(o) {
     /* add new ip set for slb */
         var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), uid = _.uniqueId(), tpl;
@@ -628,7 +635,7 @@ var eView = Backbone.View.extend({
             }
         });
         tpl.find("tr").insertAfter( $("tr[set=ip][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -651,7 +658,7 @@ var eView = Backbone.View.extend({
         });
 
         tpl.find("tr").insertAfter( tr ).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -661,7 +668,7 @@ var eView = Backbone.View.extend({
         var me = this, self = $(o.target), gnumber = self.parents("tr").attr("gnumber"), opt = self.parents("tr").attr("opt");
         $("tr[set=ip][gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
             $(this).remove();
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -677,7 +684,7 @@ var eView = Backbone.View.extend({
                 }
             });
             $(this).remove();
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -704,7 +711,7 @@ var eView = Backbone.View.extend({
         });
 
         tpl.find("tr").insertAfter( $("tr[opt='" + opt + "'][set=sg]:not([gnumber]):last") ).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -714,7 +721,7 @@ var eView = Backbone.View.extend({
         var me = this, self = $(o.target), tr = self.parents("tr"), gnumber = tr.attr("gnumber"), opt = tr.attr("opt");
         $("tr[set=sg][gnumber='" + gnumber + "'][opt='" + opt + "']").hide("slow", function() {
             $(this).remove();
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;;
     },
@@ -737,7 +744,7 @@ var eView = Backbone.View.extend({
         });
 
         tpl.find("tr").insertAfter( $("tr[set=sg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan])") ).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -754,7 +761,7 @@ var eView = Backbone.View.extend({
                     }
                 });
                 tr.remove();
-                me.saveSNMP();
+                me.ckSlbSave();
             });
         }
         return false;
@@ -780,7 +787,7 @@ var eView = Backbone.View.extend({
         });
 
         tpl.find("tr").insertAfter(tr).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -790,7 +797,7 @@ var eView = Backbone.View.extend({
         var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = tr.attr("gnumber");
         $("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']").hide("slow", function() {
             $(this).remove();
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -823,7 +830,7 @@ var eView = Backbone.View.extend({
         });
 
         tpl.find("tr").insertAfter( $("tr[set=rsg][opt='" + opt + "'][gnumber='" + gnumber + "']:has(td[rowspan]):last") ).show("slow", function() {
-            me.saveSNMP();
+            me.ckSlbSave();
         });
         return false;
     },
@@ -840,7 +847,7 @@ var eView = Backbone.View.extend({
 	        		}
 	        	});
 	        	tr.remove();
-	        	me.saveSNMP();
+	        	me.ckSlbSave();
 	        });
         }
         return false;
@@ -858,7 +865,7 @@ var eView = Backbone.View.extend({
     		$(this).remove();
     	});
 
-    	me.saveSNMP();
+    	me.ckSlbSave();
     	return false;
     },
 
@@ -874,7 +881,7 @@ var eView = Backbone.View.extend({
     		$(this).remove();
     	});
 
-    	me.saveSNMP();
+    	me.ckSlbSave();
     	return false;
     },
 
@@ -947,6 +954,7 @@ var eView = Backbone.View.extend({
                 			tpl.appendTo( self.parents("td").find("p") );
                 			select.find("option[value='" + ck + "']").remove();
                 		}
+                		me.ckSlbSave();
                 		dom.dialog("close");
                 	}
                 }, {
@@ -957,6 +965,171 @@ var eView = Backbone.View.extend({
                 }]
     		});
     	}, "html");
+    },
+
+    addSlbFallback: function(o) {
+	/* add new fallback server */
+    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = _.uniqueId(), tpl;
+    	tpl = $("tbody.newFbsSet").clone(true);
+    	tpl.find("tr").attr({
+    		opt: opt,
+    		gnumber: gnumber
+    	}).find(":input").attr({
+    		name: function(k, v) {
+    			return "fallback_server@@" + opt + "@@" + gnumber + "@@" + $(this).attr("chk");
+    		}
+    	});
+
+    	tpl.find("tr").hide().insertAfter( $("tr[opt='" + opt + "'][set='fbs']:not([gnumber]):last") ).show("slow", function() {
+    		me.ckSlbSave();
+    	});
+
+    	return false;
+    },
+
+    delSlbFallback: function(o) {
+	/* delete fallback server */
+    	var me = this, self = $(o.target);
+    	self.parents("tr").hide("slow", function() {
+    		$(this).remove();
+    		me.ckSlbSave();
+    	});
+    	return false;
+    },
+
+    addSlbProperty: function(o) {
+    	var me = this, self = $(o.target), gnumber = _.uniqueId(), tpl;
+    	tpl = $("tbody.newPtSet").clone(true);
+    	tpl.find(":input").attr({
+    		name: function(k, v) {
+    			return "property@@" + gnumber + "@@" + $(this).attr("chk");
+    		}
+    	});
+
+    	tpl.find("tr").hide().insertAfter($("tr.slbPtHead")).show("slow", function() {
+    		me.ckSlbSave();
+    	});
+    	return false;
+    },
+
+    delSlbProperty: function(o) {
+	/* delete property of slb */
+    	var me = this, self = $(o.target);
+    	self.parents("tr").hide("slow", function() {
+    		$(this).remove();
+    		me.ckSlbSave();
+    	});
+    	return false;
+    },
+
+    _getPolicyOptions: function(o) {
+	/* according to current setting, get all options for slb -> policy */
+    	slbset = {"ip": {"ipv4": [], "ipv6": []}, "sg": {"ipv4": [], "ipv6": []}, "rsg": {"ipv4": [], "ipv6": []}, "fbs": {"ipv4": [], "ipv6": []}, "pt": []};
+
+    	$.each(slbset, function(ak, av) {
+		/* set global varible which will save everything for policy */
+    		if("pt" !== ak) {
+    			$.each(av, function(k, v) {
+    				if("fbs" !== ak) {
+	    				dat = $("tr[opt='" + k + "'][set='" + ak + "']:has(td[rowspan])");
+	    	    		dat.each(function(kk, vv) {
+	    	    			val = $.trim($(vv).find("input").val());
+	    	    			if(val.length > 0) {
+	    	    				if("ip" === ak) {
+	    	    					slbset[ak][k].push({"name": val, "type": ("2" === $(vv).find("td[rowspan]").attr("rowspan")) ? "one" : "many"});
+	    	    				} else {
+	    	    					slbset[ak][k].push({"name": val});
+	    	    				}
+	    	        		}
+	    	    		});
+    				} else {
+    					dat = $("tr[opt='" + k + "'][set='" + ak + "'][gnumber]");
+    					dat.each(function(kk, vv) {
+    						val = $.trim($(vv).find("input[chk=label]").val());
+    						if(val.length > 0) {
+    							slbset[ak][k].push({"name": val});
+    						}
+    					});
+    				}
+    			});
+    		} else {
+    			dat = $("tr[set='" + ak + "']");
+    			dat.each(function(kk, vv) {
+    				val = $.trim($(vv).find("input[chk=label]").val());
+    				if(val.length > 0) {
+    					slbset[ak].push({"name": val});
+    				}
+    			});
+    		}
+    	});
+
+    	return slbset;
+    },
+
+    addSlbPolicy: function(o) {
+	/* add new policy rule slb */
+    	var me = this, self = $(o.target), dat = me._getPolicyOptions(), tr = self.parents("tr"), opt = tr.attr("opt"), gnumber = _.uniqueId(), tpl, crk;
+    	tpl = $("tbody.newPolicy").clone(true);
+    	tpl.find("tr").attr({
+    		opt: opt,
+    		gnumber: gnumber
+    	}).find(":input").attr({
+    		name: function(k, v) {
+    			return "policy@@" + opt + "@@" + gnumber + "@@" + $(this).attr("chk");
+    		}
+    	}).each(function(k, v) {
+    		if("action" !== $(v).attr("chk")) {
+	    		crk = $(v).attr("crk");
+    			if("pt" === crk) {
+    				$.each(dat[crk], function(kk, vv) {
+    					$("<option />", {
+	    					value: vv["name"],
+	    					text: vv["name"]
+	    				}).appendTo( $(v) );
+	    			});
+    			} else if("ip" === crk) {
+    				$.each(dat[crk][opt], function(kk, vv) {
+	    				$("<option />", {
+	    					value: vv["name"],
+	    					text: vv["name"],
+	    					type: vv["type"]
+	    				}).appendTo( $(v) );
+	    			});
+    			} else {
+    				$.each(dat[crk][opt], function(kk, vv) {
+	    				$("<option />", {
+	    					value: vv["name"],
+	    					text: vv["name"],
+	    				}).appendTo( $(v) );
+    				});
+    			}
+    		}
+    	});
+
+    	tpl.find("tr").hide().insertAfter( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {
+    		me.saveSNMP();
+    	});
+    	return false;
+    },
+
+    delSlbPolicy: function(o) {
+	/* delete policy rule of slb */
+    	var me = this, self = $(o.target), tr = self.parents("tr");
+    	tr.hide("slow", function() {
+    		$(this).remove();
+    		me.saveSNMP();
+    	});
+    	return false;
+    },
+
+    checkSlbAll: function(o) {
+	/* check all property of slb for slb setting page */
+    	var me = this, self = $(o.target), dat, val;
+
+    	if(1 === checkSlb) {
+		/* do some change on ohter setting */
+    		dat = me._getPolicyOptions();
+    	}
     },
 
     viewCounters: function(o) {
@@ -1286,7 +1459,7 @@ var ExtHandler = {
             me.view = new eView({
                 model: me.model,
                 events: {
-                    "click a.btnConfirm": "saveSNMP",
+                    "click a.btnConfirm": "ckSlbSave",
                     "click a.btnAddIpSet": "addSlbIpSet",
                     "click a.btnDelIpSet": "delSlbIpSet",
                     "click a.btnAddIpAddress": "addSlbIpAddress",
@@ -1302,7 +1475,14 @@ var ExtHandler = {
                     "click span.badge i.icon-remove": "delSlbRsgHc",
                     "click a.btnSetRSGNa": "delSlbRsgAllHc",
                     "click a.btnAddRSGCheck": "addSlbRsgCheck",
-                    "click span.badge[ck][txt] span": "addSlbRsgCheck"
+                    "click span.badge[ck][txt] span": "addSlbRsgCheck",
+                    "click a.btnAddFallback": "addSlbFallback",
+                    "click a.btnDelFallback": "delSlbFallback",
+                    "click a.btnAddProperty": "addSlbProperty",
+                    "click a.btnDelProperty": "delSlbProperty",
+                    "click a.btnAddPolicty": "addSlbPolicy",
+                    "click a.btnDelPolicy": "delSlbPolicy",
+                    "click a[ck=slbAll]": "checkSlbAll"
                 }
             });
 

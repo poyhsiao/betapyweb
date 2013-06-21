@@ -2,7 +2,7 @@
       <tr>
       	<th colspan="8">{{ _("Property") }}</th>
       </tr>
-      <tr>
+      <tr class="slbPtHead">
         <td>
           <a href="#" class="btn btnAddProperty">{{ _("Add") }}</a>
         </td>
@@ -15,21 +15,21 @@
         <th>{{ _("IPv6 Prefix") }}</th>
       </tr>
     <% _.each(property, function(v, k) { %>
-      <tr>
+      <tr set="pt">
         <td>
           <a href="#" class="btn btnDelProperty">{{ _("Delete") }}</a>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-flag"></i></span>
-            <input type="text" class="span1" name="property@@<%= k %>@@label" value="<%= v["label"] %>" />
+            <input type="text" class="span1" name="property@@<%= k %>@@label" value="<%= v["label"] %>" chk="label" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
         <td>
           <div class="input-prepend">
             <span class="add-on"><i class="icon-share"></i></span>
-            <select name="property@@<%= k %>@@forward_method" class="span2">
+            <select name="property@@<%= k %>@@forward_method" class="span2" chk="forward_method">
               <option value="NAT"<% if("NAT" === v["forward_method"]) { %> selected="selected"<% } %>>{{ _("NAT") }}</option>
               <option value="Route"<% if("Route" === v["forward_method"]) { %> selected="selected"<% } %>>{{ _("Route") }}</option>
               <option value="Transparent"<% if("Transparent" === v["forward_method"]) { %> selected="selected"<% } %>>{{ _("Transparent") }}</option>
@@ -39,7 +39,7 @@
         <td>
           <div class="input-prepend">
             <span class="add-on"><i class="icon-thumbs-up"></i></span>
-            <select name="property@@<%= k %>@@balance_mode" class="span2">
+            <select name="property@@<%= k %>@@balance_mode" class="span2" chk="balance_mode">
               <option value="Round-robin"<% if("Round-robin" === v["balance_mode"]) { %> selected="selected"<% } %>>{{ _("Round-robin") }}</option>
               <option value="Weighted Least-connections"<% if("Weighted Least-connections" === v["balance_mode"]) { %> selected="selected"<% } %>>{{ _("Weighted Least-connections") }}</option>
               <option value="Weighted Round-robin"<% if("Weighted Round-robin" === v["balance_mode"]) { %> selected="selected"<% } %>>{{ _("Weighted Round-robin") }}</option>
@@ -56,7 +56,7 @@
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-time"></i></span>
-            <input type="number" name="property@@<%= k %>@@health_check_interval" value="<%= v["health_check_interval"] %>" class="span1" />
+            <input type="number" name="property@@<%= k %>@@health_check_interval" value="<%= v["health_check_interval"] %>" class="span1" chk="health_check_interval" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
             <span class="add-on">{{ _("sec") }}</span>
           </div>
@@ -64,7 +64,7 @@
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-repeat"></i></span>
-            <input type="number" name="property@@<%= k %>@@persistence" value="<%= v["persistence"] %>" class="span1" />
+            <input type="number" name="property@@<%= k %>@@persistence" value="<%= v["persistence"] %>" class="span1" chk="persistence" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
             <span class="add-on">{{ _("sec") }}</span>
           </div>
@@ -72,17 +72,93 @@
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-th-large"></i></span>
-            <input type="text" name="property@@<%= k %>@@ipv4_netmask" value="<%= v["ipv4_netmask"] %>" class="span2" />
+            <input type="text" name="property@@<%= k %>@@ipv4_netmask" value="<%= v["ipv4_netmask"] %>" class="span2" chk="ipv4_netmask" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
         <td>
           <div class="input-prepend input-append">
             <span class="add-on"><i class="icon-th"></i></span>
-            <input type="text" name="property@@<%= k %>@@ipv6_prefix" value="<%= v["ipv6_prefix"] %>" class="span1" />
+            <input type="text" name="property@@<%= k %>@@ipv6_prefix" value="<%= v["ipv6_prefix"] %>" class="span1" chk="ipv6_prefix" />
             <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
           </div>
         </td>
       </tr>
     <% }); %>
     </table>
+
+    <div class="slb-ptTpl inactive">
+      <table>
+      	<tbody class="newPtSet">
+      	  <tr set="pt">
+            <td>
+              <a href="#" class="btn btnDelProperty">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-flag"></i></span>
+                <input type="text" class="span1" chk="label" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-share"></i></span>
+                <select class="span2" chk="forward_method">
+                  <option value="NAT">{{ _("NAT") }}</option>
+                  <option value="Route">{{ _("Route") }}</option>
+                  <option value="Transparent">{{ _("Transparent") }}</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-thumbs-up"></i></span>
+                <select class="span2" chk="balance_mode">
+                  <option value="Round-robin">{{ _("Round-robin") }}</option>
+                  <option value="Weighted Least-connections">{{ _("Weighted Least-connections") }}</option>
+                  <option value="Weighted Round-robin">{{ _("Weighted Round-robin") }}</option>
+                  <option value="Least-Connection">{{ _("Least-Connection") }}</option>
+                  <option value="Locality-Based Least-Connection">{{ _("Locality-Based Least-Connection") }}</option>
+                  <option value=" Locality-Based Least-Connection with Replication">{{ _(" Locality-Based Least-Connection with Replication") }}</option>
+                  <option value=" Destination Hash">{{ _(" Destination Hash") }}</option>
+                  <option value="Source Hash">{{ _("Source Hash") }}</option>
+                  <option value="Shortest Expect Delay">{{ _("Shortest Expect Delay") }}</option>
+                  <option value="Never Queue">{{ _("Never Queue") }}</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-time"></i></span>
+                <input type="number" class="span1" chk="health_check_interval" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+                <span class="add-on">{{ _("sec") }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-repeat"></i></span>
+                <input type="number" class="span1" chk="persistence" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+                <span class="add-on">{{ _("sec") }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-th-large"></i></span>
+                <input type="text" class="span2" chk="ipv4_netmask" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-th"></i></span>
+                <input type="text" class="span1" chk="ipv6_prefix" />
+                <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
+              </div>
+            </td>
+          </tr>
+      	</tbody>
+      </table>
+    </div>

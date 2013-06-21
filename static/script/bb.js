@@ -1346,6 +1346,9 @@ View = Backbone.View.extend({
             /* delete vrrp model clone (ov) */
         } catch(e) {}
 
+        checkSlb = 0;
+        /* reset checkSlb flag as 0 */
+
         $("div.popContent").off("click");
         $("div.popContent").off("change");
         $("div.popContent").off("input");
@@ -1373,7 +1376,7 @@ View = Backbone.View.extend({
         });
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, slbset, checkSlb, timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */
