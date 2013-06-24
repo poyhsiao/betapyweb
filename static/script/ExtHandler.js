@@ -29,7 +29,7 @@ var eView = Backbone.View.extend({
             /* show arrow image */
 
             require(['bsSwitch'], function() {
-                me.$el.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
 
                 $("#svSNMPEnable").parent().bootstrapSwitch('setState', dat["enable"]);
             });
@@ -62,7 +62,7 @@ var eView = Backbone.View.extend({
             });
 
             require(["bsSwitch"], function() {
-                me.$el.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
 
                 me.changeEmail();
             });
@@ -187,14 +187,21 @@ var eView = Backbone.View.extend({
 
         if(self.hasClass("btnSvVrrpDelGp")) {
         /* delete group */
-            $("tr[gnumber='" + gp + "']").hide("fast", function() {
+            $("tr[gnumber='" + gp + "']").hide("slow", function() {
                 $(this).remove();
             });
 
         } else {
         /* remove an instance of a group */
-            tr.hide("fast", function() {
+            tr.hide("slow", function() {
                 $(this).remove();
+
+                $("tr[gnumber='" + gp + "']:has(td[rowspan])").find("td[rowspan]").attr({
+                	rowspan: function(k, v) {
+                		v = ~~v;
+                		return v-=1;
+                	}
+                });
             });
         }
 
@@ -397,7 +404,7 @@ var eView = Backbone.View.extend({
                         }
 
                         require(['bsSwitch'], function() {
-                            dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                            dom.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
                         });
 
                         if("" !== dat["items"]) {

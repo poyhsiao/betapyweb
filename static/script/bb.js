@@ -381,7 +381,7 @@ View = Backbone.View.extend({
 
                     //dom.find(".switch").bootstrapSwitch();
                     require(['bsSwitch'], function() {
-                        dom.find("input[type=checkbox]").wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                        dom.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
                     });
 
                     me.$el.children("table").css({
@@ -815,7 +815,7 @@ View = Backbone.View.extend({
                 me.$el.find("input[type='checkbox']").one("change", function() {
                     $("#oApply").show("slow");
                     /* show "Apply" link/button */
-                }).wrap('<div class="switch" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                }).wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
             });
 
         }, "html");
