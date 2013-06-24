@@ -11,6 +11,7 @@
         <li><a href="#svSlbPolicy" data-toggle="tab" ck="slbAll">{{ _("Policy") }}</a></li>
       </ul>
       <div class="tab-content">
+        <input type="hidden" name="slb" value="true" />
         <div id="svSlbIp" class="tab-pane active">
           {% include "js/slb-ip.html" %}
         </div>

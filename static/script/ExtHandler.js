@@ -1109,6 +1109,15 @@ var eView = Backbone.View.extend({
     	tpl.find("tr").hide().insertAfter( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {
     		me.saveSNMP();
     	});
+
+    	me.$el.find("select[name][chk=destination_ip]").each(function(k , v) {
+    		return me.selSlbPolicyDIP($(v));
+    	});
+
+    	me.$el.find("select[name][chk=action]").each(function(k, v) {
+    		return me.selSlbPolicyAct($(v));
+    	});
+
     	return false;
     },
 
@@ -1130,7 +1139,104 @@ var eView = Backbone.View.extend({
 		/* do some change on ohter setting */
     		dat = me._getPolicyOptions();
     	}
+
+    	me.$el.find("select[name][chk=destination_ip]").each(function(k , v) {
+    		return me.selSlbPolicyDIP($(v));
+    	});
+
+    	me.$el.find("select[name][chk=action]").each(function(k, v) {
+    		return me.selSlbPolicyAct($(v));
+    	});
     },
+
+    selSlbPolicyDIP: function(o) {
+	/* when select different destination ip, will show different action options of slb policy */
+    	var me = this, self = ("target" in o) ? $(o.target) : o, tr = self.parents("tr"), tpl = $("tbody.newPolicy").clone(true);
+    	if( "many" === self.find("option:selected").attr("type") ) {
+    		tr.find("select[name][chk=action]").find("option").remove();
+    		tpl.find("select[chk=action]").find("option:not([value=VIP])").appendTo(tr.find("select[chk=action]"));
+    	} else {
+    		tr.find("select[name][chk=action]").find("option").remove();
+    		tpl.find("select[chk=action]").find("option").clone().appendTo(tr.find("select[chk=action]"));
+    	}
+
+    	tr.find("select[name][chk=action]").each(function(k, v) {
+    		return me.selSlbPolicyAct($(v));
+    	});
+
+    	delete(tpl);
+    },
+
+    selSlbPolicyAct: function(o) {
+    /* when only select "vip" in action option, can select rsg, fbs, pt */
+    	var me = this, self = ("target" in o) ? $(o.target) : o, tr = self.parents("tr");
+    	if("VIP" === self.find("option:selected").val()) {
+    		tr.find(":input[name][crk=rsg], :input[name][crk=fbs], :input[name][crk=pt]").removeAttr("disabled");
+    	} else {
+    		tr.find(":input[crk=rsg], :input[crk=fbs], :input[crk=pt]").attr("disabled", "disabled");
+    	}
+    },
+
+    viewConnect: function(o) {
+	/* display service -> connection limit */
+    	var me = this, dat = {"items": me.model.attributes[1]}, t;
+    	Ajax = $.get("/getTpl?file=connection_limit", function(d) {
+    		t = _.template(d);
+    		me.$el.html(t(dat)).find("th, td").css({
+    			"text-align": "center",
+    			"vertical-align": "middle"
+    		});
+
+    		$("div.borderArrow").show("fast");
+            /* show arrow image */
+    	});
+    },
+
+    addConnectLimit: function(o) {
+	/* add new instance of connection limit */
+    	var me = this, self = $(o.target), opt = self.attr("opt"), gnumber = _.uniqueId(opt + "@@"), tpl;
+    	tpl = $("tbody.newConnect").clone(true);
+    	tpl.find(":input").attr({
+    		name: function(k, v) {
+    			return gnumber + "@@" + $(this).attr("chk");
+    		},
+    		opt: opt
+    	});
+
+    	tpl.find("tr").hide().insertAfter( $("tr[opt='" + opt + "']") ).show("slow", function() {
+    		me.saveSNMP();
+    	});
+
+    	return false;
+    },
+
+	delConnectLimit: function(o) {
+	/* delete an exist instance of connection limit */
+		var me = this, self = $(o.target), tr = self.parents("tr");
+		tr.hide("slow", function() {
+			$(this).remove();
+		});
+
+		me.saveSNMP();
+
+		return false;
+	},
+
+	viewNAT64: function(o) {
+	/* display of service -> nat64 */
+		var me = this, dat = me.model.attributes[1], t;
+		Ajax = $.get("/getTpl?file=nat64", function(d) {
+			t = _.template(d);
+			me.$el.html(t(dat));
+
+			require(['bsSwitch'], function() {
+                me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+            });
+
+			$("div.borderArrow").show("fast");
+            /* show arrow image */
+		});
+	},
 
     viewCounters: function(o) {
     /* display stat -> counters */
@@ -1482,12 +1588,49 @@ var ExtHandler = {
                     "click a.btnDelProperty": "delSlbProperty",
                     "click a.btnAddPolicty": "addSlbPolicy",
                     "click a.btnDelPolicy": "delSlbPolicy",
+                    "change select[name][chk=destination_ip]": "selSlbPolicyDIP",
+                    "change select[name][chk=action]": "selSlbPolicyAct",
                     "click a[ck=slbAll]": "checkSlbAll"
                 }
             });
 
             return me.view.viewSLB();
         });
+    },
+
+    connect: function() {
+	/* Service -> Connection limit */
+    	var me = this;
+    	delete(me.model);
+    	delete(me.view);
+    	Ajax = $.getJSON("/service/connect", function(d) {
+    		me.model = new eModel(d);
+    		me.view = new eView({
+    			model: me.model,
+    			events: {
+    				"click a.btnAddConnectLimit": "addConnectLimit",
+    				"click a.btnDelConnectLimit": "delConnectLimit"
+    			}
+    		});
+
+    		return me.view.viewConnect();
+    	});
+    },
+
+    nat64: function() {
+	/* Service -> NAT64 */
+    	var me = this;
+    	delete(me.model);
+    	delete(me.view);
+    	Ajax = $.getJSON("/service/nat64", function(d) {
+    		me.model = new eModel(d);
+    		me.view = new eView({
+    			model: me.model,
+    			events: {}
+    		});
+
+    		return me.view.viewNAT64();
+    	});
     },
 
     counters: function() {

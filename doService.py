@@ -414,9 +414,124 @@ tion': '', 'community': 'public'})
         import json
         import libs.tools
         if "slb" in kwargs:
+            libs.tools.v(kwargs);
+            return json.dumps(kwargs);
+        else:
+            # getter
+            return json.dumps(slb.get())
+
+    @_.expose
+    def connect(self, **kwargs):
+        '''
+            connection limit getter and setter
+            format:
+                {"ipv4": [
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "TCP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "second",
+                        "limit_burst": 5
+                    },
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "UDP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "minute",
+                        "limit_burst": 5
+                    },
+                    ...
+                ],
+                "ipv6": [
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "TCP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "second",
+                        "limit_burst": 5
+                    },
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "UDP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "minute",
+                        "limit_burst": 5
+                    },
+                    ...
+                ]}
+        '''
+        import ml_w_connection_limit as wcl
+        import json
+        import libs.tools
+        if "connect" in kwargs:
             # setter
             pass
         else:
             # getter
-            return json.dumps(slb.get())
+            data = wcl.get()
+            if not (len(data[1]["ipv4"]) and len(data[1]["ipv6"])):
+                data = (True, {"ipv4": [
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "TCP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "second",
+                        "limit_burst": 5
+                    },
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "UDP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "minute",
+                        "limit_burst": 5
+                    }
+                ],
+                "ipv6": [
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "TCP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "second",
+                        "limit_burst": 5
+                    },
+                    {
+                        "source_ip": "ANY",
+                        "destination_ip": "ANY",
+                        "protocol": "UDP",
+                        "limit_rate": 5,
+                        "limit_rate_unit": "minute",
+                        "limit_burst": 5
+                    }
+                ]})
+
+            return json.dumps(data)
+
+    @_.expose
+    def nat64(self, **kwargs):
+        '''
+            nat64 getter and setter
+            format:
+                {
+                    "enable": True,
+                    "ipv6": "64:ff9b::",
+                    "ipv6_prefix": 96,
+                    "ipv4": "0.0.0.0"
+                }
+        '''
+        import ml_w_nat64 as nat64
+        import json
+        import libs.tools
+        if "nat64" in kwargs:
+            # setter
+            pass
+        else:
+            # getter
+            return json.dumps(nat64.get())
 

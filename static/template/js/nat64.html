@@ -1,0 +1,32 @@
+  <div class="svNat64 padding">
+    <fieldset>
+      <legend>{{ _("NAT64") }}</legend>
+      <input type="hidden" name="nat64" value="true" />
+      <div class="form-horizontal">
+        <div class="control-group">
+          <label for="svNatEnable" class="control-label strong">{{ _("Enable") }}</label>
+          <div class="controls">
+            <input type="checkbox" name="enable" id="svNatEnable" value="true" <% if(true === enable) { %>checked="checked"<% } %>/>
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="svNatIpv6Prefix" class="control-label strong">{{ _("IPv6 Prefix") }}</label>
+          <div class="controls">
+            <input type="text" name="ipv6_prefix" id="svNatIpv6Prefix" value="<%= ipv6_prefix %>" />
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="svNatIpv6" class="control-label strong">{{ _("IPv6") }}</label>
+          <div class="controls">
+            <input type="text" name="ipv6" id="svNatIpv6" value="<%= ipv6 %>" />
+          </div>
+        </div>
+        <div class="control-group">
+          <label for="svNatIpv4" class="control-label strong">{{ _("IPv4") }}</label>
+          <div class="controls">
+            <input type="text" name="ipv4" id="svNatIpv4" value="<%= ipv4 %>" />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>

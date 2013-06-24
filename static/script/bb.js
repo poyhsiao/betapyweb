@@ -1275,6 +1275,10 @@ View = Backbone.View.extend({
                 url = "/service/vrrp";
                 obj = $("div.svVRRP");
                 break;
+            case "slb":
+                url = "/service/slb";
+                obj = $("div.svSlb");
+                break;
             case "syslog":
                 url = "/log/syslog";
                 obj = $("div.logSyslog");
