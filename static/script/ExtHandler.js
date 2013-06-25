@@ -1615,6 +1615,7 @@ var ExtHandler = {
     		me.view = new eView({
     			model: me.model,
     			events: {
+    				"click a.btnConfirm": "saveSNMP",
     				"click a.btnAddConnectLimit": "addConnectLimit",
     				"click a.btnDelConnectLimit": "delConnectLimit"
     			}

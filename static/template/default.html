@@ -202,6 +202,14 @@
     th, td {
       vertical-align: middle;
     }
+    #psteps_simple_new_layout .step-title {
+    min-height: 20px;
+    border-radius: 0;
+    }
+    #psteps_simple_new_layout .next-button, .submit-button, .back-button {
+        float:right;
+        margin:3px;
+    }
   </style>
 </head>
 
@@ -268,6 +276,9 @@
                     </li>
                     <li class="boxShadow">
                       <div class="SubMenu" opt="admin">{{ _('Administration') }}</div>
+                    </li>
+                    <li class="boxShadow">
+                      <div class="SubMenu" opt="wizard">{{ _('Wizard') }}</div>
                     </li>
                   </ul>
                 </li>

@@ -1013,6 +1013,27 @@ View = Backbone.View.extend({
         }
     },
 
+    viewWizard: function(o) {
+    /* display wizard page */
+        var me = this, t;
+        Ajax = $.get("/getTpl?file=wizard", function(d) {
+        	require(["psteps"], function() {
+        		t = _.template(d);
+        		me.$el.html(t());
+
+            	$("div.borderArrow").show("fast");
+                /* show arrow image */
+
+            	$('#psteps_simple_new_layout').psteps({
+            	    steps_width_percentage: true,
+            	    alter_width_at_viewport: '1300',
+            	    steps_height_equalize: true
+            	});
+
+        	});
+        }, "html");
+    },
+
     viewAdmin: function(o) {
     /* display admin page */
         var me = this, dat = me.model.attributes[1], t, conf_file, fw_file;
@@ -1278,6 +1299,10 @@ View = Backbone.View.extend({
             case "slb":
                 url = "/service/slb";
                 obj = $("div.svSlb");
+                break;
+            case "connect":
+                url = "/service/connect";
+                obj = $("div.svConnect");
                 break;
             case "syslog":
                 url = "/log/syslog";
@@ -1631,6 +1656,18 @@ MainOperation = {
         });
 
         return me.view.viewDiagnostic();
+    },
+
+    wizard: function(o) {
+    /* wizard */
+        var me = this;
+        delete(me.model);
+        delete(me.view);
+        me.view = new View({
+            events: {}
+        });
+
+        return me.view.viewWizard();
     },
 
     admin: function(o) {

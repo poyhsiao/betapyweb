@@ -414,8 +414,66 @@ tion': '', 'community': 'public'})
         import json
         import libs.tools
         if "slb" in kwargs:
-            libs.tools.v(kwargs);
-            return json.dumps(kwargs);
+            dat = kwargs
+            res = {}
+            opt = []
+            goptTmp = []
+            nopt = {}
+
+            for k in dat:
+                if "@@" in k:
+                    kk = k.split("@@")
+                    if "list" == type(kk).__name__ and len(kk) > 1:
+                        goptTmp = self._unstructDict(dat, "@@")
+
+            gopt = {}
+
+            for k in goptTmp:
+                if not "slb" == k:
+                    gopt[k] = goptTmp[k]
+
+            for k in gopt:
+                if "property" == k:
+                    po = []
+                    da = self._unstructDict(gopt["property"], "@@")
+                    for kk in da:
+                        po.append(da[kk])
+
+                    nopt["property"] = po
+                elif not "real_server_group" == k:
+                    da = self._unstructDict(gopt[k], "@@")
+                    db = {}
+                    dc = []
+                    nopt[k] = {}
+                    for kk in da:
+                        db = self._unstructDict(da[kk], "@@")
+                        for ka in db:
+                            dc.append(db[ka])
+                            nopt[k][kk] = dc
+                else:
+                    da = self._unstructDict(gopt[k], "@@")
+                    db = {}
+                    dc = []
+                    nopt[k] = {}
+                    for kk in da:
+                        if not kk in nopt[k]:
+                            nopt[k][kk] = []
+
+                        db = self._unstructDict(da[kk], "@@")
+                        for ka in db:
+                            dc = self._unstructDict(db[ka], "@@")
+                            for kb in dc:
+                                if "label" == kb:
+                                    nopt[k][kk].append({kb : dc[kb]})
+                                else:
+                                    de = self._unstructDict(dc[kb], "@@")
+                                    for kc in de:
+                                        df = {}
+                                        dg = de[kc]
+                                        df = self._unstructDict(dg, "@@")
+                                        nopt[k][kk].append({kb: df})
+            libs.tools.v(nopt);
+            return json.dumps(slb.set(cfg = nopt));
         else:
             # getter
             return json.dumps(slb.get())
@@ -469,7 +527,34 @@ tion': '', 'community': 'public'})
         import libs.tools
         if "connect" in kwargs:
             # setter
-            pass
+            dat = kwargs
+            res = {}
+            opt = []
+            goptTmp = []
+            nopt = {}
+
+            for k in dat:
+                if "@@" in k:
+                    kk = k.split("@@")
+                    if "list" == type(kk).__name__ and len(kk) > 1:
+                        goptTmp = self._unstructDict(dat, "@@")
+
+            gopt = {}
+
+            for k in goptTmp:
+                if not "connect" == k:
+                    gopt[k] = goptTmp[k]
+
+            for k in gopt:
+                nopt[k] = []
+                res = self._unstructDict(gopt[k], "@@")
+                dd = {}
+                for kk in res:
+                    dd = self._unstructDict(res[kk], "@@")
+                    nopt[k].append(dd)
+
+
+            return json.dumps(wcl.set(cfg = nopt))
         else:
             # getter
             data = wcl.get()
@@ -530,7 +615,12 @@ tion': '', 'community': 'public'})
         import libs.tools
         if "nat64" in kwargs:
             # setter
-            pass
+            res = {"enable": "enable" in kwargs,
+                   "ipv6": kwargs["ipv6"],
+                   "ipv6_prefix": kwargs["ipv6_prefix"],
+                   "ipv4": kwargs["ipv4"]}
+
+            return json.dumps(nat64.set(cfg = res))
         else:
             # getter
             return json.dumps(nat64.get())

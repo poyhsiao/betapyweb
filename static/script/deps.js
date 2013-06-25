@@ -18,6 +18,7 @@ requirejs.config({
         fileupload: 'jquery.fileupload',
         bsSwitch: 'bootstrapSwitch',
         bb: 'bb',
+        psteps: 'jquery.psteps.min',
         ExtHandler: 'ExtHandler'
     },
     shim: {
@@ -51,6 +52,9 @@ requirejs.config({
         },
         'bb': {
             deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
+        },
+        'psteps': {
+            deps: ['jquery', 'bootstrap']
         },
         'ExtHandler': {
             deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bb']
