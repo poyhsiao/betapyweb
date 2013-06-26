@@ -1,0 +1,154 @@
+    <div class="wzSLB padding">
+      <div class="row-fluid">
+        <div class="span5">
+          <fieldset class="form-horizontal">
+            <legend>{{ _('SLB') }}</legend>
+            <table class="table table-bordered table-hover">
+              <tr>
+              	<th>
+              	  <a href="#" class="btn btnAddSLB">{{ _("Add") }}</a>
+              	</th>
+              	<th>
+              	  <span>{{ _("Virutal IP Address") }}</span>
+              	</th>
+              	<th>
+              	  <span>{{ _("Application Port") }}</span>
+              	</th>
+              	<th>
+              	  <span>{{ _("Protocol") }}</span>
+              	</th>
+              	<th>
+              	  <span>{{ _("Persistence") }}</span>
+              	</th>
+              	<th>
+              	  <span>{{ _("Real Server ") }}</span>
+              	</th>
+              </tr>
+              <tr>
+              	<td>
+              	  <a href="#" class="btn btnDelSLB">{{ _("Delete") }}</a>
+              	</td>
+              	<td>
+              	  <div class="input-prepend">
+              	    <span class="add-on"><i class="icon-book"></i></span>
+              	    <input type="text" name="0@@vip4" chk="vip4" placeholder="{{ _("Virutal IP Address") }}" />
+              	  </div>
+              	</td>
+            	  <td>
+            	    <table>
+            	      <tfoot>
+											<tr>
+											  <td>
+											    <a href="#" class="btn btnAddAppPort">{{ _("Add") }}</a>
+											  </td>
+											  <td>
+											    <div class="input-prepend">
+											      <span class="add-on"><i class="icon-cog"></i></span>
+											      <input type="number" name="0@@port" chk="port" placeholder="{{ _("Application Port") }}" />
+											    </div>
+											  </td>
+										  </tr>
+									  </tfoot>
+									</table>
+              	</td>
+              	<td>
+              	  <div class="input-prepend">
+              	    <span class="add-on"><i class="icon-wrench"></i></span>
+              	    <select name="0@@protocol" chk="protocol">
+              	      <option value="TCP">{{ _("TCP") }}</option>
+              	      <option value="UDP">{{ _("UDP") }}</option>
+              	    </select>
+              	  </div>
+              	</td>
+              	<td>
+              	  <div class="input-prepend">
+              	    <span class="add-on"><i class="icon-repeat"></i></span>
+              	    <input type="number" name="0@@persistence" chk="persistence" placeholder="{{ _("Persistence") }}" />
+              	  </div>
+              	</td>
+              	<td>
+              	  <table>
+                      <tr>
+                        <td>
+                          <a href="#" class="btn btnAddRealServer">{{ _("Add") }}</a>
+                        </td>
+                        <td>
+                          <div class="input-prepend">
+                            <span class="add-on"><i class="icon-book"></i></span>
+                            <input type="text" name="0@@real_server" chk="real_server" placeholder="{{ _("Real Server ") }}" />
+                          </div>
+                        </td>
+                      </tr>
+                    </table>
+              	</td>
+              </tr>
+            </table>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="wzSlb-tpl inactive">
+      <table>
+      	<tbody class="newWzSLB">
+      	  <tr>
+            <td>
+              <a href="#" class="btn btnDelSLB">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-book"></i></span>
+                <input type="text" chk="vip4" placeholder="{{ _("Virutal IP Address") }}" />
+              </div>
+            </td>
+            <td>
+              <table>
+                <tfoot>
+                  <tr opt="appPort">
+                    <td>
+                      <a href="#" class="btn btnDelAppPort">{{ _("Delete") }}</a>
+                    </td>
+                    <td>
+                      <div class="input-prepend">
+                        <span class="add-on"><i class="icon-cog"></i></span>
+                        <input type="number" chk="port" placeholder="{{ _("Application Port") }}" />
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-wrench"></i></span>
+                <select chk="protocol">
+                  <option value="TCP">{{ _("TCP") }}</option>
+                  <option value="UDP">{{ _("UDP") }}</option>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-repeat"></i></span>
+                <input type="number" chk="persistence" placeholder="{{ _("Persistence") }}" />
+              </div>
+            </td>
+            <td>
+              <table>
+                  <tr opt="realServer">
+                    <td>
+                      <a href="#" class="btn btnDelRealServer">{{ _("Delete") }}</a>
+                    </td>
+                    <td>
+                      <div class="input-prepend">
+                        <span class="add-on"><i class="icon-book"></i></span>
+                        <input type="text" chk="real_server" placeholder="{{ _("Real Server ") }}" />
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+            </td>
+          </tr>
+      	</tbody>
+      </table>
+    </div>

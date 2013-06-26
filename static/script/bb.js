@@ -48,16 +48,21 @@ View = Backbone.View.extend({
     runMenuMain: function(o) {
     /* handling the click event for main menu items, o is current object which is clicked */
         var me = this, self = $(o.target), mainmenu = $("div.MainMenu"), arrow = $("div.borderArrow"), mtitle = $("span.maintitle");
-        if(self.hasClass("closeMenu")) {
-            $("div.openMenu").removeClass("openMenu").addClass("closeMenu").siblings("ul.inactive").slideUp("slow");
-            self.removeClass("closeMenu").addClass("openMenu").siblings("ul.inactive").slideDown("slow");
-            /* open selected menu which has closeMenu class name */
+        if("wizard" === self.attr("opt")) {
+        	$("div.openMenu").removeClass("openMenu").addClass("closeMenu").siblings("ul.inactive").slideUp("slow");
+        	return me.viewWizard();
+        } else {
+        	if(self.hasClass("closeMenu")) {
+                $("div.openMenu").removeClass("openMenu").addClass("closeMenu").siblings("ul.inactive").slideUp("slow");
+                self.removeClass("closeMenu").addClass("openMenu").siblings("ul.inactive").slideDown("slow");
+                /* open selected menu which has closeMenu class name */
 
-            if(_.isUndefined(mtitle.attr("opt")) || self.attr("opt") === mtitle.attr("opt")) {
-            /* when switch to other menu item, hide arrow image by checking the page navigation options */
-                arrow.show("slow");
-            } else {
-                arrow.hide();
+                if(_.isUndefined(mtitle.attr("opt")) || self.attr("opt") === mtitle.attr("opt")) {
+                /* when switch to other menu item, hide arrow image by checking the page navigation options */
+                    arrow.show("slow");
+                } else {
+                    arrow.hide();
+                }
             }
         }
     },
@@ -1015,24 +1020,87 @@ View = Backbone.View.extend({
 
     viewWizard: function(o) {
     /* display wizard page */
-        var me = this, t;
+        var me = this, border = 20, t, dom;
         Ajax = $.get("/getTpl?file=wizard", function(d) {
-        	require(["psteps"], function() {
+        	require(["psteps", "jqueryUI"], function() {
         		t = _.template(d);
-        		me.$el.html(t());
+//        		me.$el.html(t());
 
-            	$("div.borderArrow").show("fast");
+            	$("div.borderArrow").hide();
                 /* show arrow image */
 
-            	$('#psteps_simple_new_layout').psteps({
-            	    steps_width_percentage: true,
-            	    alter_width_at_viewport: '1300',
-            	    steps_height_equalize: true
-            	});
+        		dom = $($.parseHTML(d)[1]);
+
+        		dom.psteps({
+             	    steps_width_percentage: true,
+             	    alter_width_at_viewport: '500',
+             	    steps_height_equalize: true
+             	});
+
+        		dom.on("click", "a.btnAddIps", function(o) {
+        			return me.addWzIps(o);
+        		}).on("click", "a.btnDelIps", function(o) {
+        			return me.delWzIps(o);
+        		});
+
+        		dom.dialog({
+        			 modal: true,
+                     closeOnEscape: false,
+                     resizable: false,
+                     draggable: false,
+                     width: "auto",
+                     height: $(window).height(),
+                     maxWidth: $(window).width(),
+                     maxHeight: $(window).height(),
+                     open: function() {
+                    	 require(['bsSwitch'], function() {
+                             dom.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                             dom.find("th, td").css({
+                            	 "text-align": "center",
+                            	 "vertical-align": "middle"
+                             });
+                         });
+                     },
+                     close: function() {
+                    	 dom.dialog("destroy");
+                     },
+                     destroy: function() {
+                    	dom.andSelf().remove();
+                     }
+        		});
+
+
 
         	});
         }, "html");
     },
+
+    addWzIps: function(o) {
+	/* add new ip set for s0e2 and s0e1 in wizard */
+    	var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), tr = self.parents("table").find("tr[opt]"), tpl;
+    	tpl = $(tr.get(0)).clone(true);
+    	tpl.find(":input").val("");
+
+    	tpl.hide().insertAfter( self.parents("tr") ).show("slow", function() {
+    		return self.parents("table").find("a.btnDelIps").removeClass("disabled");
+    	});
+    	return false;
+    },
+
+	delWzIps: function(o) {
+	/* delete ip set for s0e2 and s0e1 in wizard */
+		var me = this, self = $(o.target), opt = self.parents("tr").attr("opt"), table = self.parents("table"), tr = table.find("tr[opt='" + opt + "']");
+		if(tr.length > 1) {
+			self.parents("tr").hide("slow", function() {
+				$(this).remove();
+				console.log(tr);
+				if(2 === tr.length) {
+					tr.find("a.btnDelIps").addClass("disabled");
+				}
+			});
+		}
+		return false;
+	},
 
     viewAdmin: function(o) {
     /* display admin page */
@@ -1656,18 +1724,6 @@ MainOperation = {
         });
 
         return me.view.viewDiagnostic();
-    },
-
-    wizard: function(o) {
-    /* wizard */
-        var me = this;
-        delete(me.model);
-        delete(me.view);
-        me.view = new View({
-            events: {}
-        });
-
-        return me.view.viewWizard();
     },
 
     admin: function(o) {

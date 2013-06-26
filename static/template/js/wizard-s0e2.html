@@ -1,0 +1,77 @@
+    <div class="wzS0e2 padding">
+      <div class="row-fluid">
+        <div class="span12">
+          <fieldset class="form-horizontal">
+            <legend clas="text-center">{{ _(" s0e2 IP Address") }}</legend>
+            <div class="control-group">
+              <label for="wzS0e2GW" class="control-label strong">{{ _("Default Gateway") }}</label>
+              <div class="controls">
+                <input type="text" name="ipv4_default_gateway" id="wzS0e2GW" placeholder="{{ _("Default Gateway") }}" />
+              </div>
+            </div>
+            <legend>{{ _("Fixed IP Address") }}</legend>
+            <table class="table table-bordered table-hover">
+              <tr>
+              	<th>
+              	  <span>{{ _("IPv4 Address") }}</span>
+            	  </th>
+              	<th>
+              	  <span>{{ _("Prefix Length") }}</span>
+              	</th>
+              	<td>
+              	  <a href="#" class="btn btnAddIps">{{ _("Add") }}</a>
+              	</td>
+              </tr>
+              <tr opt="ipv4_fixed">
+              	<td>
+              	  <div class="input-prepend">
+              	    <span class="add-on"><i class="icon-cog"></i></span>
+              	    <input type="text" name="s0e2@@ipv4_fixed@@ipv4_address" sn="0" placeholder="{{ _("IPv4 Address") }}" />
+              	  </div>
+              	</td>
+              	<td>
+              	  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-th-large"></i></span>
+                    <input type="text" name="s0e2@@ipv4_fixed@@ipv4_prefix" sn="0" placeholder="{{ _("Prefix Length") }}" />
+                  </div>
+              	</td>
+              	<td>
+              	  <a href="#" class="btn btnDelIps disabled">{{ _("Delete") }}</a>
+              	</td>
+              </tr>
+            </table>
+            <legend>{{ _("Floating IP Address") }}</legend>
+            <table class="table table-bordered table-hover">
+              <tr>
+                <th>
+                  <span>{{ _("IPv4 Address") }}</span>
+                </th>
+                <th>
+                  <span>{{ _("Prefix Length") }}</span>
+                </th>
+                <td>
+                  <a href="#" class="btn btnAddIps">{{ _("Add") }}</a>
+                </td>
+              </tr>
+              <tr opt="ipv4_floating">
+                <td>
+                  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-cog"></i></span>
+                    <input type="text" name="s0e2@@ipv4_floating@@ipv4_address" placeholder="{{ _("IPv4 Address") }}" />
+                  </div>
+                </td>
+                <td>
+                  <div class="input-prepend">
+                    <span class="add-on"><i class="icon-th-large"></i></span>
+                    <input type="text" name="s0e2@@ipv4_floating@@ipv4_prefix" placeholder="{{ _("Prefix Length") }}" />
+                  </div>
+                </td>
+                <td>
+                  <a href="#" class="btn btnDelIps disabled">{{ _("Delete") }}</a>
+                </td>
+              </tr>
+            </table>
+          </fieldset>
+        </div>
+      </div>
+    </div>
