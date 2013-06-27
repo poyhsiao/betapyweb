@@ -34,6 +34,10 @@ View = Backbone.View.extend({
             return changeResolution.changeArrow();
         } else {
             $("div.borderArrow").hide();
+            try {
+            	Wizard.dialog("option", "width", $(window).width() - 50);
+            	Wizard.dialog("option", "height", $(window).height() - $("div.footer").height() - $("div.head").height());
+            } catch(e) {}
         }
 
         if(ckWindow.notDesktop()) {
@@ -49,7 +53,6 @@ View = Backbone.View.extend({
     /* handling the click event for main menu items, o is current object which is clicked */
         var me = this, self = $(o.target), mainmenu = $("div.MainMenu"), arrow = $("div.borderArrow"), mtitle = $("span.maintitle");
         if("wizard" === self.attr("opt")) {
-        	$("div.openMenu").removeClass("openMenu").addClass("closeMenu").siblings("ul.inactive").slideUp("slow");
         	return me.viewWizard();
         } else {
         	if(self.hasClass("closeMenu")) {
@@ -1020,56 +1023,72 @@ View = Backbone.View.extend({
 
     viewWizard: function(o) {
     /* display wizard page */
-        var me = this, border = 20, t, dom;
+        var me = this, border = 20, t;
         Ajax = $.get("/getTpl?file=wizard", function(d) {
-        	require(["psteps", "jqueryUI"], function() {
+        	require(["psteps", "jqueryUI", "blockUI"], function() {
+        		$.blockUI({
+        			message: null,
+        			baseZ: 2
+        		});
+
         		t = _.template(d);
-//        		me.$el.html(t());
 
             	$("div.borderArrow").hide();
                 /* show arrow image */
 
-        		dom = $($.parseHTML(d)[1]);
+        		Wizard = $($.parseHTML(d)[1]);
 
-        		dom.psteps({
-             	    steps_width_percentage: true,
-             	    alter_width_at_viewport: '500',
-             	    steps_height_equalize: true
-             	});
+        		Wizard.on("click", "a.btnAddIps", me.addWzIps)
+        		.on("click", "a.btnDelIps", me.delWzIps)
+        		.on("click", "a.btnAddWzSLB", me.addWzSLB)
+        		.on("click", "a.btnDelWzSLB", me.delWzSLB)
+        		.on("click", "a.btnAddWzAppPort, a.btnAddWzRealServer", me.addWzAppRS)
+        		.on("click", "a.btnDelWzAppPort, a.btnDelWzRealServer", me.delWzAppRS);
 
-        		dom.on("click", "a.btnAddIps", function(o) {
-        			return me.addWzIps(o);
-        		}).on("click", "a.btnDelIps", function(o) {
-        			return me.delWzIps(o);
-        		});
-
-        		dom.dialog({
-        			 modal: true,
+        		Wizard.dialog({
                      closeOnEscape: false,
-                     resizable: false,
                      draggable: false,
-                     width: "auto",
-                     height: $(window).height(),
-                     maxWidth: $(window).width(),
-                     maxHeight: $(window).height(),
+                     resizable: false,
+                     width: $("div.head").outerWidth(),
+                     height: $(window).innerHeight() - $("div.footer").height() - $("div.head").height(),
+                     position: {my: "center top",
+                    	 		at: "center" + " top+" + $("div.head").height() },
                      open: function() {
-                    	 require(['bsSwitch'], function() {
-                             dom.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
-                             dom.find("th, td").css({
+                    	 Wizard.psteps({
+                      	    steps_width_percentage: true,
+                      	    alter_width_at_viewport: '500',
+                      	    steps_height_equalize: true
+                      	});
+
+                    	 require(["bsSwitch"], function() {
+                    		 Wizard.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                    		 Wizard.find("th, td").css({
                             	 "text-align": "center",
                             	 "vertical-align": "middle"
                              });
                          });
                      },
                      close: function() {
-                    	 dom.dialog("destroy");
+                    	 Wizard.dialog("destroy");
+                    	 $.unblockUI();
                      },
                      destroy: function() {
-                    	dom.andSelf().remove();
-                     }
+                    	 Wizard.andSelf().remove();
+                     },
+                     buttons: [{
+                    	 text: "Next",
+                    	 class: "btnWzNext",
+                    	 click: function() {}
+                     }, {
+                    	 text: "Back",
+                    	 class: "btnWzBack hide",
+                    	 click: function() {}
+                     }, {
+                    	 text: "Done",
+                    	 class: "btnWzDon hide",
+                    	 click: function() {}
+                     }]
         		});
-
-
 
         	});
         }, "html");
@@ -1099,6 +1118,55 @@ View = Backbone.View.extend({
 				}
 			});
 		}
+		return false;
+	},
+
+	addWzSLB: function(o) {
+	/* add new slb rule in wizard */
+		var me = this, self = $(o.target), gnumber = _.uniqueId(), table = self.parents("table"), tpl;
+		tpl = $("tbody.newWzSLB").clone(true);
+		tpl.find(":input").attr({
+			name: function() {
+				return gnumber + "@@" + $(this).attr("chk")
+			}
+		});
+
+		tpl.find("tr[opt=newWzSLB]").hide().insertAfter( table.find("tr.hd") ).show("slow", function() {
+			table.find("a.btnDelWzSLB").removeClass("disabled");
+		});
+		return false;
+	},
+
+	delWzSLB: function(o) {
+	/* delete existing slb rule in wizard */
+		var me = this, self = $(o.target), tr = self.parents("tr"), table = self.parents("table");
+		if(table.find("tr:has(a.btnDelWzSLB)").length > 1) {
+			tr.hide("slow", function() {
+				$(this).remove();
+				if(1 === table.find("tr:has(a.btnDelWzSLB)").length) {
+					table.find("a.btnDelWzSLB").addClass("disabled");
+				}
+			});
+		}
+		return false;
+	},
+
+	addWzAppRS: function(o) {
+	/* add application port or real server of SLB */
+		var me = this, self = $(o.target), tr = self.parents("tr[opt]"), opt = tr.attr("opt"), tr = self.parents("tr[opt='" + opt + "']"), table = tr.parents("table[opt='" + opt + "']"), tpl;
+		tpl = $("tfoot.newWzSLB").clone(true);
+		tpl.find("tr[opt='" + opt + "']").hide().insertAfter(tr).show("slow", function() {
+			$(this).find("input").attr("name", table.find("input[name]").attr("name"));
+		});
+		return false;
+	},
+
+	delWzAppRS: function(o) {
+	/* delete application or real server of SLB */
+		var me = this, self = $(o.target), tr = self.parents("tr[opt]"), opt = tr.attr("opt");
+		self.parents("tr[opt='" + opt + "']").hide("slow", function() {
+			$(this).remove();
+		});
 		return false;
 	},
 
@@ -1473,7 +1541,7 @@ View = Backbone.View.extend({
         });
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, slbset, checkSlb, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, slbset, checkSlb, Wizard, timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */

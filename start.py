@@ -41,6 +41,7 @@ import doSystem as ds
 import doService as de
 import doStatistics as dt
 import doLog as dl
+import doWizard as wizard
 
 
 def initNonStaticResponse():
@@ -252,6 +253,7 @@ if __name__ == '__main__':
     root.service = de.Service()
     root.stat = dt.Statistics()
     root.log = dl.Log()
+    root.wizard = wizard.Wizard()
     # root.doLogin = Login()
     # root.main = main()
 

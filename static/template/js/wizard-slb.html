@@ -4,9 +4,9 @@
           <fieldset class="form-horizontal">
             <legend>{{ _('SLB') }}</legend>
             <table class="table table-bordered table-hover">
-              <tr>
+              <tr class="hd">
               	<th>
-              	  <a href="#" class="btn btnAddSLB">{{ _("Add") }}</a>
+              	  <a href="#" class="btn btnAddWzSLB">{{ _("Add") }}</a>
               	</th>
               	<th>
               	  <span>{{ _("Virutal IP Address") }}</span>
@@ -26,7 +26,7 @@
               </tr>
               <tr>
               	<td>
-              	  <a href="#" class="btn btnDelSLB">{{ _("Delete") }}</a>
+              	  <a href="#" class="btn btnDelWzSLB disabled">{{ _("Delete") }}</a>
               	</td>
               	<td>
               	  <div class="input-prepend">
@@ -35,20 +35,18 @@
               	  </div>
               	</td>
             	  <td>
-            	    <table>
-            	      <tfoot>
-											<tr>
-											  <td>
-											    <a href="#" class="btn btnAddAppPort">{{ _("Add") }}</a>
-											  </td>
-											  <td>
-											    <div class="input-prepend">
-											      <span class="add-on"><i class="icon-cog"></i></span>
-											      <input type="number" name="0@@port" chk="port" placeholder="{{ _("Application Port") }}" />
-											    </div>
-											  </td>
-										  </tr>
-									  </tfoot>
+            	    <table opt="appPort">
+										<tr opt="appPort">
+										  <td>
+										    <a href="#" class="btn btnAddWzAppPort">{{ _("Add") }}</a>
+										  </td>
+										  <td>
+										    <div class="input-prepend">
+										      <span class="add-on"><i class="icon-cog"></i></span>
+										      <input type="number" name="0@@port" chk="port" placeholder="{{ _("Application Port") }}" />
+										    </div>
+										  </td>
+									  </tr>
 									</table>
               	</td>
               	<td>
@@ -67,19 +65,19 @@
               	  </div>
               	</td>
               	<td>
-              	  <table>
-                      <tr>
-                        <td>
-                          <a href="#" class="btn btnAddRealServer">{{ _("Add") }}</a>
-                        </td>
-                        <td>
-                          <div class="input-prepend">
-                            <span class="add-on"><i class="icon-book"></i></span>
-                            <input type="text" name="0@@real_server" chk="real_server" placeholder="{{ _("Real Server ") }}" />
-                          </div>
-                        </td>
-                      </tr>
-                    </table>
+              	  <table opt="realServer">
+                    <tr opt="realServer">
+                      <td>
+                        <a href="#" class="btn btnAddWzRealServer">{{ _("Add") }}</a>
+                      </td>
+                      <td>
+                        <div class="input-prepend">
+                          <span class="add-on"><i class="icon-book"></i></span>
+                          <input type="text" name="0@@real_server" chk="real_server" placeholder="{{ _("Real Server ") }}" />
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
               	</td>
               </tr>
             </table>
@@ -91,9 +89,9 @@
     <div class="wzSlb-tpl inactive">
       <table>
       	<tbody class="newWzSLB">
-      	  <tr>
+      	  <tr opt="newWzSLB">
             <td>
-              <a href="#" class="btn btnDelSLB">{{ _("Delete") }}</a>
+              <a href="#" class="btn btnDelWzSLB">{{ _("Delete") }}</a>
             </td>
             <td>
               <div class="input-prepend">
@@ -102,20 +100,18 @@
               </div>
             </td>
             <td>
-              <table>
-                <tfoot>
-                  <tr opt="appPort">
-                    <td>
-                      <a href="#" class="btn btnDelAppPort">{{ _("Delete") }}</a>
-                    </td>
-                    <td>
-                      <div class="input-prepend">
-                        <span class="add-on"><i class="icon-cog"></i></span>
-                        <input type="number" chk="port" placeholder="{{ _("Application Port") }}" />
-                      </div>
-                    </td>
-                  </tr>
-                </tfoot>
+              <table opt="appPort">
+                <tr opt="appPort">
+                  <td>
+                    <a href="#" class="btn btnAddWzAppPort">{{ _("Add") }}</a>
+                  </td>
+                  <td>
+                    <div class="input-prepend">
+                      <span class="add-on"><i class="icon-cog"></i></span>
+                      <input type="number" chk="port" placeholder="{{ _("Application Port") }}" />
+                    </div>
+                  </td>
+                </tr>
               </table>
             </td>
             <td>
@@ -134,21 +130,45 @@
               </div>
             </td>
             <td>
-              <table>
-                  <tr opt="realServer">
-                    <td>
-                      <a href="#" class="btn btnDelRealServer">{{ _("Delete") }}</a>
-                    </td>
-                    <td>
-                      <div class="input-prepend">
-                        <span class="add-on"><i class="icon-book"></i></span>
-                        <input type="text" chk="real_server" placeholder="{{ _("Real Server ") }}" />
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+              <table opt="realServer">
+                <tr opt="realServer">
+                  <td>
+                    <a href="#" class="btn btnAddWzRealServer">{{ _("Add") }}</a>
+                  </td>
+                  <td>
+                    <div class="input-prepend">
+                      <span class="add-on"><i class="icon-book"></i></span>
+                      <input type="text" chk="real_server" placeholder="{{ _("Real Server ") }}" />
+                    </div>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
       	</tbody>
+      	<tfoot class="newWzSLB">
+      	  <tr opt="appPort">
+            <td>
+              <a href="#" class="btn btnDelWzAppPort">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-cog"></i></span>
+                <input type="number" chk="port" placeholder="{{ _("Application Port") }}" />
+              </div>
+            </td>
+          </tr>
+      	  <tr opt="realServer">
+            <td>
+              <a href="#" class="btn btnDelWzRealServer">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-book"></i></span>
+                <input type="text" chk="real_server" placeholder="{{ _("Real Server ") }}" />
+              </div>
+            </td>
+          </tr>
+      	</tfoot>
       </table>
     </div>
