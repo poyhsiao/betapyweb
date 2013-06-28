@@ -30,9 +30,20 @@ class Wizard(object):
         import json
         import libs.tools
 
-#         if "hostname" in kwargs:
-#             libs.tools.v(kwargs)
-#             return json.dumps(dns.check(cfg = kwargs))
-#         else:
-#             return json.dumps((False, None))
-        return json.dumps((False, None))
+        if "hostname" in kwargs:
+            libs.tools.v(kwargs)
+            return json.dumps(dns.check(cfg = kwargs))
+        else:
+            return json.dumps((False, None))
+
+    @_.expose
+    def ckMode(self, **kwargs):
+        import ml_w_wizard_mode as mode
+        import json
+        import libs.tools
+
+        if "mode" in kwargs:
+            libs.tools.v(kwargs)
+            return json.dumps(mode.check(cfg = kwargs))
+        else:
+            return json.dumps((False, None))

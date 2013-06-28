@@ -1076,13 +1076,50 @@ View = Backbone.View.extend({
                     	 Wizard.andSelf().remove();
                      },
                      buttons: [{
-                    	 text: "Next",
-                    	 class: "btnWzNext",
-                    	 click: function() {}
-                     }, {
                     	 text: "Back",
                     	 class: "btnWzBack hide",
-                    	 click: function() {}
+                    	 click: function() {
+                    		 var current = $("div.step-active");
+                    		 if(current.hasClass("pstep2")) {
+                			 /* check dns setting */
+                    			 $(".pstep1", "div.wizard-dialog").trigger("go_to_step");
+            					 $(".btnWzBack").addClass("hide");
+                			 } else if(current.hasClass("pstep3")) {
+                			 /* check dns setting */
+                    			 $(".pstep2", "div.wizard-dialog").trigger("go_to_step");
+                			 }
+                    	 }
+                     }, {
+                    	 text: "Next",
+                    	 class: "btnWzNext",
+                    	 click: function() {
+                    		 var current = $("div.step-active"), data;
+                    		 if(current.hasClass("pstep1")) {
+                			 /* check dns setting */
+                    			 $("div.wzDNS").wrap("<form id='wzForm' />");
+                    			 data = $("#wzForm").serialize();
+                    			 $("div.wzDNS").unwrap();
+                    			 Ajax = $.post("/wizard/ckDNS", data, function(d) {
+                    				 if(true === d[0]) {
+                    					 $(".pstep2", "div.wizard-dialog").trigger("go_to_step");
+                    					 $(".btnWzBack").removeClass("hide");
+                					 } else {
+                						 bootbox.alert(d[1].toString());
+            						 }
+                				 }, "json");
+                			 } else if(current.hasClass("pstep2")) {
+                				 $("div.wzMode").wrap("<form id='wzForm' />");
+                    			 data = $("#wzForm").serialize();
+                    			 $("div.wzDNS").unwrap();
+                    			 Ajax = $.post("/wizard/ckMode", data, function(d) {
+                    				 if(true === d[0]) {
+                    					 $(".pstep3", "div.wizard-dialog").trigger("go_to_step");
+                					 } else {
+                						 bootbox.alert(d[1].toString());
+            						 }
+                				 }, "json");
+                			 }
+                    	 }
                      }, {
                     	 text: "Done",
                     	 class: "btnWzDon hide",
@@ -1348,23 +1385,21 @@ View = Backbone.View.extend({
         var me = this, self = $(o.target);
         if(self.hasClass("btnSaFDefault")) {
         /* set to Factory Default */
-            tools.alert("confirm", {
-                title: self.text(),
-                content: $("#SysString").find("span.strAlertFactoryDefault").text()
-            }, function() {
-                $.post("/system/smaintenance", {"act": "factory_default"}, function(d) {
-                    console.log(d);
-                });
-            }, self[0]);
+        	bootbox.confirm($("#SysString").find("span.strAlertFactoryDefault").text(), function(d) {
+        		if(true === d) {
+        			$.post("/system/smaintenance", {"act": "factory_default"}, function(d) {
+                        console.log(d);
+                    });
+        		}
+        	});
         } else {
-            tools.alert("confirm", {
-                title: self.text(),
-                content: $("#SysString").find("span.strAlertReboot").text()
-            }, function() {
-                $.post("/system/smaintenance", {"act": "reboot"}, function(d) {
-                    console.log(d);
-                });
-            }, self[0]);
+        	bootbox.confirm($("#SysString").find("span.strAlertReboot").text(), function(d) {
+        		if(true === d) {
+        			$.post("/system/smaintenance", {"act": "reboot"}, function(d) {
+                        console.log(d);
+                    });
+        		}
+        	});
         }
     },
 
@@ -1816,44 +1851,6 @@ MainOperation = {
 
             return me.view.viewAdmin();
         });
-    }
-};
-
-tools = {
-/* all global tools */
-    str: {title: "Alert", content: "Alert"},
-    /* this is the default string which will display as the message will show to users */
-    cb: function() {
-    /* this is the default callback which will return whole tools object */
-        return this;
-    },
-    prefix: "/script/template/",
-    /* path to template */
-    alert: function(type, str, cb, obj) {
-    /*
-        to replace alert message
-        type: (string) default is alert; confirm is alternative if necessary
-        str: (object) the message to display
-        cb: (function) callback function when click ok
-        obj: (object[HTMLdom]) the trigger object
-    */
-        var me = this, type = type || "alert", str = str || me.str, cb = cb || me.cb, f, t, dom;
-        f = ("alert" === type) ? "toolsAlert" : "toolsConfirm";
-        Ajax = $.get("/getTpl?file=" + f, function(d) {
-            t = _.template(d);
-            $("body").append(t(str));
-
-            dom = $("div.toolsAlert");
-            dom.modal({keyboard: false}).modal("show");
-            dom.on("click", ".btnTAOk", function() {
-                cb();
-                dom.modal("hide");
-            }).on("click", ".btnTACancel", function() {
-                dom.modal("hide");
-            }).on("hidden", function() {
-                dom.remove();
-            });
-        }, "html");
     }
 };
 

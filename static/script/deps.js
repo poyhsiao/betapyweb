@@ -17,6 +17,7 @@ requirejs.config({
         iframeSupport: 'jquery.iframe-transport',
         fileupload: 'jquery.fileupload',
         bsSwitch: 'bootstrapSwitch',
+        bootbox: 'bootbox',
         bb: 'bb',
         psteps: 'jquery.psteps.min',
         ExtHandler: 'ExtHandler'
@@ -47,11 +48,14 @@ requirejs.config({
         'bsSwitch': {
             deps: ['jquery']
         },
+        'bootbox': {
+            deps: ['jquery']
+        },
         'fileupload': {
             dpes: ['jquery', 'iframeSupport', 'jqueryUI']
         },
         'bb': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap']
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bootbox']
         },
         'psteps': {
             deps: ['jquery', 'bootstrap']
