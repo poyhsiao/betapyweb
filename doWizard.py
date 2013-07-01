@@ -47,3 +47,41 @@ class Wizard(object):
             return json.dumps(mode.check(cfg = kwargs))
         else:
             return json.dumps((False, None))
+
+    @_.expose
+    def ckVRRP(self, **kwargs):
+        import ml_w_wizard_vrrp as vrrp
+        import json
+        import libs.tools
+
+        if "virtual-router-id" in kwargs:
+            libs.tools.v(kwargs)
+            data = {"vrrp": "vrrp" in kwargs,
+                    "virtual-router-id": kwargs["virtual-router-id"]}
+            return json.dumps(vrrp.check(cfg = data))
+        else:
+            return json.dumps((False, None))
+
+    @_.expose
+    def cks0e2(self, **kwargs):
+        import ml_w_wizard_s0e2 as s0e2
+        import json
+        import libs.tools
+
+        if "ipv4_default_gateway" in kwargs:
+            libs.tools.v(kwargs)
+            return json.dumps(s0e2.check(cfg = kwargs))
+        else:
+            return json.dumps((False, None))
+
+    @_.expose
+    def cks0e1(self, **kwargs):
+        import ml_w_wizard_s0e1 as s0e1
+        import json
+        import libs.tools
+
+        if "s0e1@@ipv4_fixed@@ipv4_address" in kwargs:
+            libs.tools.v(kwargs)
+            return json.dumps(s0e1.check(cfg = kwargs))
+        else:
+            return json.dumps((False, None))

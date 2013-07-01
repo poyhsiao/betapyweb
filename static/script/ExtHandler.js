@@ -2,7 +2,7 @@
  * It's the extended js which will handle service, stats, and any other main menu operation
  * Author: Kim Hsiao
  * Date: 2013/05/31
- */
+ */;
 
 var eModel = Backbone.Model.extend({});
 

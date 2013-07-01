@@ -2,6 +2,8 @@
 * Created by Kim Hsiao
 ***/
 
+"use strict";
+
 jQuery.error = console.error;
 /* this is for jquery debugger */
 
@@ -1026,10 +1028,10 @@ View = Backbone.View.extend({
         var me = this, border = 20, t;
         Ajax = $.get("/getTpl?file=wizard", function(d) {
         	require(["psteps", "jqueryUI", "blockUI"], function() {
-        		$.blockUI({
-        			message: null,
-        			baseZ: 2
-        		});
+//        		$.blockUI({
+//        			message: null,
+//        			baseZ: 2
+//        		});
 
         		t = _.template(d);
 
@@ -1049,6 +1051,7 @@ View = Backbone.View.extend({
                      closeOnEscape: false,
                      draggable: false,
                      resizable: false,
+                     modal: true,
                      width: $("div.head").outerWidth(),
                      height: $(window).innerHeight() - $("div.footer").height() - $("div.head").height(),
                      position: {my: "center top",
@@ -1059,6 +1062,8 @@ View = Backbone.View.extend({
                       	    alter_width_at_viewport: '500',
                       	    steps_height_equalize: true
                       	});
+
+                    	 Wizard.find("table").css("height", "100%");
 
                     	 require(["bsSwitch"], function() {
                     		 Wizard.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
@@ -1081,12 +1086,23 @@ View = Backbone.View.extend({
                     	 click: function() {
                     		 var current = $("div.step-active");
                     		 if(current.hasClass("pstep2")) {
-                			 /* check dns setting */
+                			 /* back to check dns setting */
                     			 $(".pstep1", "div.wizard-dialog").trigger("go_to_step");
             					 $(".btnWzBack").addClass("hide");
                 			 } else if(current.hasClass("pstep3")) {
-                			 /* check dns setting */
+                			 /* back to check mode setting */
                     			 $(".pstep2", "div.wizard-dialog").trigger("go_to_step");
+                			 } else if(current.hasClass("pstep4")) {
+            				 /* back to check vrrp setting */
+                				 $(".pstep3", "div.wizard-dialog").trigger("go_to_step");
+                			 } else if(current.hasClass("pstep5")) {
+            				 /* back to check s0e2 setting*/
+                				 $(".pstep4", "div.wizard-dialog").trigger("go_to_step");
+                			 } else if(current.hasClass("pstep6")) {
+            				 /* back to s0e1 setting and add hide(done) button and show(next) button */
+                				 $(".pstep5", "div.wizard-dialog").trigger("go_to_step");
+                				 $(".btnWzDone").addClass("hide");
+                				 $(".btnWzNext").removeClass("hide");
                 			 }
                     	 }
                      }, {
@@ -1101,28 +1117,72 @@ View = Backbone.View.extend({
                     			 $("div.wzDNS").unwrap();
                     			 Ajax = $.post("/wizard/ckDNS", data, function(d) {
                     				 if(true === d[0]) {
-                    					 $(".pstep2", "div.wizard-dialog").trigger("go_to_step");
+                    					 $("div.pstep2", "div.wizard-dialog").trigger("go_to_step");
                     					 $(".btnWzBack").removeClass("hide");
                 					 } else {
                 						 bootbox.alert(d[1].toString());
             						 }
                 				 }, "json");
+                    			 return false;
                 			 } else if(current.hasClass("pstep2")) {
+            				 /* check mode setting */
                 				 $("div.wzMode").wrap("<form id='wzForm' />");
                     			 data = $("#wzForm").serialize();
-                    			 $("div.wzDNS").unwrap();
+                    			 $("div.wzMode").unwrap();
                     			 Ajax = $.post("/wizard/ckMode", data, function(d) {
                     				 if(true === d[0]) {
-                    					 $(".pstep3", "div.wizard-dialog").trigger("go_to_step");
+                    					 $("div.pstep3", "div.wizard-dialog").trigger("go_to_step");
                 					 } else {
                 						 bootbox.alert(d[1].toString());
             						 }
                 				 }, "json");
+                    			 return false;
+                			 } else if(current.hasClass("pstep3")) {
+            				 /* check vrrp setting */
+                				 $("div.wzVRRP").wrap("<form id='wzForm' />");
+                    			 data = $("#wzForm").serialize();
+                    			 $("div.wzVRRP").unwrap();
+                    			 Ajax = $.post("/wizard/ckVRRP", data, function(d) {
+                    				 if(true === d[0]) {
+                    					 $("div.pstep4", "div.wizard-dialog").trigger("go_to_step");
+                					 } else {
+                						 bootbox.alert(d[1].toString());
+            						 }
+                				 }, "json");
+                    			 return false;
+                			 } else if(current.hasClass("pstep4")) {
+            				 /* check s0e2 setting */
+                				 $("div.wzS0e2").wrap("<form id='wzForm' />");
+                    			 data = $("#wzForm").serialize();
+                    			 $("div.wzS0e2").unwrap();
+                    			 Ajax = $.post("/wizard/cks0e2", data, function(d) {
+                    				 if(true === d[0]) {
+                    					 $("div.pstep5", "div.wizard-dialog").trigger("go_to_step");
+                					 } else {
+                						 bootbox.alert(d[1].toString());
+            						 }
+                				 }, "json");
+                    			 return false;
+                			 } else if(current.hasClass("pstep5")) {
+            				 /* check s0e1 setting */
+                				 $("div.wzS0e1").wrap("<form id='wzForm' />");
+                    			 data = $("#wzForm").serialize();
+                    			 $("div.wzS0e1").unwrap();
+                    			 Ajax = $.post("/wizard/cks0e1", data, function(d) {
+                    				 if(true === d[0]) {
+                    					 $("div.pstep6", "div.wizard-dialog").trigger("go_to_step");
+                    					 $(".btnWzNext").addClass("hide");
+                    					 $(".btnWzDone").removeClass("hide");
+                					 } else {
+                						 bootbox.alert(d[1].toString());
+            						 }
+                				 }, "json");
+                    			 return false;
                 			 }
                     	 }
                      }, {
                     	 text: "Done",
-                    	 class: "btnWzDon hide",
+                    	 class: "btnWzDone hide",
                     	 click: function() {}
                      }]
         		});
@@ -1626,7 +1686,7 @@ changeResolution = {
 
   changePopC: function(op) {
     /* for the height of popContent adjustment */
-    var pop = this.pop;
+    var pop = this.pop, val;
     pop.css({
       height: function() {
         var border = 60;
