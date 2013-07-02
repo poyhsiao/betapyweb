@@ -20,6 +20,14 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
 class Log(object):
+    def getUser(self):
+        user = _.session.get("username")
+
+        if None == user:
+            raise _.HTTPRedirect('/')
+        else:
+            return user
+
     @_.expose
     def index(self, **kwargs):
         return self.view(**kwargs)
@@ -53,7 +61,7 @@ class Log(object):
         if "facility" in kwargs:
             # syslog setter
             libs.tools.v(kwargs)
-            return json.dumps(wsl.set(cfg = kwargs))
+            return json.dumps(wsl.set(user = self.getUser(), cfg = kwargs))
         else:
             # syslog getter
-            return json.dumps(wsl.get())
+            return json.dumps(user = self.getUser(), wsl.get())

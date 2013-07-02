@@ -1028,11 +1028,6 @@ View = Backbone.View.extend({
         var me = this, border = 20, t;
         Ajax = $.get("/getTpl?file=wizard", function(d) {
         	require(["psteps", "jqueryUI", "blockUI"], function() {
-//        		$.blockUI({
-//        			message: null,
-//        			baseZ: 2
-//        		});
-
         		t = _.template(d);
 
             	$("div.borderArrow").hide();
@@ -1183,7 +1178,27 @@ View = Backbone.View.extend({
                      }, {
                     	 text: "Done",
                     	 class: "btnWzDone hide",
-                    	 click: function() {}
+                    	 click: function() {
+                		 /* check slb setting and save data if everything correct */
+                    		 var data;
+                    		 $("div.wzSLB").wrap("<form id='wzForm' />");
+                			 data = $("#wzForm").serialize();
+                			 $("div.wzSLB").unwrap();
+                			 Ajax = $.post("/wizard/ckSLB", data, function(d) {
+                				 if(true === d[0]) {
+                					 bootbox.confirm("Are you sure to reboot system right now?", function(res) {
+                						 if(true === res) {
+                							 Ajax = $.post("/system/smaintenance", {"act": "reboot"}, function(d) {
+                								 console.log(d);
+            								 });
+                						 }
+                					 });
+            					 } else {
+            						 bootbox.alert(d[1].toString());
+        						 }
+            				 }, "json");
+                			 return false;
+                    	 }
                      }]
         		});
 
@@ -1597,7 +1612,7 @@ View = Backbone.View.extend({
         try {
             clearInterval(timer);
             /* remove auto-refresh timer */
-            timer_v = 0;
+            window.timer_v = 0;
             /* reset auto-refresh option */
         } catch(e) {}
 

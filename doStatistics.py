@@ -20,6 +20,14 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
 class Statistics(object):
+    def getUser(self):
+        user = _.session.get("username")
+
+        if None == user:
+            raise _.HTTPRedirect('/')
+        else:
+            return user
+
     @_.expose
     def index(self, **kwargs):
         return self.counters(**kwargs)
@@ -64,28 +72,6 @@ class Statistics(object):
             pass
         else:
             data = wcn.get()
-            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
-                '''
-                    generate sample data
-                '''
-                data = (True, {'vips': [{"vip": "192.168.200.200",
-                                         "port": 443,
-                                         "connections": 0,
-                                         "inbound_packages": 0,
-                                         "inbound_bytes": 0,
-                                         "outbound_packages": 0,
-                                         "outbound_bytes": 0,
-                                         "rips": [{"rip": "192.168.200.200",
-                                                   "port": 443,
-                                                   "connections": 0,
-                                                   "inbound_packages": 0,
-                                                   "inbound_bytes": 0,
-                                                   "outbound_packages": 0,
-                                                   "outbound_bytes": 0,
-                                                   }]
-                                         }]
-                               }
-                        )
             return json.dumps(data)
 
     @_.expose
@@ -128,28 +114,6 @@ class Statistics(object):
             pass
         else:
             data = wrt.get()
-            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
-                '''
-                    Generate sample data
-                '''
-                data = (True, {"vips": [{"vip": "192.168.200.200",
-                          "port": 443,
-                          "connections/sec": 0,
-                          "inbound_packets/sec": 0,
-                          "inbound_bytes/sec": 0,
-                          "outbound_packets/sec": 0,
-                          "outbound_bytes/sec": 0,
-                          "rips": [{"rip": "192.168.200.200",
-                                    "port": 443,
-                                    "connections/sec": 0,
-                                    "inbound_packets/sec": 0,
-                                    "inbound_bytes/sec": 0,
-                                    "outbound_packets/sec": 0,
-                                    "outbound_bytes/sec": 0,
-                                    }]
-                             }]
-                       })
-
             return json.dumps(data)
 
     @_.expose
@@ -198,31 +162,4 @@ class Statistics(object):
             pass
         else:
             data = wpi.get()
-            if 'list' == type(data[1]['vips']).__name__ and len(data[1]['vips']) == 0:
-                '''
-                    Generate sample data
-                '''
-                data = (True, {"vips": [{"vip": "192.168.200.200",
-                                  "persistent": 300,
-                                  "netmask": 24,
-                                  "prefix": 0,
-                                  "rips": [{"rip": "192.168.200.200",
-                                            "weight": 1,
-                                            "persistent": 100,
-                                            "active": 0,
-                                            "inactive": 0
-                                            }]
-                                  }, {"vip": "2001::1",
-                                      "persistent": 300,
-                                      "netmask": 0,
-                                      "prefix": 128,
-                                      "rips": [{"rip": "2001::2",
-                                                "weight": 1,
-                                                "persistent": 100,
-                                                "active": 0,
-                                                "inactive": 0
-                                                }]
-                                  }]
-                        })
-
             return json.dumps(data)

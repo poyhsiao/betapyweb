@@ -24,13 +24,13 @@ from libs.tools import *
 
 
 class System(object):
-    # def __init__(self, callable, *args, **kwargs):
-    #     self.callable = callable
-    #     self.args = args
-    #     self.kwargs = kwargs
+    def getUser(self):
+        user = _.session.get("username")
 
-    # def __call__(self):
-    #     return self.callable(*self.args, **self.kwargs)
+        if None == user:
+            raise _.HTTPRedirect('/')
+        else:
+            return user
 
     @_.expose
     def index(self, *args, **kwargs):
@@ -129,7 +129,7 @@ class System(object):
         libs.tools.v(kwargs)
         for k in kwargs:
             kwargs[k] = libs.tools.convert(kwargs[k])
-        res = dns.set(cfg = kwargs)
+        res = dns.set(user = self.getUser(), cfg = kwargs)
         _.response.headers["Content-Type"] = "application/json"
         # return json.dumps(kwargs)
         return json.dumps(res)
@@ -165,7 +165,7 @@ class System(object):
 
         dat = {"vconfig": op}
         libs.tools.v(dat)
-        res = vlan.set(cfg = dat)
+        res = vlan.set(user = self.getUser(), cfg = dat)
         libs.tools.v(res)
         _.response.headers["Content-Type"] = "application/json"
         return json.dumps(res)
@@ -226,7 +226,7 @@ class System(object):
             })
 
         libs.tools.v(op)
-        res = wbr.set(cfg = {"br": op})
+        res = wbr.set(user = self.getUser(), cfg = {"br": op})
         return json.dumps(res)
 
     @_.expose
@@ -283,7 +283,7 @@ class System(object):
 
         output = {"ip": output}
         # change to correct format
-        return json.dumps(wip.set(cfg = output))
+        return json.dumps(wip.set(user = self.getUser(), cfg = output))
 
     @_.expose
     def groute(self, **kwargs):
@@ -324,7 +324,7 @@ class System(object):
 
         libs.tools.v(protocol)
         print(protocol)
-        return json.dumps(wrt.set(cfg = protocol))
+        return json.dumps(wrt.set(user = self.getUser(), cfg = protocol))
 
     @_.expose
     def garp(self):
@@ -346,7 +346,7 @@ class System(object):
         import json
         import libs.tools
         libs.tools.v(kwargs)
-        return json.dumps(kwargs)
+        return json.dumps(wat.set(user = self.getUser(), cfg = kwargs))
 
     @_.expose
     def gdate(self, **kwargs):
@@ -385,7 +385,7 @@ class System(object):
                 res[k] = libs.tools.convert(kwargs[k])
 
         libs.tools.v(res)
-        return json.dumps(wdt.set(cfg = res))
+        return json.dumps(wdt.set(user = self.getUser(), cfg = res))
 
     @_.expose
     def start_arping(self, **kwargs):
@@ -478,7 +478,7 @@ class System(object):
 
         res = {"user": res}
         _.response.headers["Content-Type"] = "application/json"
-        return json.dumps(wac.set(cfg = res))
+        return json.dumps(wac.set(user = self.getUser(), cfg = res))
 
     @_.expose
     def smaintenance(self, **kwargs):

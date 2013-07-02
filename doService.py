@@ -20,6 +20,14 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
 class Service(object):
+    def getUser(self):
+        user = _.session.get("username")
+
+        if None == user:
+            raise _.HTTPRedirect('/')
+        else:
+            return user
+
     @_.expose
     def index(self, **kwargs):
         return self.snmp(**kwargs)
@@ -49,7 +57,7 @@ tion': '', 'community': 'public'})
 
             libs.tools.v(res)
 
-            return json.dumps(snmp.set(cfg = res))
+            return json.dumps(snmp.set(user = self.getUser(), cfg = res))
 
         else:
             # for information getter
@@ -87,7 +95,7 @@ tion': '', 'community': 'public'})
 
             libs.tools.v(res)
 
-            return json.dumps(wem.set(cfg = res))
+            return json.dumps(wem.set(user = self.getUser(), cfg = res))
         else:
             # for information getter
             return json.dumps(wem.get())
@@ -236,7 +244,7 @@ tion': '', 'community': 'public'})
 
             res = {"group": res}
 
-            return json.dumps(wvr.set(cfg = res))
+            return json.dumps(wvr.set(user = self.getUser(), cfg = res))
         else:
             # getter
             return json.dumps(wvr.get())
@@ -473,7 +481,7 @@ tion': '', 'community': 'public'})
                                         df = self._unstructDict(dg, "@@")
                                         nopt[k][kk].append({kb: df})
             libs.tools.v(nopt);
-            return json.dumps(slb.set(cfg = nopt));
+            return json.dumps(slb.set(user = self.getUser(), cfg = nopt));
         else:
             # getter
             return json.dumps(slb.get())
@@ -554,48 +562,10 @@ tion': '', 'community': 'public'})
                     nopt[k].append(dd)
 
 
-            return json.dumps(wcl.set(cfg = nopt))
+            return json.dumps(wcl.set(user = self.getUser(), cfg = nopt))
         else:
             # getter
             data = wcl.get()
-            if not (len(data[1]["ipv4"]) and len(data[1]["ipv6"])):
-                data = (True, {"ipv4": [
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "TCP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "second",
-                        "limit_burst": 5
-                    },
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "UDP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "minute",
-                        "limit_burst": 5
-                    }
-                ],
-                "ipv6": [
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "TCP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "second",
-                        "limit_burst": 5
-                    },
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "UDP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "minute",
-                        "limit_burst": 5
-                    }
-                ]})
-
             return json.dumps(data)
 
     @_.expose
@@ -620,7 +590,7 @@ tion': '', 'community': 'public'})
                    "ipv6_prefix": kwargs["ipv6_prefix"],
                    "ipv4": kwargs["ipv4"]}
 
-            return json.dumps(nat64.set(cfg = res))
+            return json.dumps(nat64.set(user = self.getUser(), cfg = res))
         else:
             # getter
             return json.dumps(nat64.get())
