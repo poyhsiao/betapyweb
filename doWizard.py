@@ -226,23 +226,23 @@ class Wizard(object):
         data = _.session["wizard"]
         user = self.getUser()
 
-        res = dns.set(user=user, cfg=data["dns"])
-        if False = res[0]:
+        res = dns.set(user = user, cfg = data["dns"])
+        if False == res[0]:
             return json.dumps(res)
-        res = mode.set(user=user, cfg=data["mode"])
-        if False = res[0]:
+        res = mode.set(user = user, cfg = data["mode"])
+        if False == res[0]:
             return json.dumps(res)
-        res = vrrp.set(user=user, cfg=data["vrrp"])
-        if False = res[0]:
+        res = vrrp.set(user = user, cfg = data["vrrp"])
+        if False == res[0]:
             return json.dumps(res)
-        res = s0e2.set(user=user, cfg=data["s0e2"])
-        if False = res[0]:
+        res = s0e2.set(user = user, cfg = data["s0e2"])
+        if False == res[0]:
             return json.dumps(res)
-        res = s0e1.set(user=user, cfg=data["s0e1"])
-        if False = res[0]:
+        res = s0e1.set(user = user, cfg = data["s0e1"])
+        if False == res[0]:
             return json.dumps(res)
-        res = slb.set(user=user, cfg=data["slb"])
-        if False = res[0]:
+        res = slb.set(user = user, cfg = data["slb"])
+        if False == res[0]:
             return json.dumps(res)
 
         return json.dumps(res)

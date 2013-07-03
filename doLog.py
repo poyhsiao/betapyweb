@@ -64,4 +64,4 @@ class Log(object):
             return json.dumps(wsl.set(user = self.getUser(), cfg = kwargs))
         else:
             # syslog getter
-            return json.dumps(user = self.getUser(), wsl.get())
+            return json.dumps(wsl.get())

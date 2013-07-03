@@ -164,11 +164,17 @@ class Root:
             return e
 
 
+def proxy():
+    # Redirect http to https
+        if 443 != _.request.local.port:
+            server_url = _.request.base
+            server_https_url = server_url.replace("http", "https")
+            raise _.HTTPRedirect(server_https_url)
+
 if __name__ == '__main__':
     _.config.update({
         'environment': 'production',
-        'server.socket_port': 8000,
-        'server.socket_host': '0.0.0.0',
+        'tools.proxy.on': True,
         'log.error_file': 'site.log',
         'log.screen': True,
         'tools.sessions.locking': 'explicit'
@@ -260,4 +266,20 @@ if __name__ == '__main__':
     # _.tree.mount(Login(), '/doLogin', config=conf)
     # _.quickstart(Root(), '/', config=conf)
     _.tree.mount(root, '/', config = conf)
+    _.server.unsubscribe()
+    server1 = _._cpserver.Server()
+    server1.socket_port = 443
+    server1._socket_host = '0.0.0.0'
+    server1.ssl_module = "pyopenssl"
+    server1.ssl_certificate = '/usr/xtera/webui/static/ssl/xlb.crt'
+    server1.ssl_private_key = '/usr/xtera/webui/static/ssl/xlb.key'
+    server1.subscribe()
+
+    server2 = _._cpserver.Server()
+    server2.socket_port = 80
+    server2._socket_host = "0.0.0.0"
+    server2.subscribe()
+
+    _.tools.proxy = _.Tool("before_request_body", proxy)
     _.engine.start()
+
