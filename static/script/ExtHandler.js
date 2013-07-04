@@ -50,8 +50,6 @@ var eView = Backbone.View.extend({
             me.$el.html(t(dat)).find("table").css({
                 width: "100%",
                 height: "100%"
-            }).find("th, td").css({
-                "text-align": "center"
             });
 
             $("div.borderArrow").show("fast");
@@ -104,10 +102,7 @@ var eView = Backbone.View.extend({
         Ajax = $.get("/getTpl?file=vrrp", function(d) {
             t = _.template(d);
             Ajax = dat;
-            me.$el.html(t(dat)).find("td, th").css({
-                "vertical-align": "middle",
-                "text-align": "center"
-            });
+            me.$el.html(t(dat));
 
             $("div.borderArrow").show("fast");
             /* show arrow image */
@@ -154,11 +149,6 @@ var eView = Backbone.View.extend({
         tr.find(".svVrrpNewInst a").attr({
             gname: ngn.name,
             gnumber: ngn.no
-        });
-
-        ct.find("td, th").css({
-            "vertical-align": "middle",
-            "text-align": "center"
         });
     },
 
@@ -602,10 +592,7 @@ var eView = Backbone.View.extend({
         var me = this, dat = me.model.attributes[1], t;
         Ajax = $.get("/getTpl?file=slb", function(d) {
             t = _.template(d);
-            me.$el.html(t(dat)).find("td, th").css({
-                "vertical-align": "middle",
-                "text-align": "center"
-            });
+            me.$el.html(t(dat));
 
             $("div.borderArrow").show("fast");
             /* show arrow image */
@@ -1189,10 +1176,7 @@ var eView = Backbone.View.extend({
     	var me = this, dat = {"items": me.model.attributes[1]}, t;
     	Ajax = $.get("/getTpl?file=connection_limit", function(d) {
     		t = _.template(d);
-    		me.$el.html(t(dat)).find("th, td").css({
-    			"text-align": "center",
-    			"vertical-align": "middle"
-    		});
+    		me.$el.html(t(dat));
 
     		$("div.borderArrow").show("fast");
             /* show arrow image */
@@ -1270,11 +1254,6 @@ var eView = Backbone.View.extend({
             Ajax = $.get("/getTpl?file=counters_content", function(dd) {
                 t = _.template(dd);
                 me.$el.find("div.statCtContent").html(t(dat)).find("tr.trCollapse").hide();
-
-                me.$el.find("td, th").css({
-                    "text-align": "center",
-                    "vertical-align": "middle"
-                });
             }, "html");
         };
 
@@ -1356,11 +1335,6 @@ var eView = Backbone.View.extend({
             Ajax = $.get("/getTpl?file=rates_content", function(dd) {
                 t = _.template(dd);
                 me.$el.find("div.statRtContent").html(t(dat)).find("tr.trCollapse").hide();
-
-                me.$el.find("td, th").css({
-                    "text-align": "center",
-                    "vertical-align": "middle"
-                });
             }, "html");
         };
 
@@ -1416,11 +1390,6 @@ var eView = Backbone.View.extend({
             Ajax = $.get("/getTpl?file=persistence_content", function(dd) {
                 t = _.template(dd);
                 me.$el.find("div.statPIContent").html(t(dat)).find("tr.trCollapse").hide();
-
-                me.$el.find("td, th").css({
-                    "text-align": "center",
-                    "vertical-align": "middle"
-                });
             }, "html");
         };
 

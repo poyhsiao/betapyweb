@@ -1,76 +1,121 @@
-<div class="SystemRoutingTable padding">
-  <fieldset id="" class="">
-    <legend>{{ _('Routing Table') }}</legend>
-    <ul class="nav nav-tabs nav-rt">
-      <li class="active">
-        <a href="#" opt="ipv4">{{ _("IPv4 Routing Table") }}</a>
-      </li>
-      <li>
-        <a href="#" opt="ipv6">{{ _("IPv6 Routing Table") }}</a>
-      </li>
-    </ul>
-    <% _.each(items[1], function(v, k) { %>
-    <div class="SystemRoutingTable-rt SystemRoutingTable-<%= k %> padding<% if(k !== 'ipv4') { %> inactive<% } %>">
-      <table class="table table-bordered table-hover">
-        <tr>
-          <th>{{ _("Destination") }}</th>
-          <th>{{ _("Prefix Length") }}</th>
-          <th>{{ _("Gateway") }}</th>
-          <th>{{ _("Interface") }}</th>
-          <td>
-            <button class="btn btnRTAdd" opt="<%= k %>">{{ _("Add") }}</button>
-          </td>
-        </tr>
-        <% if(items[1][k].length) { %>
-          <% for(var kk = 0; kk < v.length; kk++) { %>
-        <tr>
-          <td><%= v[kk]["destination"] %></td>
-          <td><%= v[kk]["prefix"] %></td>
-          <td><%= v[kk]["gateway"] %></td>
-          <td><%= v[kk]["interface"] %></td>
-          <td>
-            <button class="btn btnRTDel">{{ _("Delete") }}</button>
-            <input type="hidden" name="<%= k %>-destination" value="<%= v[kk]["destination"] %>" />
-            <input type="hidden" name="<%= k %>-prefix" value="<%= v[kk]["prefix"] %>" />
-            <input type="hidden" name="<%= k %>-gateway" value="<%= v[kk]["gateway"] %>" />
-            <input type="hidden" name="<%= k %>-interface" value="<%= v[kk]["interface"] %>" />
-          </td>
-        </tr>
-          <% } %>
+    <div class="SystemRoutingTable padding">
+      <fieldset id="" class="">
+        <legend>{{ _('Routing Table') }}</legend>
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="#sysRT-ipv4" data-toggle="tab" opt="ipv4">{{ _("IPv4 Routing Table") }}</a>
+          </li>
+          <li>
+            <a href="#sysRT-ipv6" data-toggle="tab" opt="ipv6">{{ _("IPv6 Routing Table") }}</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+      <% _.each(items, function(v, k) { %>
+        <% if("ipv4" === k) { %>
+          <div id="sysRT-<%= k %>" class="tab-pane padding active">
+        <% } else { %>
+          <div id="sysRT-<%= k %>" class="tab-pane padding">
         <% } %>
+            <table class="table table-bordered table-hover">
+              <tr>
+                <th>{{ _("Destination") }}</th>
+                <th>{{ _("Prefix Length") }}</th>
+                <th>{{ _("Gateway") }}</th>
+                <th>{{ _("Interface") }}</th>
+                <td>
+                  <a href="#" class="btn btnRTAdd" opt="<%= k %>">{{ _("Add") }}</a>
+                </td>
+              </tr>
+              <% if(items[k].length) { %>
+                <% for(var kk = 0; kk < v.length; kk++) { %>
+              <tr>
+                <td>
+                  <div class="input-prepend input-append">
+                    <span class="add-on"><i class="icon-flag"></i></span>
+                    <input type="text" name="<%= k %>-destination" value="<%= v[kk]["destination"] %>" class="span2" placeholder="{{ _("Destination") }}" />
+                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-prepend input-append">
+                    <span class="add-on"><i class="icon-th-large"></i></span>
+                    <input type="number" name="<%= k %>-prefix" value="<%= v[kk]["prefix"] %>" class="span2" placeholder="{{ _("Prefix Length") }}" />
+                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-prepend input-append">
+                    <span class="add-on"><i class="icon-road"></i></span>
+                    <input type="text" name="<%= k %>-gateway" value="<%= v[kk]["gateway"] %>" class="span2" placholder="{{ _("Gateway") }}" />
+                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+                  </div>
+                </td>
+                <td>
+                  <div class="input-prepend input-append">
+                    <span class="add-on"><i class="icon-screenshot"></i></span>
+                    <select class="rtIpv46Intf" name="<%= k %>-interface" opt="interface" class="span2">
+                      <option value="">{{ _("auto") }}</option>
+                    <% _.each(nic, function(nv, nk) { %>
+                      <option value="<%= nv %>"<% if(v[kk]["interface"] === nv) { %>selected="selected"<% } %>><%= nv %></option>
+                    <% }); %>
+                    </select>
+                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+                  </div>
+                </td>
+                <td>
+                  <a href="#" class="btn btnRTDel">{{ _("Delete") }}</a>
+                </td>
+              </tr>
+                <% } %>
+              <% } %>
+            </table>
+          </div>
+      <% }); %>
+        <div class="tab-content">
+      </fieldset>
+    </div>
+
+    <div class="sysRT-tpl inactive">
+      <table>
+        <tbody class="newSysRt">
+          <tr>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-flag"></i></span>
+                <input type="text" class="span2" placeholder="{{ _("Destination") }}" opt="destination" />
+                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-th-large"></i></span>
+                <input type="number" class="span2" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
+                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-road"></i></span>
+                <input type="text" class="span2" placholder="{{ _("Gateway") }}" opt="gateway" />
+                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend input-append">
+                <span class="add-on"><i class="icon-screenshot"></i></span>
+                <select opt="interface" class="rtIpv46Intf span2">
+                  <option value="">{{ _("auto") }}</option>
+                <% _.each(nic, function(nv, nk) { %>
+                  <option value="<%= nv %>"><%= nv %></option>
+                <% }); %>
+                </select>
+                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
+              </div>
+            </td>
+            <td>
+              <a href="#" class="btn btnRTDel">{{ _("Delete") }}</a>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
-    <% }); %>
-  </fieldset>
-</div>
-<div class="SystemRoutingTable-edit padding control-group inactive form-horizontal">
-  <div class="control-group">
-    <label class="control-label strong" for="rtIpv46Dest">{{ _("Destination") }}</label>
-    <div class="controls">
-      <input type="text" id="rtIpv46Dest" placeholder="{{ _("Destination") }}" opt="destination" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label strong" for="rtIpv46PreL">{{ _("Prefix Length") }}</label>
-    <div class="controls">
-      <input type="number" id="rtIpv46PreL" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label strong" for="rtIpv46GW">{{ _("Gateway") }}</label>
-    <div class="controls">
-      <input type="text" id="rtIpv46GW" placeholder="{{ _("Gateway") }}" opt="gateway" />
-    </div>
-  </div>
-  <div class="control-group">
-    <label class="control-label strong" for="rtIpv46Intf">{{ _("Interface") }}</label>
-    <div class="controls">
-      <select id="rtIpv46Intf" opt="interface">
-        <option value="">{{ _("auto") }}</option>
-      </select>
-      <span class="inactive rtv46tpl">
-        <button class="btn btnRTDel">{{ _("Delete") }}</button>
-      </span>
-    </div>
-  </div>
-</div>

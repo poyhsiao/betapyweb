@@ -69,6 +69,9 @@ class Wizard(object):
         import json
 
         if "hostname" in kwargs:
+            if not _.session.has_key("wizard"):
+                _.session["wizard"] = {}
+
             libs.tools.v(kwargs)
             _.session["wizard"]["dns"] = kwargs
             return json.dumps(dns.check(user = self.getUser(), cfg = kwargs))

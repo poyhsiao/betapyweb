@@ -35,7 +35,8 @@ View = Backbone.View.extend({
             changeResolution.changePopC();
             return changeResolution.changeArrow();
         } else {
-            $("div.borderArrow").hide();
+            $("div.borderArrow").addClass("hide");
+            changeResolution.changePopC();
             try {
             	Wizard.dialog("option", "width", $(window).width() - 50);
             	Wizard.dialog("option", "height", $(window).height() - $("div.footer").height() - $("div.head").height());
@@ -47,6 +48,7 @@ View = Backbone.View.extend({
             /* in mobile device, set the height to fixed 400px */
         } else {
         /* for tablet */
+        	$("div.borderArrow").removeClass("hide");
             return changeResolution.changePopC();
         }
     },
@@ -260,7 +262,7 @@ View = Backbone.View.extend({
             $("div.borderArrow").show("fast");
             /* show arrow image */
 
-            $("div.SystemVLAN").children("table").css({
+            $("div.SystemVLAN").find("table").css({
                 "width": "100%",
                 "height": "100%"
             }).find("button").css({
@@ -269,63 +271,26 @@ View = Backbone.View.extend({
         }, "html");
     },
 
-    editVlan: function(o) {
+    addVlan: function(o) {
     /* add vlan item */
-        var me = this, dom = $("div.addSysVLAN"), ct = $("div.SystemVLAN");
+        var me = this, self = $(o.target), tr = self.parents("tr"), dom = $("div.addSysVLAN"), ct = $("div.SystemVLAN"), tpl;
+        tpl = $("tbody.newVlan").clone(true);
 
-        require(['jqueryUI'], function() {
-            dom.dialog({
-                modal: true,
-                closeOnEscape: false,
-                width: "auto",
-                open: function() {
-                    dom.block();
-                    /* block dialog when getting interface data */
-                    $('option[vl="new"]').remove();
-                    /* remove all existing NIC options and get new */
-                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
-                        /* return an array of NIC names */
-                        $.each(d["real"], function(k, v) {
-                            $("<option />").attr("vl", "new").val(v).text(v).appendTo("#lan-interface");
-                        });
-
-                        dom.unblock();
-                    });
-                },
-                close: function(e, u) {
-                    dom.find("input").val("");
-                    dom.dialog("destroy");
-                },
-                buttons: [{
-                    text: "OK",
-                    click: function() {
-                        $("<input />").attr({
-                            "type": "hidden",
-                            "value": $("#lan-interface").val(),
-                            "name": $("#lan-interface").attr("name")
-                        }).appendTo($("div.SystemVLAN table"));
-                        dom.find("input").clone().removeAttr("id").attr("type", "hidden").appendTo($("div.SystemVLAN table"));
-                        me.runOpApply();
-                        me.runOpReload();
-                        dom.dialog("close");
-                    }
-                }, {
-                    text: "Cancel",
-                    click: function() {
-                        dom.dialog("close");
-                    }
-                }]
-            });
+        tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
+            $("#oApply").show("slow");
+            /* show "Apply" link/button */
         });
+        return false;
     },
 
     delVlan: function(o) {
     /* delete vlan item */
-        var me = this, self = $(o.target);
-        self.parents("tr").hide("fast", function() {
+        var me = this, self = $(o.target), tr = self.parents("tr");
+        tr.hide("slow", function() {
             $(this).remove();
+            $("#oApply").show("slow");
         });
-        return me.viewSaveVLAN(o);
+        return false;
     },
 
     viewSaveVLAN: function(o) {
@@ -386,6 +351,8 @@ View = Backbone.View.extend({
                 closeOnEscape: false,
                 width: "auto",
                 open: function() {
+                	var i;
+
                     dom.block();
                     /* enable mask before everything is ready */
 
@@ -563,7 +530,7 @@ View = Backbone.View.extend({
 
     delBridge: function(o) {
     /* delete existing bridge setting */
-        me = this, self = $(o.target);
+        var me = this, self = $(o.target);
         self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
@@ -677,118 +644,66 @@ View = Backbone.View.extend({
 
     viewRoutingTable: function(o) {
     /* routing table display */
-        var me = this, dat = {"items": me.model.attributes}, t;
-        Ajax = $.get("/getTpl?file=routing_table", function(d) {
-            t = _.template(d);
-            me.$el.html(t(dat));
+    	var me = this, str = '', dat, t;
 
-            $("div.borderArrow").show("fast");
-            /* show arrow image */
+    	if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
 
-            me.$el.find("table").css({
-                "width": "100%",
-                "height": "100%"
-            }).find("select, button, input").css({
-                "width": "90%"
-            });
+    		bootbox.alert(str);
+    	}
 
-            me.$el.find("button.btnSmt").css({
-                "width": "45%"
-            });
+    	Ajax = $.getJSON("/system/getInterfaces", function(nic) {
+    		/* return an array of NIC names */
+    		dat = {"items": me.model.attributes[1], "nic": nic["all"]};
 
-            $('ul.nav-rt li > a[href="#"]').on("click", function() {
-                // navigation tabs display contorl
-                var opt = $(this).attr("opt");
-                if(!$(this).parent().hasClass("active")) {
-                    me.$el.find("ul.nav-tabs li").removeClass("active");
-                    $(this).parent().addClass("active");
-                    $("div.SystemRoutingTable-rt").addClass("inactive");
-                    $("div.SystemRoutingTable-" + opt).removeClass("inactive");
-                }
-            });
-        }, "html");
+    		Ajax = $.get("/getTpl?file=routing_table", function(d) {
+    			t = _.template(d);
+    			me.$el.html(t(dat));
+
+    			$("div.borderArrow").show("fast");
+                /* show arrow image */
+
+                me.$el.find("table").css({
+                    "width": "100%",
+                    "height": "100%"
+                });
+
+                me.$el.find("button.btnSmt").css({
+                    "width": "45%"
+                });
+    		}, "html");
+    	}, "json");
     },
 
     delRoutingTable: function(o) {
     /* delete existing routing table rule */
-        me = this, self = $(o.target);
-        self.parents("tr").hide("fast", function() {
+        var me = this, self = $(o.target), tr = self.parents("tr");
+        tr.hide("slow", function() {
             $(this).remove();
+            $("#oApply").show("slow");
+            /* show "Apply" link/button */
         });
-
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
     },
 
     addRoutingTable: function(o) {
     /* add new rule for routing table */
-        var me = this, self = $(o.target), opt = self.attr("opt"), dom = $("div.SystemRoutingTable-edit"), title;
+    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = self.attr("opt"), tpl;
+    	tpl = $("tbody.newSysRt").clone(true);
 
-        title = self.text() + " " + me.$el.find("ul.nav-rt li.active a").text();
+    	tpl.find(":input").attr({
+    		name: function() {
+    			return opt + "-" + $(this).attr("opt");
+    		}
+    	});
 
-        $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf").attr({
-            "name": function(i, v) {
-                /* assign name attribute for each input field */
-                return opt + "-" + $(this).attr("opt");
-            }
-        });
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
+    		$("#oApply").show("slow");
+    		/* show "Apply" link/button */
+    	});
 
-        require(['jqueryUI'], function() {
-            dom.dialog({
-                modal: true,
-                title: title,
-                closeOnEscape: false,
-                width: "auto",
-                open: function() {
-                    /* on opening, get available NIC name */
-                    dom.block();
-                    $('option[rt="new"]').remove();
-                    /* remove all existing NIC options and get new */
-                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
-                        /* return an array of NIC names */
-                        $.each(d["all"], function(k, v) {
-                            $("<option />").attr("rt", "new").val(v).text(v).appendTo("#rtIpv46Intf");
-                        });
-                        dom.unblock();
-                    });
-                },
-                close: function() {
-                    // inputs.val('');
-                    dom.wrap("<form />");
-                    dom.parent()[0].reset();
-                    dom.unwrap();
-                    /* empty all input value */
-                    $(this).dialog("destroy");
-                },
-                buttons: [{
-                    text: "OK",
-                    click: function() {
-                        var ct = $("div.SystemRoutingTable-" + opt).find("table"), inputs = $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW, #rtIpv46Intf"), td = $("<td />"), tr = $("<tr />");
-                        inputs.each(function(k, v) {
-                            $("<td />").text( $(this).val() ).appendTo(tr);
-                        });
-                        $("span.rtv46tpl button").clone(true).css("width", "90%").appendTo(td);
-                        $("#rtIpv46Dest, #rtIpv46PreL, #rtIpv46GW").clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                        $("<input />").attr({
-                            "type": "hidden",
-                            "name": $("#rtIpv46Intf").attr("name"),
-                            "value": $("#rtIpv46Intf").val()
-                        }).appendTo(td);
-                        td.appendTo(tr);
-                        tr.appendTo(ct);
-
-                        $("#oApply").show("slow");
-                        /* show "Apply" link/button */
-                        return dom.dialog("close");
-                    }
-                }, {
-                    text: "Cancel",
-                    click: function() {
-                        $(this).dialog("close");
-                    }
-                }]
-            });
-        });
+    	return false;
     },
 
     viewArpTable: function(o) {
@@ -819,7 +734,7 @@ View = Backbone.View.extend({
                 "width": "45%"
             });
 
-            $("div.SystemArpTable").find("a:first").trigger("click");
+//            $("div.SystemArpTable").find("a:first").trigger("click");
 
             require(['bsSwitch'], function() {
                 me.$el.find("input[type='checkbox']").one("change", function() {
@@ -1030,9 +945,6 @@ View = Backbone.View.extend({
         	require(["psteps", "jqueryUI", "blockUI"], function() {
         		t = _.template(d);
 
-            	$("div.borderArrow").hide();
-                /* show arrow image */
-
         		Wizard = $($.parseHTML(d)[1]);
 
         		Wizard.on("click", "a.btnAddIps", me.addWzIps)
@@ -1047,8 +959,8 @@ View = Backbone.View.extend({
                      draggable: false,
                      resizable: false,
                      modal: true,
-                     width: $("div.head").outerWidth(),
-                     height: $(window).innerHeight() - $("div.footer").height() - $("div.head").height(),
+                     width: $("#PageTailer").innerWidth(),
+                     height: $("div.body").innerHeight() + $("div.info").innerHeight(),
                      position: {my: "center top",
                     	 		at: "center" + " top+" + $("div.head").height() },
                      open: function() {
@@ -1562,19 +1474,28 @@ View = Backbone.View.extend({
             obj.wrap('<form id="theForm" />');
             console.log($("#theForm").serialize());
             $.post(url, $("#theForm").serialize(), function(d) {
+            	var str = '';
                 console.log(d);
-                if(!d[0]) {
-                    if(confirm("System Fail\n\nReload the Page?")) {
-                        obj.unwrap();
-                        /* remove form */
-                        return me.execMenu(current);
-                    }
+                if(false === d[0]) {
+            		$.each(d[1], function(k, v) {
+            			str += "<br />" + v;
+            		});
+
+            		str += '<br />System Fail<br /><br />Reload the Page?'
+
+            		bootbox.confirm(str, function(res) {
+            			if(true === res) {
+            				obj.unwrap();
+                            /* remove form */
+                            return me.execMenu(current);
+            			}
+            		});
                 } else {
                     obj.unwrap();
                     /* remove form */
                     return me.runOpReload();
                 }
-            });
+            }, "json");
         }
     },
 
@@ -1617,8 +1538,10 @@ View = Backbone.View.extend({
         } catch(e) {}
 
         try {
-            delete(ov["group"]);
-            /* delete vrrp model clone (ov) */
+        	if("group" in ov) {
+        		delete(ov["group"]);
+                /* delete vrrp model clone (ov) */
+        	}
         } catch(e) {}
 
         checkSlb = 0;
@@ -1701,30 +1624,40 @@ changeResolution = {
 
   changePopC: function(op) {
     /* for the height of popContent adjustment */
-    var pop = this.pop, val;
+    var pop = this.pop, menu = $("div.leftMenu"), bias = ckWindow.notDesktop() ? 60 : 30, val;
     pop.css({
       height: function() {
         var border = 60;
         /* this is work for define all the border width */
         val = $(window).height() - $("div.head").outerHeight() - $("div.info").outerHeight() - $("div.footer").outerHeight() - border + "px";
         return val;
+      },
+      width: function() {
+    	  if(!ckWindow.notDesktop()) {
+	    	  return $("#PageTailer").width() - menu.position().left - menu.width() - bias;
+    	  } else {
+    		  return menu.width() - bias;
+    	  }
       }
     });
-    return (ckWindow.notDesktop()) ? pop.css("margin", "0px") : pop.css("margin", "0 0 0 -60px");
+    return (ckWindow.notDesktop()) ? pop.css("margin-left", "0") : pop.css("margin-left", "-60px");
   },
 
   changeArrow: function(op) {
     /* change the position of the arrow image, if op is given as the jquery obj, the position will be located based on given op */
     var actopt = $("span.subtitle").attr("opt"),
     pop = $("div.popContent"),
-    itm = op || $("div[opt=" + actopt +"]"),
+    itm = op || $("div.selectItem[opt=" + actopt +"]"),
     // offset = ("wild" == ckWindow.text()) ? 40 : 50,
     bias = -30,
     offset = -60,
     arrow = this.arrow;
+
     arrow.css({
       top: function() {
-        return itm.position().top + "px";
+    	  try {
+    		  return itm.position().top + "px";
+    	  } catch(e) {}
       },
       left: function() {
         // return itm.position().left + itm.width() - offset + "px";
@@ -1786,9 +1719,9 @@ MainOperation = {
             me.view = new View({
                 model: me.model,
                 events: {
-                    "click button.btnVlanAdd": "editVlan",
-                    "click button.btnVlanDel": "delVlan",
-                    "input input": "viewSaveVLAN"
+                    "click a.btnAddVlan": "addVlan",
+                    "click a.btnDelVlan": "delVlan",
+                    "click a.btnEditVlan": "viewSaveVLAN"
                 }
             });
 
@@ -1842,8 +1775,9 @@ MainOperation = {
             me.view = new View({
                 model: me.model,
                 events: {
-                    "click button.btnRTDel": "delRoutingTable",
-                    "click button.btnRTAdd": "addRoutingTable"
+                    "click a.btnRTDel": "delRoutingTable",
+                    "click a.btnRTAdd": "addRoutingTable",
+                    "click a.btnEditRT": "viewSaveVLAN"
                 }
             });
 

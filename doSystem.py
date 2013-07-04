@@ -309,15 +309,15 @@ class System(object):
         for k in protocol.keys():
             if k + "-destination" in kwargs:
                 if(type(kwargs[k + "-destination"]).__name__ == "list"):
-                    for n in range(0, len(kwargs[k + "-destination"])):
+                    for n in range(len(kwargs[k + "-destination"])):
                         protocol[k].append({"destination": libs.tools.convert(kwargs[k + "-destination"][n]),
-                                            "prefix": int(kwargs[k + "-prefix"][n]),
+                                            "prefix": libs.tools.convert(kwargs[k + "-prefix"][n]),
                                             "gateway": libs.tools.convert(kwargs[k + "-gateway"][n]),
                                             "interface": libs.tools.convert(kwargs[k + "-interface"][n])
                                             })
                 else:
                     protocol[k].append({"destination": libs.tools.convert(kwargs[k + "-destination"]),
-                                        "prefix": int(kwargs[k + "-prefix"]),
+                                        "prefix": libs.tools.convert(kwargs[k + "-prefix"]),
                                         "gateway": libs.tools.convert(kwargs[k + "-gateway"]),
                                         "interface": libs.tools.convert(kwargs[k + "-interface"])
                                         })
