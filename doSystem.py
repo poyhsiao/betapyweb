@@ -556,21 +556,26 @@ class System(object):
         import json
         import libs.tools
 #         return json.dumps(kwargs)
-        file = kwargs["file"]
-        _.response.headers["Content-Type"] = "application/json"
-        libs.tools.v(kwargs);
-        if file is not None:
-            size = 0
+        if "fwfile" in kwargs and "updatekey" in kwargs:
+            fwfile = kwargs["fwfile"]
+            updatekey = kwargs["updatekey"]
+            files = {"fwfile": {"size": 0, "data": ''}, "updatekey": {"size": 0, "data": ''}}
             while True:
-                data = file.file.read(8192)
-                if not data:
+                files["fwfile"]["data"] = fwfile.file.read(8192)
+                files["updatekey"]["data"] = updatekey.file.read(8192)
+                if not files["fwfile"]["data"]:
                     break
-                size += len(data)
-            libs.tools.v(file)
-            libs.tools.v({"name": file.filename, "type": file.content_type, "size": size})
+                if not files["updatekey"]["data"]:
+                    break
+                files["fwfile"]["size"] += len(files["fwfile"]["data"])
+                files["updatekey"]["size"] += len(files["updatekey"]["data"])
 
-            return json.dumps({"name": file.filename, "size": size})
-#             return json.dumps(wcf.upload_startup(fwfile = file))
+            _.response.headers["Content-Type"] = "application/json"
+            libs.tools.v(files)
+
+            result = wfw.firmware_update(user = self.getUser(), updatekey = files["updatekey"]["data"], fwfile = files["fwfile"]["data"])
+            libs.tools.v(result)
+            return json.dumps(result)
         else:
             return json.dumps((False, "No file"))
 

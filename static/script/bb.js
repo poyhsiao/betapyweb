@@ -1196,7 +1196,7 @@ View = Backbone.View.extend({
 
     viewAdmin: function(o) {
     /* display admin page */
-        var me = this, dat = me.model.attributes[1], t, conf_file, fw_file;
+        var me = this, dat = me.model.attributes[1], t, conf_file, fw_file, fwForm;
         Ajax = $.get("/getTpl?file=admin", function(d) {
             t = _.template(d);
             me.$el.html(t(dat)).find("table").css({
@@ -1208,8 +1208,6 @@ View = Backbone.View.extend({
                         return "90%";
                     } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
                         return "45%";
-                    } else {
-                        return "90%";
                     }
                 }
             });
@@ -1219,7 +1217,6 @@ View = Backbone.View.extend({
 
             require(['fileupload'], function() {
                 conf_file = $("#fileUSConf");
-                fw_file = $("#fileFWUpdate");
 
                 conf_file.fileupload({
                 /* configuration file upload */
@@ -1239,24 +1236,41 @@ View = Backbone.View.extend({
                     }
                 });
 
-                fw_file.fileupload({
-                /* firmware file upload */
-                    url: "/system/supload_fw",
-                    add: function(e, d) {
-                        console.log(d);
-                        $("button.btnFileFWUpload").removeClass("inactive").one("click", function() {
-                            $(this).text("Uploading...");
-                            d.submit();
-                        });
-                    },
-                    done: function(e, d) {
-                    /* TBD */
-                        var res = d.response();
-                        console.log(res.result);
-                        /* return information */
-                    }
-                });
+//                fw_file.fileupload({
+//                /* firmware file upload */
+//                    url: "/system/supload_fw",
+//                    add: function(e, d) {
+//                        console.log(d);
+//                        $("a.btnFileKeyUpload, a.btnFileFWUpload").removeClass("inactive").one("click", function() {
+//                            $(this).text("Uploading...");
+//                            d.submit();
+//                        });
+//                    },
+//                    done: function(e, d) {
+//                    /* TBD */
+//                        var res = d.response();
+//                        console.log(res.result);
+//                        /* return information */
+//                    }
+//                });
             });
+
+            fw_file = $("#saFirmware").find("table");
+            fwForm = fw_file.wrap("<form action='/system/supload_fw' method='post' enctype='multipart/form-data' id='theFWForm'></form>");
+            fwForm.on("change", "input[type=file]", function() {
+            	$(this).siblings("a.btn").removeClass("inactive");
+            });
+            fwForm.on("click", "a.btn", function() {
+            	require(['jquery.form'], function() {
+            		$('#theFWForm').ajaxSubmit({
+                		success: function(d) {
+
+                			console.log(d);
+                		}
+                	});
+            	});
+            });
+
 
             require(['bsSwitch'], function() {
                 $(".switch").bootstrapSwitch();
@@ -1475,6 +1489,8 @@ View = Backbone.View.extend({
             console.log($("#theForm").serialize());
             $.post(url, $("#theForm").serialize(), function(d) {
             	var str = '';
+            	obj.unwrap();
+                /* remove form */
                 console.log(d);
                 if(false === d[0]) {
             		$.each(d[1], function(k, v) {
@@ -1485,14 +1501,10 @@ View = Backbone.View.extend({
 
             		bootbox.confirm(str, function(res) {
             			if(true === res) {
-            				obj.unwrap();
-                            /* remove form */
                             return me.execMenu(current);
             			}
             		});
                 } else {
-                    obj.unwrap();
-                    /* remove form */
                     return me.runOpReload();
                 }
             }, "json");
@@ -1526,7 +1538,9 @@ View = Backbone.View.extend({
         /* hide arrow image */
 
         try {
-            Ajax.abort();
+        	if("object" == Ajax) {
+        		Ajax.abort();
+        	}
             /* Stop all ajax request */
         } catch(e) {}
 
@@ -1538,7 +1552,7 @@ View = Backbone.View.extend({
         } catch(e) {}
 
         try {
-        	if("group" in ov) {
+        	if("object" === typeof(ov) && "group" in ov) {
         		delete(ov["group"]);
                 /* delete vrrp model clone (ov) */
         	}

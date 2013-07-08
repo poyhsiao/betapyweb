@@ -99,12 +99,15 @@
       <tr>
         <th rowspan="2">{{ _("Firmware Update") }}</th>
         <th>{{ _("License Key") }}</th>
-        <td>(12345-12345-12345-12345-12345)</td>
+        <td>
+          <input type="file" name="updatekey" id="fileKeyUpdate" class="span3" />
+          <a href="#" class="btn btnFileKeyUpload inactive">{{ _("Upload") }}</a>
+        </td>
       </tr>
       <tr>
         <td colspan="2">
-          <input type="file" name="file" id="fileFWUpdate" />
-          <button class="btn btnFileFWUpload inactive">{{ _("Upload") }}</button>
+          <input type="file" name="fwfile" id="fileFWUpdate" class="span3" />
+          <a href="#" class="btn btnFileFWUpload inactive">{{ _("Upload") }}</a>
         </td>
       </tr>
     </table>
