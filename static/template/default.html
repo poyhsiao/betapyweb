@@ -108,6 +108,9 @@
         padding: 2px 0px 2px 20px;
         border: 1px solid #000;
     }
+    input[type=file] {
+      border: 0 none;
+    }
     .inactive {
         display: none;
     }
@@ -139,9 +142,6 @@
         z-index: 1;
         width: 50px;
         height: 34px;
-    }
-    input[type=file] {
-      border: 0 none;
     }
     #Paganation {
       margin-right: 15px;
@@ -324,7 +324,7 @@
                       <div class="SubMenu" opt="rates">{{ _('Rates') }}</div>
                     </li>
                     <li class="boxShadow">
-                      <div class="SubMenu" opt="persistence">{{ _('Rersistence Info') }}</div>
+                      <div class="SubMenu" opt="persistence">{{ _('Persistence Info') }}</div>
                     </li>
                   </ul>
                 </li>
