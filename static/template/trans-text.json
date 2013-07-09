@@ -1,0 +1,7 @@
+window.Translation = {
+    "OK": "{{ _("OK")}}",
+    "Cancel": "{{ _("Cancel")}}",
+    "Next": "{{ _("Next") }}",
+    "Back": "{{ _("Back") }}",
+    "Done": "{{ _("Done") }}"
+}

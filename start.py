@@ -163,6 +163,26 @@ class Root:
             libs.tools.v(e)
             return e
 
+    @_.expose
+    def getTranslate(self, **kwargs):
+        '''
+            Try to translate json files as translation table
+        '''
+        try:
+            if 'lang' in kwargs:
+                tpl = env.get_template('/' + kwargs['lang'] + '.json')
+                trans = translation()
+                env.install_gettext_translations(trans['obj'])
+#                 _.response.headers["Content-Type"] = "application/json"
+                _.response.headers["Content-Type"] = "text/javascript"
+                return tpl.render(lang = trans['lang'])
+            else:
+                return kwargs
+        except Exception as e:
+            import libs.tools
+            libs.tools.v(e)
+            return e
+
 
 def proxy():
     # Redirect http to https

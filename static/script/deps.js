@@ -21,7 +21,8 @@ requirejs.config({
         bootbox: 'bootbox',
         bb: 'bb',
         psteps: 'jquery.psteps.min',
-        ExtHandler: 'ExtHandler'
+        ExtHandler: 'ExtHandler',
+        trans: '/getTranslate?lang=trans-text'
     },
     shim: {
         'jquery': {
@@ -53,7 +54,7 @@ requirejs.config({
             deps: ['jquery']
         },
         'bootbox': {
-            deps: ['jquery']
+            deps: ['jquery', 'trans']
         },
         'fileupload': {
             dpes: ['jquery', 'iframeSupport', 'jqueryUI']
@@ -62,13 +63,13 @@ requirejs.config({
             deps: ['jquery']
         },
         'bb': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bootbox']
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bootbox', 'trans']
         },
         'psteps': {
             deps: ['jquery', 'bootstrap']
         },
         'ExtHandler': {
-            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bb'],
+            deps: ['jquery', 'underscore', 'backbone', 'bootstrap', 'bb', 'trans'],
             exports: "ExtHandler"
         }
     },

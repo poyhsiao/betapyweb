@@ -474,7 +474,7 @@ View = Backbone.View.extend({
                     dom.dialog("destroy");
                 },
                 buttons: [{
-                    text: "OK",
+                    text: Translation["OK"],
                     click: function() {
                         if(self.hasClass("brEdit")) {
                         /* edit existing bridge */
@@ -526,7 +526,7 @@ View = Backbone.View.extend({
                         return dom.dialog("close");
                     }
                 }, {
-                    text: "Cancel",
+                    text: Translation["Cancel"],
                     click: function() {
                         return dom.dialog("close");
                     }
@@ -904,7 +904,7 @@ View = Backbone.View.extend({
                     	 Wizard.andSelf().remove();
                      },
                      buttons: [{
-                    	 text: "Back",
+                    	 text: Translation["Back"],
                     	 class: "btnWzBack hide",
                     	 click: function() {
                     		 var current = $("div.step-active");
@@ -929,7 +929,7 @@ View = Backbone.View.extend({
                 			 }
                     	 }
                      }, {
-                    	 text: "Next",
+                    	 text: Translation["Next"],
                     	 class: "btnWzNext",
                     	 click: function() {
                     		 var current = $("div.step-active"), data;
@@ -1004,7 +1004,7 @@ View = Backbone.View.extend({
                 			 }
                     	 }
                      }, {
-                    	 text: "Done",
+                    	 text: Translation["Done"],
                     	 class: "btnWzDone hide",
                     	 click: function() {
                 		 /* check slb setting and save data if everything correct */
@@ -1249,7 +1249,7 @@ View = Backbone.View.extend({
                     dom.dialog("destroy");
                 },
                 buttons: [{
-                    text: "Ok",
+                    text: Translation["OK"],
                     click: function() {
                         if("new" === ed) {
                         /* add new account */
@@ -1277,7 +1277,7 @@ View = Backbone.View.extend({
                         /* show "Apply" link/button */
                     }
                 }, {
-                    text: "Cancel",
+                    text: Translation["Cancel"],
                     click: function() {
                         dom.dialog("close");
                     }
@@ -1504,7 +1504,7 @@ View = Backbone.View.extend({
         });
     }
 }),
-ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, slbset, checkSlb, Wizard, timer_v = 0;
+ckWindow, changeResolution, menuview, windowview, infoview, MainOperation, timer, tools, Ajax, ov, slbset, checkSlb, Wizard, trans = '', timer_v = 0;
 
 ckWindow = {
     /* check if the device resolution */
