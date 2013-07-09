@@ -19,16 +19,15 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 # set middleware path in system path
 
 # import libs.tools as tools
-env = Environment(loader=FileSystemLoader('static/template'))
+env = Environment(loader = FileSystemLoader('static/template'))
 
 
-class Login:
-    @_.expose
+class Login(object):
     def index(self, **kwargs):
         # print kwargs
-        username = str(kwargs['AccountAlias'])
-        password = str(kwargs['Password'])
-        lang = kwargs['Language']
+        username = libs.tools.convert(kwargs['AccountAlias'])
+        password = libs.tools.convert(kwargs['Password'])
+        lang = libs.tools.convert(kwargs['Language'])
 
         _.session['LANG'] = lang
         # save perfer language first
