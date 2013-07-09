@@ -22,7 +22,7 @@
         {"title": "{{ _('Statistics') }}", "subitems": [
             {"title": "{{ _('Counters') }}", "src": "counters"},
             {"title": "{{ _('Rates') }}", "src": "rates"},
-            {"title": "{{ _('Rersistence Info') }}", "src": "persistence"}
+            {"title": "{{ _('Persistence Info') }}", "src": "persistence"}
         ]},
         {"title": "{{ _('Log') }}", "subitems": [
             {"title": "{{ _('View') }}", "src": "view"},

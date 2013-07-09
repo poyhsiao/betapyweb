@@ -14,7 +14,7 @@
       <% } %>
       </tr>
       <tr opt="<%= ak %>" set="ip">
-        <th>{{ _("Lable") }}</th>
+        <th>{{ _("Label") }}</th>
         <th colspan="2">{{ _("IP Address") }}</th>
       </tr>
   <% _.each(av, function(v, k) { %>
@@ -59,8 +59,8 @@
     <div class="slb-ipTpl inactive">
       <table>
         <tbody class="newSlbIpSet">
-        	<tr set="ip">
-        		<td rowspan="2">
+       	  <tr set="ip">
+       	    <td rowspan="2">
               <a href="#" class="btn btnDelIpSet" opt="">{{ _("Delete") }}</a>
             </td>
             <td rowspan="2">
@@ -70,19 +70,19 @@
                 <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
               </div>
             </td>
-        	</tr>
-        	<tr set="ip">
-        	  <td>
-        	    <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
-        	  </td>
-        	  <td>
+       	  </tr>
+          <tr set="ip">
+            <td>
+              <a href="#" class="btn btnAddIpAddress">{{ _("Add") }}</a>
+            </td>
+            <td>
               <div class="input-prepend input-append">
                 <span class="add-on"><i class="icon-cog"></i></span>
                 <input type="text" class="span2" />
                 <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
               </div>
             </td>
-        	</tr>
+          </tr>
       	</tbody>
       	<tfoot class="newSlbIpSet">
       	  <tr set="ip">

@@ -22,7 +22,7 @@
         {"title": "Statistics", "subitems": [
             {"title": "Counters", "src": "counters"},
             {"title": "Rates", "src": "rates"},
-            {"title": "Rersistence Info", "src": "persistence"}
+            {"title": "Persistence Info", "src": "persistence"}
         ]},
         {"title": "Log", "subitems": [
             {"title": "View", "src": "view"},
