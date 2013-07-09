@@ -559,8 +559,6 @@ View = Backbone.View.extend({
             me.$el.find("table").css({
                 "width": "100%",
                 "height": "100%"
-            }).find("select, button, input").css({
-                "width": "90%"
             });
 
             me.$el.find("button.btnSmt").css({
@@ -578,75 +576,30 @@ View = Backbone.View.extend({
 
     addIpAddress: function(o) {
     /* add new a ip address which will pop-up an dialog */
-        var me = this, self = $(o.target), dom = $("div.IpEditor"), inf = $("#ipSelecter").val(), title;
+    	var me = this, self = $(o.target), tr = self.parents("tr"), inf = $("#ipSelecter"), chk = self.attr("chk"), opt = self.attr("opt"), tpl;
+    	tpl = $("tbody.newIpAddress[opt='" + opt + "']").clone(true);
+    	tpl.find(":input").attr({
+    		name: function() {
+    			return chk + "-" + $(this).attr("opt");
+    		}
+    	});
 
-        if(self.hasClass("btnSI4Add")) {
-            /* add IPv4 address */
-            title = $("th.IpV4title:first").text();
-            $("#IpV46_address").attr("name", inf + "-ipv4_address");
-            $("#IpV46_prefix").attr("name", inf + "-ipv4_prefix");
-            dom.attr("opt", "SystemIpV4");
-            /* set the parameter for item which tr added for */
-        } else {
-            /* add IPv6 address */
-            title = $("th.IpV6title:first").text();
-            $("#IpV46_address").attr("name", inf + "-ipv6_address");
-            $("#IpV46_prefix").attr("name", inf + "-ipv6_prefix");
-            dom.attr("opt", "SystemIpV6");
-            /* set the parameter for item which tr added for */
-        }
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
+    		me.viewSaveVLAN();
+    	});
 
-        $('label[for="IpV46_address"]').text(title);
-
-        require(['jqueryUI'], function() {
-            dom.dialog({
-                title: title,
-                modal: true,
-                closeOnEscape: false,
-                width: "auto",
-                close: function() {
-                    dom.wrap("<form />");
-                    dom.parent()[0].reset();
-                    dom.unwrap();
-                    dom.dialog("destroy");
-                },
-                buttons: [{
-                    text: "OK",
-                    click: function() {
-                        /* click save new ip address */
-                        var tr = $("<tr />"), td = $("<td />"), ct = $('div.' + dom.attr("opt") + '[opt="' + inf + '"]').children("table"), add = $("#IpV46_address"), prefix = $("#IpV46_prefix");
-                        $("<td />").text( add.val() ).appendTo(tr);
-                        $("<td />").text( prefix.val() ).appendTo(tr);
-                        $("span.ipv46Tpl button").clone(true).css("width", "90%").appendTo(td);
-                        add.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                        prefix.clone().removeAttr("id").attr("type", "hidden").appendTo(td);
-                        td.appendTo(tr);
-                        tr.appendTo(ct);
-
-                        $("#oApply").show("slow");
-                        /* show "Apply" link/button */
-
-                        dom.dialog("close");
-                    }
-                }, {
-                    text: "Cancel",
-                    click: function() {
-                        dom.dialog("close");
-                    }
-                }]
-            });
-        });
+    	return false;
     },
 
     delIpAddress: function(o) {
     /* delete exist ip address setting */
         var me = this; self = $(o.target);
-        self.parents("tr").hide("fast", function() {
+        self.parents("tr").hide("slow", function() {
             $(this).remove();
+            return me.viewSaveVLAN();
         });
 
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
+        return false;
     },
 
     viewRoutingTable: function(o) {
@@ -715,40 +668,38 @@ View = Backbone.View.extend({
 
     viewArpTable: function(o) {
     /* ip address setup page display */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, dat = {"items": me.model.attributes[1], "nic": ''}, t;
         Ajax = $.get("/getTpl?file=arp_table", function(d) {
-            $.each(dat, function(k, v) {
-                v["protocol"] = k.split("_")[0];
-                v["type"] = k.split("_")[1];
-            });
+        	Ajax = $.getJSON("/system/getInterfaces", function(nic) {
+        		dat["nic"] = nic["interface"];
 
-            dat = {"items" : dat};
+        		$.each(dat["items"], function(k, v) {
+                    v["protocol"] = k.split("_")[0];
+                    v["type"] = k.split("_")[1];
+                });
 
-            t = _.template(d);
-            me.$el.html(t(dat));
+        		 t = _.template(d);
+                 me.$el.html(t(dat));
 
-            $("div.borderArrow").show("fast");
-            /* show arrow image */
+                 $("div.borderArrow").show("fast");
+                 /* show arrow image */
 
-            me.$el.find("table").css({
-                "width": "100%",
-                "height": "100%"
-            }).find("select, button, input").css({
-                "width": "90%"
-            });
+                 me.$el.find("table").css({
+                     "width": "100%",
+                     "height": "100%"
+                 });
 
-            me.$el.find("button.btnSmt").css({
-                "width": "45%"
-            });
+                 me.$el.find("button.btnSmt").css({
+                     "width": "45%"
+                 });
 
-//            $("div.SystemArpTable").find("a:first").trigger("click");
-
-            require(['bsSwitch'], function() {
-                me.$el.find("input[type='checkbox']").one("change", function() {
-                    $("#oApply").show("slow");
-                    /* show "Apply" link/button */
-                }).wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
-            });
+                 require(['bsSwitch'], function() {
+                     me.$el.find("input[type='checkbox']").one("change", function() {
+                         $("#oApply").show("slow");
+                         /* show "Apply" link/button */
+                     }).wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                 });
+        	});
 
         }, "html");
     },
@@ -758,71 +709,29 @@ View = Backbone.View.extend({
       var me = this, self = $(o.target);
       self.parents("tr").hide("fast", function() {
           $(this).remove();
+          me.viewSaveVLAN();
+          /* show "Apply" link/button */
       });
-
-      $("#oApply").show("slow");
-      /* show "Apply" link/button */
+      return false
     },
 
     addArpTable: function(o) {
     /* add new arp static ip */
-        var me = this, self = $(o.target), dom = $("div.editSystemArpTable"), title = $("div.SystemArpTable").find("li.active").children("a").text(), opt = self.attr("opt"), apt = $("#arp-" + opt).children("table");
+    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = self.attr("opt"), tpl;
+    	tpl = $("tbody.newArpTable[opt='" + opt + "']").clone(true);
+    	console.log(opt);
+    	console.log(tpl);
+    	tpl.find(":input").attr({
+    		"name": function() {
+    			return opt + "-" + $(this).attr("opt");
+    		}
+    	});
 
-        require(['jqueryUI'], function() {
-            dom.dialog({
-                modal: true,
-                title: title,
-                closeOnEscape: false,
-                width: "auto",
-                open: function() {
-                    $('option[arp="new"]').remove();
-                    /* remove listed interfaces */
-                    dom.block();
-                    Ajax = $.getJSON("/system/getInterfaces", function(d) {
-                        /* return an array of NIC names */
-                        $.each(d["interface"], function(k, v) {
-                            $("<option />").attr("arp", "new").val(v).text(v).appendTo("#editArpInterface");
-                        });
-                        dom.unblock();
-                    });
-                },
-                close: function() {
-                    dom.wrap("<form />");
-                    dom.parent()[0].reset();
-                    dom.unwrap();
-                    dom.dialog("destroy");
-                },
-                buttons: [{
-                    text: "OK",
-                    click: function() {
-                        var tr = $("<tr />").appendTo(apt), td = $("<td />"), btn = dom.find("button.btnArpDel").clone(true).css("width", "90%");
-                        $("<td />").text( $("#editArpInterface").val() ).appendTo(tr);
-                        $("<td />").text( $("#editArpIp").val() ).appendTo(tr);
-                        $("<td />").text( $("#editArpMac").val() ).appendTo(tr);
-                        btn.appendTo(td);
-                        dom.find("input, select").each(function(k, v) {
-                            $("<input />").attr({
-                                type: "hidden",
-                                name: function() {
-                                    return opt + "-" + $(v).attr("name");
-                                }
-                            }).val($(v).val()).appendTo(td);
-                        });
-                        td.appendTo(tr);
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
+    		me.viewSaveVLAN();
+    	});
 
-                        $("#oApply").show("slow");
-                        /* show "Apply" link/button */
-
-                        return dom.dialog("close");
-                    }
-                }, {
-                    text: "Cancel",
-                    click: function() {
-                        dom.dialog("close");
-                    }
-                }]
-            });
-        });
+    	return false;
     },
 
     viewDateTime: function(o) {
@@ -1777,8 +1686,9 @@ MainOperation = {
                 model: me.model,
                 events: {
                     "change #ipSelecter": "changeIpAddress",
-                    "click button.btnIpAdd": "addIpAddress",
-                    "click button.btnIpDel": "delIpAddress"
+                    "click a.btnIpAdd": "addIpAddress",
+                    "click a.btnIpDel": "delIpAddress",
+                    "click a.btnEdit": "viewSaveVLAN"
                 }
             });
 
@@ -1816,8 +1726,9 @@ MainOperation = {
             me.view = new View({
                 model: me.model,
                 events: {
-                    "click button.btnArpDel": "delArpTable",
-                    "click button.btnArpAdd": "addArpTable"
+                    "click a.btnArpDel": "delArpTable",
+                    "click a.btnArpAdd": "addArpTable",
+                    "click a.btnEdit": "viewSaveVLAN"
                 }
             });
 

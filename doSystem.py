@@ -327,7 +327,7 @@ class System(object):
         return json.dumps(wrt.set(user = self.getUser(), cfg = protocol))
 
     @_.expose
-    def garp(self):
+    def garp(self, **kwargs):
         '''
             Get ARP table setting
         '''
