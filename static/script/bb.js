@@ -7,6 +7,9 @@
 jQuery.error = console.error;
 /* this is for jquery debugger */
 
+$.ajaxSetup({ cache: false });
+/* prevent ajax cache especially in IE */
+
 var Model = Backbone.Model.extend({}),
 /* keep the model blank if need to retrieval data from Ajax */
 View = Backbone.View.extend({
@@ -254,20 +257,24 @@ View = Backbone.View.extend({
 
     viewVLAN: function(o) {
     /* it is about VLAN get */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, dat = {"items": me.model.attributes[1], "nic": ''}, t;
         Ajax = $.get("/getTpl?file=vlan", function(d) {
-            t = _.template(d);
-            me.$el.html(t(dat));
+        	Ajax = $.getJSON("/system/getInterfaces", function(nic) {
+        		dat["nic"] = nic["real"];
 
-            $("div.borderArrow").show("fast");
-            /* show arrow image */
+        		t = _.template(d);
+                me.$el.html(t(dat));
 
-            $("div.SystemVLAN").find("table").css({
-                "width": "100%",
-                "height": "100%"
-            }).find("button").css({
-                "width": "90%"
-            });
+                $("div.borderArrow").show("fast");
+                /* show arrow image */
+
+                $("div.SystemVLAN").find("table").css({
+                    "width": "100%",
+                    "height": "100%"
+                }).find("button").css({
+                    "width": "90%"
+                });
+        	});
         }, "html");
     },
 

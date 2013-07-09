@@ -23,17 +23,20 @@ env = Environment(loader = FileSystemLoader('static/template'))
 
 
 class Login(object):
+    @_.expose
     def index(self, **kwargs):
         # print kwargs
-        username = libs.tools.convert(kwargs['AccountAlias'])
-        password = libs.tools.convert(kwargs['Password'])
-        lang = libs.tools.convert(kwargs['Language'])
+        username = kwargs['AccountAlias']
+        password = kwargs['Password']
+        lang = kwargs['Language']
 
         _.session['LANG'] = lang
         # save perfer language first
 
         import ml_w_login as wlogin
-        if wlogin.get(username, password)[0]:
+        login = wlogin.get(username = username, password = password)
+        libs.tools.v(login)
+        if login[0]:
 
             import ml_w_account as wa
 
@@ -47,6 +50,8 @@ class Login(object):
                     libs.tools.v(v)
                     for kk, vv in v.items():
                         _.session[kk] = vv
+
+            libs.tools.v(_.session.items())
 
             raise _.HTTPRedirect('/main/')
             # tpl = env.get_template('default.html')

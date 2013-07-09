@@ -38,7 +38,7 @@ class System(object):
         print kwargs
         return 'Hello World!'
 
-    def _getInterface(self):
+    def _getInterface(self, **kwargs):
         '''
             Get all interfaces or False if fail to get interfaces
             internal function
@@ -473,8 +473,8 @@ class System(object):
         import json
         import libs.tools
         res = []
-        for k in range(0, len(kwargs['name'])):
-            res.append({"name": libs.tools.convert(kwargs["name"][k]), "group": libs.tools.convert(kwargs["group"][k]), "password": libs.tools.convert(kwargs["password"][k])})
+        for k in range(len(kwargs['name'])):
+            res.append({"name": kwargs["name"][k], "group": kwargs["group"][k], "password": kwargs["password"][k]})
 
         res = {"user": res}
         _.response.headers["Content-Type"] = "application/json"
@@ -589,8 +589,7 @@ class System(object):
         import libs.tools
         if "ckCLI" in kwargs:
             # post data to set cli services
-            libs.tools.v(kwargs)
-            data = {"ssh": ("sshEnable" in kwargs), "telnet": ("telnet" in kwargs)}
+            data = {"ssh": ("sshEnable" in kwargs), "telnet": ("telnetEnable" in kwargs)}
             _.response.headers["Content-Type"] = "application/json"
             return json.dumps(cli.set(cfg = data))
         else:
@@ -598,7 +597,7 @@ class System(object):
             return json.dumps(cli.get())
 
     @_.expose
-    def getInterfaces(self):
+    def getInterfaces(self, **kwargs):
         '''
             Get all available NIC name, include real device, vlan, and bridge
         '''

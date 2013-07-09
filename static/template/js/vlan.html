@@ -13,12 +13,16 @@
             <a href="#" class="btn btnAdd btnAddVlan">{{ _("Add") }}</a>
           </td>
         </tr>
-        <% _.each(vconfig, function(v, k) { %>
+        <% _.each(items.vconfig, function(v, k) { %>
         <tr class="item item-<%= v["vlan_id"] %>">
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-tag"></i></span>
-              <input type="text" name="interface" value="<%= v["interface"] %>" class="span2" placeholder="{{ _("Interface") }}" />
+              <select name="interface" class="span2">
+              <% _.each(nic, function(vv, kk) { %>
+                <option value="<%= vv %>" <% if(v["interface"] === vv) { %>selected="selected"<% } %>><%= vv %></option>
+              <% }); %>
+              </select>
               <a href="#" class="btn btnEditVlan">{{ _("Edit") }}</a>
             </div>
           </td>
@@ -45,7 +49,11 @@
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-tag"></i></span>
-              <input type="text" name="interface" class="span2" placeholder="{{ _("Interface") }}"  />
+              <select name="interface" class="span2">
+              <% _.each(nic, function(vv, kk) { %>
+                <option value="<%= vv %>"><%= vv %></option>
+              <% }); %>
+              </select>
               <a href="#" class="btn btnEditVlan">{{ _("Edit") }}</a>
             </div>
           </td>
