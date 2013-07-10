@@ -7,7 +7,10 @@
 jQuery.error = console.error;
 /* this is for jquery debugger */
 
-$.ajaxSetup({ cache: false });
+$.ajaxSetup({
+	cache: false,
+	async: false
+});
 /* prevent ajax cache especially in IE */
 
 var Model = Backbone.Model.extend({}),
@@ -249,12 +252,6 @@ View = Backbone.View.extend({
         }, "html");
     },
 
-    viewSaveDNS: function(o) {
-    /* when the input items is changed, triggler this function */
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
-    },
-
     viewVLAN: function(o) {
     /* it is about VLAN get */
         var me = this, dat = {"items": me.model.attributes[1], "nic": ''}, t;
@@ -283,10 +280,7 @@ View = Backbone.View.extend({
         var me = this, self = $(o.target), tr = self.parents("tr"), dom = $("div.addSysVLAN"), ct = $("div.SystemVLAN"), tpl;
         tpl = $("tbody.newVlan").clone(true);
 
-        tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
-            $("#oApply").show("slow");
-            /* show "Apply" link/button */
-        });
+        tpl.find("tr").hide().insertAfter(tr).show("slow", function() {});
         return false;
     },
 
@@ -295,15 +289,8 @@ View = Backbone.View.extend({
         var me = this, self = $(o.target), tr = self.parents("tr");
         tr.hide("slow", function() {
             $(this).remove();
-            $("#oApply").show("slow");
         });
         return false;
-    },
-
-    viewSaveVLAN: function(o) {
-    /* when modify any of vlan item, display apply and able to save the value */
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
     },
 
     viewBridge: function(o) {
@@ -521,8 +508,6 @@ View = Backbone.View.extend({
                             td.appendTo(tr);
                         }
 
-                        $("#oApply").show("fast");
-
                         return dom.dialog("close");
                     }
                 }, {
@@ -541,15 +526,20 @@ View = Backbone.View.extend({
         self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
-
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
     },
 
     viewIpAddress: function(o) {
     /* ip address setup page display */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, dat = {"items": me.model.attributes[1], "nic": []}, t;
         Ajax = $.get("/getTpl?file=ip_address", function(d) {
+
+        	$.each(dat["items"]["ip"], function(k, v) {
+        		dat["nic"].push(v["interface"]);
+        	});
+
+        	dat["nic"] = _.sortBy(dat["nic"], function(v) {return v;});
+        	/* sorting nic names */
+
             t = _.template(d);
             me.$el.html(t(dat));
 
@@ -584,9 +574,7 @@ View = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
-    		me.viewSaveVLAN();
-    	});
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {});
 
     	return false;
     },
@@ -596,7 +584,6 @@ View = Backbone.View.extend({
         var me = this; self = $(o.target);
         self.parents("tr").hide("slow", function() {
             $(this).remove();
-            return me.viewSaveVLAN();
         });
 
         return false;
@@ -642,8 +629,6 @@ View = Backbone.View.extend({
         var me = this, self = $(o.target), tr = self.parents("tr");
         tr.hide("slow", function() {
             $(this).remove();
-            $("#oApply").show("slow");
-            /* show "Apply" link/button */
         });
     },
 
@@ -658,10 +643,7 @@ View = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
-    		$("#oApply").show("slow");
-    		/* show "Apply" link/button */
-    	});
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {});
 
     	return false;
     },
@@ -694,10 +676,7 @@ View = Backbone.View.extend({
                  });
 
                  require(['bsSwitch'], function() {
-                     me.$el.find("input[type='checkbox']").one("change", function() {
-                         $("#oApply").show("slow");
-                         /* show "Apply" link/button */
-                     }).wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
+                     me.$el.find("input[type='checkbox']").one("change", function() {}).wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
                  });
         	});
 
@@ -709,8 +688,6 @@ View = Backbone.View.extend({
       var me = this, self = $(o.target);
       self.parents("tr").hide("fast", function() {
           $(this).remove();
-          me.viewSaveVLAN();
-          /* show "Apply" link/button */
       });
       return false
     },
@@ -727,9 +704,7 @@ View = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {
-    		me.viewSaveVLAN();
-    	});
+    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {});
 
     	return false;
     },
@@ -745,17 +720,11 @@ View = Backbone.View.extend({
             /* show arrow image */
 
             me.$el.find('input[opt="dt"]').trigger("click");
-
-            $("#oApply").hide();
-            /* hide "Apply" link/button, which may appear because of the timepicker */
         }, "html");
     },
 
     editDateTime: function(o) {
     /* date time configuration */
-
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
     },
 
     choiceDateTime: function(o) {
@@ -1140,7 +1109,7 @@ View = Backbone.View.extend({
                     add: function(e, d) {
                         console.log(d);
                         $("button.btnFileUSConf").removeClass("inactive").one("click", function() {
-                            $(this).text("Uploading...");
+                            $(this).text(Translation["Uploading..."]);
                             d.submit();
                         });
                     },
@@ -1151,24 +1120,6 @@ View = Backbone.View.extend({
                         /* return information */
                     }
                 });
-
-//                fw_file.fileupload({
-//                /* firmware file upload */
-//                    url: "/system/supload_fw",
-//                    add: function(e, d) {
-//                        console.log(d);
-//                        $("a.btnFileKeyUpload, a.btnFileFWUpload").removeClass("inactive").one("click", function() {
-//                            $(this).text("Uploading...");
-//                            d.submit();
-//                        });
-//                    },
-//                    done: function(e, d) {
-//                    /* TBD */
-//                        var res = d.response();
-//                        console.log(res.result);
-//                        /* return information */
-//                    }
-//                });
             });
 
             fw_file = $("#saFirmware").find("table");
@@ -1202,10 +1153,7 @@ View = Backbone.View.extend({
                         $("#telnetEnable").parents(".switch").bootstrapSwitch('setState', res['telnet']);
                     }
 
-                    $("input[type='checkbox']").parents('.switch').on("switch-change", function(e, d) {
-                        $("#oApply").show("slow");
-                        /* show "Apply" link/button */
-                    });
+                    $("input[type='checkbox']").parents('.switch').on("switch-change", function(e, d) {});
                 });
             });
         }, "html");
@@ -1272,9 +1220,6 @@ View = Backbone.View.extend({
                         }
 
                         dom.dialog("close");
-
-                        $("#oApply").show("slow");
-                        /* show "Apply" link/button */
                     }
                 }, {
                     text: Translation["Cancel"],
@@ -1292,9 +1237,6 @@ View = Backbone.View.extend({
         self.parents("tr").hide("fast", function() {
             $(this).remove();
         });
-
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
     },
 
     maintainAdmin: function(o) {
@@ -1433,8 +1375,6 @@ View = Backbone.View.extend({
         will just reload the popContent
     */
         var me = this, opt = $("span.subtitle").attr("current");
-        $("#oApply").hide();
-        /* hide save/apply link */
         return me.execMenu(opt);
     },
 
@@ -1631,10 +1571,7 @@ MainOperation = {
         Ajax = $.getJSON("/system/gdns", function(d) {
             me.model = new Model(d);
             me.view = new View({
-                model: me.model,
-                events: {
-                    "input input": "viewSaveDNS"
-                }
+                model: me.model
             });
 
             return me.view.viewDNS();
@@ -1650,8 +1587,7 @@ MainOperation = {
                 model: me.model,
                 events: {
                     "click a.btnAddVlan": "addVlan",
-                    "click a.btnDelVlan": "delVlan",
-                    "click a.btnEditVlan": "viewSaveVLAN"
+                    "click a.btnDelVlan": "delVlan"
                 }
             });
 
@@ -1687,8 +1623,7 @@ MainOperation = {
                 events: {
                     "change #ipSelecter": "changeIpAddress",
                     "click a.btnIpAdd": "addIpAddress",
-                    "click a.btnIpDel": "delIpAddress",
-                    "click a.btnEdit": "viewSaveVLAN"
+                    "click a.btnIpDel": "delIpAddress"
                 }
             });
 
@@ -1707,8 +1642,7 @@ MainOperation = {
                 model: me.model,
                 events: {
                     "click a.btnRTDel": "delRoutingTable",
-                    "click a.btnRTAdd": "addRoutingTable",
-                    "click a.btnEditRT": "viewSaveVLAN"
+                    "click a.btnRTAdd": "addRoutingTable"
                 }
             });
 
@@ -1727,8 +1661,7 @@ MainOperation = {
                 model: me.model,
                 events: {
                     "click a.btnArpDel": "delArpTable",
-                    "click a.btnArpAdd": "addArpTable",
-                    "click a.btnEdit": "viewSaveVLAN"
+                    "click a.btnArpAdd": "addArpTable"
                 }
             });
 

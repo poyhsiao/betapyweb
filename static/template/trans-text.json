@@ -3,5 +3,6 @@ window.Translation = {
     "Cancel": "{{ _("Cancel")}}",
     "Next": "{{ _("Next") }}",
     "Back": "{{ _("Back") }}",
-    "Done": "{{ _("Done") }}"
+    "Done": "{{ _("Done") }}",
+    "Uploading...": "{{ _("Uploading...") }}"
 }

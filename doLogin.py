@@ -46,10 +46,8 @@ class Login(object):
 
             dat = wa.get()[1]['user']
             for v in dat:
-                if "admin" == v.get("name"):
-                    libs.tools.v(v)
-                    for kk, vv in v.items():
-                        _.session[kk] = vv
+                for kk, vv in v.items():
+                    _.session[kk] = vv
 
             libs.tools.v(_.session.items())
 

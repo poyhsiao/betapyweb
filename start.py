@@ -183,6 +183,17 @@ class Root:
             libs.tools.v(e)
             return e
 
+    @_.expose
+    def debug(self, **kwargs):
+        '''
+            Try to debug something
+        '''
+        import libs.tools
+        import json
+        libs.tools.v(_.session.items())
+        return json.dumps(_.session.items())
+
+
 
 def proxy():
     # Redirect http to https

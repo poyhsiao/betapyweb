@@ -36,12 +36,6 @@ var eView = Backbone.View.extend({
         }, "html");
     },
 
-    saveSNMP: function(o) {
-    /* try to save SNMP setting */
-        $("#oApply").show("slow");
-        /* show "Apply" link/button */
-    },
-
     viewEmail: function(o) {
     /* display email page */
         var me = this, dat = me.model.attributes[1], t;
@@ -168,7 +162,7 @@ var eView = Backbone.View.extend({
             $("[iname='" + orgVal + "']").attr("iname", val);
         }
 
-        return me.saveSNMP();
+        return false;
     },
 
     deleteSvVrrp: function(o) {
@@ -195,7 +189,7 @@ var eView = Backbone.View.extend({
             });
         }
 
-        return me.saveSNMP();
+        return false;
     },
 
     _genNextVrrpItem: function(type) {
@@ -573,8 +567,6 @@ var eView = Backbone.View.extend({
 
                             ntr.insertAfter( $(".svVRRP .vrrpTable").find("tr[gnumber='" + ngn.no + "']:last") );
                         }
-
-                        me.saveSNMP();
                         dom.dialog("close");
                     }
                 }, {
@@ -607,7 +599,7 @@ var eView = Backbone.View.extend({
 	/* when any thing change on slb, will let user check policy setting before save */
     	var me = this;
     	checkSlb = 1;
-    	return me.saveSNMP();
+    	return false;
     },
 
     addSlbIpSet: function(o) {
@@ -1100,9 +1092,7 @@ var eView = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {
-    		me.saveSNMP();
-    	});
+    	tpl.find("tr").hide().insertAfter( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {});
 
     	me.$el.find("select[name][chk=destination_ip]").each(function(k , v) {
     		return me.selSlbPolicyDIP($(v));
@@ -1120,7 +1110,6 @@ var eView = Backbone.View.extend({
     	var me = this, self = $(o.target), tr = self.parents("tr");
     	tr.hide("slow", function() {
     		$(this).remove();
-    		me.saveSNMP();
     	});
     	return false;
     },
@@ -1194,9 +1183,7 @@ var eView = Backbone.View.extend({
     		opt: opt
     	});
 
-    	tpl.find("tr").hide().insertAfter( $("tr[opt='" + opt + "']") ).show("slow", function() {
-    		me.saveSNMP();
-    	});
+    	tpl.find("tr").hide().insertAfter( $("tr[opt='" + opt + "']") ).show("slow", function() {});
 
     	return false;
     },
@@ -1207,8 +1194,6 @@ var eView = Backbone.View.extend({
 		tr.hide("slow", function() {
 			$(this).remove();
 		});
-
-		me.saveSNMP();
 
 		return false;
 	},
@@ -1479,10 +1464,7 @@ var ExtHandler = {
         Ajax = $.getJSON('/service/snmp', function(d) {
             me.model = new eModel(d),
             me.view = new eView({
-                model: me.model,
-                events: {
-                    "change div.svSNMP input": "saveSNMP"
-                }
+                model: me.model
             });
 
             return me.view.viewSNMP();
@@ -1499,8 +1481,7 @@ var ExtHandler = {
             me.view = new eView({
                 model: me.model,
                 events: {
-                    "switch-change div.switch": "changeEmail",
-                    "change div.svEmail input": "saveSNMP"
+                    "switch-change div.switch": "changeEmail"
                 }
             });
 
@@ -1584,7 +1565,6 @@ var ExtHandler = {
     		me.view = new eView({
     			model: me.model,
     			events: {
-    				"click a.btnConfirm": "saveSNMP",
     				"click a.btnAddConnectLimit": "addConnectLimit",
     				"click a.btnDelConnectLimit": "delConnectLimit"
     			}
@@ -1687,11 +1667,7 @@ var ExtHandler = {
         Ajax = $.getJSON("/log/syslog", function(d) {
             me.model = new eModel(d);
             me.view = new eView({
-                model: me.model,
-                events: {
-                    "change input": "saveSNMP",
-                    "change select": "saveSNMP"
-                }
+                model: me.model
             });
 
             return me.view.viewSyslog();

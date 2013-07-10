@@ -9,8 +9,8 @@
           <td>
             <select class="ipSelInterface" id="ipSelecter">
               <option disabled="disabled">{{ _("Interface") }}</option>
-            <% _.each(ip, function(v, k) { %>
-              <option value="<%= v["interface"] %>"><%= v["interface"] %></option>
+            <%  _.each(nic, function(v, k) { %>
+              <option value="<%= v %>"><%= v %></option>
             <% }); %>
             </select>
           </td>
@@ -20,8 +20,8 @@
   </div>
 
   <div class="SystemIpV46All">
-    <% _.each(ip, function(v, k) { %>
-      <div class="SystemIpV4 padding<% if(0 !== k) { %> inactive<% } %>" opt="<%= v["interface"] %>">
+    <% _.each(items["ip"], function(v, k) { %>
+      <div class="SystemIpV4 padding<% if(nic[0] !== v["interface"]) { %> inactive<% } %>" opt="<%= v["interface"] %>">
         <table class="table table-bordered table-hover">
           <tr>
             <th class="IpV4title">{{ _("IPv4 Address") }}</th>
