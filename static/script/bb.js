@@ -430,7 +430,7 @@ View = Backbone.View.extend({
                             $.each(interfaces.split(","), function(ak, av) {
                             	tpl = $("div.newSysBridgeInterface").clone(true);
                                 tpl.find("span.str").text(av);
-                                tpl.find("span.badge").css("margin-right", "4px").appendTo(tn);
+                                tpl.find("span.badge").css("margin", "2px").appendTo(tn);
                             });
                             dom.find('select[name]').each(function(k, v) {
                                 var name = $(v).attr("name"), val = $(v).val();
@@ -448,7 +448,7 @@ View = Backbone.View.extend({
                             $.each(interfaces.split(","), function(ak, av) {
                             	tpl = $("div.newSysBridgeInterface").clone(true);
                                 tpl.find("span.str").text(av);
-                                tpl.find("span.badge").css("margin-right", "4px").appendTo(tn);
+                                tpl.find("span.badge").css("margin", "2px").appendTo(tn);
                             });
 
 //                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
