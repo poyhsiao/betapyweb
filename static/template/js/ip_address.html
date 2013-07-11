@@ -25,7 +25,7 @@
         <table class="table table-bordered table-hover">
           <tr>
             <th class="IpV4title">{{ _("IPv4 Address") }}</th>
-            <th>{{ _("Prefix Length") }}</th>
+            <th>{{ _("Netmask") }}</th>
             <td>
               <a href="#" class="btn btnSI4Add btnIpAdd" opt="ipv4" chk="<%= v["interface"] %>">{{ _("Add") }}</a>
             </td>
@@ -42,7 +42,7 @@
             <td>
               <div class="input-prepend input-append">
                 <span class="add-on"><i class="icon-th-large"></i></span>
-                <input type="number" name="<%= v["interface"] %>-ipv4_prefix" value="<%= vv['ipv4_prefix'] %>" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
+                <input type="text" name="<%= v["interface"] %>-ipv4_prefix" value="<%= vv['ipv4_prefix'] %>" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
                 <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
@@ -103,7 +103,7 @@
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-th-large"></i></span>
-              <input type="number" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
+              <input type="text" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
               <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>

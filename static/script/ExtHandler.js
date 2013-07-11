@@ -481,7 +481,7 @@ var eView = Backbone.View.extend({
                     /* completly remove template table */
                 },
                 buttons: [{
-                    text: Translation["OK"],
+                    text: Translation("OK"),
                     click: function() {
                         var inputs = [], ntr, ngn, gno;
                         // dom.find(":input[name]").clone().removeAttr("id").each(function(k, v) {
@@ -570,7 +570,7 @@ var eView = Backbone.View.extend({
                         dom.dialog("close");
                     }
                 }, {
-                    text: Translation["Cancel"],
+                    text: Translation("Cancel"),
                     click: function() {
                         dom.dialog("close");
                     }
@@ -927,7 +927,7 @@ var eView = Backbone.View.extend({
                 	dom.dialog("destroy");
                 },
                 buttons: [{
-                	text: Translation["OK"],
+                	text: Translation("OK"),
                 	click: function() {
                 		if("edit" === cf) {
             			/* edit mode */
@@ -944,7 +944,7 @@ var eView = Backbone.View.extend({
                 		dom.dialog("close");
                 	}
                 }, {
-                	text: Translation["Cancel"],
+                	text: Translation("Cancel"),
                 	click: function() {
                 		dom.dialog("close");
                 	}

@@ -1,24 +1,24 @@
-body    
-{       
+body
+{
 	color: black;
 	font-family: TAHOMA;
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 23px;
 	margin : 0;IdentityInformation
-}       
+}
 
 span
 {
 	font-family: TAHOMA;
 }
 
-img                                                                                      
-{                                                                                        
-	border: 0;                                                                       
+img
+{
+	border: 0;
 }
 
-input.button 
+input.button
 {
 	BACKGROUND-COLOR: #FBC931;
 	BORDER-BOTTOM: thin outset;
@@ -31,7 +31,7 @@ input.button
 }
 
 .LogoBar
-{       
+{
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -39,39 +39,39 @@ input.button
 	height: 120px;
 }
 
-.MenuItem                                                                     
-{                                                                                        
-	position: absolute; 
+.MenuItem
+{
+	position: absolute;
 	left: 10px;
 	width: 222px;
 	text-align: left;
 	cursor: pointer;
-	border: thin solid darkgray;                                          
+	border: thin solid darkgray;
 }
 
-.ItemClose                                                               
-{                                                                             
-	left: 0px;                                                       
-	top: 0px;                                                                        
-	height: 23px;                                                                    
-	background: url(/image/S3_arrow_right.png) no-repeat left center;                
-	padding-left: 10px;                                                              
-	margin-left: 5px;                                                                
-	font-size: 12px;                                                                 
-	font-weight: bold;                                                               
+.ItemClose
+{
+	left: 0px;
+	top: 0px;
+	height: 23px;
+	background: url(/image/S3_arrow_right.png) no-repeat left center;
+	padding-left: 10px;
+	margin-left: 5px;
+	font-size: 12px;
+	font-weight: bold;
 }
 
-.ItemOpen                                                                     
-{                                                                                        
-	left: 0px;                                                                       
-	top: 0px;                                                                        
-	height: 23px;                                                                    
-	background: url(/image/S3_arrow_down.png) no-repeat left center;                 
-	padding-left: 10px;                                                              
-	margin-left: 5px;                                                                
-	color: black;                                                                    
-	font-size: 14px;                                                                 
-	font-weight: bolder;                                                             
+.ItemOpen
+{
+	left: 0px;
+	top: 0px;
+	height: 23px;
+	background: url(/image/S3_arrow_down.png) no-repeat left center;
+	padding-left: 10px;
+	margin-left: 5px;
+	color: black;
+	font-size: 14px;
+	font-weight: bolder;
 }
 
 .MenuPage_div
@@ -81,50 +81,50 @@ input.button
 	z-index: 5;
 }
 
-.MenuEntry                                                                               
+.MenuEntry
 {
-	position: absolute; 
-	left: 10px;                                                                      
-	width: 211px;                                                                    
-	background-color: gainsboro;                                                     
-	border: thin solid darkgray;                                                     
-	color: black;                                                                    
-	height: 19px;                                                                    
+	position: absolute;
+	left: 10px;
+	width: 211px;
+	background-color: gainsboro;
+	border: thin solid darkgray;
+	color: black;
+	height: 19px;
 	line-height: 19px;
 	z-index: 6;
 }
 
-.EntryName                                                                               
-{                                                                                        
-	position: absolute;                                                     
-	left: 0px;                                                               
-	top: 0px;                                                        
-	background: url(/image/S3_arrow_dark.png) no-repeat left center;                 
-	padding-left: 8px;                                               
-	-webkit-text-size-adjust:none;                                        
-	font-size: 11px;                                                                 
-	font-weight: normal;                                             
+.EntryName
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	background: url(/image/S3_arrow_dark.png) no-repeat left center;
+	padding-left: 8px;
+	-webkit-text-size-adjust:none;
+	font-size: 11px;
+	font-weight: normal;
 }
 
-#MenuBar                                                                                 
-{                                                                                        
-	position: absolute;                                                              
-	left: 0px;                                                                       
-	top: 123px;                                                                      
-	bottom: 40px;                                                                    
-	width: 225px;                                                                    
-	height: 450px;                                                                   
-	z-index:1;                                                                       
+#MenuBar
+{
+	position: absolute;
+	left: 0px;
+	top: 123px;
+	bottom: 40px;
+	width: 225px;
+	height: 450px;
+	z-index:1;
 }
 
-#ItemTemplate                                                                            
-{                                                                                        
-	display: none;                                                                
+#ItemTemplate
+{
+	display: none;
 }
 
-#EntryTemplate                                                                            
-{                                                                                        
-	display: none;                                                                
+#EntryTemplate
+{
+	display: none;
 }
 
 #LogoBarBG1
@@ -133,7 +133,7 @@ input.button
 	left: 10px;
 	top: 10px;
 }
-               
+
 #LogoBarBG2
 {
 	position: absolute;
@@ -208,6 +208,17 @@ input.button
 	cursor: pointer;
 }
 
+#oSaveToDisk
+{
+  position: relative;
+  top: 5px;
+  background: url(/image/S3_icon_apply.png) no-repeat left center;
+  padding-left: 24px;
+  padding-right: 4px;
+  border-left: solid thin;
+  cursor: pointer;
+}
+
 #oReload
 {
 	position: relative;
@@ -253,14 +264,14 @@ input.button
 	top: 105px;
 	z-index: 15;
 }
-                                
+
 #ContentTable
 {
 	background-color: transparent;
 	width: 100%;
 	height: 100%;
 }
-                                                               
+
 #ContentDialog
 {
 	position: absolute;

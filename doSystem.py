@@ -74,6 +74,93 @@ class System(object):
 
 
     @_.expose
+    def summary(self, **kwargs):
+        '''
+            get Everything for summary display
+
+            format for system:
+            {
+                "version": "1.0",
+                "serial_number": "1111-2222-3333-4444",
+                "uptime": "32 days, 8:14",
+                "connections": 2843,
+                "cpu_usage": 12.0
+            }
+
+            format for port:
+            {
+                "port": [
+                    {
+                        "interface": "s0e1",
+                        "status": "1000/Full",
+                        "RX": {
+                            "packets": 2740,
+                            "bytes": 215697
+                        },
+                        "TX": {
+                            "packets": 112,
+                            "bytes": 84835
+                        }
+                    },
+                    ....
+                ]
+            }
+
+            format for server status:
+             {
+                "ipv4": [
+                    {
+                        "virtual_server": "vs1_v4",
+                        "green_real_server": [
+                            "Douliu",
+                            "Chishang"
+                        ],
+                        "red_real_server": [
+                            "Gangshan",
+                            "Hukou"
+                        ],
+                        "gray_real_server": [
+                            "Hsinchu",
+                            "Miaoli"
+                        ]
+                    },
+                    ...
+                ]
+                "ipv6": [
+                    {
+                        "virtual_server": "vs1_v6",
+                        "green_real_server": [
+                            "Dadu",
+                            "Changhua"
+                        ],
+                        "red_real_server": [
+                            "Gushan",
+                            "Haishan"
+                        ],
+                        "gray_real_server": [
+                            "Linkou",
+                            "Pingtung"
+                        ]
+                    },
+                    ...
+                ]
+            }
+        '''
+        import ml_w_summary_system as wsys
+        import ml_w_summary_port as wport
+        import ml_w_summary_server_status as wstat
+        import libs.tools
+        import json
+        sys = wsys.get()
+        port = wport.get()
+        status = wstat.get()
+        result = {"sys": sys, "port": port, "status": status}
+        libs.tools.v(result)
+
+        _.response.headers["Content-Type"] = "application/json"
+        return json.dumps(result)
+
+    @_.expose
     def ssys(self, **kwargs):
         '''
             System -> Summary access
@@ -189,7 +276,6 @@ class System(object):
         import json
         import libs.tools
         libs.tools.v(kwargs)
-        size = len(kwargs["name"])
         names = []
         op = []
 
@@ -203,27 +289,54 @@ class System(object):
         except:
             max = 1
 
-        for i in range(0, size):
-            if kwargs["STP"][i] == "true":
-                kwargs["STP"][i] = True
+        if "name" in kwargs:
+            if "list" == type(kwargs["name"]).__name__:
+                for i in range(len(kwargs["name"])):
+                    if i in kwargs["STP"] and "true" == kwargs["STP"][i]:
+                        stp = True
+                    else:
+                        stp = False
+
+                    if kwargs["name"][i].startswith("Auto"):
+                        name = "s0b" + str(max)
+                        max = max + 1
+                    else:
+                        name = kwargs["name"][i]
+
+                    libs.tools.v(name)
+
+                    interface = kwargs["interface"][i].split(",")
+
+                    op.append({"name": name,
+                        "interface": interface,
+                        "STP": stp,
+                        "hello_time": libs.tools.convert(kwargs["hello_time"][i]),
+                        "max_message_age": libs.tools.convert(kwargs["max_message_age"][i]),
+                        "forward_delay": libs.tools.convert(kwargs["forward_delay"][i])
+                    })
             else:
-                kwargs["STP"][i] = False
+                if "true" == kwargs["STP"]:
+                    stp = True
+                else:
+                    stp = False
 
-            if kwargs["name"][i].startswith("Auto"):
-                kwargs["name"][i] = "s0b" + str(max)
-                max = max + 1
-            else:
-                kwargs["name"][i] = libs.tools.convert(kwargs["name"][i])
+                if kwargs["name"].startswith("Auto"):
+                    name = "s0b" + str(max)
+                    max = max + 1
+                else:
+                    name = kwargs["name"]
 
-            kwargs["interface"][i] = libs.tools.convert(kwargs["interface"][i]).split(",")
+                libs.tools.v(name)
 
-            op.append({"name": kwargs["name"][i],
-                "interface": kwargs["interface"][i],
-                "STP": kwargs["STP"][i],
-                "hello_time": int(kwargs["hello_time"][i]),
-                "max_message_age": int(kwargs["max_message_age"][i]),
-                "forward_delay": int(kwargs["forward_delay"][i])
-            })
+                interface = kwargs["interface"].split(",")
+
+                op.append({"name": name,
+                           "interface": interface,
+                           "STP": stp,
+                           "hello_time": libs.tools.convert(kwargs["hello_time"]),
+                           "max_message_age": libs.tools.convert(kwargs["max_message_age"]),
+                           "forward_delay": libs.tools.convert(kwargs["forward_delay"])
+                           })
 
         libs.tools.v(op)
         res = wbr.set(user = self.getUser(), cfg = {"br": op})

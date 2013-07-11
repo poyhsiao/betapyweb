@@ -170,7 +170,7 @@ class Root:
         '''
         try:
             if 'lang' in kwargs:
-                tpl = env.get_template('/' + kwargs['lang'] + '.json')
+                tpl = env.get_template('/' + kwargs['lang'] + '.js')
                 trans = translation()
                 env.install_gettext_translations(trans['obj'])
 #                 _.response.headers["Content-Type"] = "application/json"

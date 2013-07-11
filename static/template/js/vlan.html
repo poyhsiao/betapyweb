@@ -29,7 +29,7 @@
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-pencil"></i></span>
-              <input type="number" name="vlan_id" value="<%= v["vlan_id"] %>" class="span2" placeholder="{{ _("VLAN ID") }}" />
+              <input type="number" name="vlan_id" min="0" max="4095" value="<%= v["vlan_id"] %>" class="span2" placeholder="{{ _("VLAN ID") }}" />
               <a href="#" class="btn btnEditVlan">{{ _("Edit") }}</a>
             </div>
           </td>
@@ -60,7 +60,7 @@
           <td>
             <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-pencil"></i></span>
-              <input type="number" name="vlan_id" class="span2" placeholder="{{ _("VLAN ID") }}" />
+              <input type="number" name="vlan_id" min="0" max="4095" class="span2" placeholder="{{ _("VLAN ID") }}" />
               <a href="#" class="btn btnEditVlan">{{ _("Edit") }}</a>
             </div>
           </td>

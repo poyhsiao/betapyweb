@@ -44,10 +44,15 @@ class Login(object):
             _.session['username'] = username
             _.session['password'] = password
 
-            dat = wa.get()[1]['user']
+            libs.tools.v(username)
+            dat = wa.get(user = username)
+            libs.tools.v(dat)
+
+            dat = wa.get(user = username)[1]['user']
             for v in dat:
-                for kk, vv in v.items():
-                    _.session[kk] = vv
+                if username == v["name"]:
+                    for kk, vv in v.items():
+                        _.session[kk] = vv
 
             libs.tools.v(_.session.items())
 

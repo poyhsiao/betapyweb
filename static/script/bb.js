@@ -146,93 +146,49 @@ View = Backbone.View.extend({
         window.location = '/logout';
     },
 
-    viewSysSummaryTimer: function(d, kp) {
-    /* d is important now, which include data passed from system information */
-        var me = this, t, smodel, sview, updateInfo;
+    viewSummary: function(o) {
+	/* display all summary layout */
+    	var me = this, t;
+    	Ajax = $.get("/getTpl?file=summary_control", function(d) {
+    		t = _.template(d);
+    		me.$el.html(t());
 
-        updateInfo = function() {
-            var dat = d;
-            Ajax = $.getJSON("/system/s_port", function(data) {
-                /* retrieval port summary information */
-                var pmodel = new Model(data),
-                pview = new View({
-                    model: pmodel
-                });
-                pview.viewSysSummary("summary_port", "div.systemSummaryPort", 1);
-            });
-
-            smodel = new Model(dat);
-            sview = new View({
-                model: smodel,
-            });
-
-            return sview.viewSysSummary();
-        };
-
-        if(!kp) {
-            Ajax = $.get("/getTpl?file=summary_control", function(d) {
-                t = _.template(d);
-                me.$el.append(t());
-
-                $("div.borderArrow").show("fast");
-                /* show arrow image */
-
-                $("div.systemSummaryTimer").css({
-                    "position": "relative",
-                    "bottom": "20px",
-                    "right": "10px"
-                });
-
-
-                updateInfo();
-            }, "html");
-        } else {
-            return updateInfo();
-        }
+    		me._viewSummary();
+    	}, "html");
     },
 
-    viewSysSummary: function(file, id, selector) {
-    /* summary display */
-        var me = this, id = id || "div.systemSummary", selector = me.model.attributes[selector] || me.model.attributes, f = file || "summary", t;
-        $(id).remove();
-        /* remove and clean-up current data */
+    _viewSummary: function(o) {
+	/* display summary information of system, port, and server status */
+    	var me = this, dat, t;
+    	Ajax = $.getJSON("/system/summary", function(d) {
+    		dat = d;
+    		console.log(dat);
 
-        Ajax = $.get("/getTpl?file=" + f, function(d) {
-            t = _.template(d)
-            me.$el.append(t(selector));
-            /* because the SysSummaryTimer is shown before, just append it*/
-
-            $(id).children("table").css({
-                "width": "100%",
-                "height": "100%"
-            });
-
-            require(['blockUI'], function() {
-                return $("div.popContent").unblock();
-            });
-        }, "html");
+    		Ajax = $.get("/getTpl?file=summary_all", function(d) {
+    			t = _.template(d);
+    			$("div.sysSummaryInfo").html(t(dat));
+    		}, "html");
+    	});
     },
 
     setSysSummaryTimer: function(o) {
-    /* set Summary auto-refresh timer */
-        var me = this, self = $(o.target), val;
-        timer_v = self.val();
-        try {
-            clearInterval(timer);
-            /* make sure timer is reset when everytime change the item */
-        } catch(e) {}
-        if("0" === timer_v) {
-            if("object" == typeof(timer)) {
-                clearInterval(timer);
-            }
-        } else {
-            val = parseInt(timer_v) * 1000;
-            /* conver the given value to second */
-            timer = setInterval(function() {
-                $(".systemSummary, .systemSummaryPort").remove();
-                MainOperation.summary("keep");
-            }, val);
-        }
+    	var me = this, self = $(o.target), val;
+    	timer_v = self.val();
+    	try {
+    		clearInterval(timer);
+    	} catch(e) {}
+
+    	if("0" === timer_v) {
+    		if("object" === typeof(timer)) {
+    			clearInterval(timer);
+    		}
+    	} else {
+    		val = (~~timer_v * 1000);
+    		/* convert micro-second to second */
+    		timer = setInterval(function() {
+    			me._viewSummary();
+    		}, val);
+    	}
     },
 
     viewDNS: function(o) {
@@ -316,7 +272,7 @@ View = Backbone.View.extend({
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), opt, title;
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), opt, title, tpl, tn;
 
         dom.on("click", "button.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
@@ -461,7 +417,7 @@ View = Backbone.View.extend({
                     dom.dialog("destroy");
                 },
                 buttons: [{
-                    text: Translation["OK"],
+                    text: Translation("OK"),
                     click: function() {
                         if(self.hasClass("brEdit")) {
                         /* edit existing bridge */
@@ -469,7 +425,13 @@ View = Backbone.View.extend({
                             interfaces = dom.find("tr.brInterface").map(function() {
                                 return $(this).children("td:first").text();
                             }).get().join();
-                            tr.find("td.brInterface").text(interfaces);
+                            tn = tr.find("td.brInterface");
+                            tn.empty();
+                            $.each(interfaces.split(","), function(ak, av) {
+                            	tpl = $("div.newSysBridgeInterface").clone(true);
+                                tpl.find("span.str").text(av);
+                                tpl.find("span.badge").css("margin-right", "4px").appendTo(tn);
+                            });
                             dom.find('select[name]').each(function(k, v) {
                                 var name = $(v).attr("name"), val = $(v).val();
                                 tr.find('input[name="' + name + '"]').val(val);
@@ -481,25 +443,35 @@ View = Backbone.View.extend({
                             interfaces = dom.find("tr.brInterface").map(function() {
                                 return $(this).children("td:first").text();
                             }).get().join();
-                            console.log(interfaces);
                             $("<td />").text( $("#br_name").val() ).appendTo(tr);
-                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
+                            tn = $("<td />").addClass("brInterface").appendTo(tr);
+                            $.each(interfaces.split(","), function(ak, av) {
+                            	tpl = $("div.newSysBridgeInterface").clone(true);
+                                tpl.find("span.str").text(av);
+                                tpl.find("span.badge").css("margin-right", "4px").appendTo(tn);
+                            });
+
+//                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
                             dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
                             dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
-                            dom.find('input, select[name]').each(function(k, v) {
+                            dom.find(':input').each(function(k, v) {
                                 var name = $(v).attr("name"), val = $(v).val();
                                 if("STP" === name) {
                                     $("<input />").attr({
                                         name: name,
                                         type: "hidden"
                                     }).val( $(v).is(":checked").toString() ).appendTo(td);
-                                } else {
+                                } else if("name" !== name) {
                                     $("<input />").attr({
                                         name: name,
                                         type: "hidden"
                                     }).val(val).appendTo(td);
                                 }
                             });
+                            $("<input />").attr({
+                                name: "name",
+                                type: "hidden"
+                            }).val( $("#br_name").val() ).appendTo(td);
                             $("<input />").attr({
                                 name: "interface",
                                 type: "hidden"
@@ -511,7 +483,7 @@ View = Backbone.View.extend({
                         return dom.dialog("close");
                     }
                 }, {
-                    text: Translation["Cancel"],
+                    text: Translation("Cancel"),
                     click: function() {
                         return dom.dialog("close");
                     }
@@ -873,7 +845,7 @@ View = Backbone.View.extend({
                     	 Wizard.andSelf().remove();
                      },
                      buttons: [{
-                    	 text: Translation["Back"],
+                    	 text: Translation("Back"),
                     	 class: "btnWzBack hide",
                     	 click: function() {
                     		 var current = $("div.step-active");
@@ -898,7 +870,7 @@ View = Backbone.View.extend({
                 			 }
                     	 }
                      }, {
-                    	 text: Translation["Next"],
+                    	 text: Translation("Next"),
                     	 class: "btnWzNext",
                     	 click: function() {
                     		 var current = $("div.step-active"), data;
@@ -973,7 +945,7 @@ View = Backbone.View.extend({
                 			 }
                     	 }
                      }, {
-                    	 text: Translation["Done"],
+                    	 text: Translation("Done"),
                     	 class: "btnWzDone hide",
                     	 click: function() {
                 		 /* check slb setting and save data if everything correct */
@@ -1109,7 +1081,7 @@ View = Backbone.View.extend({
                     add: function(e, d) {
                         console.log(d);
                         $("button.btnFileUSConf").removeClass("inactive").one("click", function() {
-                            $(this).text(Translation["Uploading..."]);
+                            $(this).text(Translation("Uploading..."));
                             d.submit();
                         });
                     },
@@ -1197,7 +1169,7 @@ View = Backbone.View.extend({
                     dom.dialog("destroy");
                 },
                 buttons: [{
-                    text: Translation["OK"],
+                    text: Translation("OK"),
                     click: function() {
                         if("new" === ed) {
                         /* add new account */
@@ -1222,7 +1194,7 @@ View = Backbone.View.extend({
                         dom.dialog("close");
                     }
                 }, {
-                    text: Translation["Cancel"],
+                    text: Translation("Cancel"),
                     click: function() {
                         dom.dialog("close");
                     }
@@ -1367,6 +1339,11 @@ View = Backbone.View.extend({
                 }
             }, "json");
         }
+    },
+
+    runOpSaveToDisk: function(o) {
+    	return window.location.href = "/system/ssave_conf/?act=save";
+        /* download file */
     },
 
     runOpReload: function(o) {
@@ -1561,7 +1538,8 @@ MainOperation = {
                     }
                 });
 
-                cview.viewSysSummaryTimer(d, o);
+//                cview.viewSysSummaryTimer(d, o);
+                cview.viewSummary();
         });
     },
 
@@ -1763,6 +1741,7 @@ MainOperation = {
         el: "div.user-op",
         events: {
             "click #oApply": "runOpApply",
+            "click #oSaveToDisk": "runOpSaveToDisk",
             "click #oReload": "runOpReload",
             "click #oHelp": "runOpHelp"
         }
