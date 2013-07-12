@@ -1,22 +1,20 @@
   <div class="systemSummaryTimer control-group">
-    <fieldset>
-      <legend>{{ _('Summary') }}</legend>
-      <label class="control-label strong" for="summary_timer">{{ _('Automatic Refresh') }}</label>
-      <div class="controls">
-        <select name="summary_timer" id="summary_timer">
-          <option value="0">{{ _('Disabled') }}</option>
-          <option value="3">{{ _('Every 3 Seconds') }}</option>
-          <option value="6">{{ _('Every 6 Seconds') }}</option>
-          <option value="9">{{ _('Every 9 Seconds') }}</option>
-          <option value="15">{{ _('Every 15 Seconds') }}</option>
-          <option value="21">{{ _('Every 21 Seconds') }}</option>
-          <option value="30">{{ _('Every 30 Seconds') }}</option>
-          <option value="39">{{ _('Every 39 Seconds') }}</option>
-          <option value="51">{{ _('Every 51 Seconds') }}</option>
-          <option value="63">{{ _('Every 63 Seconds') }}</option>
-        </select>
-      </div>
-    </fieldset>
+    <div class="input-prepend">
+      <span class="add-on"><i class="icon-time"></i></span>
+      <span class="add-on"><label class="control-label strong" for="summary_timer">{{ _('Automatic Refresh') }}</label></span>
+      <select name="summary_timer" id="summary_timer">
+        <option value="0">{{ _('Disabled') }}</option>
+        <option value="3">{{ _('Every 3 Seconds') }}</option>
+        <option value="6">{{ _('Every 6 Seconds') }}</option>
+        <option value="9">{{ _('Every 9 Seconds') }}</option>
+        <option value="15">{{ _('Every 15 Seconds') }}</option>
+        <option value="21">{{ _('Every 21 Seconds') }}</option>
+        <option value="30">{{ _('Every 30 Seconds') }}</option>
+        <option value="39">{{ _('Every 39 Seconds') }}</option>
+        <option value="51">{{ _('Every 51 Seconds') }}</option>
+        <option value="63">{{ _('Every 63 Seconds') }}</option>
+      </select>
+    </div>
   </div>
 
   <div class="sysSummaryInfo"></div>

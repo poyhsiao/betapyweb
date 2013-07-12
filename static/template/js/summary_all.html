@@ -1,99 +1,108 @@
-  <div class="systemSummary padding">
-    <table class="table table-bordered table-hover">
-      <tr>
-      	<th>{{ _("Version") }}</th>
-      	<td><%= sys[1]['version'] %></td>
-      </tr>
-      <tr>
-        <th>{{ _("Serial Number") }}</th>
-        <td><%= sys[1]['serial_number'] %></td>
-      </tr>
-      <tr>
-        <th>{{ _("Uptime") }}</th>
-        <td><%= sys[1]['uptime'] %></td>
-      </tr>
-      <tr>
-        <th>{{ _("Connections") }}</th>
-        <td><%= sys[1]['connections'] %></td>
-      </tr>
-      <tr>
-        <th>{{ _("CPU Usage") }}</th>
-        <td><%= sys[1]['version'] %></td>
-      </tr>
-    </table>
-  </div>
+  <fieldset>
+    <legend>{{ _('Summary') }}</legend>
+    <div class="systemSummary padding">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Version") }}</th>
+          <td><%= sys[1]['version'] %></td>
+        </tr>
+        <tr>
+          <th>{{ _("Serial Number") }}</th>
+          <td><%= sys[1]['serial_number'] %></td>
+        </tr>
+        <tr>
+          <th>{{ _("Uptime") }}</th>
+          <td><%= sys[1]['uptime'] %></td>
+        </tr>
+        <tr>
+          <th>{{ _("Connections") }}</th>
+          <td><%= sys[1]['connections'] %></td>
+        </tr>
+        <tr>
+          <th>{{ _("CPU Usage") }}</th>
+          <td><%= sys[1]['version'] %></td>
+        </tr>
+      </table>
+    </div>
+  </fieldset>
 
-  <div class="systemSummaryPort padding">
-    <table class="table table-bordered table-hover">
-      <tbody>
-        <tr>
-            <th rowspan="2">{{ _('Interface') }}</th>
-            <th rowspan="2">{{ _('Status') }}</th>
-            <th colspan="2">{{ _('Rx (Kbps)') }}</th>
-            <th colspan="2">{{ _("TX (Kbps)") }}</th>
-        </tr>
-        <tr>
-            <th>{{ _("Packets") }}</th>
-            <th>{{ _("Bytes") }}</th>
-            <th>{{ _("Packets") }}</th>
-            <th>{{ _("Bytes") }}</th>
-        </tr>
-        <% _.each(port[1]["port"], function(v, k) { %>
-        <tr>
-            <th><%= v["interface"] %></th>
-            <td><%= v["status"] %></td>
-            <td><%= v["RX"]["bytes"] %></td>
-            <td><%= v["RX"]["packets"] %></td>
-            <td><%= v["TX"]["bytes"] %></td>
-            <td><%= v["TX"]["packets"] %></td>
-        </tr>
+  <fieldset>
+  	<legend>{{ _("Port Information") }}</legend>
+  	<div class="systemSummaryPort padding">
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+              <th rowspan="2">{{ _('Interface') }}</th>
+              <th rowspan="2">{{ _('Status') }}</th>
+              <th colspan="2">{{ _('Rx (Kbps)') }}</th>
+              <th colspan="2">{{ _("TX (Kbps)") }}</th>
+          </tr>
+          <tr>
+              <th>{{ _("Packets") }}</th>
+              <th>{{ _("Bytes") }}</th>
+              <th>{{ _("Packets") }}</th>
+              <th>{{ _("Bytes") }}</th>
+          </tr>
+          <% _.each(port[1]["port"], function(v, k) { %>
+          <tr>
+              <th><%= v["interface"] %></th>
+              <td><%= v["status"] %></td>
+              <td><%= v["RX"]["bytes"] %></td>
+              <td><%= v["RX"]["packets"] %></td>
+              <td><%= v["TX"]["bytes"] %></td>
+              <td><%= v["TX"]["packets"] %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </fieldset>
+
+  <fieldset>
+  	<legend>{{ _("Port Information") }}</legend>
+  	<div class="systemSummaryServerStatus padding">
+      <table class="table table-bordered table-hover">
+      <% _.each(status[1], function(v, k) { %>
+        <thead>
+          <tr>
+          <% if("ipv4" === k) { %>
+            <td colspan="2">{{ _("IPv4") }}</td>
+          <% } else { %>
+            <td colspan="2">{{ _("IPv6") }}</td>
+          <% } %>
+          </tr>
+          <tr>
+            <th>
+              <span>{{ _("Virtual Server") }}</span>
+            </th>
+            <th>
+              <span>
+                {{ _("Real Servers") }}
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        <% _.each(v, function(vv, kk) { %>
+          <tr>
+            <td>
+              <span><%= vv["virtual_server"] %></span>
+            </td>
+            <td>
+            <% _.each(vv["green_real_server"], function(av, ak) { %>
+              <span class="badge badge-success"><%= av %></span>
+            <% }); %>
+            <% _.each(vv["red_real_server"], function(av, ak) { %>
+              <span class="badge badge-important"><%= av %></span>
+            <% }); %>
+            <% _.each(vv["gray_real_server"], function(av, ak) { %>
+              <span class="badge"><%= av %></span>
+            <% }); %>
+            </td>
+          </tr>
         <% }); %>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="systemSummaryServerStatus padding">
-    <table class="table table-bordered table-hover">
-    <% _.each(status[1], function(v, k) { %>
-      <thead>
-        <tr>
-        <% if("ipv4" === k) { %>
-          <td colspan="2">{{ _("IPv4") }}</td>
-        <% } else { %>
-          <td colspan="2">{{ _("IPv6") }}</td>
-        <% } %>
-        </tr>
-        <tr>
-        	<th>
-        	  <span>{{ _("Virtual Server") }}</span>
-        	</th>
-        	<th>
-        	  <span>
-        	    {{ _("Real Servers") }}
-        	  </span>
-        	</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% _.each(v, function(vv, kk) { %>
-        <tr>
-        	<td>
-        	  <span><%= vv["virtual_server"] %></span>
-        	</td>
-        	<td>
-    	    <% _.each(vv["green_real_server"], function(av, ak) { %>
-      	    <span class="badge badge-success"><%= av %></span>
-    	    <% }); %>
-  	      <% _.each(vv["red_real_server"], function(av, ak) { %>
-            <span class="badge badge-important"><%= av %></span>
-          <% }); %>
-	        <% _.each(vv["gray_real_server"], function(av, ak) { %>
-            <span class="badge"><%= av %></span>
-          <% }); %>
-        	</td>
-        </tr>
+        </tbody>
       <% }); %>
-      </tbody>
-    <% }); %>
-    </table>
-  </div>
+      </table>
+    </div>
+  </fieldset>
