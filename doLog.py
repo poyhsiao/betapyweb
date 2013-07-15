@@ -21,9 +21,9 @@ env = Environment(loader = FileSystemLoader('static/template'), extensions = ['j
 
 class Log(object):
     def getUser(self):
-        user = _.session.get("username")
-
-        if None == user:
+        import libs.login
+        user = libs.login.cklogin()
+        if False == user:
             raise _.HTTPRedirect('/')
         else:
             return user
@@ -41,6 +41,10 @@ class Log(object):
             "facility": "local0"
             }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_view as wvi
         import json
         import libs.tools
@@ -54,6 +58,10 @@ class Log(object):
             format:
             (True, {'server_ip': '192.168.0.1', 'facility': 'local0'})
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_syslog as wsl
         import json
         import libs.tools

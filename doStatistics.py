@@ -21,15 +21,19 @@ env = Environment(loader = FileSystemLoader('static/template'), extensions = ['j
 
 class Statistics(object):
     def getUser(self):
-        user = _.session.get("username")
-
-        if None == user:
+        import libs.login
+        user = libs.login.cklogin()
+        if False == user:
             raise _.HTTPRedirect('/')
         else:
             return user
 
     @_.expose
     def index(self, **kwargs):
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         return self.counters(**kwargs)
 
     @_.expose
@@ -64,6 +68,10 @@ class Statistics(object):
                 ]
             }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_counters as wcn
         import json
         import libs.tools
@@ -106,6 +114,10 @@ class Statistics(object):
                 ]
             }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_rates as wrt
         import json
         import libs.tools
@@ -154,6 +166,10 @@ class Statistics(object):
                     ]
                 }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_persistence_info as wpi
         import json
         import libs.tools

@@ -162,8 +162,6 @@ View = Backbone.View.extend({
     	var me = this, dat, t;
     	Ajax = $.getJSON("/system/summary", function(d) {
     		dat = d;
-    		console.log(dat);
-
     		Ajax = $.get("/getTpl?file=summary_all", function(d) {
     			t = _.template(d);
     			$("div.sysSummaryInfo").html(t(dat));
@@ -262,11 +260,12 @@ View = Backbone.View.extend({
             $("div.SystemBridge").children("table").css({
                 "width": "100%",
                 "height": "100%"
-            }).find("button").css({
-                "width": function() {
-                    return $(this).hasClass("brAdd") ? "90%" : "45%";
-                }
             });
+//            .find("button").css({
+//                "width": function() {
+//                    return $(this).hasClass("brAdd") ? "90%" : "45%";
+//                }
+//            });
         }, "html");
     },
 
@@ -397,8 +396,6 @@ View = Backbone.View.extend({
                             });
                         }
 
-                        dom.find("button").css("width", "90%");
-
                         dom.unblock();
                     });
                 },
@@ -419,6 +416,7 @@ View = Backbone.View.extend({
                 buttons: [{
                     text: Translation("OK"),
                     click: function() {
+                    	var btns;
                         if(self.hasClass("brEdit")) {
                         /* edit existing bridge */
                             var tr = self.parents("tr"), interfaces;
@@ -452,8 +450,10 @@ View = Backbone.View.extend({
                             });
 
 //                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
-                            dom.find("span.brBtnTpl button.brDel").clone().css("width", "45%").attr("opt", val).appendTo(td);
-                            dom.find("span.brBtnTpl button.brEdit").clone().css("width", "45%").attr("opt", val).appendTo(td);
+                            btns = $("<div />").addClass("btn-group");
+                            dom.find("span.brBtnTpl button.brDel").clone(true).attr("opt", val).appendTo(btns);
+                            dom.find("span.brBtnTpl button.brEdit").clone(true).attr("opt", val).appendTo(btns);
+                            btns.appendTo(td);
                             dom.find(':input').each(function(k, v) {
                                 var name = $(v).attr("name"), val = $(v).val();
                                 if("STP" === name) {
@@ -748,7 +748,7 @@ View = Backbone.View.extend({
         if(self.hasClass("dtStartArpN-snd")) {  /* ARP & NDP fix */
             self.addClass("disabled");
             $("button.dtStartArpN-stp").removeClass("disabled");
-            return Ajax = $.getJSON("/system/start_arping", function(d) {
+            Ajax = $.getJSON("/system/start_arping", function(d) {
                 if(true === d[0]) {
                     $("div.dtDialog").appendTo("body").modal();
                     $("div.dtDialog").on("hide", function() {
@@ -757,8 +757,9 @@ View = Backbone.View.extend({
                     });
                 }
             });
+            return false;
         } else if(self.hasClass("dtStartArpN-stp") && !self.hasClass("disabled")) {  /* force stop ARP & NDP fix */
-            return Ajax = $.getJSON("/system/stop_arping", function(d) {
+            Ajax = $.getJSON("/system/stop_arping", function(d) {
                 if(true === d[0]) {
                     $("div.dtDialog").appendTo("body").modal();
                     $("div.dtDialog").on("hide", function() {
@@ -767,31 +768,44 @@ View = Backbone.View.extend({
                     });
                 }
             });
-        }
-
-        if(!!$("#dtPingTracertName").val().length) {
+            return false;
+        } else if(!!$("#dtPingTracertName").val().length) {
             if(self.hasClass("start")) {  /* start to ping/traceroute the target */
-                ct.wrap("<div />").parent().block();
-                $("button.start").addClass("disabled");
-                $("button.btnDtArpPT").removeClass("disabled").attr("opt", opt);
-                return $.post("/system/start_" + opt, {"address": $("#dtPingTracertName").val()}, function(d) {
-                    ct.val(d[1]);
-                    $("button.start").removeClass("disabled");
-                    $("button.btnDtArpPT").addClass("disabled").removeAttr("opt");
+            	require(['blockUI'], function() {
+            		ct.wrap("<div />").parent().block();
+                    $("a.start").addClass("disabled");
+                    $("a.btnDtArpPT").removeClass("disabled").attr("opt", opt);
+                    Ajax = $.ajax({
+                    	type: "POST",
+                    	url: "/system/start_" + opt,
+                    	data: {"address": $("#dtPingTracertName").val()},
+                    	success: function(d) {
+                    		ct.val(d[1]);
+                            $("a.start").removeClass("disabled");
+                            $("a.btnDtArpPT").addClass("disabled").removeAttr("opt");
+                            ct.parent().unblock();
+                            ct.unwrap();
+                    	},
+                    	dataType: "json",
+                    	async: true
+                	});
+            	});
+            	return false;
+            } else if(self.hasClass("stop")) {  /* stop pinging / traceroute the target */
+            	try {
+            		Ajax.abort();
+            		ct.parent().unblock();
+            	} catch(e) {}
+
+                Ajax = $.getJSON("/system/stop_" + opt, function(d) {
+                    ct.val('Terminated');
+                    $("a.start").removeClass("disabled");
+                    self.addClass("disabled").removeAttr("opt");
                     ct.parent().unblock();
                     ct.unwrap();
-                }, "json");
+                });
+                return false;
             }
-        }
-
-        if(self.hasClass("stop") && !!self.attr("opt")) {  /* stop pinging / traceroute the target */
-            Ajax = $.getJSON("/system/stop_" + opt, function(d) {
-                ct.val('Terminated');
-                $("button.start").removeClass("disabled");
-                self.addClass("disabled").removeAttr("opt");
-                ct.parent().unblock();
-                ct.unwrap();
-            });
         }
     },
 
@@ -1059,14 +1073,6 @@ View = Backbone.View.extend({
             me.$el.html(t(dat)).find("table").css({
                 width: "100%",
                 height: "100%"
-            }).find("button.btn, input[type='file']").css({
-                width: function() {
-                    if($(this).hasClass("btnSaAddAccount")) {
-                        return "90%";
-                    } else if($(this).hasClass("btnSaEditAccount") || $(this).hasClass("btnSaDelAccount")) {
-                        return "45%";
-                    }
-                }
             });
 
             $("div.borderArrow").show("fast");
@@ -1179,7 +1185,6 @@ View = Backbone.View.extend({
                             dom.find('input[name], select').each(function(k, v) {
                                 tpl.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
                             });
-                            tpl.find("button").attr("opt", name).css("width", "45%");
                             $("<td />").append(tpl.children()).appendTo(tr);
 
                         } else {
@@ -1674,7 +1679,7 @@ MainOperation = {
         me.model = new Model();
         me.view = new View({
             events: {
-                "click div.SystemDiagnostic button": "controlDiagnostic"
+                "click a.btn": "controlDiagnostic"
             }
         });
 

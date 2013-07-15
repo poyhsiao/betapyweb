@@ -11,6 +11,7 @@ Created on 2013/05/31
 import os
 import sys
 import cherrypy as _
+import libs.login
 
 from jinja2 import Environment, FileSystemLoader
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -21,9 +22,9 @@ env = Environment(loader = FileSystemLoader('static/template'), extensions = ['j
 
 class Service(object):
     def getUser(self):
-        user = _.session.get("username")
-
-        if None == user:
+        import libs.login
+        user = libs.login.cklogin()
+        if False == user:
             raise _.HTTPRedirect('/')
         else:
             return user
@@ -40,6 +41,10 @@ class Service(object):
             (True, {'system_name': 'SLB', 'system_contact': '', 'enable': False, 'system_loca
 tion': '', 'community': 'public'})
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_snmp as snmp
         import json
         import libs.tools
@@ -70,6 +75,10 @@ tion': '', 'community': 'public'})
             data format from middleware
             (True, {'to': [], 'server': '', 'from': '', 'timeout': 0, 'alert': False})
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_email as wem
         import json
         import libs.tools
@@ -110,6 +119,10 @@ tion': '', 'community': 'public'})
             debug:
                 no use right now
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         from libs.tools import convert as convert
         from libs.tools import v as v
 
@@ -163,6 +176,10 @@ tion': '', 'community': 'public'})
                        }]
                }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_vrrpv2 as wvr
         import json
         import libs.tools
@@ -418,6 +435,10 @@ tion': '', 'community': 'public'})
                 }
             }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_slb as slb
         import json
         import libs.tools
@@ -530,6 +551,10 @@ tion': '', 'community': 'public'})
                     ...
                 ]}
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_connection_limit as wcl
         import json
         import libs.tools
@@ -580,6 +605,10 @@ tion': '', 'community': 'public'})
                     "ipv4": "0.0.0.0"
                 }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_nat64 as nat64
         import json
         import libs.tools

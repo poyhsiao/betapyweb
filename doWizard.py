@@ -22,9 +22,9 @@ env = Environment(loader = FileSystemLoader('static/template'), extensions = ['j
 
 class Wizard(object):
     def getUser(self):
-        user = _.session.get("username")
-
-        if None == user:
+        import libs.login
+        user = libs.login.cklogin()
+        if False == user:
             raise _.HTTPRedirect('/')
         else:
             return user
@@ -65,10 +65,13 @@ class Wizard(object):
 
     @_.expose
     def ckDNS(self, **kwargs):
+        import libs.login
         import ml_w_wizard_dns as dns
         import json
 
-        if "hostname" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "hostname" in kwargs:
             if not _.session.has_key("wizard"):
                 _.session["wizard"] = {}
 
@@ -80,10 +83,13 @@ class Wizard(object):
 
     @_.expose
     def ckMode(self, **kwargs):
+        import libs.login
         import ml_w_wizard_mode as mode
         import json
 
-        if "mode" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "mode" in kwargs:
             libs.tools.v(kwargs)
             _.session["wizard"]["mode"] = kwargs
             return json.dumps(mode.check(user = self.getUser(), cfg = kwargs))
@@ -92,10 +98,13 @@ class Wizard(object):
 
     @_.expose
     def ckVRRP(self, **kwargs):
+        import libs.login
         import ml_w_wizard_vrrp as vrrp
         import json
 
-        if "virtual-router-id" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "virtual-router-id" in kwargs:
             libs.tools.v(kwargs)
             data = {"vrrp": "vrrp" in kwargs,
                     "virtual-router-id": kwargs["virtual-router-id"]}
@@ -107,6 +116,7 @@ class Wizard(object):
 
     @_.expose
     def cks0e2(self, **kwargs):
+        import libs.login
         import ml_w_wizard_s0e2 as s0e2
         import json
 
@@ -115,7 +125,9 @@ class Wizard(object):
         keya = ["ipv4_floating", "ipv4_fixed"]
 
 
-        if "ipv4_default_gateway" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "ipv4_default_gateway" in kwargs:
             for k in kwargs:
                 if "@@" in k:
                     kk = k.split("@@")
@@ -143,6 +155,7 @@ class Wizard(object):
 
     @_.expose
     def cks0e1(self, **kwargs):
+        import libs.login
         import ml_w_wizard_s0e1 as s0e1
         import json
 
@@ -150,7 +163,9 @@ class Wizard(object):
         res = {}
         keya = ["ipv4_floating", "ipv4_fixed"]
 
-        if "s0e1@@ipv4_fixed@@ipv4_address" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "s0e1@@ipv4_fixed@@ipv4_address" in kwargs:
             libs.tools.v(kwargs)
             for k in kwargs:
                 if "@@" in k:
@@ -176,13 +191,16 @@ class Wizard(object):
 
     @_.expose
     def ckSLB(self, **kwargs):
+        import libs.login
         import ml_w_wizard_slb as slb
         import json
 
         opt = []
         goptTmp = []
 
-        if "slb" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "slb" in kwargs:
             for k in kwargs:
                 if "@@" in k:
                     kk = k.split("@@")
@@ -208,9 +226,12 @@ class Wizard(object):
 
     @_.expose
     def ckSession(self, **kwargs):
+        import libs.login
         import json
 
-        if "name" in kwargs:
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+        elif "name" in kwargs:
             libs.tools.v(_.session.get(kwargs["name"]))
             return json.dumps(_.session.get(kwargs["name"]))
         else:
@@ -218,6 +239,7 @@ class Wizard(object):
             return json.dumps(_.session.items())
 
     def saveWizard(self):
+        import libs.login
         import ml_w_wizard_dns as dns
         import ml_w_wizard_mode as mode
         import ml_w_wizard_vrrp as vrrp
@@ -228,6 +250,9 @@ class Wizard(object):
 
         data = _.session["wizard"]
         user = self.getUser()
+
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
 
         res = dns.set(user = user, cfg = data["dns"])
         if False == res[0]:

@@ -105,10 +105,6 @@ class Root:
         from doLogin import logout
         return logout()
 
-    # @_.expose
-    # def system(self, opt):
-    #     return ds.System(opt)
-
     @_.expose
     def menuitem(self, **kwargs):
         '''
@@ -169,7 +165,11 @@ class Root:
             Try to translate json files as translation table
         '''
         try:
-            if 'lang' in kwargs:
+            import libs.login
+            if False == libs.login.cklogin():
+                _.response.headers["Content-Type"] = "text/javascript"
+                return "window.parent.location.reload();"
+            elif 'lang' in kwargs:
                 tpl = env.get_template('/' + kwargs['lang'] + '.js')
                 trans = translation()
                 env.install_gettext_translations(trans['obj'])

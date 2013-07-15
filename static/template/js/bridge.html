@@ -7,7 +7,7 @@
           <th>{{ _("Interface") }}</th>
           <td>
             <button type="button" class="btn brAdd">{{ _("Add") }}</button>
-            <div class="inactive brBtnTpl">
+            <div class="inactive brBtnTpl btn-group">
               <button type="button" class="btn brDel">{{ _("Delete") }}</button>
               <button type="button" class="btn brEdit">{{ _("Edit") }}</button>
             </div>
@@ -22,8 +22,10 @@
           <% }); %>
           </td>
           <td>
-            <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
-            <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
+            <div class="btn-group">
+              <button type="button" class="btn brDel" opt="<%= v.name %>">{{ _("Delete") }}</button>
+              <button type="button" class="btn brEdit" opt="<%= v.name %>">{{ _("Edit") }}</button>
+            </div>
             <input type="hidden" name="STP" value="<%= v.STP %>" />
             <input type="hidden" name="name" value="<%= v.name %>" />
             <input type="hidden" name="hello_time" value="<%= v.hello_time %>" />

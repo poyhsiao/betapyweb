@@ -35,8 +35,10 @@
         <td><%= v.name %></td>
         <td><%= v.group %></td>
         <td>
-          <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v.name %>">{{ _("Edit") }}</button>
-          <button class="btnSaDelAccount btn" opt="<%= v.name %>">{{ _("Delete") }}</button>
+          <div class="btn-group">
+            <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v.name %>">{{ _("Edit") }}</button>
+            <button class="btnSaDelAccount btn" opt="<%= v.name %>">{{ _("Delete") }}</button>
+          </div>
           <input type="hidden" name="name" value="<%= v.name %>" />
           <input type="hidden" name="group" value="<%= v.group %>" />
           <input type="hidden" name="password" value="<%= v.password %>" />
@@ -160,8 +162,10 @@
     </div>
   </div>
   <span class="inactive saAdminTpl">
-    <button class="btnSaEditAccount btn btnSaEditAdd" opt="">{{ _("Edit") }}</button>
-    <button class="btnSaDelAccount btn" opt="">{{ _("Delete") }}</button>
+    <div class="btn-group">
+      <button class="btnSaEditAccount btn btnSaEditAdd" opt="">{{ _("Edit") }}</button>
+      <button class="btnSaDelAccount btn" opt="">{{ _("Delete") }}</button>
+    </div>
     <input type="hidden" name="name" />
     <input type="hidden" name="group" />
     <input type="hidden" name="password" />

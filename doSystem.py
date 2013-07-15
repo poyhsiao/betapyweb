@@ -19,15 +19,12 @@ sys.path.append(os.path.join(current_dir, '../middleware'))
 
 env = Environment(loader = FileSystemLoader('static/template'), extensions = ['jinja2.ext.i18n'])
 
-from libs.tools import *
-# all necessary libs
-
 
 class System(object):
     def getUser(self):
-        user = _.session.get("username")
-
-        if None == user:
+        import libs.login
+        user = libs.login.cklogin()
+        if False == user:
             raise _.HTTPRedirect('/')
         else:
             return user
@@ -146,11 +143,16 @@ class System(object):
                 ]
             }
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_summary_system as wsys
         import ml_w_summary_port as wport
         import ml_w_summary_server_status as wstat
         import libs.tools
         import json
+
         sys = wsys.get()
         port = wport.get()
         status = wstat.get()
@@ -165,7 +167,12 @@ class System(object):
         '''
             System -> Summary access
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_summary_system as wsys
+        import libs.tools
         obj = wsys.get()
         print obj
         if not obj[0]:
@@ -173,7 +180,7 @@ class System(object):
             return 'Fail'
         else:
             tpl = env.get_template('summary.json')
-            trans = translation()
+            trans = libs.tools.translation()
             env.install_gettext_translations(trans['obj'])
             # import gettext for language translation
             # _.response.headers['Content-Type'] = 'application/json'
@@ -184,6 +191,10 @@ class System(object):
         '''
             Retrieval summary of port information
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_summary_port as wport
         obj = wport.get()
         print obj
@@ -199,6 +210,10 @@ class System(object):
         '''
             Retrieval dns information
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_dns as dns
         import json
         _.response.headers["Content-Type"] = "application/json"
@@ -209,6 +224,10 @@ class System(object):
         '''
             Save DNS setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_dns as dns
         import json
         import libs.tools
@@ -226,6 +245,10 @@ class System(object):
         '''
             Get VLAN information
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_vlan as vlan
         import json
         _.response.headers["Content-Type"] = "application/json"
@@ -236,6 +259,10 @@ class System(object):
         '''
             Save VLAN setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_vlan as vlan
         import json
         import libs.tools
@@ -262,6 +289,10 @@ class System(object):
         '''
             get Bridge setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_bridge as wbr
         import json
         _.response.headers["Content-Type"] = "application/json"
@@ -272,6 +303,10 @@ class System(object):
         '''
             Save Bridge setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_bridge as wbr
         import json
         import libs.tools
@@ -347,6 +382,10 @@ class System(object):
         '''
             get ip address from certain interface
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_ip_address as wip
         import json
         import libs.tools
@@ -358,6 +397,10 @@ class System(object):
         '''
             save ip address for each interfaces
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_ip_address as wip
         import json
         import libs.tools
@@ -403,6 +446,10 @@ class System(object):
         '''
             Get routing table setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_routing_table as wrt
         import json
         import libs.tools
@@ -414,6 +461,10 @@ class System(object):
         '''
             Set routing table setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_routing_table as wrt
         import json
         import libs.tools
@@ -444,6 +495,10 @@ class System(object):
         '''
             Get ARP table setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_arp_table as wat
         import json
         import libs.tools
@@ -455,6 +510,10 @@ class System(object):
         '''
             Set ARP table setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_arp_table as wat
         import json
         import libs.tools
@@ -466,6 +525,10 @@ class System(object):
         '''
             Get DateTime setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_date_time as wdt
         import json
         import libs.tools
@@ -481,6 +544,10 @@ class System(object):
         '''
             Set DateTime setting
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_date_time as wdt
         import json
         import libs.tools
@@ -505,6 +572,10 @@ class System(object):
         '''
             Send request for starting Unsolicited ARP & NDP
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -516,6 +587,10 @@ class System(object):
         '''
             Send request for stopping Unsolicited ARP & NDP
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -527,6 +602,10 @@ class System(object):
         '''
             Send request for starting ping
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -538,6 +617,10 @@ class System(object):
         '''
             Send request for starting ping
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -549,6 +632,10 @@ class System(object):
         '''
             Send request for starting ping
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -560,6 +647,10 @@ class System(object):
         '''
             Send request for starting ping
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_diagnostic_tools as wdt
         import json
         import libs.tools
@@ -571,6 +662,10 @@ class System(object):
         '''
             Get all user information
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_account as wac
         import json
         import libs.tools
@@ -582,6 +677,10 @@ class System(object):
         '''
             Set all user information
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_account as wac
         import json
         import libs.tools
@@ -598,6 +697,10 @@ class System(object):
         '''
             Set factory default or reboot system
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_maintenance as wmt
         import json
         import libs.tools
@@ -614,6 +717,10 @@ class System(object):
         '''
             Save Running Configuration as Startup Configuation,
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_configuration as wcf
         import json
         import libs.tools
@@ -638,6 +745,10 @@ class System(object):
         '''
             Upload Startup Configuation
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_configuration as wcf
         import json
         import libs.tools
@@ -665,6 +776,10 @@ class System(object):
         '''
             Upload Firmware Update
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_firmware as wfw
         import json
         import libs.tools
@@ -697,6 +812,10 @@ class System(object):
         '''
             Get SSH/Telnet status
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import ml_w_cli as cli
         import json
         import libs.tools
@@ -714,6 +833,10 @@ class System(object):
         '''
             Get all available NIC name, include real device, vlan, and bridge
         '''
+        import libs.login
+        if False == libs.login.cklogin():
+            raise _.HTTPRedirect('/')
+
         import json
         import libs.tools
         libs.tools.v(self._getInterface())

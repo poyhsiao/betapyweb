@@ -17,19 +17,32 @@ sys.path.append(os.path.join(current_dir, '../../middleware'))
 import cherrypy as _
 
 
-def cklogin():
+def cklogin(arr = False):
     # check if user is logon already
+    if False == arr:
+        session = _.session
+    else:
+        session = arr
+
+    import tools
+    tools.v(session.items())
+
     try:
         # lock the session first for checking
-        if 'username' in _.session and _.session['username'] is not None:
-            return _.session['username']
+#         if 'username' in _.session and _.session['username'] is not None:
+#             return _.session['username']
+        if 'username' in session:
+            if session['username'] is not None:
+                return session['username']
+            else:
+                return False
         else:
             return False
     except:
         return False
 
 
-def login(username=None, password=None, success='/main/', fail='/'):
+def login(username = None, password = None, success = '/main/', fail = '/'):
     # login into the site
     import ml_w_login
     res = ml_w_login.get(username, password)
