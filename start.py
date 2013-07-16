@@ -151,7 +151,7 @@ class Root:
                 trans = translation()
                 env.install_gettext_translations(trans['obj'])
                 # import gettext for language translation
-                return tpl.render(lang = trans['lang'])
+                return tpl.render(lang = trans['lang'], userinfo = _.session)
             else:
                 return kwargs
         except Exception as e:

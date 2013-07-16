@@ -1149,16 +1149,21 @@ View = Backbone.View.extend({
         } else {
         /* edit user */
             ed = "edit";
-            str = self.siblings('input[name="name"]').val();
+            str = self.parents("td").find('input[name="name"]').val();
             title = prefix + ' - ' + str;
 
             dom.find('input[name="name"]').attr("readonly", "readonly");
-            $.each(self.siblings("input"), function(k, v) {
+            $.each(self.parents("td").find("input"), function(k, v) {
                 dom.find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
             });
 
-            dom.find("select").val( self.siblings('input[name="group"]').val() );
-            $("#saAddEditConfirm").val( self.siblings('input[name="password"]').val() );
+            if(0 === self.parents("tr").find("button.btnSaDelAccount").length) {
+        	/* login user just can modify himself's password cannot modify himself's group */
+            	dom.find("select").addClass("disabled").attr("disabled", "disabled");
+            }
+
+            dom.find("select").val( self.parents("td").find('input[name="group"]').val() );
+            $("#saAddEditConfirm").val( self.parents("td").find('input[name="password"]').val() );
         }
 
         require(['jqueryUI', 'bsSwitch'], function() {
@@ -1190,7 +1195,7 @@ View = Backbone.View.extend({
                         } else {
                         /* edit existing account */
                             $.each(dom.find('input[name], select'), function(k, v) {
-                                self.siblings('input[name="' + $(v).attr("name") + '"]').val($(v).val());
+                                self.parents("td").find('input[name="' + $(v).attr("name") + '"]').val($(v).val());
                             });
 
                             self.parents("tr").find("td:nth-child(2)").text( dom.find('select[name="group"]').val() );

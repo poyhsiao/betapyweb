@@ -1,173 +1,233 @@
-<div class="SystemAdmin padding">
-  <fieldset id="" class="">
-    <legend>{{ _('Administration') }}</legend>
-    <ul class="nav nav-tabs">
-      <li class="active">
-        <a href="#saAccount" data-toggle="tab">{{ _("Account") }}</a>
-      </li>
-      <li>
-        <a href="#saMaintenance" data-toggle="tab">{{ _("Maintenance") }}</a>
-      </li>
-      <li>
-        <a href="#saConfiguration" data-toggle="tab">{{ _("Configuration") }}</a>
-      </li>
-      <li>
-        <a href="#saFirmware" data-toggle="tab">{{ _("Firmware Update") }}</a>
-      </li>
-      <li>
-        <a href="#saCLI" data-toggle="tab" opt="cli">{{ _("CLI") }}</a>
-      </li>
-    </ul>
-  </fieldset>
-</div>
-<div class="tab-content">
-  <div id="saAccount" class="tab-pane active">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>{{ _("Name") }}</th>
-        <th>{{ _("Group") }}</th>
-        <td>
-          <button class="btnSaAddAccount btn btnSaEditAdd">{{ _("Add") }}</button>
-        </td>
-      </tr>
-    <% _.each(user, function(v, k) { %>
-      <tr>
-        <td><%= v.name %></td>
-        <td><%= v.group %></td>
-        <td>
-          <div class="btn-group">
-            <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v.name %>">{{ _("Edit") }}</button>
-            <button class="btnSaDelAccount btn" opt="<%= v.name %>">{{ _("Delete") }}</button>
-          </div>
-          <input type="hidden" name="name" value="<%= v.name %>" />
-          <input type="hidden" name="group" value="<%= v.group %>" />
-          <input type="hidden" name="password" value="<%= v.password %>" />
-        </td>
-      </tr>
-    <% }); %>
-    </table>
+  <div class="SystemAdmin padding">
+    <fieldset id="" class="">
+      <legend>{{ _('Administration') }}</legend>
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#saAccount" data-toggle="tab">{{ _("Account") }}</a>
+        </li>
+        <li>
+          <a href="#saMaintenance" data-toggle="tab">{{ _("Maintenance") }}</a>
+        </li>
+        <li>
+          <a href="#saConfiguration" data-toggle="tab">{{ _("Configuration") }}</a>
+        </li>
+        <li>
+          <a href="#saFirmware" data-toggle="tab">{{ _("Firmware Update") }}</a>
+        </li>
+        <li>
+          <a href="#saCLI" data-toggle="tab" opt="cli">{{ _("CLI") }}</a>
+        </li>
+      </ul>
+    </fieldset>
   </div>
-  <div id="saMaintenance" class="tab-pane">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>{{ _("Factory Default") }}</th>
-        <td>
-          <button class="btn btnSaFDefault">{{ _("Factory Default") }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ _("Reboot") }}</th>
-        <td>
-          <button class="btn btnSaReboot">{{ _("Reboot") }}</button>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div id="saConfiguration" class="tab-pane">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>{{ _("Save Running Configuration as Startup Configuation") }}</th>
-        <td>
-          <button class="btn btnSaveRSConf">{{ _("Save") }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ _("Download Running Configuration") }}</th>
-        <td>
-          <button class="btn btnDLRConf">{{ _("Download") }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ _("Download Startup Configuration") }}</th>
-        <td>
-          <button class="btn btnDLSConf">{{ _("Download") }}</button>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ _("Upload Startup Configuation") }}</th>
-        <td>
-          <input type="file" id="fileUSConf" name="file" />
-          <button class="btn btnFileUSConf inactive">{{ _("Upload") }}</button>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div id="saFirmware" class="tab-pane">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>{{ _("Current Version") }}</th>
-        <td colspan="2"></td>
-      </tr>
-      <tr>
-        <th rowspan="2">{{ _("Firmware Update") }}</th>
-        <th>{{ _("License Key") }}</th>
-        <td>
-          <input type="file" name="updatekey" id="fileKeyUpdate" class="span3" />
-          <a href="#" class="btn btnFileKeyUpload inactive">{{ _("Upload") }}</a>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <input type="file" name="fwfile" id="fileFWUpdate" class="span3" />
-          <a href="#" class="btn btnFileFWUpload inactive">{{ _("Upload") }}</a>
-        </td>
-      </tr>
-    </table>
-  </div>
-  <div id="saCLI" class="tab-pane">
-    <table class="table table-bordered table-hover">
-      <tr>
-        <th>
-          <label for="sshEnable" class="control-lable">{{ _("SSH") }}</label>
-        </th>
-        <td clss="ssh-status">
-          <div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
-            <input type="checkbox" name="sshEnable" id="sshEnable" />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="telnetEnable" class="control-label">{{ _("Telnet") }}</label>
-        </th>
-        <td class="telnet-status">
-          <div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
-            <input type="checkbox" name="telnetEnable" id="telnetEnable" />
-          </div>
-        </td>
-      </tr>
-    </table>
-    <input type="hidden" class="ckCLI" name="ckCLI" value="true" />
-  </div>
-  <div class="inactive editSaAccount control-group">
-    <label for="saAddEditName" class="control-label">{{ _("Name") }}</label>
-    <div class="controls">
-      <input type="text" id="saAddEditName" name="name" readonly="readonly" />
+
+  <div class="tab-content">
+    <div id="saAccount" class="tab-pane active">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Name") }}</th>
+          <th>{{ _("Group") }}</th>
+          <th>
+            <span>
+            {% if "admin" == userinfo["group"] %}
+              <button class="btnSaAddAccount btn btnSaEditAdd">{{ _("Add") }}</button>
+            {% endif %}
+            </span>
+          </th>
+        </tr>
+      {% if "admin" == userinfo["group"] %}
+      <% _.each(user, function(v, k) { %>
+        <tr>
+          <td><%= v["name"] %></td>
+          <td><%= v["group"] %></td>
+          <td>
+            <div class="btn-group">
+              <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v["name"] %>">{{ _("Edit") }}</button>
+            <% if("{{ userinfo["group"] }}" != v["group"] && "{{ userinfo["username"] }}" != v["name"]) { %>
+              <button class="btnSaDelAccount btn" opt="<%= v["name"] %>">{{ _("Delete") }}</button>
+            <% } %>
+            </div>
+            <input type="hidden" name="name" value="<%= v["name"] %>" />
+            <input type="hidden" name="group" value="<%= v["group"] %>" />
+            <input type="hidden" name="password" value="<%= v["password"] %>" />
+          </td>
+        </tr>
+      <% }); %>
+      {% else %}
+        <tr>
+          <td>
+            <span>{{ userinfo["username"] }}</span>
+          <% _.each(user, function(v, k) { %>
+            <input type="hidden" name="name" value="<%= v.name %>" />
+            <input type="hidden" name="group" value="<%= v.group %>" />
+            <input type="hidden" name="password" value="<%= v.password %>" />
+          <% }); %>
+          </td>
+          <td>
+            <span>{{ userinfo["group"] }}</span>
+          </td>
+          <td>
+            <div class="btn-group">
+              <button class="btnSaEditAccount btn btnSaEditAdd" opt="{{ userinfo["username"] }}">{{ _("Edit") }}</button>
+            </div>
+            <input type="hidden" name="name" value="{{ userinfo["username"] }}" />
+            <input type="hidden" name="group" value="{{ userinfo["group"] }}" />
+            <input type="hidden" name="password" value="{{ userinfo["password"] }}" />
+          </td>
+        </tr>
+      {% endif %}
+      </table>
     </div>
-    <label for="saAddEditGroup" class="control-label">{{ _("Group") }}</label>
-    <div class="controls">
-      <select name="group" id="saAddEditGroup">
-        <option value="admin">admin</option>
-        <option value="operator">operator</option>
-        <option value="monitor">monitor</option>
-      </select>
+
+    <div id="saMaintenance" class="tab-pane">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Factory Default") }}</th>
+          <td>
+          {% if "admin" == userinfo["group"] or "operator" == userinfo["group"] %}
+            <button class="btn btnSaFDefault">{{ _("Factory Default") }}</button>
+          {% else %}
+            <a href="#" class="btn disabled">{{ _("Factory Default") }}</a>
+          {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>{{ _("Reboot") }}</th>
+          <td>
+          {% if "admin" == userinfo["group"] or "operator" == userinfo["group"] %}
+            <button class="btn btnSaReboot">{{ _("Reboot") }}</button>
+          {% else %}
+            <a href="#" class="btn disabled">{{ _("Reboot") }}</a>
+          {% endif %}
+          </td>
+        </tr>
+      </table>
     </div>
-    <label for="saAddEditPass" class="control-label">{{ _("Password") }}</label>
-    <div class="controls">
-      <input type="password" id="saAddEditPass" name="password" />
+
+    <div id="saConfiguration" class="tab-pane">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Save Running Configuration as Startup Configuation") }}</th>
+          <td>
+            <button class="btn btnSaveRSConf">{{ _("Save") }}</button>
+          </td>
+        </tr>
+        <tr>
+          <th>{{ _("Download Running Configuration") }}</th>
+          <td>
+            <button class="btn btnDLRConf">{{ _("Download") }}</button>
+          </td>
+        </tr>
+        <tr>
+          <th>{{ _("Download Startup Configuration") }}</th>
+          <td>
+            <button class="btn btnDLSConf">{{ _("Download") }}</button>
+          </td>
+        </tr>
+        <tr>
+          <th>{{ _("Upload Startup Configuation") }}</th>
+          <td>
+          {% if "admin" == userinfo["group"] or "operator" == userinfo["group"] %}
+            <input type="file" id="fileUSConf" name="file" />
+            <button class="btn btnFileUSConf inactive">{{ _("Upload") }}</button>
+          {% else %}
+            <a href="#" class="btn disabled">{{ _("Upload") }}</a>
+          {% endif %}
+          </td>
+        </tr>
+      </table>
     </div>
-    <label for="saAddEditConfirm" class="control-label">{{ _("Password Confirm") }}</label>
-    <div class="controls">
-      <input type="password" id="saAddEditConfirm" />
+
+    <div id="saFirmware" class="tab-pane">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>{{ _("Current Version") }}</th>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <th rowspan="2">{{ _("Firmware Update") }}</th>
+          <th>{{ _("License Key") }}</th>
+          <td>
+          {% if "admin" == userinfo["group"] or "operator" == userinfo["group"] %}
+            <input type="file" name="updatekey" id="fileKeyUpdate" class="span3" />
+            <a href="#" class="btn btnFileKeyUpload inactive">{{ _("Upload") }}</a>
+          {% else %}
+            <a href="#" class="btn disabled">{{ _("Upload") }}</a>
+          {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+          {% if "admin" == userinfo["group"] or "operator" == userinfo["group"] %}
+            <input type="file" name="fwfile" id="fileFWUpdate" class="span3" />
+            <a href="#" class="btn btnFileFWUpload inactive">{{ _("Upload") }}</a>
+          {% else %}
+            <a href="#" class="btn disabled">{{ _("Upload") }}</a>
+          {% endif %}
+          </td>
+        </tr>
+      </table>
     </div>
+
+    <div id="saCLI" class="tab-pane">
+      <table class="table table-bordered table-hover">
+        <tr>
+          <th>
+            <label for="sshEnable" class="control-lable">{{ _("SSH") }}</label>
+          </th>
+          <td clss="ssh-status">
+            <div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+              <input type="checkbox" name="sshEnable" id="sshEnable" />
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <label for="telnetEnable" class="control-label">{{ _("Telnet") }}</label>
+          </th>
+          <td class="telnet-status">
+            <div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class='icon-ok icon-white'></i>" data-off-label="<i class='icon-remove'></i>">
+              <input type="checkbox" name="telnetEnable" id="telnetEnable" />
+            </div>
+          </td>
+        </tr>
+      </table>
+      <input type="hidden" class="ckCLI" name="ckCLI" value="true" />
+    </div>
+
+    <div class="inactive editSaAccount control-group">
+      <label for="saAddEditName" class="control-label">{{ _("Name") }}</label>
+      <div class="controls">
+        <input type="text" id="saAddEditName" name="name" readonly="readonly" />
+      </div>
+      <label for="saAddEditGroup" class="control-label">{{ _("Group") }}</label>
+      <div class="controls">
+      {% if "admin" == userinfo["group"] %}
+        <select name="group" id="saAddEditGroup">
+      {% else %}
+        <select name="group" id="saAddEditGroup" class="disabled" disabled="disabled">
+      {% endif %}
+          <option value="admin">admin</option>
+          <option value="operator">operator</option>
+          <option value="monitor">monitor</option>
+        </select>
+      </div>
+      <label for="saAddEditPass" class="control-label">{{ _("Password") }}</label>
+      <div class="controls">
+        <input type="password" id="saAddEditPass" name="password" />
+      </div>
+      <label for="saAddEditConfirm" class="control-label">{{ _("Password Confirm") }}</label>
+      <div class="controls">
+        <input type="password" id="saAddEditConfirm" />
+      </div>
+    </div>
+    <span class="inactive saAdminTpl">
+      <div class="btn-group">
+        <button class="btnSaEditAccount btn btnSaEditAdd" opt="">{{ _("Edit") }}</button>
+        <button class="btnSaDelAccount btn" opt="">{{ _("Delete") }}</button>
+      </div>
+      <input type="hidden" name="name" />
+      <input type="hidden" name="group" />
+      <input type="hidden" name="password" />
+    </span>
   </div>
-  <span class="inactive saAdminTpl">
-    <div class="btn-group">
-      <button class="btnSaEditAccount btn btnSaEditAdd" opt="">{{ _("Edit") }}</button>
-      <button class="btnSaDelAccount btn" opt="">{{ _("Delete") }}</button>
-    </div>
-    <input type="hidden" name="name" />
-    <input type="hidden" name="group" />
-    <input type="hidden" name="password" />
-  </span>
-</div>

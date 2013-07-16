@@ -339,9 +339,11 @@
                     </li>
                   </ul>
                 </li>
+              {% if "admin" == userinfo["group"] %}
                 <li class="boxShadow">
                   <div class="MainMenu closeMenu" opt="wizard">{{ _("Wizard") }}</div>
                 </li>
+              {% endif %}
               </ul>
           </div>
       </div>
