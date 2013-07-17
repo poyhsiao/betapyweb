@@ -301,6 +301,8 @@ if __name__ == '__main__':
     server1 = _._cpserver.Server()
     server1.socket_port = 443
     server1._socket_host = '0.0.0.0'
+    server1.socket_timeout = 120
+    server1.socket_queue_size = 30
     server1.ssl_module = "pyopenssl"
     server1.ssl_certificate = '/usr/xtera/webui/static/ssl/xlb.crt'
     server1.ssl_private_key = '/usr/xtera/webui/static/ssl/xlb.key'

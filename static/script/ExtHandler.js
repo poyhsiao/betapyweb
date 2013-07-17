@@ -592,6 +592,8 @@ var eView = Backbone.View.extend({
             require(['bsSwitch'], function() {
                 me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
             });
+
+            $("tbody[set=pl]").sortable();
         }, "html");
     },
 
@@ -1092,7 +1094,7 @@ var eView = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last") ).show("slow", function() {});
+    	tpl.find("tr").hide().prependTo( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last").parents("thead").next("tbody[opt='" + opt + "']") ).show("slow", function() {});
 
     	me.$el.find("select[name][chk=destination_ip]").each(function(k , v) {
     		return me.selSlbPolicyDIP($(v));
@@ -1111,6 +1113,45 @@ var eView = Backbone.View.extend({
     	tr.hide("slow", function() {
     		$(this).remove();
     	});
+    	return false;
+    },
+
+    changeSlbSetting: function(o) {
+	/* once change anything, hide search button */
+    	$("div.slbPolicySearch").hide("fast");
+    	return false;
+    },
+
+    selectSlbSub: function(o) {
+	/* when change main catalog item, load sub items into select element */
+    	var me = this, self = $(o.target);
+    	if(self.hasClass("searchCatalog")) {
+		/* select ipv4 or ipv6*/
+    		$(":input.searchSLB").removeAttr("disabled");
+    	} else if(self.hasClass("searchSLB")) {
+		/* select the catalog */
+    		$(":input.searchSlbOpt").removeAttr("disabled");
+    	} else if(self.hasClass("searchSlbOpt")) {
+		/* select the value of the catalog */
+    		$("a.btnSearchSLB").removeClass("disabled");
+    	}
+    },
+
+    searchSlbPolicy: function(o) {
+	/* do search */
+
+    },
+
+    highlightSlbTr: function(o) {
+	/* hight light selected tr */
+    	var me = this, self = ("a" === $(o.target)[0].tagName.toLowerCase()) ? $(o.target) : $(o.target).parent(), tr = self.parents("tr"), icon = self.find("i");
+    	if(icon.hasClass("icon-eye-open")) {
+    		tr.addClass("highlight");
+    		icon.removeClass("icon-eye-open").addClass("icon-eye-close");
+    	} else {
+    		tr.removeClass("highlight");
+    		icon.removeClass("icon-eye-close").addClass("icon-eye-open");
+    	}
     	return false;
     },
 
@@ -1547,7 +1588,14 @@ var ExtHandler = {
                     "click a.btnDelPolicy": "delSlbPolicy",
                     "change select[name][chk=destination_ip]": "selSlbPolicyDIP",
                     "change select[name][chk=action]": "selSlbPolicyAct",
-                    "click a[ck=slbAll]": "checkSlbAll"
+                    "click a[ck=slbAll]": "checkSlbAll",
+                    "change table :input": "changeSlbSetting",
+                    "click table a.btn": "changeSlbSetting",
+                    "change .searchCatalog": "selectSlbSub",
+                    "change .searchSLB": "selectSlbSub",
+                    "change .searchSlbOpt": "selectSlbSub",
+                    "click a.btnSearchSLB": "searchSlbPolicy",
+                    "click a.btnHighlight": "highlightSlbTr"
                 }
             });
 
