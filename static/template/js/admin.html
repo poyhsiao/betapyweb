@@ -43,7 +43,7 @@
           <td>
             <div class="btn-group">
               <button class="btnSaEditAccount btn btnSaEditAdd" opt="<%= v["name"] %>">{{ _("Edit") }}</button>
-            <% if("{{ userinfo["group"] }}" != v["group"] && "{{ userinfo["username"] }}" != v["name"]) { %>
+            <% if(("{{ userinfo["group"] }}" != v["group"] && "{{ userinfo["username"] }}" != v["name"]) || ("admin" === "{{ userinfo["group"] }}" && "{{ userinfo["username"] }}" != v["name"])) { %>
               <button class="btnSaDelAccount btn" opt="<%= v["name"] %>">{{ _("Delete") }}</button>
             <% } %>
             </div>

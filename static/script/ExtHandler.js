@@ -593,7 +593,11 @@ var eView = Backbone.View.extend({
                 me.$el.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
             });
 
-            $("tbody[set=pl]").sortable();
+            $("tbody[set=pl]").sortable({
+            	stop: me._ckSlbPolicyRules
+            });
+
+            me._ckSlbPolicyRules();
         }, "html");
     },
 
@@ -1094,7 +1098,7 @@ var eView = Backbone.View.extend({
     		}
     	});
 
-    	tpl.find("tr").hide().prependTo( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last").parents("thead").next("tbody[opt='" + opt + "']") ).show("slow", function() {});
+    	tpl.find("tr").hide().prependTo( $("tr[set=pl][opt='" + opt + "']:not([gnumber]):last").parents("thead").next("tbody[opt='" + opt + "']") ).show("slow", function() { console.log(this); });
 
     	me.$el.find("select[name][chk=destination_ip]").each(function(k , v) {
     		return me.selSlbPolicyDIP($(v));
@@ -1104,6 +1108,8 @@ var eView = Backbone.View.extend({
     		return me.selSlbPolicyAct($(v));
     	});
 
+    	me._ckSlbPolicyRules();
+
     	return false;
     },
 
@@ -1112,6 +1118,7 @@ var eView = Backbone.View.extend({
     	var me = this, self = $(o.target), tr = self.parents("tr");
     	tr.hide("slow", function() {
     		$(this).remove();
+    		me._ckSlbPolicyRules();
     	});
     	return false;
     },
@@ -1153,6 +1160,45 @@ var eView = Backbone.View.extend({
     		icon.removeClass("icon-eye-close").addClass("icon-eye-open");
     	}
     	return false;
+    },
+
+    sortSlbPolicy: function(o) {
+    	/* sorting slb row policy of table */
+    	var me = this, self = ("a" === $(o.target)[0].tagName.toLowerCase()) ? $(o.target) : $(o.target).parent(), tr = self.parents("tr:first");
+
+    	if(self.is(".btnSlbPolicyUp") && tr.prevAll().length > 0) {
+    		tr.fadeOut("fast", function() {
+    			tr.insertBefore(tr.prev()).fadeIn("fast");
+    			me._ckSlbPolicyRules();
+    		});
+    	} else if(self.is(".btnSlbPolicyDown") && tr.nextAll().length > 0) {
+    		tr.fadeOut("fast", function() {
+    			tr.insertAfter(tr.next()).fadeIn("fast");
+    			me._ckSlbPolicyRules();
+    		});
+    	}
+    	return false;
+    },
+
+    _ckSlbPolicyRules: function(o) {
+	/* check every rules of item can be move up or down */
+    	var me = this, set = "pl", opt = ["ipv4", "ipv6"], tbody;
+    	$.each(opt, function(k, v) {
+    		tbody = $("tbody[set='" + set + "'][opt='" + v + "']");
+    		tbody.find("tr").each(function(ak, av) {
+    			if(0 == $(av).prevAll().length && 0 == $(av).nextAll().length) {
+    				$(av).find(".btnSlbPolicyUp, .btnSlbPolicyDown").addClass("hide");
+    			} else if(0 == $(av).prevAll().length) {
+    				$(av).find(".btnSlbPolicyDown").removeClass("hide");
+    				$(av).find(".btnSlbPolicyUp").addClass("hide");
+    			} else if(0 == $(av).nextAll().length) {
+    				$(av).find(".btnSlbPolicyUp").removeClass("hide");
+    				$(av).find(".btnSlbPolicyDown").addClass("hide");
+    			} else {
+    				$(av).find(".btnSlbPolicyUp, .btnSlbPolicyDown").removeClass("hide");
+    			}
+    		});
+    	});
     },
 
     checkSlbAll: function(o) {
@@ -1285,8 +1331,15 @@ var eView = Backbone.View.extend({
 
         Ajax = $.getJSON("/stat/counters", function(d) {
             data = new eModel(d);
-            tpl(data.attributes[1]);
-            return $("div.statCtContent").unblock();
+            if(false === data.attributes[0]) {
+            	bootbox.alert(data.attributes[1], function() {
+            		$("div.statCtContent").unblock();
+            	});
+            	return false;
+            } else {
+            	tpl(data.attributes[1]);
+                return $("div.statCtContent").unblock();
+            }
         });
     },
 
@@ -1366,8 +1419,15 @@ var eView = Backbone.View.extend({
 
         Ajax = $.getJSON("/stat/rates", function(d) {
             data = new eModel(d);
-            tpl(data.attributes[1]);
-            return $("div.statRtContent").unblock();
+            if(false === data.attributes[0]) {
+            	bootbox.alert(data.attributes[1], function() {
+            		$("div.statRtContent").unblock();
+            	});
+            	return false;
+            } else {
+            	tpl(data.attributes[1]);
+                return $("div.statRtContent").unblock();
+            }
         });
     },
 
@@ -1421,6 +1481,12 @@ var eView = Backbone.View.extend({
 
         Ajax = $.getJSON("/stat/persistence", function(d) {
             data = new eModel(d);
+            if(false === data.attributes[0]) {
+            	bootbox.alert(data.attributes[1], function() {
+            		$("div.statPIContent").unblock();
+            	});
+            	return false;
+            }
             tpl(data.attributes[1]);
             return $("div.statPIContent").unblock();
         });
@@ -1595,7 +1661,9 @@ var ExtHandler = {
                     "change .searchSLB": "selectSlbSub",
                     "change .searchSlbOpt": "selectSlbSub",
                     "click a.btnSearchSLB": "searchSlbPolicy",
-                    "click a.btnHighlight": "highlightSlbTr"
+                    "click a.btnHighlight": "highlightSlbTr",
+                    "click a.btnSlbPolicyUp": "sortSlbPolicy",
+                    "click a.btnSlbPolicyDown": "sortSlbPolicy"
                 }
             });
 
