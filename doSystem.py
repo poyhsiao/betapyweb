@@ -268,16 +268,20 @@ class System(object):
         import libs.tools
         libs.tools.v(kwargs)
         op = []
-        size = len(kwargs["interface"])
-        if type(kwargs["interface"]).__name__ == "list":
-            if len(kwargs["interface"]) > 0:
-                for i in range(0, size):
+
+        if "interface" in kwargs:
+            if type(kwargs["interface"]).__name__ == "list":
+                size = kwargs["interface"]
+                for i in range(len(size)):
                     if len(kwargs["interface"][i]) > 1 and len(kwargs["vlan_id"]) > 0:
                         op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": int(kwargs["vlan_id"][i])})
-        else:
-            op.append({"interface": libs.tools.convert(kwargs["interface"]), "vlan_id": int(kwargs["vlan_id"])});
+            else:
+                op.append({"interface": libs.tools.convert(kwargs["interface"]), "vlan_id": int(kwargs["vlan_id"])});
 
-        dat = {"vconfig": op}
+            dat = {"vconfig": op}
+        else:
+            dat = {"vconfig": []}
+
         libs.tools.v(dat)
         res = vlan.set(user = self.getUser(), cfg = dat)
         libs.tools.v(res)
@@ -509,6 +513,41 @@ class System(object):
     def sarp(self, **kwargs):
         '''
             Set ARP table setting
+            Format:
+                {
+                    "ipv4_static": [
+                        {
+                            "interface":"s0e1",
+                            "ip":"192.168.0.135",
+                            "mac":"08:00:27:fd:9d:f9"
+                        },
+                        ...
+                    ],
+                    "ipv4_dynamic": [
+                        {
+                            "interface":"s0e1",
+                            "ip":"192.168.0.112",
+                            "mac":"6c:f0:27:fd:ea:23"
+                        },
+                        ...
+                    ],
+                    "ipv6_static": [
+                        {
+                            "interface":"s0e1",
+                            "ip":"2001::1234",
+                            "mac":"08:00:27:fd:9d:f9"
+                        },
+                        ...
+                    ],
+                    "ipv6_dynamic": [
+                        {
+                            "interface":"s0e1",
+                            "ip":"2001::2468",
+                            "mac":"6c:f0:27:fd:ea:23"
+                        },
+                        ...
+                    ]
+                }
         '''
         import libs.login
         if False == libs.login.cklogin():
@@ -517,8 +556,69 @@ class System(object):
         import ml_w_arp_table as wat
         import json
         import libs.tools
-        libs.tools.v(kwargs)
-        return json.dumps(wat.set(user = self.getUser(), cfg = kwargs))
+
+        dataTpl = {"ipv4_static": [], "ipv4_dynamic": [], "ipv6_static": [], "ipv6_dynamic": []}
+
+
+        if "ipv4_static-ip" in kwargs:
+            dat = "ipv4_static-ip"
+            if "list" == type(kwargs[dat]).__name__:
+                for x in range(len(kwargs[dat])):
+                    dataTpl["ipv4_static"].append({"ip": kwargs["ipv4_static-ip"][x],
+                                                   "interface": kwargs["ipv4_static-interface"][x],
+                                                   "mac": kwargs["ipv4_static-mac"][x]
+                                                   });
+            else:
+                dataTpl["ipv4_static"].append({"ip": kwargs["ipv4_static-ip"],
+                                               "interface": kwargs["ipv4_static-interface"],
+                                               "mac": kwargs["ipv4_static-mac"]
+                                               });
+
+
+        if "ipv4_dynamic-ip" in kwargs:
+            dat = "ipv4_dynamic-ip"
+            if "list" == type(kwargs[dat]).__name__:
+                for x in range(len(kwargs[dat])):
+                    dataTpl["ipv4_dynamic"].append({"ip": kwargs["ipv4_dynamic-ip"][x],
+                                                   "interface": kwargs["ipv4_dynamic-interface"][x],
+                                                   "mac": kwargs["ipv4_dynamic-mac"][x]
+                                                   });
+            else:
+                dataTpl["ipv4_dynamic"].append({"ip": kwargs["ipv4_dynamic-ip"],
+                                               "interface": kwargs["ipv4_dynamic-interface"],
+                                               "mac": kwargs["ipv4_dynamic-mac"]
+                                               });
+
+        if "ipv6_static-ip" in kwargs:
+            dat = "ipv6_static-ip"
+            if "list" == type(kwargs[dat]).__name__:
+                for x in range(len(kwargs[dat])):
+                    dataTpl["ipv6_static"].append({"ip": kwargs["ipv6_static-ip"][x],
+                                                   "interface": kwargs["ipv6_static-interface"][x],
+                                                   "mac": kwargs["ipv6_static-mac"][x]
+                                                   });
+            else:
+                dataTpl["ipv6_static"].append({"ip": kwargs["ipv6_static-ip"],
+                                               "interface": kwargs["ipv6_static-interface"],
+                                               "mac": kwargs["ipv6_static-mac"]
+                                               });
+
+        if "ipv6_dynamic-ip" in kwargs:
+            dat = "ipv6_dynamic-ip"
+            if "list" == type(kwargs[dat]).__name__:
+                for x in range(len(kwargs[dat])):
+                    dataTpl["ipv6_dynamic"].append({"ip": kwargs["ipv6_dynamic-ip"][x],
+                                                   "interface": kwargs["ipv6_dynamic-interface"][x],
+                                                   "mac": kwargs["ipv6_dynamic-mac"][x]
+                                                   });
+            else:
+                dataTpl["ipv6_dynamic"].append({"ip": kwargs["ipv6_dynamic-ip"],
+                                               "interface": kwargs["ipv6_dynamic-interface"],
+                                               "mac": kwargs["ipv6_dynamic-mac"]
+                                               });
+        libs.tools.v(dataTpl)
+
+        return json.dumps(wat.set(user = self.getUser(), cfg = dataTpl))
 
     @_.expose
     def gdate(self, **kwargs):

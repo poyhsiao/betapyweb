@@ -8,7 +8,10 @@
         </th>
         <td>
           <div class="controls">
-            <input type="text" value="<%= items["hostname"] %>" id="hostname" name="hostname" placeholder="{{ _("Host Name") }}" />
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-pencil"></i></span>
+              <input type="text" value="<%= items["hostname"] %>" id="hostname" class="span3" name="hostname" placeholder="{{ _("Host Name") }}" />
+            </div>
           </div>
         </td>
       </tr>
@@ -18,7 +21,10 @@
         </th>
         <td>
           <div class="controls">
-            <input type="text" value="<%= items["domain-name"] %>" id="domain-name" name="domain-name" placeholder="{{ _("Domain Name") }}" />
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-pencil"></i></span>
+              <input type="text" value="<%= items["domain-name"] %>" id="domain-name" class="span3" name="domain-name" placeholder="{{ _("Domain Name") }}" />
+            </div>
           </div>
         </td>
       </tr>
@@ -28,7 +34,10 @@
         </th>
         <td>
           <div class="controls">
-            <input type="text" value="<%= items["dns-server-1"] %>" id="dns-server-1" name="dns-server-1" placeholder="{{ _("DNS Server 1") }}" />
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-hdd"></i></span>
+              <input type="text" value="<%= items["dns-server-1"] %>" id="dns-server-1" class="span3" name="dns-server-1" placeholder="{{ _("DNS Server 1") }}" />
+            </div>
           </div>
         </td>
       </tr>
@@ -38,7 +47,10 @@
         </th>
         <td>
           <div class="controls">
-            <input type="text" value="<%= items["dns-server-2"] %>" id="dns-server-2" name="dns-server-2" placeholder="{{ _("DNS Server 2") }}" />
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-hdd"></i></span>
+              <input type="text" value="<%= items["dns-server-2"] %>" id="dns-server-2" class="span3" name="dns-server-2" placeholder="{{ _("DNS Server 2") }}" />
+            </div>
           </div>
         </td>
       </tr>

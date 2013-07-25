@@ -1,4 +1,4 @@
-    <div class="SystemArpTable padding">
+    <div class="padding">
       <fieldset id="" class="">
         <legend>{{ _('ARP Table') }}</legend>
         <ul class="nav nav-tabs">
@@ -14,7 +14,8 @@
         </ul>
       </fieldset>
     </div>
-    <div class="tab-content">
+
+    <div class="tab-content SystemArpTable">
   <% _.each(items, function(v, k) { %>
     <% if("ipv4_dynamic" === k) { %>
       <div id="arp-<%= k %>" class="tab-pane active">
@@ -32,7 +33,7 @@
             <th>{{ _("MAC Address") }}</th>
           <% if("static" === v.type) { %>
             <td>
-              <a href="#" class="btn btnArpAdd" opt="<%= v["protocol"] %>">{{ _("Add") }}</a>
+              <a href="#" class="btn btnArpAdd" opt="<%= v["protocol"] %>" chk="<%= k %>">{{ _("Add") }}</a>
             </td>
           <% } else { %>
             <td>
@@ -44,28 +45,25 @@
           <tr>
           <% if("static" === v.type) { %>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-screenshot"></i></span>
                 <select name="<%= k %>-interface" opt="interface">
                 <% _.each(nic, function(av, ak) { %>
                   <option value="<%= av %>" <% if(vv["interface"] == av) { %>selected="selected"<% } %>><%= av %></option>
                 <% }); %>
                 </select>
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-book"></i></span>
                 <input type="text" name="<%= k %>-ip" value="<%= vv.ip %>" class="span2" opt="ip" placeholder="<% if("ipv4" === v.protocol) { %>{{ _("IPv4 Address") }}<% } else { %>{{ _("IPv6 Address") }}<% } %>" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-bookmark"></i></span>
                 <input type="text" name="<%= k %>-mac" value="<%= vv.mac %>" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
@@ -100,28 +98,25 @@
       <tbody class="newArpTable" opt="ipv4">
         <tr>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-screenshot"></i></span>
               <select opt="interface">
               <% _.each(nic, function(av, ak) { %>
                 <option value="<%= av %>"><%= av %></option>
               <% }); %>
               </select>
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-book"></i></span>
               <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv4 Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-bookmark"></i></span>
               <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
@@ -132,28 +127,25 @@
       <tbody class="newArpTable" opt="ipv6">
         <tr>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-screenshot"></i></span>
               <select opt="interface">
               <% _.each(nic, function(av, ak) { %>
                 <option value="<%= av %>"><%= av %></option>
               <% }); %>
               </select>
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-book"></i></span>
               <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv6 Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-bookmark"></i></span>
               <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>

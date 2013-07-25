@@ -15,7 +15,10 @@
           <label for="svSNMPCmty" class="control-label strong">{{ _("Community" )}}</label>
         </th>
         <td>
-          <input type="text" id="svSNMPCmty" name="community" value="<%= community %>" />
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-volume-up"></i></span>
+            <input type="text" id="svSNMPCmty" name="community" class="span2" value="<%= community %>" />
+          </div>
         </td>
       </tr>
       <tr>
@@ -23,7 +26,10 @@
           <label for="svSNMPSysName" class="control-label strong">{{ _("System Name") }}</label>
         </th>
         <td>
-          <input type="text" id="svSNMPSysName" name="system_name" value="<%= system_name %>" />
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-pencil"></i></span>
+            <input type="text" id="svSNMPSysName" name="system_name" class="span2" value="<%= system_name %>" />
+          </div>
         </td>
       </tr>
       <tr>
@@ -31,7 +37,10 @@
           <label for="svSNMPSysCont" class="control-label strong">{{ _("System Contact") }}</label>
         </th>
         <td>
-          <input type="text" name="system_contact" id="svSNMPSysCont" value="<%= system_contact %>" />
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-user"></i></span>
+            <input type="text" name="system_contact" id="svSNMPSysCont" class="span2" value="<%= system_contact %>" />
+          </div>
         </td>
       </tr>
       <tr>
@@ -39,7 +48,10 @@
           <label for="svSNMPSysLoc" class="control-label strong">{{ _("System Location") }}</label>
         </th>
         <td>
-          <input type="text" name="system_location" id="svSNMPSysLoc" value="<%= system_location %>" />
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-home"></i></span>
+            <input type="text" name="system_location" id="svSNMPSysLoc" class="span2" value="<%= system_location %>" />
+          </div>
         </td>
       </tr>
     </table>

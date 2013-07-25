@@ -15,7 +15,18 @@ var eView = Backbone.View.extend({
 
     viewSNMP: function(o) {
     /* display snmp page  */
-        var me = this, dat = me.model.attributes[1], t ;
+        var me = this, str = '', dat, t ;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=snmp", function(d) {
             t = _.template(d);
             me.$el.html(t(dat)).find("table").css({
@@ -38,7 +49,18 @@ var eView = Backbone.View.extend({
 
     viewEmail: function(o) {
     /* display email page */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=email", function(d) {
             t = _.template(d);
             me.$el.html(t(dat)).find("table").css({
@@ -91,7 +113,17 @@ var eView = Backbone.View.extend({
 
     viewVrrp: function(o) {
     /* display of VRRPv2 page */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
 
         Ajax = $.get("/getTpl?file=vrrp", function(d) {
             t = _.template(d);
@@ -581,7 +613,18 @@ var eView = Backbone.View.extend({
 
     viewSLB: function(o) {
     /* display service -> slb */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=slb", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
@@ -1249,7 +1292,18 @@ var eView = Backbone.View.extend({
 
     viewConnect: function(o) {
 	/* display service -> connection limit */
-    	var me = this, dat = {"items": me.model.attributes[1]}, t;
+    	var me = this, str = '', dat, t;
+
+    	if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = {"items": me.model.attributes[1]};
+    	}
+
     	Ajax = $.get("/getTpl?file=connection_limit", function(d) {
     		t = _.template(d);
     		me.$el.html(t(dat));
@@ -1287,7 +1341,18 @@ var eView = Backbone.View.extend({
 
 	viewNAT64: function(o) {
 	/* display of service -> nat64 */
-		var me = this, dat = me.model.attributes[1], t;
+		var me = this, str = '', dat, t;
+
+		if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
 		Ajax = $.get("/getTpl?file=nat64", function(d) {
 			t = _.template(d);
 			me.$el.html(t(dat));
@@ -1514,7 +1579,18 @@ var eView = Backbone.View.extend({
 
     viewView: function(o) {
     /* display view log */
-        var me = this, dat = me.model.attributes[1], t, txa;
+        var me = this, str = '', dat, t, txa;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=views", function(d) {
             t = _.template(d);
             me.$el.html(t()).find("textarea").css({
@@ -1547,7 +1623,17 @@ var eView = Backbone.View.extend({
 
     viewSyslog: function(o) {
     /* display syslog */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
 
         Ajax = $.get("/getTpl?file=syslog", function(d) {
             t = _.template(d);

@@ -1,35 +1,47 @@
-<div class="editSystemDateTime padding form-horizontal">
-  <fieldset id="" class="">
-    <legend>{{ _('Date/Time') }}</legend>
-    <div class="control-group">
-      <label for="editDateTZ" class="control-label strong">{{ _("Time Zone") }}</label>
-      <div class="controls">
-        <select id="editDateTZ" name="time_zone">
-        <% _.each(timezone_set, function(v, k) { %>
-          <option value="<%= v %>"<% if(v === time_zone) { %> selected="selected"<% } %>><%= v %></option>
-        <% }); %>
-        </select>
-      </div>
-    </div>
-    <div class="control-group">
-      <label for="editDateTS" class="control-label strong">{{ _("Time Server") }}</label>
-      <div class="controls">
-        <input type="text" name="time_server" id="editDateTS" value="<%= time_server %>" />
-      </div>
-    </div>
-    <div class="control-group">
-      <label for="editDateDate" class="control-label strong">{{ _("Date") }}</label>
-      <div class="controls">
-        <input type="text" name="date" id="editDateDate" readonly="readonly" opt="dt" value="<%= date %>" placeholder="{{ _("Date") }}" />
-      </div>
-    </div>
-    <div class="control-group">
-      <label for="editDateTime" class="control-label strong">{{ _("Time") }}</label>
-      <div class="controls">
-        <div class="bootstrap-timepicker">
-          <input type="text" name="time" id="editDateTime" readonly="readonly" opt="dt" value="<%= time %>" placeholder="{{ _("Time") }}" />
+  <div class="editSystemDateTime padding form-horizontal">
+    <fieldset id="" class="">
+      <legend>{{ _('Date/Time') }}</legend>
+      <div class="control-group">
+        <label for="editDateTZ" class="control-label strong">{{ _("Time Zone") }}</label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-globe"></i></span>
+            <select id="editDateTZ" name="time_zone">
+            <% _.each(timezone_set, function(v, k) { %>
+              <option value="<%= v %>"<% if(v === time_zone) { %> selected="selected"<% } %>><%= v %></option>
+            <% }); %>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-  </fieldset>
-</div>
+      <div class="control-group">
+        <label for="editDateTS" class="control-label strong">{{ _("Time Server") }}</label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-hdd"></i></span>
+            <input type="text" name="time_server" id="editDateTS" value="<%= time_server %>" />
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editDateDate" class="control-label strong">{{ _("Date") }}</label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-calendar"></i></span>
+            <input type="text" name="date" id="editDateDate" readonly="readonly" opt="dt" value="<%= date %>" placeholder="{{ _("Date") }}" />
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label for="editDateTime" class="control-label strong">{{ _("Time") }}</label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-time"></i></span>
+            <span class="bootstrap-timepicker">
+              <input type="text" name="time" id="editDateTime" readonly="readonly" opt="dt" value="<%= time %>" placeholder="{{ _("Time") }}" />
+            </span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>

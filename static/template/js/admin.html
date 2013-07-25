@@ -202,11 +202,11 @@
       </div>
       <label for="saAddEditGroup" class="control-label">{{ _("Group") }}</label>
       <div class="controls">
-        {% if "admin" == userinfo["group"] %}
+      {% if "admin" == userinfo["group"] %}
         <select name="group" id="saAddEditGroup">
-        {% else %}
+      {% else %}
         <select name="group" id="saAddEditGroup" class="disabled" disabled="disabled">
-        {% endif %}
+      {% endif %}
           <option value="admin">admin</option>
           <option value="operator">operator</option>
           <option value="monitor">monitor</option>

@@ -30,28 +30,25 @@
                 <% for(var kk = 0; kk < v.length; kk++) { %>
               <tr>
                 <td>
-                  <div class="input-prepend input-append">
+                  <div class="input-prepend">
                     <span class="add-on"><i class="icon-flag"></i></span>
                     <input type="text" name="<%= k %>-destination" value="<%= v[kk]["destination"] %>" class="span2" placeholder="{{ _("Destination") }}" />
-                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
                   </div>
                 </td>
                 <td>
-                  <div class="input-prepend input-append">
+                  <div class="input-prepend">
                     <span class="add-on"><i class="icon-th-large"></i></span>
                     <input type="number" name="<%= k %>-prefix" value="<%= v[kk]["prefix"] %>" class="span2" placeholder="{{ _("Prefix Length") }}" />
-                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
                   </div>
                 </td>
                 <td>
-                  <div class="input-prepend input-append">
+                  <div class="input-prepend">
                     <span class="add-on"><i class="icon-road"></i></span>
                     <input type="text" name="<%= k %>-gateway" value="<%= v[kk]["gateway"] %>" class="span2" placholder="{{ _("Gateway") }}" />
-                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
                   </div>
                 </td>
                 <td>
-                  <div class="input-prepend input-append">
+                  <div class="input-prepend">
                     <span class="add-on"><i class="icon-screenshot"></i></span>
                     <select class="rtIpv46Intf" name="<%= k %>-interface" opt="interface" class="span2">
                       <option value="">{{ _("auto") }}</option>
@@ -59,7 +56,6 @@
                       <option value="<%= nv %>"<% if(v[kk]["interface"] === nv) { %>selected="selected"<% } %>><%= nv %></option>
                     <% }); %>
                     </select>
-                    <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
                   </div>
                 </td>
                 <td>
@@ -80,28 +76,25 @@
         <tbody class="newSysRt">
           <tr>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-flag"></i></span>
                 <input type="text" class="span2" placeholder="{{ _("Destination") }}" opt="destination" />
-                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-th-large"></i></span>
                 <input type="number" class="span2" placeholder="{{ _("Prefix Length") }}" opt="prefix" />
-                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-road"></i></span>
                 <input type="text" class="span2" placholder="{{ _("Gateway") }}" opt="gateway" />
-                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-screenshot"></i></span>
                 <select opt="interface" class="rtIpv46Intf span2">
                   <option value="">{{ _("auto") }}</option>
@@ -109,7 +102,6 @@
                   <option value="<%= nv %>"><%= nv %></option>
                 <% }); %>
                 </select>
-                <a href="#" class="btn btnEditRT">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>

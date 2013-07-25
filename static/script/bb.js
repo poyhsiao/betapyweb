@@ -249,7 +249,17 @@ View = Backbone.View.extend({
 
     viewBridge: function(o) {
     /* it is about Bridge get */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=bridge", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
@@ -261,36 +271,33 @@ View = Backbone.View.extend({
                 "width": "100%",
                 "height": "100%"
             });
-//            .find("button").css({
-//                "width": function() {
-//                    return $(this).hasClass("brAdd") ? "90%" : "45%";
-//                }
-//            });
         }, "html");
     },
 
     editBridge: function(o) {
     /* add new bridge, which will pop-up a jQuery dialog */
-        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), opt, title, tpl, tn;
+        var me = this, self = $(o.target), dom = $("div.editSystemBridge").clone(true), ck = self.text() + " " + $("span.subtitle").text(), sel = dom.find("select.nicSelect"), opt, title, tpl, tn;
 
-        dom.on("click", "button.btnDelBrInterface", function() {
+        dom.on("click", "a.btnDelBrInterface", function() {
         /* clicking delete bridge interface */
             var opt = $(this).attr("opt");
             $("<option />").attr("br", "new").val(opt).text(opt).appendTo(sel);
             $(this).parents("tr.brInterface").hide("fast", function() {
                $(this).remove();
             });
+            return false;
         });
 
-        dom.on("click", "button.btnAddBrInterface", function() {
+        dom.on("click", "a.btnAddBrInterface", function() {
         /* clicking add bridge interface */
             if($(sel).find("option").size()) {
                 var val = $(sel).val(), op = $(sel).children('option[value="' + val + '"]'), tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface:last");
                 op.remove();
                 /* remove selected item */
                 $("<td />").text(val).appendTo($("tr.addBrInterface:last")).appendTo(tr);
-                $("<td />").addClass("text-center").append( $("span button.btnDelBrInterface:last").clone().attr("opt", val) ).appendTo(tr);
+                $("<td />").addClass("text-center").append( $("span a.btnDelBrInterface:last").clone().attr("opt", val) ).appendTo(tr);
             }
+            return false;
         });
 
         require(['jqueryUI'], function() {
@@ -352,8 +359,8 @@ View = Backbone.View.extend({
 
                         if(self.hasClass("brEdit")) {
                         /* edit existing bridge */
-                            self.siblings("input").each(function(k, v) {
-                                var vname = $(v).attr("name");
+                            self.parents(".btn-group:first").siblings("input").each(function(k, v) {
+                                var vname = $(v).attr("name"), cln;
                                 if("interface" === vname) {
                                     cif = $(v).val().split(',');
                                     /* re-generate the interfaces as an array */
@@ -366,7 +373,7 @@ View = Backbone.View.extend({
                                         /* generate exists interfaces */
                                        var tr = $("<tr />").addClass("brInterface").insertAfter("tr.addBrInterface:last"), td = $("<td />").addClass("text-center");
                                        $("<td />").text(vv).appendTo(tr);
-                                       $("span.brBtnTpl button.btnDelBrInterface:last").clone().attr("opt", vv).appendTo(td);
+                                       $("div.editSystemBridge:visible").find("span.brBtnTpl a.btnDelBrInterface:last").clone(true).attr("opt", vv).appendTo(td);
                                        td.appendTo(tr);
                                     });
 
@@ -397,6 +404,9 @@ View = Backbone.View.extend({
                         }
 
                         dom.unblock();
+
+                        $("a").css("outline", "none");
+                        /* remove a(button) outline */
                     });
                 },
                 close: function() {$('option[br="new"]').remove();
@@ -451,8 +461,8 @@ View = Backbone.View.extend({
 
 //                            $("<td />").addClass("brInterface").text(interfaces).appendTo(tr);
                             btns = $("<div />").addClass("btn-group");
-                            dom.find("span.brBtnTpl button.brDel").clone(true).attr("opt", val).appendTo(btns);
-                            dom.find("span.brBtnTpl button.brEdit").clone(true).attr("opt", val).appendTo(btns);
+                            dom.find("span.brBtnTpl a.brDel").clone(true).attr("opt", val).appendTo(btns);
+                            dom.find("span.brBtnTpl a.brEdit").clone(true).attr("opt", val).appendTo(btns);
                             btns.appendTo(td);
                             dom.find(':input').each(function(k, v) {
                                 var name = $(v).attr("name"), val = $(v).val();
@@ -502,7 +512,18 @@ View = Backbone.View.extend({
 
     viewIpAddress: function(o) {
     /* ip address setup page display */
-        var me = this, dat = {"items": me.model.attributes[1], "nic": []}, t;
+        var me = this, str = '', dat, t;
+
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = {"items": me.model.attributes[1], "nic": []}
+    	}
+
         Ajax = $.get("/getTpl?file=ip_address", function(d) {
 
         	$.each(dat["items"]["ip"], function(k, v) {
@@ -622,7 +643,17 @@ View = Backbone.View.extend({
 
     viewArpTable: function(o) {
     /* ip address setup page display */
-        var me = this, dat = {"items": me.model.attributes[1], "nic": ''}, t;
+        var me = this, str = '', dat, t;
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = {"items": me.model.attributes[1], "nic": ''};
+    	}
+
         Ajax = $.get("/getTpl?file=arp_table", function(d) {
         	Ajax = $.getJSON("/system/getInterfaces", function(nic) {
         		dat["nic"] = nic["interface"];
@@ -666,24 +697,32 @@ View = Backbone.View.extend({
 
     addArpTable: function(o) {
     /* add new arp static ip */
-    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = self.attr("opt"), tpl;
+    	var me = this, self = $(o.target), tr = self.parents("tr"), opt = self.attr("opt"), chk = self.attr("chk"), tpl;
     	tpl = $("tbody.newArpTable[opt='" + opt + "']").clone(true);
-    	console.log(opt);
-    	console.log(tpl);
     	tpl.find(":input").attr({
     		"name": function() {
-    			return opt + "-" + $(this).attr("opt");
+    			return chk + "-" + $(this).attr("opt");
     		}
     	});
 
-    	tpl.find("tr").hide().insertAfter(tr).show("slow", function() {});
+    	tpl.find("tr").hide().insertAfter(tr).show("slow");
 
     	return false;
     },
 
     viewDateTime: function(o) {
     /* date time setup page display */
-        var me = this, dat = me.model.attributes[1], t;
+        var me = this, str = '', dat, t;
+        if(false === me.model.attributes[0]) {
+    		$.each(me.model.attributes[1], function(k, v) {
+    			str += ' ' + v;
+    		});
+
+    		return bootbox.alert(str);
+    	} else {
+    		dat = me.model.attributes[1];
+    	}
+
         Ajax = $.get("/getTpl?file=datetime", function(d) {
             t = _.template(d);
             me.$el.html(t(dat));
@@ -1288,6 +1327,10 @@ View = Backbone.View.extend({
                 url = "/system/sroute";
                 obj = $("div.SystemRoutingTable");
                 break;
+            case "arp":
+            	url = "/system/sarp";
+            	obj = $("div.SystemArpTable");
+            	break;
             case "date":
                 url = "/system/sdate";
                 obj = $("div.editSystemDateTime");
@@ -1345,7 +1388,9 @@ View = Backbone.View.extend({
             			}
             		});
                 } else {
-                    return me.runOpReload();
+                	return bootbox.alert("Update completed", function() {
+                		return me.runOpReload();
+                	});
                 }
             }, "json");
         }
@@ -1591,9 +1636,9 @@ MainOperation = {
             me.view = new View({
                 model: me.model,
                 events: {
-                    "click button.brAdd": "editBridge",
-                    "click button.brDel": "delBridge",
-                    "click button.brEdit": "editBridge"
+                    "click a.brAdd": "editBridge",
+                    "click a.brDel": "delBridge",
+                    "click a.brEdit": "editBridge"
                 }
             });
 

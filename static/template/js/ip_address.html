@@ -7,12 +7,15 @@
             <label class="control-label strong" for="ipSelecter">{{ _("Interface") }}</label>
           </th>
           <td>
-            <select class="ipSelInterface" id="ipSelecter">
-              <option disabled="disabled">{{ _("Interface") }}</option>
-            <%  _.each(nic, function(v, k) { %>
-              <option value="<%= v %>"><%= v %></option>
-            <% }); %>
-            </select>
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-screenshot"></i></span>
+              <select class="ipSelInterface" id="ipSelecter">
+                <option disabled="disabled">{{ _("Interface") }}</option>
+              <%  _.each(nic, function(v, k) { %>
+                <option value="<%= v %>"><%= v %></option>
+              <% }); %>
+              </select>
+            </div>
           </td>
         </tr>
       </table>
@@ -33,17 +36,15 @@
           <% _.each(v["ipv4"], function(vv, kk) { %>
           <tr>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-book"></i></span>
                 <input type="text" name="<%= v["interface"] %>-ipv4_address" value="<%= vv['ipv4_address'] %>" opt="ipv4_address" class="span2" placeholder="{{ _("IPv4 Address") }}" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-th-large"></i></span>
                 <input type="text" name="<%= v["interface"] %>-ipv4_prefix" value="<%= vv['ipv4_prefix'] %>" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
@@ -66,17 +67,15 @@
           <% _.each(v["ipv6"], function(vv, kk) { %>
           <tr>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-book"></i></span>
                 <input type="text" name="<%= v["interface"] %>-ipv6_address" value="<%= vv['ipv6_address'] %>" opt="ipv6_address" class="span2" placeholder="{{ _("IPv6 Address") }}" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
-              <div class="input-prepend input-append">
+              <div class="input-prepend">
                 <span class="add-on"><i class="icon-th-large"></i></span>
                 <input type="number" name="<%= v["interface"] %>-ipv6_prefix" value="<%= vv['ipv6_prefix'] %>" opt="ipv6_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
-                <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
               </div>
             </td>
             <td>
@@ -94,17 +93,15 @@
     	<tbody class="newIpAddress" opt="ipv4">
     	  <tr>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-book"></i></span>
               <input type="text" opt="ipv4_address" class="span2" placeholder="{{ _("IPv4 Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-th-large"></i></span>
               <input type="text" opt="ipv4_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
@@ -115,17 +112,15 @@
     	<tbody class="newIpAddress" opt="ipv6">
     	  <tr>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-book"></i></span>
               <input type="text" opt="ipv6_address" class="span2" placeholder="{{ _("IPv6 Address") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>
-            <div class="input-prepend input-append">
+            <div class="input-prepend">
               <span class="add-on"><i class="icon-th-large"></i></span>
               <input type="number" opt="ipv6_prefix" class="span2" placeholder="{{ _("Prefix Length") }}" />
-              <a href="#" class="btn btnEdit">{{ _("Edit") }}</a>
             </div>
           </td>
           <td>

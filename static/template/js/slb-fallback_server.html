@@ -1,72 +1,68 @@
-  <table class="table table-bordered table-hover">
-    <tr>
-    	<th colspan="3">{{ _("Fallback Server")}}</th>
-    </tr>
-<% _.each(fallback_server, function(av, ak) { %>
-    <tr opt="<%= ak %>" set="fbs">
-    	<th rowspan="2">
-    	  <a href="#" class="btn btnAddFallback">{{ _("Add") }}</a>
-    	</th>
-  	<% if("ipv4" === ak) { %>
-    	<th colspan="2">{{ _("IPv4") }}</th>
-  	<% } else { %>
-  	  <th colspan="2">{{ _("IPv6") }}</th>
-	  <% } %>
-    </tr>
-    <tr opt="<%= ak %>" set="fbs">
-    	<th>{{ _("Label") }}</th>
-    	<th>{{ _("IP Address") }}</th>
-    </tr>
-  <% _.each(av, function(v, k) { %>
-    <tr gnumber="<%= k %>" opt="<%= ak %>" set="fbs">
-    	<td>
-    	  <a href="#" class="btn btnDelFallback">{{ _("Delete") }}</a>
-    	</td>
-    	<td>
-    	  <div class="input-prepend input-append">
-    	    <span class="add-on"><i class="icon-pencil"></i></span>
-    	    <input type="text" name="fallback_server@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span2" chk="label" />
-    	    <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
-    	  </div>
-  	  </td>
-    	<td>
-    	  <div class="input-prepend input-append">
-    	    <span class="add-on"><i class="icon-book"></i></span>
-    	    <input type="text" name="fallback_server@@<%= ak %>@@<%= k %>@@ip_address" value="<%= v["ip_address"] %>" class="span2" chk="ip_address" />
-    	    <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
-    	  </div>
-    	</td>
-    </tr>
+    <table class="table table-bordered table-hover">
+      <tr>
+      	<th colspan="3">{{ _("Fallback Server")}}</th>
+      </tr>
+  <% _.each(fallback_server, function(av, ak) { %>
+      <tr opt="<%= ak %>" set="fbs">
+      	<th rowspan="2">
+      	  <a href="#" class="btn btnAddFallback">{{ _("Add") }}</a>
+      	</th>
+    	<% if("ipv4" === ak) { %>
+      	<th colspan="2">{{ _("IPv4") }}</th>
+    	<% } else { %>
+    	  <th colspan="2">{{ _("IPv6") }}</th>
+  	  <% } %>
+      </tr>
+      <tr opt="<%= ak %>" set="fbs">
+      	<th>{{ _("Label") }}</th>
+      	<th>{{ _("IP Address") }}</th>
+      </tr>
+    <% _.each(av, function(v, k) { %>
+      <tr gnumber="<%= k %>" opt="<%= ak %>" set="fbs">
+      	<td>
+      	  <a href="#" class="btn btnDelFallback">{{ _("Delete") }}</a>
+      	</td>
+      	<td>
+      	  <div class="input-prepend input-append">
+      	    <span class="add-on"><i class="icon-pencil"></i></span>
+      	    <input type="text" name="fallback_server@@<%= ak %>@@<%= k %>@@label" value="<%= v["label"] %>" class="span2" chk="label" />
+      	  </div>
+    	  </td>
+      	<td>
+      	  <div class="input-prepend input-append">
+      	    <span class="add-on"><i class="icon-book"></i></span>
+      	    <input type="text" name="fallback_server@@<%= ak %>@@<%= k %>@@ip_address" value="<%= v["ip_address"] %>" class="span2" chk="ip_address" />
+      	  </div>
+      	</td>
+      </tr>
+    <% }); %>
+      <tr>
+        <td></td>
+      	<td colspan="2">{{ _("NA") }}</td>
+      </tr>
   <% }); %>
-    <tr>
-      <td></td>
-    	<td colspan="2">{{ _("NA") }}</td>
-    </tr>
-<% }); %>
-  </table>
-
-  <div class="slb-fbsTpl inactive">
-    <table>
-    	<tbody class="newFbsSet">
-    	  <tr set="fbs">
-          <td>
-            <a href="#" class="btn btnDelFallback">{{ _("Delete") }}</a>
-          </td>
-          <td>
-            <div class="input-prepend input-append">
-              <span class="add-on"><i class="icon-pencil"></i></span>
-              <input type="text" class="span2" chk="label" />
-              <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
-            </div>
-          </td>
-          <td>
-            <div class="input-prepend input-append">
-              <span class="add-on"><i class="icon-book"></i></span>
-              <input type="text" class="span2" chk="ip_address" />
-              <a href="#" class="btn btnConfirm">{{ _("Edit") }}</a>
-            </div>
-          </td>
-        </tr>
-    	</tbody>
     </table>
-  </div>
+
+    <div class="slb-fbsTpl inactive">
+      <table>
+      	<tbody class="newFbsSet">
+      	  <tr set="fbs">
+            <td>
+              <a href="#" class="btn btnDelFallback">{{ _("Delete") }}</a>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-pencil"></i></span>
+                <input type="text" class="span2" chk="label" />
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-book"></i></span>
+                <input type="text" class="span2" chk="ip_address" />
+              </div>
+            </td>
+          </tr>
+      	</tbody>
+      </table>
+    </div>
