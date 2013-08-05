@@ -238,7 +238,10 @@ class System(object):
         res = dns.set(user = self.getUser(), cfg = kwargs)
         _.response.headers["Content-Type"] = "application/json"
         # return json.dumps(kwargs)
-        return json.dumps(res)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def gvlan(self, **kwargs):
@@ -274,9 +277,9 @@ class System(object):
                 size = kwargs["interface"]
                 for i in range(len(size)):
                     if len(kwargs["interface"][i]) > 1 and len(kwargs["vlan_id"]) > 0:
-                        op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": int(kwargs["vlan_id"][i])})
+                        op.append({"interface": libs.tools.convert(kwargs["interface"][i]), "vlan_id": libs.tools.convert(kwargs["vlan_id"][i])})
             else:
-                op.append({"interface": libs.tools.convert(kwargs["interface"]), "vlan_id": int(kwargs["vlan_id"])});
+                op.append({"interface": libs.tools.convert(kwargs["interface"]), "vlan_id": libs.tools.convert(kwargs["vlan_id"])});
 
             dat = {"vconfig": op}
         else:
@@ -286,7 +289,10 @@ class System(object):
         res = vlan.set(user = self.getUser(), cfg = dat)
         libs.tools.v(res)
         _.response.headers["Content-Type"] = "application/json"
-        return json.dumps(res)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def gbridge(self, **kwargs):
@@ -379,7 +385,10 @@ class System(object):
 
         libs.tools.v(op)
         res = wbr.set(user = self.getUser(), cfg = {"br": op})
-        return json.dumps(res)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def gip(self, **kwargs):
@@ -423,27 +432,31 @@ class System(object):
                 if(type(kwargs[inf + '-ipv4_address']).__name__ == 'list'):
                     for ip in range(0, len(kwargs[inf + '-ipv4_address'])):
                         ot["ipv4"].append({"ipv4_address": libs.tools.convert(kwargs[inf + '-ipv4_address'][ip]),
-                                           "ipv4_prefix": int(kwargs[inf + '-ipv4_prefix'][ip])
+                                           "ipv4_prefix": libs.tools.convert(kwargs[inf + '-ipv4_prefix'][ip])
                                            })
                 else:
                     ot["ipv4"].append({"ipv4_address": libs.tools.convert(kwargs[inf + '-ipv4_address']),
-                                       "ipv4_prefix": int(kwargs[inf + '-ipv4_prefix'])
+                                       "ipv4_prefix": libs.tools.convert(kwargs[inf + '-ipv4_prefix'])
                                        })
             if inf + '-ipv6_address' in kwargs:
                 if(type(kwargs[inf + '-ipv6_address']).__name__ == 'list'):
                     for ip in range(0, len(kwargs[inf + '-ipv6_address'])):
                         ot["ipv6"].append({"ipv6_address": libs.tools.convert(kwargs[inf + '-ipv6_address'][ip]),
-                                           "ipv6_prefix": int(kwargs[inf + '-ipv6_prefix'][ip])
+                                           "ipv6_prefix": libs.tools.convert(kwargs[inf + '-ipv6_prefix'][ip])
                                            })
                 else:
                     ot["ipv6"].append({"ipv6_address": libs.tools.convert(kwargs[inf + '-ipv6_address']),
-                                       "ipv6_prefix": int(kwargs[inf + '-ipv6_prefix'])
+                                       "ipv6_prefix": libs.tools.convert(kwargs[inf + '-ipv6_prefix'])
                                        })
             output.append(ot)
 
         output = {"ip": output}
         # change to correct format
-        return json.dumps(wip.set(user = self.getUser(), cfg = output))
+        res = wip.set(user = self.getUser(), cfg = output)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def groute(self, **kwargs):
@@ -492,7 +505,11 @@ class System(object):
 
         libs.tools.v(protocol)
         print(protocol)
-        return json.dumps(wrt.set(user = self.getUser(), cfg = protocol))
+        res = wrt.set(user = self.getUser(), cfg = protocol)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def garp(self, **kwargs):
@@ -618,7 +635,11 @@ class System(object):
                                                });
         libs.tools.v(dataTpl)
 
-        return json.dumps(wat.set(user = self.getUser(), cfg = dataTpl))
+        res = wat.set(user = self.getUser(), cfg = dataTpl)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def gdate(self, **kwargs):
@@ -665,7 +686,11 @@ class System(object):
                 res[k] = libs.tools.convert(kwargs[k])
 
         libs.tools.v(res)
-        return json.dumps(wdt.set(user = self.getUser(), cfg = res))
+        res = wdt.set(user = self.getUser(), cfg = res)
+        if False == res[0]:
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+        else:
+            return json.dumps(res)
 
     @_.expose
     def start_arping(self, **kwargs):

@@ -306,7 +306,7 @@ var eView = Backbone.View.extend({
      * other: other object like ipv4_vip/ipv4_vr/ipv6_vip/ipv6_vr and it's number, the format should be like below:
      * {"ipv4_vip", [{'interface': 's0e1', 'ipv4': '192.168.1.1', 'netmask': '255.255.255.0'}]} ... - optional
      */
-        var me = this, ips = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr", "additional_track_interface"], names = [], obj, paras, prefix, swap;
+        var me = this, ips = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr", "additional_track_interface"], names = [], dat = {}, name_prefix = [], name_val = [], obj, paras, prefix, swap, res;
 
         if(_.isUndefined(ov['group'][gnumber])) {
             ov['group'][gnumber] = {"instance": []};
@@ -322,11 +322,12 @@ var eView = Backbone.View.extend({
 
         obj = [];
         prefix = gnumber + "@@instance@@" + inumber + "@@";
-        params = $(":input[name^='" + prefix + "']");
+        params = $("tr[gnumber='" + gnumber + "'][inumber='" + inumber + "']").find("span.svVrrpTpl").find(":input");
+        console.log(params);
 
         params.each(function(k, v) {
             names = $(v).attr("name").replace(prefix, '');
-            if(-1 !== names.indexOf('@@')) {
+            if(-1 != names.indexOf('@@')) {
             /* names contains with @@ */
                 names = names.split("@@");
                 names[1] = ~~names[1];
@@ -365,7 +366,24 @@ var eView = Backbone.View.extend({
             });
         }
 
-        return ov['group'][gnumber]['instance'][inumber];
+//        return ov['group'][gnumber]['instance'][inumber];
+        res = ov['group'][gnumber]['instance'][inumber];
+        $.each(res, function(k, v) {
+        	if("additional_track_interface" === k && $.isArray(v)) {
+        		$.each(v, function(kk, vv) {
+        			if(-1 === _.indexOf(name_val, vv["interface"])) {
+        				name_val.push(vv["interface"]);
+        				if(_.isUndefined(dat[k])) {
+        					dat[k] = [];
+        				}
+        				dat[k].push(vv);
+        			}
+        		});
+        	} else {
+        		dat[k] = v;
+        	}
+        });
+        return dat;
     },
 
     addEditSvVrrpIns: function(o) {
@@ -423,7 +441,7 @@ var eView = Backbone.View.extend({
                             dom.find("input[type=checkbox]").wrap('<div class="switch switch-mini" data-on="primary" data-off="danger" data-on-label="<i class=\'icon-ok icon-white\'></i>" data-off-label="<i class=\'icon-remove\'></i>">').parent().bootstrapSwitch();
                         });
 
-                        if("" !== dat["items"]) {
+                        if("" != dat["items"]) {
                         /* edit existing instance*/
                             items = ["ipv4_vip", "ipv4_vr", "ipv6_vip", "ipv6_vr"];
                             $.each(items, function(k, v) {
@@ -455,6 +473,7 @@ var eView = Backbone.View.extend({
                                 ntr.removeClass("newSelAvailAtIf").insertAfter(tr);
                                 addAtIfTimes += 1;
                             }
+                            console.log(ov);
                             return false;
                         });
 
@@ -486,6 +505,7 @@ var eView = Backbone.View.extend({
                                 }
                             });
 
+                            me._inputsToObject(gp.no, ist.no);
                             tpl.removeClass(ck.data("tpl")).insertAfter($("tr." + base + ":last")).show("fast");
                             return false;
                         });
@@ -496,6 +516,7 @@ var eView = Backbone.View.extend({
                             ck.parents("tr").hide("fast", function() {
                                 $(this).remove();
                             });
+                            me._inputsToObject(gp.no, ist.no)
                             return false;
                         });
 
@@ -536,7 +557,7 @@ var eView = Backbone.View.extend({
                                     value: $(v).is(":checked")
                                 })[0]);
                             } else {
-                                inputs.push($("<input />", {
+                            	inputs.push($("<input />", {
                                     type: "hidden",
                                     name: $(v).attr("name"),
                                     gnumber: '',
@@ -552,12 +573,12 @@ var eView = Backbone.View.extend({
                         if(self.hasClass("btnSvVrrpEditIt")) {
                         /* edit exist instance */
                             gno = $("tr[gnumber='" + gp.no + "'][inumber='" + ist.no + "']");
-                            gno.find("span.svVrrpTpl").html(inputs);
+                            gno.find("span.svVrrpTpl").empty().html(inputs);
                             gno.find("[gnumber]").attr("gnumber", gp.no);
                             gno.find("[inumber]").attr("inumber", ist.no);
 
                             delete(ov['group'][gp.no]['instance'][ist.no]);
-                            ov['group'][gp.no]['instance'] = _.compact(ov['group'][gp.no]['instance']);
+            				ov['group'][gp.no]['instance'] = _.compact(ov['group'][gp.no]['instance']);
                             /* remove exist ov value to make sure every information is updated */
                         } else {
                         /* add new instance */
@@ -574,7 +595,7 @@ var eView = Backbone.View.extend({
                                 gnumber: ngn.no,
                                 inumber: ist.no
                             }).removeClass("newInstance");
-                            inputs.appendTo($(".svVrrpTpl"));
+                            inputs.appendTo($("span.svVrrpTpl"));
                             /* put input fields into capacity */
 
                             $("<input />", {
@@ -1578,47 +1599,51 @@ var eView = Backbone.View.extend({
     },
 
     viewView: function(o) {
-    /* display view log */
+        /* display view log */
         var me = this, str = '', dat, t, txa;
 
         if(false === me.model.attributes[0]) {
-    		$.each(me.model.attributes[1], function(k, v) {
-    			str += ' ' + v;
-    		});
+            $.each(me.model.attributes[1], function(k, v) {
+                str += ' ' + v;
+            });
 
-    		return bootbox.alert(str);
-    	} else {
-    		dat = me.model.attributes[1];
+            return bootbox.alert(str);
+
+        } else {
+        	dat = {"items": me.model.attributes[1]};
     	}
 
         Ajax = $.get("/getTpl?file=views", function(d) {
-            t = _.template(d);
-            me.$el.html(t()).find("textarea").css({
-                resize: "none",
-                background: "#fff",
-                width: "90%",
-                height: "200px"
-            });
+        	t = _.template(d);
+        	me.$el.html(t(dat)).find("textarea").css({
+        		resize: "none",
+        		background: "#fff",
+        		width: "90%",
+        		height: "200px"
+			});
 
-            $("div.borderArrow").show("fast");
-            /* show arrow image */
-
-            $.each(dat, function(k, v) {
-                me.$el.find("textarea").val(function(i, vv) {
-                    return vv + v;
-                });
-            });
-
-            txa = me.$el.find("textarea");
-            txa.scrollTop(
-                txa[0].scrollHeight - txa.height()
-            );
-        }, "html");
+        	$("div.borderArrow").show("fast");
+        	/* show arrow image */
+    	});
     },
 
     refeshViews: function(o) {
     /* press views refresh button */
-        return $("#oReload").trigger("click");
+//        return $("#oReload").trigger("click");
+    	var me = this, self = $(o.target), txtarea = $("textarea.logViewList");
+    	txtarea.parents("div:first").block();
+    	Ajax = $.post("/log/view", {"logtype": me.$el.find("select[name=logtype]").val()}, function(d) {
+    		$.each(d, function(k,  v) {
+    			txtarea.val(function(i, vv) {
+    				return vv + v;
+    			});
+    		});
+
+    		txtarea.scrollTop( txtarea[0].scrollHeight - txtarea.height() );
+    		txtarea.parents("div:first").unblock();
+    	}, "json");
+
+    	return false;
     },
 
     viewSyslog: function(o) {
@@ -1848,12 +1873,12 @@ var ExtHandler = {
         var me = this;
         delete(me.model);
         delete(me.view);
-        Ajax = $.getJSON("/log/view", function(d) {
+        Ajax = $.getJSON("/log/viewCatalog", function(d) {
             me.model = new eModel(d);
             me.view = new eView({
                 model: me.model,
                 events: {
-                    "click a.btn": "refeshViews"
+                    "click a.btnViewsRf": "refeshViews"
                 }
             });
 

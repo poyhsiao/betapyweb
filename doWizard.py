@@ -77,7 +77,11 @@ class Wizard(object):
 
             libs.tools.v(kwargs)
             _.session["wizard"]["dns"] = kwargs
-            return json.dumps(dns.check(user = self.getUser(), cfg = kwargs))
+            res = dns.check(user = self.getUser(), cfg = kwargs)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             return json.dumps((False, None))
 
@@ -92,7 +96,11 @@ class Wizard(object):
         elif "mode" in kwargs:
             libs.tools.v(kwargs)
             _.session["wizard"]["mode"] = kwargs
-            return json.dumps(mode.check(user = self.getUser(), cfg = kwargs))
+            res = mode.check(user = self.getUser(), cfg = kwargs)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             return json.dumps((False, None))
 
@@ -110,7 +118,11 @@ class Wizard(object):
                     "virtual-router-id": kwargs["virtual-router-id"]}
 
             _.session["wizard"]["vrrp"] = data
-            return json.dumps(vrrp.check(user = self.getUser(), cfg = data))
+            res = vrrp.check(user = self.getUser(), cfg = data)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             return json.dumps((False, None))
 
@@ -149,7 +161,11 @@ class Wizard(object):
                             res[ka].append({"ipv4_address": libs.tools.convert(goptTmp[k][ka + "@@ipv4_address"]), "ipv4_prefix": libs.tools.convert(goptTmp[k][ka + "@@ipv4_prefix"])})
 
             _.session["wizard"]["s0e2"] = res
-            return json.dumps(s0e2.check(user = self.getUser(), cfg = res))
+            res = s0e2.check(user = self.getUser(), cfg = res)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             return json.dumps((False, None))
 
@@ -185,7 +201,11 @@ class Wizard(object):
                         res[ka].append({"ipv4_address": libs.tools.convert(goptTmp[k][ka + "@@ipv4_address"]), "ipv4_prefix": libs.tools.convert(goptTmp[k][ka + "@@ipv4_prefix"])})
 
             _.session["wizard"]["s0e1"] = res
-            return json.dumps(s0e1.check(user = self.getUser(), cfg = res))
+            res = s0e1.check(user = self.getUser(), cfg = res)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             return json.dumps((False, None))
 
@@ -220,7 +240,7 @@ class Wizard(object):
             if True == res[0]:
                 return self.saveWizard()
             else:
-                return json.dumps(res)
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         else:
             return json.dumps((False, None))
 
@@ -256,21 +276,21 @@ class Wizard(object):
 
         res = dns.set(user = user, cfg = data["dns"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         res = mode.set(user = user, cfg = data["mode"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         res = vrrp.set(user = user, cfg = data["vrrp"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         res = s0e2.set(user = user, cfg = data["s0e2"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         res = s0e1.set(user = user, cfg = data["s0e1"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
         res = slb.set(user = user, cfg = data["slb"])
         if False == res[0]:
-            return json.dumps(res)
+            return json.dumps([res[0], libs.tools.translateMessage(res[1])])
 
         return json.dumps(res)

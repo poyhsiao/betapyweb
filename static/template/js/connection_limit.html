@@ -8,7 +8,7 @@
           <td rowspan="2">
             <a href="#" class="btn btnAddConnectLimit" opt="<%= ak %>">{{ _("Add") }}</a>
           </td>
-          <th colspan="5">
+          <th colspan="6">
           <% if("ipv4" === ak) { %>
             <span>{{ _("IPv4") }}</span>
           <% } else { %>
@@ -25,6 +25,9 @@
           </th>
           <th>
             <span>{{ _("Protocol") }}</span>
+          </th>
+          <th>
+            <span>{{ _("Application Port") }}</span>
           </th>
           <th>
             <span>{{ _("Rate") }}</span>
@@ -59,8 +62,14 @@
               </select>
             </div>
           </td>
-        	<td>
+          <td>
             <div class="input-prepend">
+              <span class="add-on"><i class="icon-cog"></i></span>
+              <input type="text" name="<%= ak %>@@<%= k %>@@application_port" gnumber="<%= k %>" value="<%= v["application_port"] %>" class="span1" chk="application_port" />
+            </div>
+          </td>
+        	<td>
+            <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-time"></i></span>
               <input type="number" name="<%= ak %>@@<%= k %>@@limit_rate" gnumber="<%= k %>" value="<%= v["limit_rate"] %>" class="span1" chk="limit_rate" />
               <select name="<%= ak %>@@<%= k %>@@limit_rate_unit" gnumber="<%= k %>" class="span1" chk="limit_rate_unit">
@@ -114,6 +123,12 @@
           </td>
           <td>
             <div class="input-prepend">
+              <span class="add-on"><i class="icon-cog"></i></span>
+              <input type="text" class="span1" chk="application_port" />
+            </div>
+          </td>
+          <td>
+            <div class="input-prepend input-append">
               <span class="add-on"><i class="icon-time"></i></span>
               <input type="number" class="span1" chk="limit_rate" />
               <select class="span1" chk="limit_rate_unit">

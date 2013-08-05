@@ -1,10 +1,17 @@
-<div class="logView padding">
-  <fieldset id="" class="">
-    <legend>{{ _("Recent Event") }}</legend>
-    <label class="control-label strong"></label>
-    <div class="controls padding">
-      <a href="#" class="btn btnViewsRf">{{ _("Refresh") }}</a>
-    </div>
-    <textarea class="logViewList padding" readonly="readonly"></textarea>
-  </fieldset>
-</div>
+  <div class="logView padding">
+    <fieldset id="" class="">
+      <legend>{{ _("Recent Event") }}</legend>
+      <div class="padding input-prepend input-append">
+        <span class="add-on"><i class="icon-refresh"></i></span>
+        <select name="logtype" class="span2">
+          <% _.each(items, function(v, k) { %>
+          <option value="<%= v %>"><%= v %></option>
+          <% }); %>
+        </select>
+        <a href="#" class="btn btnViewsRf">{{ _("Refresh") }}</a>
+      </div>
+      <div>
+        <textarea class="logViewList padding" readonly="readonly"></textarea>
+      </div>
+    </fieldset>
+  </div>

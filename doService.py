@@ -62,8 +62,11 @@ tion': '', 'community': 'public'})
 
             libs.tools.v(res)
 
-            return json.dumps(snmp.set(user = self.getUser(), cfg = res))
-
+            res = snmp.set(user = self.getUser(), cfg = res)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             # for information getter
             return json.dumps(snmp.get())
@@ -261,7 +264,11 @@ tion': '', 'community': 'public'})
 
             res = {"group": res}
 
-            return json.dumps(wvr.set(user = self.getUser(), cfg = res))
+            res = wvr.set(user = self.getUser(), cfg = res)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             # getter
             return json.dumps(wvr.get())
@@ -502,7 +509,11 @@ tion': '', 'community': 'public'})
                                         df = self._unstructDict(dg, "@@")
                                         nopt[k][kk].append({kb: df})
             libs.tools.v(nopt);
-            return json.dumps(slb.set(user = self.getUser(), cfg = nopt));
+            res = slb.set(user = self.getUser(), cfg = nopt)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             # getter
             return json.dumps(slb.get())
@@ -512,44 +523,50 @@ tion': '', 'community': 'public'})
         '''
             connection limit getter and setter
             format:
-                {"ipv4": [
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "TCP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "second",
-                        "limit_burst": 5
-                    },
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "UDP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "minute",
-                        "limit_burst": 5
-                    },
-                    ...
-                ],
-                "ipv6": [
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "TCP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "second",
-                        "limit_burst": 5
-                    },
-                    {
-                        "source_ip": "ANY",
-                        "destination_ip": "ANY",
-                        "protocol": "UDP",
-                        "limit_rate": 5,
-                        "limit_rate_unit": "minute",
-                        "limit_burst": 5
-                    },
-                    ...
-                ]}
+                 {
+                    "ipv4": [
+                        {
+                            "source_ip": "ANY",
+                            "destination_ip": "ANY",
+                            "protocol": "TCP",
+                            "application_port": 80,
+                            "limit_rate": 5,
+                            "limit_rate_unit": "second",
+                            "limit_burst": 5
+                        },
+                        {
+                            "source_ip": "ANY",
+                            "destination_ip": "ANY",
+                            "protocol": "UDP",
+                            "application_port": 80,
+                            "limit_rate": 5,
+                            "limit_rate_unit": "minute",
+                            "limit_burst": 5
+                        },
+                        ...
+                    ],
+                    "ipv6": [
+                        {
+                            "source_ip": "ANY",
+                            "destination_ip": "ANY",
+                            "protocol": "TCP",
+                            "application_port": 80,
+                            "limit_rate": 5,
+                            "limit_rate_unit": "second",
+                            "limit_burst": 5
+                        },
+                        {
+                            "source_ip": "ANY",
+                            "destination_ip": "ANY",
+                            "protocol": "UDP",
+                            "application_port": 80,
+                            "limit_rate": 5,
+                            "limit_rate_unit": "minute",
+                            "limit_burst": 5
+                        },
+                        ...
+                    ]
+                }
         '''
         import libs.login
         if False == libs.login.cklogin():
@@ -587,7 +604,11 @@ tion': '', 'community': 'public'})
                     nopt[k].append(dd)
 
 
-            return json.dumps(wcl.set(user = self.getUser(), cfg = nopt))
+            res = wcl.set(user = self.getUser(), cfg = nopt)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             # getter
             data = wcl.get()
@@ -619,7 +640,11 @@ tion': '', 'community': 'public'})
                    "ipv6_prefix": kwargs["ipv6_prefix"],
                    "ipv4": kwargs["ipv4"]}
 
-            return json.dumps(nat64.set(user = self.getUser(), cfg = res))
+            res = nat64.set(user = self.getUser(), cfg = res)
+            if False == res[0]:
+                return json.dumps([res[0], libs.tools.translateMessage(res[1])])
+            else:
+                return json.dumps(res)
         else:
             # getter
             return json.dumps(nat64.get())
