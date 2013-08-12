@@ -1010,9 +1010,22 @@ View = Backbone.View.extend({
                 				 if(true === d[0]) {
                 					 bootbox.confirm("Are you sure to reboot system right now?", function(res) {
                 						 if(true === res) {
-                							 Ajax = $.post("/system/smaintenance", {"act": "reboot"}, function(d) {
-                								 console.log(d);
-            								 });
+                							 Ajax = $.post("/system/ssave_conf", {"act": "save"}, function(da) {
+                								 if(true === da[0]) {
+                									 var wait = 3 * 60 * 1000;
+                									 /* wait for 3 mins for reboot */
+
+                									 $.blockUI();
+
+                									 Ajax = $.post("/system/smaintenance", {"act": "reboot"}, function(db) {
+                										 setTimeout(function() {
+                											 window.parent.href = '/';
+                										 }, wait);
+                    								 });
+                								 } else {
+                									 bootbox.alert(da[1].toString());
+                								 }
+                							 });
                 						 }
                 					 });
             					 } else {

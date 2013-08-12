@@ -211,9 +211,30 @@ class Wizard(object):
 
     @_.expose
     def ckSLB(self, **kwargs):
+        '''
+            data foramt:
+             [
+                {
+                    "vip4":"10.12.97.100",
+                    "protocol":"TCP",
+                    "port":[80,443],
+                    "persistence":10,
+                    "real_server":["192.168.1.10", "192.168.1.20"]
+                },
+                ...
+            ]
+        '''
         import libs.login
         import ml_w_wizard_slb as slb
         import json
+
+        tpl = {
+               "vip4": "",
+               "protocol": "",
+               "port": [],
+               "persistence": 0,
+               "real_server": []
+               }
 
         opt = []
         goptTmp = []
@@ -227,9 +248,20 @@ class Wizard(object):
                     if "list" == type(kk).__name__ and len(kk) > 1:
                         goptTmp = self._unstructDict(kwargs, "@@")
 
-            for k in goptTmp:
+            libs.tools.v(goptTmp)
+            for k, v in goptTmp.items():
                 if not "slb" == k:
-                    opt.append(goptTmp[k])
+                    tp = tpl
+                    for b in v:
+                        libs.tools.v(b)
+                        val = libs.tools.convert(v[b])
+                        libs.tools.v(val)
+                        if "port" == b or "real_server" == b:
+                            libs.tools.v(type(val).__name__)
+                            tp[b].append(val)
+                        else:
+                            tp[b] = val
+                    opt.append(tp)
 
             libs.tools.v(opt)
 

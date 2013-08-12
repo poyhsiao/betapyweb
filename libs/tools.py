@@ -50,6 +50,7 @@ def translation():
     langdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../locale')
     return {'obj': gettext.translation(domain = 'messages', localedir = langdir, languages = [lang]), 'lang': lang}
 
+
 def translateMessage(msgList):
     '''
         translation messages from middleware
@@ -62,7 +63,6 @@ def translateMessage(msgList):
         msg = msgArray
 
     return msg
-
 
 def v(obj, display = 'print'):
     '''

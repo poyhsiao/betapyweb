@@ -1615,11 +1615,12 @@ var eView = Backbone.View.extend({
 
         Ajax = $.get("/getTpl?file=views", function(d) {
         	t = _.template(d);
-        	me.$el.html(t(dat)).find("textarea").css({
+        	me.$el.html(t(dat)).find(".logViewList").css({
         		resize: "none",
+        		border: "1px ridge #000",
         		background: "#fff",
-        		width: "90%",
-        		height: "200px"
+        		height: "200px",
+        		overflow: "auto"
 			});
 
         	$("div.borderArrow").show("fast");
@@ -1630,14 +1631,19 @@ var eView = Backbone.View.extend({
     refeshViews: function(o) {
     /* press views refresh button */
 //        return $("#oReload").trigger("click");
-    	var me = this, self = $(o.target), txtarea = $("textarea.logViewList");
+    	var me = this, self = $(o.target), txtarea = $(".logViewList");
     	txtarea.parents("div:first").block();
     	Ajax = $.post("/log/view", {"logtype": me.$el.find("select[name=logtype]").val()}, function(d) {
-    		$.each(d, function(k,  v) {
-    			txtarea.val(function(i, vv) {
-    				return vv + v;
+    		if(true === d[0]) {
+    			txtarea.empty();
+    			$.each(d[1], function(k, v) {
+    				$("<div />").css({
+    					padding: "2px 10px"
+    				}).text(v).appendTo(txtarea);
     			});
-    		});
+    		} else {
+    			return bootbox.alert(d[1]);
+    		}
 
     		txtarea.scrollTop( txtarea[0].scrollHeight - txtarea.height() );
     		txtarea.parents("div:first").unblock();

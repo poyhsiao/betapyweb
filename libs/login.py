@@ -25,7 +25,6 @@ def cklogin(arr = False):
         session = arr
 
     import tools
-    tools.v(session.items())
 
     try:
         # lock the session first for checking
