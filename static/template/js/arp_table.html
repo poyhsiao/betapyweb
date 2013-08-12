@@ -16,12 +16,12 @@
     </div>
 
     <div class="tab-content SystemArpTable">
-  <% _.each(items, function(v, k) { %>
-    <% if("ipv4_dynamic" === k) { %>
-      <div id="arp-<%= k %>" class="tab-pane active">
-    <% } else { %>
-      <div id="arp-<%= k %>" class="tab-pane">
-    <% } %>
+    <% _.each(items, function(v, k) { %>
+      <% if("ipv4_dynamic" === k) { %>
+        <div id="arp-<%= k %>" class="tab-pane active">
+      <% } else { %>
+        <div id="arp-<%= k %>" class="tab-pane">
+      <% } %>
         <table class="table table-bordered table-hover">
           <tr>
             <th>{{ _("Interface") }}</th>
@@ -93,65 +93,65 @@
   <% }); %>
     </div>
 
-  <div class="newSysArpTable inactive">
-    <table>
-      <tbody class="newArpTable" opt="ipv4">
-        <tr>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-screenshot"></i></span>
-              <select opt="interface">
-              <% _.each(nic, function(av, ak) { %>
-                <option value="<%= av %>"><%= av %></option>
-              <% }); %>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-book"></i></span>
-              <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv4 Address") }}" />
-            </div>
-          </td>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-bookmark"></i></span>
-              <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
-            </div>
-          </td>
-          <td>
-            <a href="#" class="btn btnArpDel">{{ _("Delete") }}</a>
-          </td>
-        </tr>
-      </tbody>
-      <tbody class="newArpTable" opt="ipv6">
-        <tr>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-screenshot"></i></span>
-              <select opt="interface">
-              <% _.each(nic, function(av, ak) { %>
-                <option value="<%= av %>"><%= av %></option>
-              <% }); %>
-              </select>
-            </div>
-          </td>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-book"></i></span>
-              <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv6 Address") }}" />
-            </div>
-          </td>
-          <td>
-            <div class="input-prepend">
-              <span class="add-on"><i class="icon-bookmark"></i></span>
-              <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
-            </div>
-          </td>
-          <td>
-            <a href="#" class="btn btnArpDel">{{ _("Delete") }}</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="newSysArpTable inactive">
+      <table>
+        <tbody class="newArpTable" opt="ipv4">
+          <tr>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-screenshot"></i></span>
+                <select opt="interface">
+                <% _.each(nic, function(av, ak) { %>
+                  <option value="<%= av %>"><%= av %></option>
+                <% }); %>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-book"></i></span>
+                <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv4 Address") }}" />
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-bookmark"></i></span>
+                <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
+              </div>
+            </td>
+            <td>
+              <a href="#" class="btn btnArpDel">{{ _("Delete") }}</a>
+            </td>
+          </tr>
+        </tbody>
+        <tbody class="newArpTable" opt="ipv6">
+          <tr>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-screenshot"></i></span>
+                <select opt="interface">
+                <% _.each(nic, function(av, ak) { %>
+                  <option value="<%= av %>"><%= av %></option>
+                <% }); %>
+                </select>
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-book"></i></span>
+                <input type="text" class="span2" opt="ip" placeholder="{{ _("IPv6 Address") }}" />
+              </div>
+            </td>
+            <td>
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-bookmark"></i></span>
+                <input type="text" class="span2" opt="mac" placeholder="{{ _("MAC Address") }}" />
+              </div>
+            </td>
+            <td>
+              <a href="#" class="btn btnArpDel">{{ _("Delete") }}</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
