@@ -1399,8 +1399,8 @@ var eView = Backbone.View.extend({
 
             require(["blockUI"], function() {
                 $("div.statCtContent").block();
+                me.updateCounters();
             });
-            me.updateCounters();
         }, "html");
     },
 
@@ -1487,8 +1487,8 @@ var eView = Backbone.View.extend({
 
             require(["blockUI"], function() {
                 $("div.statRtContent").block();
+                me.updateRates();
             });
-            me.updateRates();
         }, "html");
     },
 
@@ -1548,9 +1548,9 @@ var eView = Backbone.View.extend({
             /* show arrow image */
 
             require(["blockUI"], function() {
-                $("div.statPIContent").block();
+            	$("div.statPIContent").block();
+            	me.updatePersistence();
             });
-            me.updatePersistence();
         }, "html");
     },
 
